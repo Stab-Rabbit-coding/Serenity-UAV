@@ -2696,7 +2696,8 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     real lead length. Test 12 AWG AT121925 and 14 AWG AT141927 (the latter in the existing 0.197 in
     conduit). If 14 AWG passes, no pod change; otherwise open the conduit and stage-2 slot to about
     0.28 in (7.0 mm) for AT121925.
-- [ ] **[WARNING] NAC-64-FUSE-COORD** — Owner decision 2026-11-11 (report Decision 4, option B): the
+- [ ] **[CAUTION] NAC-64-FUSE-COORD** — Owner decision 2026-11-11 (report Decision 4, option B;
+    CAUTION per `AGENTS.md`: aircraft loss, WARNING only if people are under the hover): the
     BOM FUSE-ESC-40A is below the 44 A design current and the 57 A peak. Run a coordination study with
     three curves on one plot: fuse time-current, wire short-time rating, and the ESC limit. **The ESC
     current limit shall be I-squared-t / fold-back:** up to 60 A for at most 10 s, then fold back to no

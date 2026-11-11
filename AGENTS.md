@@ -232,12 +232,15 @@ Callout severity and requirement-verb usage follow CNAF M-3710.7 §1.5–1.6 (NA
 Flight and Operating Instructions Manual) [REF-MIL-003 §1.5, §1.6], adapted for a build/design
 repo rather than a flight-ops manual:
 
-- **WARNING** — a procedure, practice, or condition that may result in injury, death, or loss
-  of the aircraft/vehicle if not carefully observed or followed. Reserve for personnel-safety
-  or airframe-loss risk (e.g., handling a charged spring, using a soldering iron, releasing a payload near people, a live battery pack, or a load-bearing
-  joint that can fail catastrophically).
-- **CAUTION** — a procedure, practice, or condition that may result in damage to equipment if
-  not carefully observed or followed, with no personnel-injury or airframe-loss risk (e.g., overtorquing a fitting, shorting a circuit).
+- **WARNING** — a procedure, practice, or condition that may result in injury to or death of
+  people if not carefully observed or followed. Reserve for personnel-safety risk (e.g.,
+  handling a charged spring, using a soldering iron, releasing a payload near people, a live
+  battery pack, or a failure that can bring the aircraft down on or near people).
+- **CAUTION** — a procedure, practice, or condition that may result in damage to or loss of
+  equipment if not carefully observed or followed, with no risk of injury to people. **This
+  includes total loss of the aircraft** (e.g., overtorquing a fitting, shorting a circuit, a
+  load-bearing joint or power branch that can fail and down the aircraft where no person is at
+  risk).
 - **Note** — information about a procedure, practice, or condition that must be emphasized, but
   carries no WARNING- or CAUTION-level risk.
 
@@ -498,5 +501,8 @@ The shall/should/may definitions and the WARNING/CAUTION/NOTE call-out
 convention above follow CNAF M-3710.7, *NATOPS General Flight and Operating
 Instructions*, issued by Commander, Naval Air Forces (CNAF)
 (<https://www.secnav.navy.mil/doni/SECNAV%20Manuals1/3710.7%20(CNAF).pdf>).
+**Owner deviation from CNAF M-3710.7:** CNAF assigns loss of the aircraft to WARNING. This repo
+does not: a WARNING is a risk of injury or death to people only, and loss of the aircraft with
+no risk to people is a CAUTION.
 The will/could definitions and the active-voice/passive-voice distinction
 above are this project's own convention, not drawn from that source.

@@ -81,7 +81,7 @@ bend chamber re-drawn (larger shift), i.e. reopen OD-17. No option meets AC 43.1
 ## 7. ESC and protection
 - ESC: the manufacturer recommends 80 A; sustained 33-38 A, peak 57-60 A. 80 A settles OD-3 on the
   datasheet; the earlier finding that 50 A sustained is not thermally survivable in the bay stays open.
-- **Branch fuse (WARNING-level finding):** BOM FUSE-ESC-40A (40 A mini blade) is below the 57 A
+- **Branch fuse (CAUTION-level finding; reclassified 2026-11-11 per AGENTS.md, aircraft loss without risk to people):** BOM FUSE-ESC-40A (40 A mini blade) is below the 57 A
   full-throttle draw and barely above the 38 A late-pack hover. A fuse opening in hover loses one of
   four fans. The fuse must carry 38 A continuous and 57-60 A for up to 10 s, yet protect a wire whose
   bundle ampacity is about 33-48 A. That needs the fuse time-current curve, the wire short-time
