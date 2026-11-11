@@ -1,17 +1,23 @@
 #!/usr/bin/env python3
 """nacelle64_optD_concept.py -- OD-17 option D: tilt joint moved outboard, 4 x 10 AWG routed.
 
-Builds the option-D concept in the nacelle-local frame (stbd, pylon +X): the pod collar boss carried
-`--shift` mm outboard, trunnion/spar/wing/pinion moved with it, and the four wires routed from the
-spar bore (2 x 2) around a 3 x OD bend, forward in the annulus, fanned out to the disconnect-bay
-studs.
+Builds the option-D model in the nacelle-local frame (stbd, pylon +X).  Since Sprint 2 (2026-11-11)
+the joint shift (P64_JOINT_SHIFT, 23 mm) lives in nacelle_64_scale.scad and is carried by the pod
+SCAD
+(collar boss, wire channels), the trunnion SCAD and nacelle64_assembly_check.py, so the placed
+trunnion,
+spar, wing and pinion are already shifted.  `--shift` is an EXTRA what-if shift (default 0).  The
+four
+wires route from the spar bore (2 x 2) around a 3 x OD bend, forward in the annulus, fanned out to
+the
+disconnect-bay studs.
 Reports each wire's bend radius and exit X, wire-to-wire gaps, wire-vs-wing/pinion contact over the
 tilt sweep, and the pod material the wire channels remove; with --render-dir it writes top, bottom,
 front and back close-ups at 0 and 90 deg tilt (pyvista, off-screen), each wire in its own colour.
 Brief: docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md.  Wire OD 5.5 mm is ASSUMED (SPAR-20-WIREOD).
 
 Usage:  python3 tools/nacelle64_optD_concept.py --pod POD.stl --trunnion TRUNNION.stl
-            [--shift 23] [--render-dir docs/figures]
+            [--shift 0] [--render-dir docs/figures]
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note: Written by Claude (Anthropic, Claude Opus 5.5) under the author's direction, 2026-11-08.
@@ -47,24 +53,49 @@ def shift(t, s):
     return a.xform(t, a.mat4([[1, 0, 0, s], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]))
 
 
+# Path of each wire after it leaves the spar bore.  The 90 deg bend (centreline radius R as below)
+# runs in a plane tilted by BETA deg about the spar axis toward the wire's stud, so the aft pair
+# starts
+# fanning out in Y inside the bend (a first version that fanned out only after the bend made the
+# forward and aft wires interpenetrate, 0.051 in3 (839 mm3) per pair); it exits heading along
+# d = (0, +-sin BETA, -cos BETA).  A cubic Hermite tail then leads to the start of the straight 9 mm
+# terminal barrel, which arrives tilted by G deg in Y toward the stud.  Per wire:
+# (BETA deg, G deg, exit tangent mm, barrel-end tangent mm).  The SAME numbers are in the pod SCAD
+# (OD17_OFFS).  Hermite: p(t) = h00 p0 + h10 m0 + h01 p1 + h11 m1.  Chosen 2026-11-11 so every
+# wire's
+# tightest point is >= 3 x OD and no two wires interpenetrate (the first polyline had 0.08-0.14 in
+# kinks).
+TAIL = {(-2.75, -2.75): (0, 0, 22, 22), (2.75, -2.75): (0, 0, 22, 22),
+        (-2.75, 2.75): (12, 8, 13, 13), (2.75, 2.75): (12, 8, 13, 13)}
+BARREL = 9.0                                       # straight run into the ring-terminal barrel, mm
+N_TAIL = 12
+
+
 def pod_side_path(off, S):
     """Polyline in the pod frame (tilt 0) from inside the spar mouth to the stud."""
     y0, z0 = off
     xm = X0 + S
     zc = PZ - 2.75 - R_MIN
     R = (PZ + z0) - zc
-    pts = [(xm + 6, y0, PZ + z0)]
-    for ph in np.linspace(0, np.pi / 2, 19):
-        pts.append((xm - R * np.sin(ph), y0, zc + R * np.cos(ph)))
-    xe = xm - R
     ys = STUD_Y[off]
-    zmid = 0.5 * (zc + DZ + 9)
-    for f in np.linspace(0, 1, 9)[1:]:           # run forward, fanning out in Y to the studs
-        pts.append((xe, y0 + (ys - y0) * f, zc + (zmid - zc) * f))
-    for f in np.linspace(0, 1, 9)[1:]:           # then ease in X to the lug plane
-        pts.append((xe + (X_LUG - xe) * f, ys, zmid + (DZ + 9 - zmid) * f))
-    pts.append((X_LUG, ys, DZ + 4.5))           # lug barrel above the stud
-    pts.append((X_LUG, ys, DZ))
+    sgn = 1.0 if ys >= y0 else -1.0
+    beta, g, k1, k2 = TAIL[off]
+    t0 = np.array([-1.0, 0.0, 0.0])
+    dd = np.array([0.0, sgn * np.sin(np.radians(beta)), -np.cos(np.radians(beta))])
+    s0 = np.array([xm, y0, PZ + z0])
+    pts = [tuple(s0 + np.array([6.0, 0.0, 0.0]))]
+    for ph in np.radians(np.arange(0.0, 90.1, 10.0)):
+        pts.append(tuple(s0 + R * np.sin(ph) * t0 + R * (1 - np.cos(ph)) * dd))
+    xe = xm - R
+    dir_b = np.array([0.0, sgn * np.sin(np.radians(g)), -np.cos(np.radians(g))])
+    e = np.array(pts[-1])
+    b = np.array([X_LUG, ys, DZ])
+    bp = b - BARREL * dir_b
+    m0, m1 = dd * k1, dir_b * k2
+    for t in np.arange(1, N_TAIL + 1) / N_TAIL:
+        pts.append(tuple((2 * t ** 3 - 3 * t ** 2 + 1) * e + (t ** 3 - 2 * t ** 2 + t) * m0
+                         + (-2 * t ** 3 + 3 * t ** 2) * bp + (t ** 3 - t ** 2) * m1))
+    pts.append(tuple(b))
     return np.array(pts), R, xe
 
 
@@ -100,10 +131,8 @@ def tube(pts, d):
 def build(S, pod_path, trunnion_path):
     parts = a.load_parts(pod_path, trunnion_path)
     for k in ('trunnion', 'spar', 'wing', 'pinion'):
-        parts[k] = shift(parts[k], S)
-    # pod extension: collar boss carried S further outboard (concept: annulus r 19.05..27)
-    boss = m.Manifold.cylinder(S + 4, 27.0, 27.0, 96).rotate([0, 90, 0]).translate([47.8, 0, PZ]) \
-        - m.Manifold.cylinder(S + 6, 19.05, 19.05, 96).rotate([0, 90, 0]).translate([46.8, 0, PZ])
+        parts[k] = shift(parts[k], S)               # extra what-if shift only; 0 by default
+    boss = m.Manifold()                             # the collar boss is now part of the pod SCAD
     return parts, boss
 
 
@@ -225,7 +254,7 @@ def main(argv: list[str] | None = None) -> int:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--pod", type=Path, required=True)
     ap.add_argument("--trunnion", type=Path, required=True)
-    ap.add_argument("--shift", type=float, default=23.0, help="joint shift outboard, mm")
+    ap.add_argument("--shift", type=float, default=0.0, help="extra what-if shift, mm")
     ap.add_argument("--render-dir", type=Path)
     args = ap.parse_args(argv)
     parts, boss = build(args.shift, args.pod, args.trunnion)

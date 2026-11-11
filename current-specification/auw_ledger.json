@@ -1,37 +1,37 @@
 {
  "configs": {
   "cargo_2800_payload": {
-   "I_pitch_gmm2": 68044646.02741906,
-   "T_W": 1.451616698956922,
+   "I_pitch_gmm2": 68121908.87919217,
+   "T_W": 1.4249486376546932,
    "cg": [
-    -0.0921617032466991,
-    351.84882704104837,
-    155.81312235170742
+    -0.09046857450708978,
+    351.99686306873116,
+    155.64703944748595
    ],
-   "k_pitch_mm": 102.07485900312493,
-   "mass_g": 6530.649590082546
+   "k_pitch_mm": 101.1902901250666,
+   "mass_g": 6652.871373387201
   },
   "heaviest_4000_payload": {
-   "I_pitch_gmm2": 68437480.46721926,
-   "T_W": 1.4299398288231346,
+   "I_pitch_gmm2": 68516839.74002095,
+   "T_W": 1.4040551834808108,
    "cg": [
-    -0.09078546027978995,
-    351.3538183935366,
-    156.30869920573844
+    -0.08914206984180485,
+    351.5086444310365,
+    156.13608062023602
    ],
-   "k_pitch_mm": 101.60187416477898,
-   "mass_g": 6629.649590082546
+   "k_pitch_mm": 100.73643598566996,
+   "mass_g": 6751.871373387201
   },
   "hover_4000": {
-   "I_pitch_gmm2": 68257410.8483919,
-   "T_W": 1.4805907692543163,
+   "I_pitch_gmm2": 68339451.34884077,
+   "T_W": 1.4528576712071855,
    "cg": [
-    -0.09400123820831552,
-    351.17153174570495,
-    157.27247836266562
+    -0.09224049134299778,
+    351.33515369380746,
+    157.07580721229726
    ],
-   "k_pitch_mm": 103.24957087360302,
-   "mass_g": 6402.849590082546
+   "k_pitch_mm": 102.33945754959684,
+   "mass_g": 6525.071373387201
   }
  },
  "nacelle_printed_unit_g": {
@@ -322,6 +322,30 @@
   },
   {
    "cg": [
+    184.6,
+    373.8,
+    146.7
+   ],
+   "kind": "PRINT",
+   "mass_g": 36.41,
+   "name": "wing_tip_fairing_port",
+   "ref": "PRINT-WING-TIP-FAIRING",
+   "source": "MEASURED mesh x DuraForm PA CF 1.11 g/cc (hull frame)"
+  },
+  {
+   "cg": [
+    -184.6,
+    373.8,
+    146.7
+   ],
+   "kind": "PRINT",
+   "mass_g": 36.41,
+   "name": "wing_tip_fairing_stbd",
+   "ref": "PRINT-WING-TIP-FAIRING",
+   "source": "MEASURED mesh x DuraForm PA CF 1.11 g/cc (hull frame)"
+  },
+  {
+   "cg": [
     0.0,
     282.0,
     145.2
@@ -583,6 +607,30 @@
    "name": "Nacelle stbd rotating assembly (64 mm)",
    "ref": "NACELLE",
    "source": "tools/nacelle_mass_cg_64.py roll-up at the hull pivot"
+  },
+  {
+   "cg": [
+    230.4,
+    339.4,
+    146.9
+   ],
+   "kind": "NACELLE",
+   "mass_g": 24.7,
+   "name": "OD-17 joint extension port (pod boss + spar)",
+   "ref": "NACELLE",
+   "source": "render delta + spar ESTIMATE; retire at NAC-64-REBAKE"
+  },
+  {
+   "cg": [
+    -230.4,
+    339.4,
+    146.9
+   ],
+   "kind": "NACELLE",
+   "mass_g": 24.7,
+   "name": "OD-17 joint extension stbd (pod boss + spar)",
+   "ref": "NACELLE",
+   "source": "render delta + spar ESTIMATE; retire at NAC-64-REBAKE"
   },
   {
    "cg": [
@@ -2040,8 +2088,8 @@
  "subtotals_hover_g": {
   "BOM": 2386.9040000000005,
   "GAP": 218.8114,
-  "NACELLE": 1928.4762270463518,
-  "PRINT": 1868.657963036194
+  "NACELLE": 1977.876227046352,
+  "PRINT": 1941.4797463408495
  },
  "thrust_gf": 9480.0,
  "unclassified": []

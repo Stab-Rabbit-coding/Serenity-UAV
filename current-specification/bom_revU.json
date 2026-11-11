@@ -2929,6 +2929,19 @@
       "Notes": "Rev U NEW. Replaces the 50 mm trunnion. Published STLs are in print orientation. Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 0 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
+      "Ref": "PRINT-WING-TIP-FAIRING",
+      "Description": "wing_tip_fairing_{port,stbd}.stl — wing-fixed aft fairing behind the rotating tilt collar, with rounded end plate and fillet into the wing tip (OD-17 option D)",
+      "Category": "Printed Part",
+      "Qty": "2",
+      "Unit_Mass_g": "36.4",
+      "Total_Mass_g": "72.8",
+      "Supplier": "SLS service bureau (vendor not yet selected)",
+      "Supplier_PN_or_Search": "SLS DuraForm PA CF [3DS-30108A] (REF-MAT-015)",
+      "Est_Unit_Price_USD": "0.00",
+      "Est_Total_Price_USD": "0.00",
+      "Notes": "Rev U (2026-11-11, WA-R10, owner decision OD-17 option D). PRINT FROM airframe/stls/wings/wing_tip_fairing_{port,stbd}.stl, built by tools/nacelle64_wing_fairing.py. Bonds to the wing tip; wing-fixed (it does not tilt). NACA-type tail behind the Dia 2.13 in (54 mm) collar to the wing trailing-edge line; 0.24 in (6 mm) convex rounding, 0.04 in (1 mm) wall and 0.24 in (6 mm) concave fillet at the wing junction (CFD: 14 % less drag than the 1.50 in glove); 22.8 deg wing taper kept. Solid at 36.4 g; hollowing to a 0.079 in (2.0 mm) skin is open (OD17-FAIR-HOLLOW). Outer half-thickness at the tilt axis is bore radius + 0.079 in (2.0 mm) for the minimum wall (OD17-FAIR-WALL). Mass synced to the STL mesh at the SLS datasheet density. "
+    },
+    {
       "Ref": "PRINT-NOZ64-THROAT",
       "Description": "nacelle_nozzle_throat_64mm_{port,stbd}.stl — nozzle throat liner + housing (handed)",
       "Category": "Printed Part",

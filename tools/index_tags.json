@@ -3247,6 +3247,22 @@
       ],
       "archived": false
     },
+    "airframe/stls/wings/wing_tip_fairing_port.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/wings/wing_tip_fairing_stbd.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/wings-nacelles/TODO.md": {
       "description": "Serenity UAV \u2014 Airframe Wings and Nacelles TODO (Open Work Only)",
       "tags": [
@@ -9699,7 +9715,7 @@
       "archived": false
     },
     "current-specification/bom_revU.csv": {
-      "description": "Bill of materials, CSV (236 items)",
+      "description": "Bill of materials, CSV (237 items)",
       "tags": [
         "bom",
         "specification"
@@ -9707,7 +9723,7 @@
       "archived": false
     },
     "current-specification/bom_revU.json": {
-      "description": "Bill of materials, JSON (236 items)",
+      "description": "Bill of materials, JSON (237 items)",
       "tags": [
         "bom",
         "specification"
@@ -10569,6 +10585,13 @@
       "archived": false
     },
     "docs/figures/nacelle64_od17_optD_vertical.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_s2_wire_paths.png": {
       "description": "Rendered image / reference photo",
       "tags": [
         "documentation"
@@ -13549,6 +13572,13 @@
       ],
       "archived": false
     },
+    "docs/solutions/design-patterns/check-a-drawn-wire-path-for-kinks-and-wire-to-wire-overlap.md": {
+      "description": "Check a drawn wire path for kinks and wire-to-wire overlap",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/solutions/design-patterns/coaxial-worm-motor-clearance-is-set-by-worm-diameter-not-placement.md": {
       "description": "A motor coaxial with its worm clears the wheel by WORM_PD/2 \u2212 MOTOR_D/2 \u2212 m, whatever you do with C or the wo\u2026",
       "tags": [
@@ -15431,7 +15461,7 @@
       "archived": false
     },
     "tools/auw_ledger.py": {
-      "description": "Serenity UAV -- bottom-up all-up-weight, CG, pitch inertia and hover T/W.",
+      "description": "Python script",
       "tags": [
         "build-tooling"
       ],
@@ -16039,6 +16069,13 @@
     },
     "tools/nacelle64_optD_glove.py": {
       "description": "nacelle64_optD_glove.py -- OD-17 option D: spanwise glove blending the aft fairing into the wing.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/nacelle64_wing_fairing.py": {
+      "description": "nacelle64_wing_fairing.py -- OD-17 option D: the wing-fixed aft fairing and rounded end plate.",
       "tags": [
         "build-tooling"
       ],
@@ -16823,6 +16860,7 @@
       "docs/figures/nacelle64_od17_optD_horizontal.png",
       "docs/figures/nacelle64_od17_optD_tip_extension.png",
       "docs/figures/nacelle64_od17_optD_vertical.png",
+      "docs/figures/nacelle64_od17_s2_wire_paths.png",
       "docs/figures/nacelle64_od17_tail_cfd_sections.png",
       "docs/figures/nacelle64_od17_tail_cfd_wall_shear.png",
       "docs/figures/nacelle64_od17_tail_planform.png",
@@ -17199,6 +17237,7 @@
       "docs/solutions/conventions/pb2-header-capability-from-soc-datasheet-not-srm-summary.md",
       "docs/solutions/design-patterns/annular-esc-bay-length-is-set-by-radial-stack-not-panel-width.md",
       "docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md",
+      "docs/solutions/design-patterns/check-a-drawn-wire-path-for-kinks-and-wire-to-wire-overlap.md",
       "docs/solutions/design-patterns/coaxial-worm-motor-clearance-is-set-by-worm-diameter-not-placement.md",
       "docs/solutions/design-patterns/cut-the-local-solid-with-a-true-offset-and-gate-the-joint.md",
       "docs/solutions/design-patterns/decide-cape-board-size-against-every-mount-and-guard-envelope-coupling-mechanically.md",
@@ -18169,6 +18208,8 @@
       "airframe/stls/wings/wing_stbd_s1223_revo.stl",
       "airframe/stls/wings/wing_tilt_pinion_port.stl",
       "airframe/stls/wings/wing_tilt_pinion_stbd.stl",
+      "airframe/stls/wings/wing_tip_fairing_port.stl",
+      "airframe/stls/wings/wing_tip_fairing_stbd.stl",
       "airframe/wings-nacelles/TODO.md",
       "airframe/wings-nacelles/WBS.md"
     ],
@@ -18485,6 +18526,8 @@
       "airframe/stls/wings/wing_stbd_s1223_revo.stl",
       "airframe/stls/wings/wing_tilt_pinion_port.stl",
       "airframe/stls/wings/wing_tilt_pinion_stbd.stl",
+      "airframe/stls/wings/wing_tip_fairing_port.stl",
+      "airframe/stls/wings/wing_tip_fairing_stbd.stl",
       "archives/18in-scale-scad.tar.gz",
       "avionics/datasheets/molex/ul_1040310811/1040310811.stl",
       "avionics/datasheets/ti/SIL0010D.stl",
@@ -20629,6 +20672,7 @@
       "tools/nacelle64_optD_aft_fairing.py",
       "tools/nacelle64_optD_concept.py",
       "tools/nacelle64_optD_glove.py",
+      "tools/nacelle64_wing_fairing.py",
       "tools/nacelle_64_proportion_trade.py",
       "tools/nacelle_64_scale.py",
       "tools/nacelle_cowl_fair.py",

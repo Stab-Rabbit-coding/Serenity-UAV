@@ -46,8 +46,9 @@ import nacelle_64_scale as ns  # noqa: E402
 
 PIVOT_Z = 109.7                                  # pod PIVOT_Z == PIVOT_Z_64 (tilt joint context)
 AXIS_SHIFT = ns.get("P64_AXIS_SHIFT_S")          # 9.61
-TRUNNION_X0 = 28.2 + AXIS_SHIFT                  # spar tip == trunnion outboard face
-WING_TIP_FACE = 41.7 + AXIS_SHIFT + 7.0          # P64_STUB_EXTRA
+JOINT_SHIFT = ns.get("P64_JOINT_SHIFT")          # 23.0, OD-17 option D (owner 2026-11-11)
+TRUNNION_X0 = 28.2 + AXIS_SHIFT + JOINT_SHIFT    # spar tip == trunnion outboard face (60.81)
+WING_TIP_FACE = 41.7 + AXIS_SHIFT + 7.0 + JOINT_SHIFT   # P64_STUB_EXTRA
 PAD_PROUD = 2.0
 SEAT = WING_TIP_FACE - PAD_PROUD                 # wing tip pad face, local X
 WING_TIP_HULL_X = 176.55                         # |X| of the wing tip pad face in hull R2
@@ -243,11 +244,16 @@ def load_parts(pod_path: Path, trunnion_path: Path,
     parts["wing"] = xform(wing, h2l)
     pin = trimesh.load(STL / "wings/wing_tilt_pinion_stbd.stl", force="mesh")
     parts["pinion"] = xform(pin, h2l)
+    # OD-17 option D: the wing-fixed aft fairing + rounded end plate
+    # (tools/nacelle64_wing_fairing.py)
+    fair = STL / "wings/wing_tip_fairing_stbd.stl"
+    if fair.exists():
+        parts["fairing"] = xform(trimesh.load(fair, force="mesh"), h2l)
     return parts
 
 
 TILTING = ("pod", "cartridge", "motor1", "motor2", "nozzle_throat", "nozzle_ring", "trunnion")
-FIXED = ("spar", "wing", "pinion")
+FIXED = ("spar", "wing", "pinion", "fairing")
 
 
 def overlap_matrix(man: dict[str, m.Manifold]) -> list[tuple[str, str, float]]:
@@ -316,7 +322,7 @@ def cable_route(man: dict[str, m.Manifold], pitch: float = 0.75) -> dict:
     from scipy import ndimage  # noqa: PLC0415
     from skimage.graph import MCP_Geometric  # noqa: PLC0415
 
-    x0, x1, y0, y1, z0, z1 = -50.0, 60.0, -56.0, 56.0, 0.0, 212.0
+    x0, x1, y0, y1, z0, z1 = -50.0, WING_TIP_FACE + 10.0, -56.0, 56.0, 0.0, 212.0
     shape = (int((x1 - x0) / pitch), int((y1 - y0) / pitch), int((z1 - z0) / pitch))
     grid = {"pitch": pitch, "x0": x0, "y0": y0, "z0": z0, "shape": shape}
     solid = np.zeros(shape, dtype=bool)
@@ -379,6 +385,76 @@ def cable_route(man: dict[str, m.Manifold], pitch: float = 0.75) -> dict:
                 hi_r = mid
         res["max_bundle_radius_that_connects"] = round(lo_r, 2)
         out[label] = res
+    return out
+
+
+def circumradius(p: np.ndarray, q: np.ndarray, r: np.ndarray) -> float:
+    """Radius of the circle through three points (inf for collinear)."""
+    a_, b_, c_ = np.linalg.norm(q - r), np.linalg.norm(p - r), np.linalg.norm(p - q)
+    area2 = np.linalg.norm(np.cross(q - p, r - p))
+    return float("inf") if area2 < 1e-9 else float(a_ * b_ * c_ / (2.0 * area2))
+
+
+def wire_check(man: dict[str, m.Manifold]) -> dict:
+    """OD-17 option D, as built: do the four 10 AWG wires run, clear of every part, from the spar
+    bore to their own disconnect-bay studs, at a bend radius of at least 3 x wire OD?
+
+    The wire paths are the ones the pod SCAD cuts as channels (od17_wire_channels) and
+    nacelle64_optD_concept.pod_side_path() draws.  A wire is a capsule chain of the assumed 10 AWG
+    OD (SPAR-20-WIREOD); the pod already has its channels, so any overlap with the pod is a defect.
+    Also: the 4-wire bundle (circumscribed OD + radial clearance) must pass the spar mouth, and the
+    pod-side wires, which tilt with the pod, must clear the wing-fixed parts over the whole sweep.
+    """
+    import nacelle64_optD_concept as d  # noqa: PLC0415  (lazy: the concept tool imports this one)
+
+    out: dict = {"wire_od_mm": d.WIRE_D, "min_bend_required_mm": d.R_MIN, "wires": {}}
+    wires: dict[str, m.Manifold] = {}
+    solids = [k for k in man if k not in ("motor1", "motor2")]   # motor cans are inside the duct
+    for off in d.OFFS:
+        pts, rad, xe = d.pod_side_path(off, 0.0)
+        name = d.NAMES[off]
+        w = to_man(d.tube(pts, d.WIRE_D))
+        wires[name] = w
+        seg = np.diff(pts, axis=0)
+        rr = [circumradius(pts[i - 1], pts[i], pts[i + 1]) for i in range(1, len(pts) - 1)]
+        out["wires"][name] = {
+            "bend_radius_mm": round(float(rad), 2),
+            "min_polyline_radius_mm": round(float(min(rr)), 2),
+            "leaves_bend_at_x_mm": round(float(xe), 2),
+            "pod_side_length_mm": round(float(np.linalg.norm(seg, axis=1).sum()), 1),
+            "overlap_mm3": {k: round(float((w ^ man[k]).volume()), 1) for k in solids
+                            if (w ^ man[k]).volume() > 0.5},
+            # wire edge to the duct wall (outer radius DUCT_OUT_R about the duct axis)
+            # along the part
+            # of the run that is below the bend chamber (Z < 95); the sleeve zone above is checked
+            # by the overlap test against the cartridge
+            "gap_to_duct_wall_mm": round(float(np.hypot(pts[pts[:, 2] < 95.0][:, 0],
+                                                        pts[pts[:, 2] < 95.0][:, 1]).min()
+                                               - d.WIRE_D / 2 - DUCT_OUT_R), 2),
+        }
+    names = list(wires)
+    out["wire_overlap_mm3"] = {f"{names[i]}|{names[j]}": round(float(
+        (wires[names[i]] ^ wires[names[j]]).volume()), 1)
+        for i in range(4) for j in range(i + 1, 4)}
+    out["wire_gap_mm"] = {f"{names[i]}|{names[j]}": round(float(
+        wires[names[i]].min_gap(wires[names[j]], 5.0)), 2)
+        for i in range(4) for j in range(i + 1, 4)}
+    # bundle corridor: circumscribed bundle + radial twist clearance, straight along the spar axis,
+    # from 24 mm into the bend chamber through the spar mouth and 20 mm into the spar bore
+    r_b = BUNDLE_D / 2 + CLEARANCE
+    cor = m.Manifold.cylinder(44.0, r_b, r_b, 96).rotate([0, 90, 0]).translate(
+        [TRUNNION_X0 - 24.0, 0, PIVOT_Z])
+    out["bundle_corridor_radius_mm"] = round(r_b, 2)
+    out["bundle_corridor_overlap_mm3"] = {k: round(float((cor ^ man[k]).volume()), 1)
+                                          for k in solids if (cor ^ man[k]).volume() > 0.5}
+    # pod-side wires tilt with the pod: against the wing-fixed parts over the sweep
+    worst = 0.0
+    for t in np.arange(TILT_MIN, TILT_MAX + 0.1, 5.0):
+        tm = np.asarray(tilt_matrix(t)[:3, :4], dtype=float)
+        for w in wires.values():
+            wt = w.transform(tm)
+            worst = max(worst, sum(float((wt ^ man[k]).volume()) for k in FIXED if k in man))
+    out["sweep_wire_vs_fixed_worst_mm3"] = round(worst, 1)
     return out
 
 
@@ -471,7 +547,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--step", type=float, default=5.0)
     ap.add_argument("--json", type=Path)
     ap.add_argument("--figs", type=Path, help="write section figures to this directory")
-    ap.add_argument("--stage", choices=("static", "sweep", "cable", "bay", "all"), default="all")
+    ap.add_argument("--stage", choices=("static", "sweep", "cable", "bay", "wires", "all"),
+                    default="all")
     args = ap.parse_args(argv)
 
     parts = load_parts(args.pod, args.trunnion)
@@ -540,6 +617,32 @@ def main(argv: list[str] | None = None) -> int:
                           f"min clearance {inch(q['min_clearance'])}")
                 else:
                     print(f"      {req}: NO ROUTE ({q['why']})")
+    if args.stage in ("wires", "all"):
+        res["wires"] = wire_check(man)
+        w = res["wires"]
+        print(f"\n4 x 10 AWG wire check (OD {inch(w['wire_od_mm'])} ASSUMED, SPAR-20-WIREOD; "
+              f"minimum bend {inch(w['min_bend_required_mm'])} = 3 x OD):")
+        for nm, r in w["wires"].items():
+            bad = [] if r["min_polyline_radius_mm"] >= w["min_bend_required_mm"] else ["BEND"]
+            if r["overlap_mm3"]:
+                bad.append("OVERLAP")
+            if r["gap_to_duct_wall_mm"] < 1.0:
+                bad.append("DUCT WALL")
+            print(f"  {nm:8s} bend R {inch(r['bend_radius_mm'])}, tightest point of the path "
+                  f"{inch(r['min_polyline_radius_mm'])}, "
+                  f"pod-side run {inch(r['pod_side_length_mm'])}, "
+                  f"wire to duct wall {inch(r['gap_to_duct_wall_mm'])}"
+                  f"{'  <-- ' + ' '.join(bad) if bad else '  OK'}")
+            for k, v in r["overlap_mm3"].items():
+                print(f"      overlaps {k}: {cu_in(v)}")
+        print("  wire-to-wire gap: "
+              + ", ".join(f"{k} {inch(v)}" for k, v in w["wire_gap_mm"].items()))
+        print("  wire-to-wire overlap (insulation touches where the wires run as a bundle): "
+              + ", ".join(f"{k} {cu_in(v)}" for k, v in w["wire_overlap_mm3"].items()))
+        print(f"  bundle corridor, radius {inch(w['bundle_corridor_radius_mm'])}, mouth +/- bend "
+              f"chamber: overlap {w['bundle_corridor_overlap_mm3'] or 'none'}")
+        print(f"  pod-side wires vs wing-fixed parts over the sweep, worst: "
+              f"{cu_in(w['sweep_wire_vs_fixed_worst_mm3'])}")
     if args.json:
         args.json.write_text(json.dumps(res, indent=1) + "\n", encoding="utf-8")
     return 0

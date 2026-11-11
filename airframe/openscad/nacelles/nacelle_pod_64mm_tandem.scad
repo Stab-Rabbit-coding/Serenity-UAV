@@ -684,7 +684,7 @@ PIVOT_Z         = 109.7;   // [mm] pivot axial centre = full-assembly CG station
 SPAR_OD          =  20.0;  // [mm] fixed CF spar OD (Rev T1) — reference only;
                            //      the spar is a WING part, not built here
 // [flattened] TRUNNION_X0: value from its last assignment (override), kept at the first position
-TRUNNION_X0     = 28.2 + P64_AXIS_SHIFT;  // [mm] |X| of the spar tip = trunnion outboard face.
+TRUNNION_X0     = 28.2 + P64_AXIS_SHIFT + P64_JOINT_SHIFT;  // [mm] |X| of the spar tip = trunnion outboard face.
                            //      HARD BOUND, corrected 2026-08-31: the binding
                            //      radius here is NOT the r = 25 duct.  PIVOT_Z
                            //      lies inside the sleeve zone, where the bore is
@@ -693,15 +693,15 @@ TRUNNION_X0     = 28.2 + P64_AXIS_SHIFT;  // [mm] |X| of the spar tip = trunnion
                            //      and the spar both cut into the sleeve — a
                            //      measured 23.3 mm³ of solid overlap.  Gate T8.
 // [flattened] WING_TIP_FACE_X: value from its last assignment (override), kept at the first position
-WING_TIP_FACE_X = 41.7 + P64_AXIS_SHIFT + P64_STUB_EXTRA;  // [mm] |X| of the wing tip face = NACELLE_OD_X/2
+WING_TIP_FACE_X = 41.7 + P64_AXIS_SHIFT + P64_STUB_EXTRA + P64_JOINT_SHIFT;  // [mm] |X| of the wing tip face = NACELLE_OD_X/2
                            //      (37.7) + the 4.0 mm joint gap
 // [flattened] TRUNNION_REG_D: value from its last assignment (override), kept at the first position
 TRUNNION_REG_D  = 38.1;  // [mm] H7 register bore — mates nacelle_trunnion.scad
                            //      REG_D 33.9
 // [flattened] COLLAR_X0: value from its last assignment (override), kept at the first position
-COLLAR_X0       = 28.2 + P64_AXIS_SHIFT + 12.5;   // = 32.2  register bore, outboard end
+COLLAR_X0       = 28.2 + P64_AXIS_SHIFT + P64_JOINT_SHIFT + 12.5;   // = 32.2  register bore, outboard end
 // [flattened] COLLAR_X1: value from its last assignment (override), kept at the first position
-COLLAR_X1       = 28.2 + P64_AXIS_SHIFT + 14.0;   // = 35.7  flange seat rim face
+COLLAR_X1       = 28.2 + P64_AXIS_SHIFT + P64_JOINT_SHIFT + 14.0;   // = 35.7  flange seat rim face
 // [flattened] COLLAR_OD: value from its last assignment (override), kept at the first position
 COLLAR_OD       = 54.0;  // [mm] collar OD = trunnion flange OD
 // [flattened] COLLAR_BOLT_D: value from its last assignment (override), kept at the first position
@@ -720,11 +720,11 @@ COLLAR_FAIR_X   = 22.0 + P64_AXIS_SHIFT;  // [mm] |X| the fairing blends back to
 // Trunnion internal cavity: the ring gear (Ø41.6) and the bearing barrel live
 // inside the pod, outboard of the collar bore.
 TRUNNION_CAV_D   =  42.6;  // [mm] cavity Ø — gear tip Ø41.6 + 0.5 mm/side
-TRUNNION_CAV_X0  = TRUNNION_X0 - 1.0;   // = 25.7, opens the cavity outboard so
+TRUNNION_CAV_X0  = TRUNNION_X0 - P64_JOINT_SHIFT - 1.0;   // = 25.7, opens the cavity outboard so
                            //      the gear is not blind-ended.  This is a VOID,
                            //      not a member, so the ≥ 26 bound does not apply.
 // Legacy name retained where still referenced downstream (nav channel etc.):
-PIVOT_BOSS_DEPTH = COLLAR_X1 - NACELLE_FACE_X_PYLON;  // nav_channel Z reference
+PIVOT_BOSS_DEPTH = COLLAR_X1 - P64_JOINT_SHIFT - NACELLE_FACE_X_PYLON;  // un-shifted: nav channel keeps its Z  // nav_channel Z reference
 
 // ── 4 × 10 AWG power disconnect bay (WA-R10, Rev T4) ─────────────────────────
 // Plan 003 U3 put the four high-current bullet disconnects in a wingtip
@@ -1208,7 +1208,7 @@ CAVITY_TRUNNION_R  = 30.0; // [mm] radius about the SPAR axis
 // [flattened] CAVITY_TRUNNION_X0: value from its last assignment (override), kept at the first position
 CAVITY_TRUNNION_X0 = 20.0 + P64_AXIS_SHIFT; // [mm] |X| the keep-out starts at
 // [flattened] CAVITY_TRUNNION_X1: value from its last assignment (override), kept at the first position
-CAVITY_TRUNNION_X1 = 40.0 + P64_AXIS_SHIFT + P64_STUB_EXTRA; // [mm] |X| it ends at
+CAVITY_TRUNNION_X1 = 40.0 + P64_AXIS_SHIFT + P64_STUB_EXTRA + P64_JOINT_SHIFT; // [mm] |X| it ends at
 
 // ── Hinged ESC bays (Rev T4c, 2026-09-01) ───────────────────────────────────
 // Every dimension the pod and the access covers must agree on lives in ONE file,
@@ -1747,13 +1747,15 @@ module trunnion_collar() {
     sgn = PYLON_SIDE;
     union() {
         // ── Collar tube ────────────────────────────────────────────────────
-        translate([sgn * COLLAR_X0, 0, PIVOT_Z])
+        // OD-17 option D: the boss is carried P64_JOINT_SHIFT further outboard, so the tube
+        // starts where the un-shifted collar began and runs out to the shifted flange rim.
+        translate([sgn * (COLLAR_X0 - P64_JOINT_SHIFT), 0, PIVOT_Z])
             rotate([0, sgn * 90, 0])
-                cylinder(d = COLLAR_OD, h = COLLAR_X1 - COLLAR_X0);
+                cylinder(d = COLLAR_OD, h = COLLAR_X1 - COLLAR_X0 + P64_JOINT_SHIFT);
 
         // ── Junction fairing / gussets ─────────────────────────────────────
         hull() {
-            translate([sgn * (COLLAR_X1 - 0.4), 0, PIVOT_Z])
+            translate([sgn * (COLLAR_X1 - P64_JOINT_SHIFT - 0.4), 0, PIVOT_Z])
                 rotate([0, sgn * 90, 0])
                     cylinder(d = COLLAR_OD, h = 0.4);
             translate([sgn * COLLAR_FAIR_X, 0, PIVOT_Z])
@@ -2729,7 +2731,59 @@ module tilt_drive_relief() {
     }
 }
 
+// ── OD-17 option D: four 10 AWG wire channels (WA-R10, owner decision 2026-11-11) ──
+// The wires leave the spar bore as a 2 x 2 group (offsets +/-2.75 mm about the spar axis), turn
+// through the bend chamber at a centreline radius of at least 3 x wire OD (16.5 mm; 22 mm for the
+// aft pair, which sits 5.5 mm further from the bend centre), run forward in the annulus between the
+// duct wall and the pod skin while fanning out in Y, and land on the four stud rows of the
+// disconnect bay.  Same path as tools/nacelle64_optD_concept.py pod_side_path(); that tool and
+// tools/nacelle64_assembly_check.py verify it.  Wire OD 5.5 mm is ASSUMED (WBS SPAR-20-WIREOD);
+// 3 x OD is the minimum bend of NASA-STD-8739.4A Table 7-1 [REF-NASA-001 7.2.19].
+OD17_WIRE_D   = 5.5;                    // [mm] assumed 10 AWG silicone OD (SPAR-20-WIREOD)
+OD17_CH_D     = OD17_WIRE_D + 1.0;      // [mm] channel diameter, 0.5 mm clearance per side
+OD17_R_MIN    = 3 * OD17_WIRE_D;        // [mm] minimum centreline bend radius
+OD17_X_LUG    = 40.5;                   // [mm] |X| of the ring-terminal lug plane over the studs
+OD17_BARREL   = 9.0;                    // [mm] straight run into the ring-terminal barrel
+OD17_N_TAIL   = 12;                     // [count] samples along each wire's tail
+// [y0, z0 about the spar axis, stud Y, bend-plane tilt BETA deg, barrel tilt G deg, exit tangent mm,
+//  barrel-end tangent mm].  The 90 deg bend runs in a plane tilted BETA about the spar axis toward the
+// stud (so the aft pair starts fanning out inside the bend, which keeps the forward and aft wires
+// from interpenetrating); a cubic Hermite tail then leads to the straight barrel.  Chosen so every
+// wire's tightest point is >= 3 x OD (tools/nacelle64_assembly_check.py --stage wires); same numbers
+// as TAIL in tools/nacelle64_optD_concept.py.
+OD17_OFFS     = [[-2.75, -2.75, -3.75, 0, 0, 22, 22], [2.75, -2.75, 3.75, 0, 0, 22, 22],
+                 [-2.75, 2.75, -11.25, 12, 8, 13, 13], [2.75, 2.75, 11.25, 12, 8, 13, 13]];
+function od17_herm(p0, m0, p1, m1, t) =
+    (2*t*t*t - 3*t*t + 1) * p0 + (t*t*t - 2*t*t + t) * m0
+    + (-2*t*t*t + 3*t*t) * p1 + (t*t*t - t*t) * m1;
+function od17_pts(w) =
+    let (y0 = w[0], z0 = w[1], ys = w[2], be = w[3], g = w[4], k1 = w[5], k2 = w[6],
+         xm = TRUNNION_X0,                              // spar tip (pod bend-chamber end)
+         zc = PIVOT_Z - 2.75 - OD17_R_MIN,              // un-tilted bend centre Z
+         R  = PIVOT_Z + z0 - zc,                        // this wire's bend radius
+         sg = (ys >= y0) ? 1 : -1,
+         dd = [0, sg * sin(be), -cos(be)],              // heading at the bend exit
+         s0 = [xm, y0, PIVOT_Z + z0],
+         db = [0, sg * sin(g), -cos(g)],                // barrel direction
+         e  = s0 + R * [-1, 0, 0] + R * (1 - cos(90)) * dd,
+         b  = [OD17_X_LUG, ys, ESC_DISC_Z],             // stud centre
+         bp = b - OD17_BARREL * db)
+    concat([s0 + [6, 0, 0]],
+           [for (i = [0 : 9]) s0 + R * sin(i * 10) * [-1, 0, 0] + R * (1 - cos(i * 10)) * dd],
+           [for (i = [1 : OD17_N_TAIL])
+                od17_herm(e, dd * k1, bp, db * k2, i / OD17_N_TAIL)],
+           [b]);
+module od17_wire_channels() {
+    for (w = OD17_OFFS) {
+        pts = od17_pts(w);
+        for (i = [0 : len(pts) - 2])
+            hull() for (q = [pts[i], pts[i + 1]])
+                translate([PYLON_SIDE * q[0], q[1], q[2]]) sphere(d = OD17_CH_D, $fn = 12);
+    }
+}
+
 module extra_zone_b_cuts() {
+    od17_wire_channels();
     lip_ring_cavity(); tilt_drive_relief(); motor_lead_routes();
     $nsv_side = PYLON_SIDE;
     nsv_pod_cuts();     // nozzle servo pocket, drive sweeps, service wells, cover opening
@@ -2767,6 +2821,8 @@ module trunnion_collar_cut() {
     sgn = PYLON_SIDE;
     translate([sgn * COLLAR_X0, 0, PIVOT_Z]) rotate([0, sgn * 90, 0])
         cylinder(d = TRUNNION_REG_D, h = (WING_TIP_FACE_X - COLLAR_X0) + 1);
+    // OD-17 option D: this Ø42.6 void is also the 0.96 in (24.3 mm) bend chamber in which the
+    // four 10 AWG wires turn from the spar axis toward the disconnect bay.
     translate([sgn * TRUNNION_CAV_X0, 0, PIVOT_Z]) rotate([0, sgn * 90, 0])
         cylinder(d = TRUNNION_CAV_D, h = COLLAR_X0 - TRUNNION_CAV_X0 + 0.01);
     part_frame() for (a = T_BOLTS) rotate([0, 0, a])
@@ -2792,8 +2848,8 @@ assert(EDF1_Z_ENTRY >= P64_LIP_A,
        "rotor 1 is inside the lip — it must run in the constant 64 mm bore");
 assert(MOTOR_BOLT_R + M3_CLEAR_D / 2 < R_HUB,
        "QF2822 bolt circle does not land on the stator hub");
-assert(abs(NACELLE_FACE_X_PYLON - TRUNNION_X0 - (34.0 - 28.2)) < 1e-9,
-       "pylon-face-to-spar-tip distance changed — sleeve bound not held");
+assert(abs(NACELLE_FACE_X_PYLON - TRUNNION_X0 + P64_JOINT_SHIFT - (34.0 - 28.2)) < 1e-9,
+       "pylon-face-to-spar-tip distance (less the OD-17 joint shift) changed — sleeve bound not held");
 assert(abs(WING_TIP_FACE_X - TRUNNION_X0 - 20.5) < 1e-9,
        "spar stub != wings_s1223_revo.scad SPAR_TIP_PROTRUSION_64N (20.5 mm)");
 assert(NACELLE_FACE_X_PYLON - EDF_BORE_R - WALL_T >= 6.5,

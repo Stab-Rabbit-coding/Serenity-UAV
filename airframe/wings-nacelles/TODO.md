@@ -40,7 +40,6 @@
 ##### 1.1.3.7 *Rev S4 — fixed-spar trunnion, skewer removal, print readiness*
 → full detail: `WBS.md` §1.1.3.7
 
-- [ ] [OPEN — WA-R10] The 4 × 10 AWG disconnect route is UNBLOCKED but not…
 - [ ] [OPEN — FLIGHT SAFETY, LG-HOVER-01] Hover ground clearance is still…
 - [ ] [OPEN — VERIFY] `serenity_assembly.py` still places the deleted parts
 
@@ -80,6 +79,8 @@
 ## Findings 2026-11-11 (code review of the OD-17 tools, Claude Opus 5.5)
 → full detail: `WBS.md` §5.5
 
+- [ ] OD17-FAIR-WALL — Fairing thickened 0.08 in (2 mm) per side for the…
+- [ ] OD17-FAIR-HOLLOW — Fairing is printed solid, 0.080 lbm (36.4 g)
 - [ ] OD17-TOOLS-01 — One fairing module
 - [ ] WBS-BURNDOWN-01 — Count closures by identity, not by count
 

@@ -190,6 +190,9 @@ PRINTED = [
     ("PRINT-TILT-BRAKE-GUIDE", "fuselage/cargo/tilt_brake_guide_stbd.stl", 1, "hull"),
     ("(wing tilt pinion)", "wings/wing_tilt_pinion_port.stl", 1, "hull"),
     ("(wing tilt pinion)", "wings/wing_tilt_pinion_stbd.stl", 1, "hull"),
+    # OD-17 option D (owner 2026-11-11): wing-fixed aft fairing + rounded end plate, one per side
+    ("PRINT-WING-TIP-FAIRING", "wings/wing_tip_fairing_port.stl", 1, "hull"),
+    ("PRINT-WING-TIP-FAIRING", "wings/wing_tip_fairing_stbd.stl", 1, "hull"),
     ("PRINT-CHIN-SHELF", "fuselage/cargo/chin_node_shelf.stl", 1, "hull"),
     # The INSTALLED (baked, aircraft-frame) bay meshes, not the *_print.stl bed
     # copies: those are part-local, so measuring them "hull" put all four bays at
@@ -487,6 +490,17 @@ def nacelle_items() -> list[Item]:
                           total, p, inertia,
                           "tools/nacelle_mass_cg_64.py roll-up at the hull pivot",
                           "NACELLE"))
+    # OD-17 option D: the published pod (above) is still the pre-shift bake until
+    # NAC-64-REBAKE (S3).
+    # The moved joint adds pod material (measured: pod render 369,451 -> 388,178 mm3 on 2026-11-11,
+    # +18,727 mm3 x PA CF 1.11 g/cc = 20.8 g, collar boss net of the wire channels) and 0.91
+    # in (23 mm)
+    # of CF spar (29.1 g / 173 mm, BOM SPAR-CF-20X16 x 23 mm = 3.9 g, ESTIMATE).  Retire this item
+    # when the rebaked pod is published.
+    for side, p in PIVOT.items():
+        items.append(Item(f"OD-17 joint extension {side} (pod boss + spar)", "NACELLE",
+                          20.8 + 3.9, p, None,
+                          "render delta + spar ESTIMATE; retire at NAC-64-REBAKE", "NACELLE"))
     return items
 
 

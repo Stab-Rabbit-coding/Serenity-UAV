@@ -208,7 +208,7 @@ T64_STUB_EXTRA  = 7.0;    // [mm] spar stub / joint extension (owner 2026-10-03)
 
 // ── Joint stations, expressed as nacelle-local |X| (see the budget above) ─────
 // [flattened] TRUNNION_X0: value from its last assignment (override), kept at the first position
-TRUNNION_X0     = 28.2 + T64_AXIS_SHIFT;   // [mm] outboard face = spar tip.  SLEEVE-BOUNDED,
+TRUNNION_X0     = 28.2 + T64_AXIS_SHIFT + P64_JOINT_SHIFT;   // [mm] outboard face = spar tip.  SLEEVE-BOUNDED,
                            //      not duct-bounded — corrected 2026-08-31.  The
                            //      pivot sits inside the Ø55.4 sleeve zone, where
                            //      the stator sleeve's OD is r 27.5, so the old
@@ -216,7 +216,7 @@ TRUNNION_X0     = 28.2 + T64_AXIS_SHIFT;   // [mm] outboard face = spar tip.  SL
                            //      23.3 mm³ of solid interference into
                            //      edf_stator_sleeve.stl.  28.2 leaves 0.70 mm.
 // [flattened] WING_TIP_FACE_X: value from its last assignment (override), kept at the first position
-WING_TIP_FACE_X = 41.7 + T64_AXIS_SHIFT + T64_STUB_EXTRA;   // [mm] wing tip face  (NACELLE_OD_X/2 + 4.0 joint gap)
+WING_TIP_FACE_X = 41.7 + T64_AXIS_SHIFT + T64_STUB_EXTRA + P64_JOINT_SHIFT;   // [mm] wing tip face  (NACELLE_OD_X/2 + 4.0 joint gap)
 PAD_PROUD       =   2.0;   // [mm] wing tip pad proud of that face (TIP_PAD_PROUD)
 PILOT_CLEAR     =   0.3;   // [mm] running clearance, pilot spigot → pad face
 AIR_GAP         =   1.5;   // [mm] magnet face → AK7455 IC face (HALL_AIR_GAP)

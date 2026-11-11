@@ -1425,8 +1425,9 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     constant, because this stub has now been mis-bounded three times (32 → 15.0
     → 13.5).
 
-- [ ] **[OPEN — WA-R10] The 4 × 10 AWG disconnect route is UNBLOCKED but not
-    built.** **2026-11-07 (measured, NAC-64-ASM-03, Claude Opus 5.5): on the live
+- [x] **[CLOSED 2026-11-11 — WA-R10] The 4 × 10 AWG route is drawn in the pod SCAD
+    and clearance-proven on fresh renders.** *(Sprint 2. The published pod STL is the pre-shift bake
+    until S3 NAC-64-REBAKE; owner confirmation OD-18 pending; see below.)* **2026-11-07 (measured, NAC-64-ASM-03, Claude Opus 5.5): on the live
     x1.06 hollowed pod the route does NOT exist.** The spar-bore mouth (X 1.489 in (37.81 mm))
     is ~0.04 in (1 mm) from the cartridge/duct wall; the largest free sphere on the mouth
     is 0.06 in (1.5 mm) radius vs 0.26 in (6.64 mm) for the bundle (0.32 in (8.14 mm)
@@ -1449,6 +1450,26 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     **22.8° taper** (the longer-tail trial, 11.9°, gave 19 % less strip drag and was rejected as too small a
     flight-performance gain). CFD: `tools/od17_junction_cfd/`; brief sections "Junction CFD" and "Longer-tail
     CFD". Sprint 2 implements this; the route entry stays open until `--stage cable` passes on the moved joint.
+    **2026-11-11 (Sprint 2, built):** `P64_JOINT_SHIFT` 0.91 in (23 mm) in `nacelle_64_scale.scad`, read by
+    the pod, trunnion, assembly check, bake and tilt dynamics. Pod: collar boss to the moved rim, Ø1.68 in
+    (42.6 mm) bend chamber, four wire channels (`od17_wire_channels`). New published part
+    `PRINT-WING-TIP-FAIRING` ×2 (fairing + rounded end plate, `tools/nacelle64_wing_fairing.py`), BOM row,
+    ledger rows, mesh-sync PASS. Results, both pods (port mirrored), `tools/nacelle64_assembly_check.py
+    --stage all`: static only the known 0.0007 in³ (12 mm³) rib contact; sweep −5…+135° only ring-gear/pinion
+    tooth phase, pod material in the pinion sweep 0; wires: tightest point ≥ 0.650 in (16.50 mm) (3 × the
+    assumed 0.217 in (5.5 mm) OD) on all four, wire-to-wire overlap 0, wire to duct wall ≥ 0.088 in
+    (2.24 mm), 0.32 in (8.14 mm) bundle corridor clear through the spar mouth and chamber, wires and fairing
+    vs wing-fixed parts 0 over the sweep. Pod-side run 2.43 in (61.7 mm) forward pair, 2.78 in (70.7 mm) aft
+    pair (wing-side run not drawn). **Defect found and fixed:** the first drawn paths had 0.08–0.14 in
+    (2.1–3.6 mm) kinks, and the smoothed version made forward and aft wires overlap 0.051 in³ (839 mm³) per
+    pair; the aft pair's bend plane is now tilted 12°. **Exit reinterpreted** (plan: one route at 0.32 in
+    (8.14 mm) radius): the decided geometry fans four wires out in a 0.35 in (9 mm) annulus, so the exit is
+    the `wires` stage; the old `cable` stage still reports no single-bundle route. Owner confirmation:
+    OD-18 in the brief. Weight: fairing 0.080 lbm (36.4 g) per side; joint +0.046 lbm (+20.8 g) pod
+    (measured) + 0.009 lbm (+3.9 g) spar (ESTIMATE) per nacelle; hover AUW 6,403 → 6,525 g, T/W 1.48 → 1.45.
+    Not done here: wing-side harness run, WIREOD datasheet, pod re-bake (S3 NAC-64-REBAKE: the published
+    pod STL is still the pre-shift bake). **At the re-bake, delete the `OD-17 joint extension` rows in
+    `tools/auw_ledger.py nacelle_items()`**, or the pod boss is counted twice (+0.046 lbm (+20.8 g) per nacelle).
     *(Superseded reason, kept because it is why the requirement stalled:)* The bay itself is built (Z 82, 30 × 14 × 6.0 mm, 4 × M3 brass studs
     for ring terminals) and sits over the EDF1 ESC wire exit. What does not exist
     is the annulus the wing side assigned the bundle to: **the pod is solid.** The
@@ -2651,6 +2672,10 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     stand-in; obtain a real coupon/mill figure before release (TODO §0.8).
 - [ ] **SPAR-20-WIREOD** — `bom_revS.csv` records no OD for `WIRE-10AWG`. The
     whole bore chain scales off the assumed 5.5 mm; measure the procured wire.
+    **2026-11-11 (S2):** still open. The BOM row is a generic marketplace wire with no manufacturer, so
+    no datasheet can be cited for what will be procured. The as-built paths (bend R, channel size, bundle
+    corridor) all scale off 0.217 in (5.5 mm); the checks re-run in seconds if `WIRE_D` changes. Needs the
+    owner's caliper reading of the procured wire, or a named product with a manufacturer datasheet.
 
 ---
 
@@ -2728,6 +2753,10 @@ and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
 
 ## Findings 2026-11-11 (code review of the OD-17 tools, Claude Opus 5.5)
 
+- [ ] **OD17-FAIR-WALL — Fairing thickened 0.08 in (2 mm) per side** for
+    the minimum wall (CFD body had zero wall at the collar bore); drag not re-run (OD-18 item 2).
+- [ ] **OD17-FAIR-HOLLOW — Fairing is printed solid, 0.080 lbm (36.4 g).**
+    Hollow to a 0.079 in (2.0 mm) skin with powder-escape holes; mass falls, CG unchanged.
 - [ ] **OD17-TOOLS-01 — One fairing module.** The NACA section, TE line,
     loft and cap code is copied in `nacelle64_optD_aft_fairing.py`, `nacelle64_optD_glove.py`
     and `od17_junction_cfd/geom.py`, and the copies differ: the TE half-thickness floor is 0.039 in (1.0 mm)

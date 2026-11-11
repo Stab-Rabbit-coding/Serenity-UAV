@@ -209,7 +209,9 @@ COMPONENTS = {
 #      = (41.7 + axis shift + 7.0 stub) - 2.0  (53.84 at x1.00 shift 7.14).
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import nacelle_64_scale  # noqa: E402
-_N64_SEAT_SCALED = 41.7 + nacelle_64_scale.get("P64_AXIS_SHIFT_S") + 7.0 - 2.0
+_N64_SEAT_SCALED = (41.7 + nacelle_64_scale.get("P64_AXIS_SHIFT_S") + 7.0
+                    + nacelle_64_scale.get("P64_JOINT_SHIFT")
+                    - 2.0)   # OD-17 option D: joint +23 mm outboard
 # 2026-10-19 (drift found by fitting the published pods' duct bore): the pods
 # under airframe/stls/nacelles/ were baked at the x1.00 seat, axis X +60.540 /
 # -399.022, NOT at the x1.06 seat the scale file now gives (+63.01) -- the

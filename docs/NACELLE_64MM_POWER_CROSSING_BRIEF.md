@@ -317,3 +317,54 @@ before any part is drawn.
 **Still unverified:** the conductor OD (SPAR-20-WIREOD; 0.217 in (5.5 mm) is assumed); the NASA-STD-8739.4A
 bend-radius clause the repo cites; the 10 AWG loop stiffness and fatigue life; the spar-root allowable;
 and every mass marked ESTIMATE.
+
+## Sprint 2 as built (2026-11-11)
+
+Implements the decisions above. Built, rendered and checked on both pods (the port pod rendered with
+`PYLON_SIDE=-1`, mirrored into the starboard frame; every figure below is identical on both sides).
+Commands: `tools/nacelle64_assembly_check.py --stage all`, `tools/nacelle64_wing_fairing.py`.
+
+![As-built wire paths: section, tilt-axis view and top view](figures/nacelle64_od17_s2_wire_paths.png)
+
+*Red/blue: the forward and aft wires of ESC A; orange/magenta: ESC B. Arrow: the bay's travel as the pod
+tilts. Wire OD 0.217 in (5.5 mm) is ASSUMED (SPAR-20-WIREOD).*
+
+**What changed in the parts.** `P64_JOINT_SHIFT = 0.91 in (23 mm)` is one number in
+`nacelle_64_scale.scad`. The pod, the trunnion SCAD, the assembly check, the hull-frame bake and the tilt
+dynamics read it. In the pod the Ø2.13 in (54 mm) collar boss now runs from the old collar station out to
+the moved flange rim (flange rim at X 2.95 in (74.8 mm), `COLLAR_X1`), the Ø1.68 in (42.6 mm) cavity
+is continuous from the old station to the moved register and doubles as the 0.96 in (24.3 mm) bend
+chamber, and four wire channels (`od17_wire_channels`) are cut to the bay studs. The wing-fixed aft
+fairing and rounded end plate are a new published part, `PRINT-WING-TIP-FAIRING` (2 per aircraft).
+
+| Check | Finding |
+|---|---|
+| **Statics and dynamics** | Tilting rotates the pod about the spanwise axis, so the fairing gap cannot close. The fairing is wing-fixed and carries only its own air load over a 1.39 in (35 mm) span. The wires carry the tilt as twist inside the spar bore; no conductor flexes in bending. Spar-root moment grows 6.4 lbf·in (0.72 N·m) (brief, option D); the spar allowable is still unverified (SPAR-20-ALLOW). |
+| **Function** | Route proven: four wires run from the spar mouth to their own studs, each with a tightest point of at least 0.650 in (16.50 mm), 3 × wire OD, and no two wires interpenetrate. The first drawn paths had 0.08–0.14 in (2.1–3.6 mm) kinks; the check caught them, and the aft pair's bend plane is now tilted 12° so it fans out inside the bend. Wire to duct wall at least 0.088 in (2.24 mm). The 4-wire bundle (0.32 in (8.14 mm) radius) clears the spar mouth and the bend chamber. |
+| **Structural integrity** | Bay inserts keep 0.091 in (2.31 mm) minimum wall to the flow bore (minimum 0.079 in (2.0 mm)). The fairing's outer half-thickness at the tilt axis is bore radius + 0.079 in (2.0 mm) for the same minimum wall, so it is 0.08 in (2 mm) thicker per side than the CFD body (OD17-FAIR-WALL, below). The fairing is solid; hollowing is open (OD17-FAIR-HOLLOW). |
+| **Mechanism and component interactions** | Static overlaps at tilt 0: only the known pod/cartridge rib contact, 0.0007 in³ (12 mm³). Sweep −5…+135°: trunnion ring gear against pinion only (tooth phase, by design); pod material in the pinion sweep 0 in³ (0 mm³); wires and fairing against every wing-fixed part 0 in³ (0 mm³). Nearest gaps: fairing to pod 0.039 in (0.99 mm), to pinion 0.031 in (0.78 mm), to trunnion 0.039 in (1.00 mm). |
+| **Weight and balance** | Fairing 0.080 lbm (36.4 g) per side solid PA CF [REF-MAT-015]. Joint extension per nacelle: pod +0.046 lbm (+20.8 g) measured on the renders (369,451 → 388,178 mm³), spar +0.009 lbm (+3.9 g) ESTIMATE. Ledger: hover AUW 6,403 g (14.12 lbm) → 6,525 g (14.39 lbm), T/W 1.48 → 1.45. The pod roll-up still uses the pre-shift published pod until NAC-64-REBAKE (S3); the ledger carries the joint extension as its own row until then. Wing-fixed fairing: the nacelle pivot is unaffected. |
+| **Canonical shape** | The nacelle sits 0.91 in (23 mm) further from the wing tip (accepted 2026-11-11). Wing planform unchanged (22.8° taper kept). The fairing and plate are the shapes decided from the CFD; see OD-18 item 2 for the wall. Owner judgement against REF-CAD-003 stands. |
+
+**Harness lengths (pod side, centreline, spar mouth to stud lug).** Forward pair 2.43 in (61.7 mm); aft
+pair 2.78 in (70.7 mm). The wing-side run (spar bore to the wing's connection) is not drawn in this
+sprint; cut length = pod-side run + wing-side run + service loop.
+
+### OD-18 — three things the owner needs to confirm
+
+1. **Cable exit criterion.** The plan wrote it as "`--stage cable` finds a route at 0.32 in (8.14 mm)
+   radius", i.e. one 0.64 in (16.3 mm) corridor for the whole bundle from the spar to the bay. Option D
+   cannot meet that and never meant to: after the bend the wires run in a 0.35 in (9 mm) annulus between
+   the duct and the skin, so they fan out as four separate wires. The check I ran instead is `--stage wires`
+   (above): bundle corridor of 0.32 in radius through the spar mouth and bend chamber, then four separate
+   wire paths with bend, clearance and no-overlap tests. The old `cable` stage still runs and still
+   reports no bundle route to the bay, which is expected. **Decision: accept the wires check as the WA-R10
+   exit (I recommend yes), or require a single-bundle route (that means roughly doubling the shift, per
+   "Option D, modelled").**
+2. **Fairing wall.** A zero-wall fairing cannot print. I thickened it by 0.08 in (2.0 mm) per side at the
+   tilt axis and truncated the trailing edge at 0.08 in (2.0 mm). Drag effect not re-run. **Decision:
+   accept, or order a CFD re-run first.**
+3. **Bend-radius clause.** The repo's NASA-STD-8739.4A citation (Table 7-1, §7.2.19, `REFERENCES.md`
+   REF-NASA-001) gives 3 × OD for an overall harness. I applied it to each wire. If the four are bound as
+   one harness the minimum is 3 × 0.523 in = 1.57 in (39.8 mm), and the shift roughly doubles. I did not
+   re-fetch the standard this session. **Decision: confirm wires are routed unbound, or reopen OD-17.**

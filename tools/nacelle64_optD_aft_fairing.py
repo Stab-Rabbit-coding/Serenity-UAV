@@ -8,6 +8,9 @@ the wing TE line (measured on the wing mesh, extended outboard); the rotating co
 TE truncated at 2 mm (AGENTS.md section 7).  Lofted from X 49 mm (1 mm off the pod's inboard face,
 a gap that tilting about the spanwise axis cannot change) into the wing's full-chord section.
 Reports volume/mass, t/c and fineness, and clearance to every tilting part over -5..135 deg.
+SUPERSEDED for the published part by tools/nacelle64_wing_fairing.py (printable wall, end plate);
+kept to reproduce the brief's figures.  Run it only on pod/trunnion renders made AFTER the joint
+shift (P64_JOINT_SHIFT) landed: SH is 0 because the shift is already in them.
 Concept geometry for the decision brief (docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md).
 
 Usage:  python3 tools/nacelle64_optD_aft_fairing.py POD.stl TRUNNION.stl OUT_FAIRING.stl
@@ -25,7 +28,7 @@ import sls_materials as sm
 import manifold3d as m
 sys.path.insert(0, __import__('os').path.dirname(__import__('os').path.abspath(__file__)))
 POD, TRN, OUT = sys.argv[1:4]
-SH = 23.0
+SH = 0.0                                      # the 23 mm joint shift is in the pod SCAD and checker
 PZ = a.PIVOT_Z
 R_COL, CLR = 27.0, 1.0
 RHO = sm.rho_g_mm3(sm.PA_CF)                  # g/mm^3, datasheet solid density (single source)

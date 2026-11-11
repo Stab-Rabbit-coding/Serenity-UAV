@@ -24,8 +24,9 @@ def test_tilt_fixes_pivot_and_points_exhaust_down_in_hover():
 
 
 def test_stack_datums():
-    assert abs(a.SEAT - 56.31) < 0.01        # 41.7 + 9.61 + 7.0 - 2.0
-    assert abs(a.TRUNNION_X0 - 37.81) < 0.01
+    # OD-17 option D: the joint sits P64_JOINT_SHIFT = 23.0 mm outboard of the pod's pylon face
+    assert abs(a.SEAT - 79.31) < 0.01        # 41.7 + 9.61 + 7.0 + 23.0 - 2.0
+    assert abs(a.TRUNNION_X0 - 60.81) < 0.01
 
 
 def test_fix_nonmanifold_splits_edge_touching_cubes():
@@ -53,3 +54,22 @@ def test_bay_insert_walls_meet_minimum_and_old_insert_did_not():
         assert not a.bay_check(far)["min_wall_ok"]
     finally:
         a.BAY_INSERT_L = old
+
+
+def test_scad_wire_table_matches_concept_tool():
+    """The pod SCAD's OD17_OFFS (what is cut) and the concept tool's TAIL/STUD_Y (what is checked)
+    must be the same numbers, or the wires check proves a path the pod does not cut."""
+    import re
+
+    import nacelle64_optD_concept as d
+
+    scad = (a.ROOT / "airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad").read_text()
+    body = re.search(r"OD17_OFFS\s*=\s*\[(.*?)\];", scad, re.S).group(1)
+    rows = [[float(v) for v in r.split(",")] for r in re.findall(r"\[([^\[\]]+)\]", body)]
+    assert len(rows) == 4
+    for y0, z0, ys, beta, g, k1, k2 in rows:
+        assert d.STUD_Y[(y0, z0)] == ys
+        assert d.TAIL[(y0, z0)] == (beta, g, k1, k2)
+    assert re.search(r"OD17_X_LUG\s*=\s*40\.5;", scad) and d.X_LUG == 40.5
+    assert re.search(r"OD17_BARREL\s*=\s*9\.0;", scad) and d.BARREL == 9.0
+    assert re.search(r"OD17_WIRE_D\s*=\s*5\.5;", scad) and d.WIRE_D == 5.5
