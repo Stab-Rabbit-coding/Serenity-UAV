@@ -2933,13 +2933,13 @@
       "Description": "wing_tip_fairing_{port,stbd}.stl — wing-fixed aft fairing behind the rotating tilt collar, with rounded end plate and fillet into the wing tip (OD-17 option D)",
       "Category": "Printed Part",
       "Qty": "2",
-      "Unit_Mass_g": "23.2",
-      "Total_Mass_g": "46.4",
+      "Unit_Mass_g": "20.7",
+      "Total_Mass_g": "41.4",
       "Supplier": "SLS service bureau (vendor not yet selected)",
       "Supplier_PN_or_Search": "SLS DuraForm PA CF [3DS-30108A] (REF-MAT-015)",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev U (2026-11-11, WA-R10, owner decision OD-17 option D). PRINT FROM airframe/stls/wings/wing_tip_fairing_{port,stbd}.stl, built by tools/nacelle64_wing_fairing.py. Bonds to the wing tip; wing-fixed (it does not tilt). NACA-type tail behind the Dia 2.13 in (54 mm) collar to the wing trailing-edge line; 0.24 in (6 mm) convex rounding, 0.04 in (1 mm) wall and 0.24 in (6 mm) concave fillet at the wing junction (CFD: 14 % less drag than the 1.50 in glove); 22.8 deg wing taper kept. Hollow 0.079 in (2.0 mm) SLS skin filled with 2 lb/ft3 closed-cell PU foam from FOAM-PU-2LB (owner 2026-11-11: not structural; 0.4 g foam per side, in the AUW ledger); two Dia 0.16 in (4 mm) fill/vent holes in the outboard cap double as the SLS powder-escape holes [REF-MFG-001 p. 6]. Solid it was 36.4 g. Outer half-thickness at the tilt axis is bore radius + 0.079 in (2.0 mm) for the minimum wall (OD17-FAIR-WALL). Mass synced to the STL mesh at the SLS datasheet density. Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 36.4 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
+      "Notes": "Rev U (2026-11-11, WA-R10, owner decision OD-17 option D). PRINT FROM airframe/stls/wings/wing_tip_fairing_{port,stbd}.stl, built by tools/nacelle64_wing_fairing.py. Bonds to the wing tip; wing-fixed (it does not tilt). NACA-type tail behind the Dia 2.13 in (54 mm) collar to the wing trailing-edge line; 0.24 in (6 mm) convex rounding, 0.04 in (1 mm) wall and 0.24 in (6 mm) concave fillet at the wing junction (CFD: 14 % less drag than the 1.50 in glove); 22.8 deg wing taper kept. Hollow 0.059 in (1.5 mm) SLS skin (owner OD-18 item 4 / OD-19 A, 2026-11-11) filled with 2 lb/ft3 closed-cell PU foam from FOAM-PU-2LB (owner 2026-11-11: not structural; 0.5 g foam per side, in the AUW ledger); two Dia 0.16 in (4 mm) fill/vent holes in the outboard cap double as the SLS powder-escape holes [REF-MFG-001 p. 6]. Solid it was 36.4 g. Outer half-thickness at the tilt axis is bore radius + 0.079 in (2.0 mm) for the minimum wall (OD17-FAIR-WALL). Mass synced to the STL mesh at the SLS datasheet density. Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 23.2 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "PRINT-NOZ64-THROAT",

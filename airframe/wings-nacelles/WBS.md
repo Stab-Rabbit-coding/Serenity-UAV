@@ -2679,6 +2679,11 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     corridor) all scale off 0.217 in (5.5 mm); the checks re-run in seconds if `WIRE_D` changes. Needs the
     owner's caliper reading of the procured wire, or a named product with a manufacturer datasheet.
 
+- [ ] **NAC-64-WIRE-QUAL** — Owner OD-18 item 3 (2026-11-11): the four feed wires run **unbound**.
+    Qualify the chosen 10 AWG wire by a cycle test on the real spar length: 140 deg twist per tilt
+    cycle **plus the installed 0.65 in (16.5 mm) centreline channel bend**, to the service life. Ask
+    Daburn for 2617/10's minimum bend radius first. If the test fails, redraw the channel to about
+    0.73 in (18.5 mm) centreline so the inside radius meets 3 x OD (check the bend chamber has room).
 - [ ] **NAC-64-FEED-THERM** — Owner decision 2026-11-11 (ESC wire report review,
     `reports/UAV ESC wire market survey.md` Decision 1): **test the current spar first.** Load-bank the
     four 10 AWG feed conductors in the spar at 44 A and 38 A sustained with a thermocouple on the spar
@@ -2784,6 +2789,13 @@ and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
 
 - [ ] **OD17-FAIR-WALL — Fairing thickened 0.08 in (2 mm) per side** for
     the minimum wall (CFD body had zero wall at the collar bore); drag not re-run (OD-18 item 2).
+    **Owner 2026-11-11: CFD re-run first** — see OD17-FAIR-CFD.
+- [ ] **OD17-FAIR-CFD — Owner OD-18 item 2 (2026-11-11): re-run the junction drag CFD on the as-built
+    fairing** (outer half-thickness bore + 2.0 mm at the tilt axis, trailing edge cut at 2.0 mm) and
+    compare with the zero-wall body that gave 14 % less drag than the 1.50 in glove
+    (`od17_junction_cfd/`). Hold release of the fairing outer shape until done. If the drag penalty
+    matters, reduce the thickening at the axis (it is a printability allowance, not structure) and
+    re-run. Fold OD17-TOOLS-01 in first so the CFD body and the printed part come from one module.
 - [x] **OD17-FAIR-HOLLOW — Fairing hollow, foam filled (owner 2026-11-11).**
     Owner direction: not a structural part, so a hollow shell with the minimum skin that holds its shape
     with a foam core. Built in `tools/nacelle64_wing_fairing.py` (`--skin`, default 2.0 mm): cavity =
@@ -2795,7 +2807,10 @@ and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
     (X 2.08–3.04 in (52.8–77.3 mm)) is 2.0 mm; the thin readings (4 % of samples below 0.95 mm) are all
     in the end-plate fillet toe, which tapers onto the wing and is bonded. **Skin is open to the owner
     (OD17-FAIR-SKIN below).**
-- [ ] **OD17-FAIR-SKIN — Owner: fairing skin 2.0 mm (§7) or 1.0 mm (SLS min)?**
+- [x] **OD17-FAIR-SKIN — Owner: fairing skin 2.0 mm (§7) or 1.0 mm (SLS min)?** **DECIDED 2026-11-11
+    (OD-18 item 4): 1.5 mm under OD-19 option A.** Rebuilt: 20.7 g shell + 0.5 g foam per side, 5.0 g
+    saved per aircraft; BOM and ledger synced. The 1.0 mm figure below was a mis-citation
+    (SLS-WALL-FLOOR). Original brief:
     `AGENTS.md` §7 sets exterior shells at 2.0 mm; the SLS process minimum is 1.0 mm [REF-MFG-001 p. 15].
     1.0 mm: shell 0.039 lbm (17.5 g) + foam 0.5 g per side, saves 0.026 lbm (11.6 g) per aircraft, needs
     a §7 waiver; the outer half-thickness at the axis could then drop 1 mm toward the CFD shape

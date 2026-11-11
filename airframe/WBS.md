@@ -307,7 +307,9 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     removed; `ARCHIVE_INDEX.md` section "airframe/archive/FreeCAD-scripts/" added.
     The canonical `SerenityAssembly.FCStd` was left in place in `airframe/freecad/assembly/`.
 
-- [ ] **OD-19 — Owner: adopt the SLS minimum-wall rule?** (2026-11-11)
+- [x] **OD-19 — Owner: adopt the SLS minimum-wall rule?** (2026-11-11) **DECIDED 2026-11-11: option A**,
+    adopted into `AGENTS.md` §7 (2.0 mm where category or orientation is not stated). Text below is the
+    original brief; the current table is `docs/SLS_MIN_WALL_THICKNESS.md`.
     The 0.079 in (2.0 mm) `AGENTS.md` §7 wall came from FDM CF-PETG. `docs/SLS_MIN_WALL_THICKNESS.md`
     (tool `tools/sls_min_wall.py`) re-derives it for DuraForm PA CF in six cases (load-bearing /
     non-load-bearing x foam-backed / free-standing / lattice-supported), any orientation vs XY fixed.

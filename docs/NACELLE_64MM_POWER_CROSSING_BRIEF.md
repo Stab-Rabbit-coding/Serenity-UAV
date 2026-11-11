@@ -350,7 +350,9 @@ fairing and rounded end plate are a new published part, `PRINT-WING-TIP-FAIRING`
 pair 2.78 in (70.7 mm). The wing-side run (spar bore to the wing's connection) is not drawn in this
 sprint; cut length = pod-side run + wing-side run + service loop.
 
-### OD-18 — three things the owner needs to confirm
+### OD-18 — owner decisions (decided 2026-11-11)
+
+**Decided by the owner, 2026-11-11:** item 1 — accept the `wires` check as the WA-R10 exit; item 2 — **hold** the fairing outer shape until a CFD drag re-run on the thickened shape; item 3 — wires routed **unbound**, centreline basis taken as an interpretation, qualified by the torsion-and-bend test (WBS NAC-64-WIRE-QUAL), channel enlarged only if the test fails; item 4 — skin **1.5 mm** under OD-19 option A (adopted into `AGENTS.md` §7). The original briefs follow.
 
 1. **Cable exit criterion.** The plan wrote it as "`--stage cable` finds a route at 0.32 in (8.14 mm)
    radius", i.e. one 0.64 in (16.3 mm) corridor for the whole bundle from the spar to the bay. Option D
@@ -360,10 +362,12 @@ sprint; cut length = pod-side run + wing-side run + service loop.
    wire paths with bend, clearance and no-overlap tests. The old `cable` stage still runs and still
    reports no bundle route to the bay, which is expected. **Decision: accept the wires check as the WA-R10
    exit (I recommend yes), or require a single-bundle route (that means roughly doubling the shift, per
-   "Option D, modelled").**
+   "Option D, modelled").** **Decided 2026-11-11: wires check accepted.** The `cable` stage stays as an
+   information-only check.
 2. **Fairing wall.** A zero-wall fairing cannot print. I thickened it by 0.08 in (2.0 mm) per side at the
    tilt axis and truncated the trailing edge at 0.08 in (2.0 mm). Drag effect not re-run. **Decision:
-   accept, or order a CFD re-run first.**
+   accept, or order a CFD re-run first.** **Decided 2026-11-11: CFD re-run first** (WBS OD17-FAIR-CFD);
+   the outer shape is not released until it is done.
 3. **Bend-radius clause.** The repo's NASA-STD-8739.4A citation (Table 7-1, §7.2.19, `REFERENCES.md`
    REF-NASA-001) gives 3 × OD for an overall harness. I applied it to each wire. If the four are bound as
    one harness the minimum is 3 × 0.523 in = 1.57 in (39.8 mm), and the shift roughly doubles. I did not
@@ -372,6 +376,11 @@ sprint; cut length = pod-side run + wing-side run + service loop.
    centreline. Measured to the inside of the bend it fails (about 13.3-13.9 mm against 15.8 mm), and the
    105/30 silicone class carries a 10 × OD maker limit (Alpha 391000). Confirm the Table 7-1 basis; the
    torsion test now includes the installed channel bend (`reports/UAV ESC wire market survey.md`).
+   **Decided 2026-11-11: unbound, qualified by test.** Table 7-1 as read defines OD only as "Outside
+   Diameter" and does not state a centreline or inside-radius basis, and it has no single-wire row, so
+   applying the harness row per wire on the centreline is a declared interpretation. The installed
+   bend is qualified by WBS NAC-64-WIRE-QUAL; the channel is redrawn to about 0.73 in (18.5 mm)
+   centreline only if that test fails.
 4. **Fairing skin.** You directed a hollow, foam-filled fairing with the minimum skin that holds its shape.
    I built it at 0.079 in (2.0 mm), the `AGENTS.md` §7 exterior-shell skin. *Corrected 2026-11-11:* the
    earlier 0.039 in (1.0 mm) "SLS process minimum" mis-cited REF-MFG-001 p. 15 (a tank wall). The interim
@@ -379,3 +388,7 @@ sprint; cut length = pod-side run + wing-side run + service loop.
    non-load-bearing row), which needs OD-19 or a §7 waiver. Rebuild with
    `tools/nacelle64_wing_fairing.py --skin 1.5` for the mesh mass. Neither skin is load-checked; the
    part carries only its own air load. **Decision: 2.0 mm (as built) or 1.5 mm under OD-19.**
+   **Decided 2026-11-11: 1.5 mm under OD-19 option A.** Rebuilt: 0.046 lbm (20.7 g) shell + 0.5 g foam
+   per side (was 23.2 g), 0.011 lbm (5.0 g) saved per aircraft. Ray-cast check: shell body median
+   1.50 mm; readings below 1.4 mm are in the bonded fillet toe (within 6 mm of the wing) or within
+   2 mm of a sharp edge (hole lips, bore edge, trailing-edge cut), i.e. ray artefacts.

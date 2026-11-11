@@ -284,9 +284,16 @@ language states what is required regardless of actor.
   part not yet moved to SLS. Replace any stray "PETG" reference with CF-PETG when found;
   verify any other material mentioned in the repo. (The DaVinci Jr prototype is exempt — not
   expected to meet full-build spec.)
-- Exterior shell: hollow to 2.0 mm (0.079 in), watertight, no voids; fill with 2 lb/ft³
-  (32 kg/m³) low-density closed-cell foam; inter-section mating faces stay open for build
-  access and inter-compartment cable routing.
+- Exterior shell: hollow, watertight, no voids; fill with 2 lb/ft³ (32 kg/m³) low-density
+  closed-cell foam; inter-section mating faces stay open for build access and
+  inter-compartment cable routing.
+- **SLS wall thickness (owner OD-19 option A, 2026-11-11):** size SLS PA CF walls from the
+  table in `docs/SLS_MIN_WALL_THICKNESS.md` by load category (load-bearing or not) and backing
+  (foam-backed, free-standing or lattice-supported). Use its **"XY fixed" column only when the
+  drawing states the print orientation**; otherwise use "any orientation". Where a part's
+  category or orientation is not stated, the wall **shall be 2.0 mm (0.079 in)**. The table is
+  a minimum gauge: load-bearing parts are still sized by their own loads. Its floor is the
+  interim 0.059 in (1.5 mm) until the service bureau states a minimum (WBS SLS-WALL-FLOOR).
 - Integrate mounting brackets/bosses/ribs into the shell print wherever feasible.
 - Load-bearing mating joints require a minimum 2-wall contact annulus **and** a positive-stop
   shoulder — friction fit alone is never acceptable for a flight-critical joint.

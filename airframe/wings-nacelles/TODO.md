@@ -69,6 +69,7 @@
 - [ ] SPAR-20-TSCALE — `s1223_section()` carries a note that `t_scale` was…
 - [ ] SPAR-20-ALLOW — No verified CF tube flexural allowable exists in…
 - [ ] SPAR-20-WIREOD — `bom_revS.csv` records no OD for `WIRE-10AWG`
+- [ ] NAC-64-WIRE-QUAL — Owner OD-18 item 3 (2026-11-11)
 - [ ] NAC-64-FEED-THERM — Owner decision 2026-11-11 (ESC wire report…
 - [ ] NAC-64-DESIGN-AMPS — Owner decision 2026-11-11
 - [ ] NAC-64-PHASE-TEST — Owner decision 2026-11-11 (report Decision 3)
@@ -84,7 +85,7 @@
 → full detail: `WBS.md` §5.5
 
 - [ ] OD17-FAIR-WALL — Fairing thickened 0.08 in (2 mm) per side for the…
-- [ ] OD17-FAIR-SKIN — Owner: fairing skin 2.0 mm (§7) or 1.0 mm (SLS min)?
+- [ ] OD17-FAIR-CFD — Owner OD-18 item 2 (2026-11-11)
 - [ ] OD17-TOOLS-01 — One fairing module
 - [ ] WBS-BURNDOWN-01 — Count closures by identity, not by count
 
