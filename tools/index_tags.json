@@ -10207,6 +10207,13 @@
       ],
       "archived": false
     },
+    "docs/MATSPEC_SLS_PA_CF.md": {
+      "description": "Material specification MS-SLS-PACF \u2014 SLS DuraForm PA CF flight parts",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md": {
       "description": "Owner Decision Brief OD-17 \u2014 How the 4 \u00d7 10 AWG feed crosses the tilt joint (WA-R10)",
       "tags": [
@@ -16825,6 +16832,7 @@
       "docs/MANIFEST.json",
       "docs/MASS_AUDIT_CARGO_WING_ROOT.md",
       "docs/MASS_AUDIT_MIDDLE_REAR_SECTIONS.md",
+      "docs/MATSPEC_SLS_PA_CF.md",
       "docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md",
       "docs/NACELLE_64MM_VERIFICATION.md",
       "docs/NOZZLE_DRIVE_TRADE.md",

@@ -9,8 +9,8 @@ still sized by its own analysis, and this tool gives the floor that analysis sta
 in-plane allowables (panel buckling, face wrinkling) a part analysis needs.
 
 Failure modes checked (each case reports the governing one):
-  PROC   SLS process minimum wall, 1.0 mm (0.039 in) [REF-MFG-001 p. 15]; the DFM audit
-         (tools/sls_dfm_audit.py) flags walls reading below 0.95 mm.
+  PROC   interim SLS minimum wall for carbon-filled PA, 1.5 mm (0.059 in); see T_PROC.  (Corrected
+         2026-11-11: REF-MFG-001 p. 15 gives ">1mm" for pressure-tight tanks, not a minimum wall.)
   RUPT   flexural rupture of the skin under a handling point load, Roark-type thin-plate
          formula for a central load on a circular plate (simply supported for a free-standing
          panel, clamped for a lattice cell, a foundation-equivalent plate for a foam-backed skin).
@@ -62,7 +62,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import sls_materials as sm  # noqa: E402
 
 MM_IN = 25.4
-T_PROC = 1.0                    # mm, REF-MFG-001 p. 15
+# Interim floor for 33 % carbon-filled PA12 (2026-11-11 correction): REF-MFG-001 p. 15's ">1mm" is
+# the wall for a pressure-tight SLS TANK, not a general minimum wall, and the guide (2019) predates
+# PA CF.  No 3D Systems document read states a minimum wall for DuraForm PA CF.  General SLS
+# guidance for fibre-filled powders is 1.5 mm minimum, 2.0-2.5 mm recommended (anthropic-skills
+# 3d-print-design reference, uncited); 1.5 mm is used until the service bureau states its minimum.
+T_PROC = 1.5                    # mm, INTERIM (see above)
 NU = 0.35                       # ASSUMED
 E_PETG = 6670.0                 # MPa, REF-MAT-002 via MASS_AUDIT section 1
 T_PETG = 2.0                    # mm, the old FDM rule

@@ -317,6 +317,16 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     with the old CF-PETG basis). Foam crush and face wrinkling make 2 lb/ft³ foam a poor stabilizer
     for load-bearing skins. Recommendation A (adopt, with orientation on the drawing). The §7 text is
     the owner's to change. Unverified: PA CF Z data, foam datasheet, handling load, textbook cites.
+- [ ] **MS-SLS-PACF — Owner: approve the PA CF material specification** (2026-11-11)
+    `docs/MATSPEC_SLS_PA_CF.md`: brittle design basis (did not yield, 3.8 % elongation), orientation
+    on every drawing, 2.25 factor for load-bearing parts, process record per build, witness coupons,
+    mass check ±3 %, and an ASTM D638/D790/D953 coupon plan in X/Y/Z that replaces the 0.5 assumed
+    Z knockdown. 3D Systems publishes no Z data (3DS-30108A re-read 2026-11-11).
+- [ ] **SLS-WALL-FLOOR — The 1.0 mm "SLS process floor" was a mis-citation**
+    REF-MFG-001 p. 15's ">1mm" is the wall of a pressure-tight SLS tank, not a minimum wall.
+    `tools/sls_min_wall.py` now uses an interim 1.5 mm floor for the 33 % carbon-filled powder;
+    `tools/sls_dfm_audit.py` (MIN_WALL_MM 1.0) still cites p. 15. Get the bureau's minimum wall for
+    DuraForm PA CF, then fix the audit constant and its citation.
 - [ ] **SLS-WALL-STIFF — 2.0 mm SLS load-bearing skins, unfixed orientation**
     Finding from OD-19: a 2.0 mm PA CF skin whose print orientation is not fixed has about 52 % of
     the bending stiffness (E t³, Z knockdown 0.5 ASSUMED) of the 2.0 mm CF-PETG skin the existing

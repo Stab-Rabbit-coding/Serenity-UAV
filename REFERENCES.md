@@ -2032,7 +2032,7 @@ which prints that caveat on every run.
 | **Date** | 2023-10-31 |
 | **Source** | <https://www.3dsystems.com/sites/default/files/2023-11/3d-systems-duraform-pa-cf-datasheet-us-en-2023-10-31-a_web65.pdf> (owner-supplied 2026-11-01; HTTP 200 `application/pdf` from 3dsystems.com, validated 2026-11-01). Renumbered from REF-MAT-011 (ID collided with Rock West CF plate). |
 | **Verified** | 2026-11-07: downloaded from the Source URL (HTTP 200, `application/pdf`); the sheet footer reads `3DS-30108A 10-23` and the Solid Density row reads 1.11 g/cm³ (ASTM D792). |
-| **Values applied** | Density 1.11 g/cm³ (ASTM D792); tensile ultimate 84 MPa, tensile modulus 8,500 MPa, elongation 3.8 % (ASTM D638 Type I); flexural modulus 7,000 MPa (ASTM D790); HDT 177 °C at 1.82 MPa (ASTM D648). No orientation (Z) data and no electrical rows. |
+| **Values applied** | Density 1.11 g/cm³ (ASTM D792); tensile ultimate 84 MPa, tensile modulus 8,500 MPa, elongation 3.8 % (ASTM D638 Type I); flexural modulus 7,000 MPa and flexural strength 140 MPa (ASTM D790); HDT 177 °C at 1.82 MPa (ASTM D648); 24 h water absorption 0.47 % (ASTM D570); notched / unnotched Izod 52 / 490 J/m; tensile 'did not yield'; composition 33 % carbon-fibre-filled nylon 12. No orientation (Z) data and no electrical rows. Re-read 2026-11-11 from the same URL; the live product page https://www.3dsystems.com/materials/duraform-pa-cf-sls still links only this revision. |
 
 **Used in:** `tools/aft_section_mass_audit.py`, `tools/aft_skin_thinning_study.py`,
 `docs/MASS_AUDIT_MIDDLE_REAR_SECTIONS.md`, `docs/AFT_SKIN_THINNING_STUDY.md`,
