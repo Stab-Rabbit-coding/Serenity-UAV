@@ -79,7 +79,14 @@ jobs:
           fetch-depth: 0
       - name: Install kicad-cli
         run: |
-          sudo add-apt-repository --yes ppa:kicad/kicad-9.0-releases
+          # add-apt-repository calls api.launchpad.net, which has failed from the runner with
+          # transient DNS/TLS/network errors (PR #281, 2026-11-11).  Retry the install setup with
+          # backoff; the validator below still runs in full and fails on any real ERC/DRC error.
+          for i in 1 2 3 4; do
+            sudo add-apt-repository --yes ppa:kicad/kicad-9.0-releases && break
+            [ "$i" = 4 ] && exit 1
+            sleep $((i * 15))
+          done
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends kicad
           kicad-cli --version
