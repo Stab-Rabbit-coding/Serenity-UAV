@@ -2677,6 +2677,32 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     corridor) all scale off 0.217 in (5.5 mm); the checks re-run in seconds if `WIRE_D` changes. Needs the
     owner's caliper reading of the procured wire, or a named product with a manufacturer datasheet.
 
+- [ ] **NAC-64-FEED-THERM** — Owner decision 2026-11-11 (ESC wire report review,
+    `reports/UAV ESC wire market survey.md` Decision 1): **test the current spar first.** Load-bank the
+    four 10 AWG feed conductors in the spar at 44 A and 38 A sustained with a thermocouple on the spar
+    wall. Pass: wall at or below the procured resin's wet Tg minus 50 deg F (28 deg C). Only on a fail,
+    move to a high-temperature spar (wet Tg at least 352 deg F (178 deg C)) with an in-spar sleeve rated
+    at least 302 deg F (150 deg C). Needs: the procured spar's resin datasheet (wet Tg); a catalogued
+    CMH-17 edition and section for the Tg-margin rule.
+- [ ] **NAC-64-DESIGN-AMPS** — Owner decision 2026-11-11: the sustained per-fan design current is the
+    most heavily loaded fan at 21.0 V including control headroom, about **44 A** (ESTIMATE, 57 A x
+    (21/24)^2), not the 38 A mean hover. Re-derive it from the flight-control allocation and the CG
+    offset when those exist. Short-time case: 57-63 A (63 A on a fresh 25.2 V pack) unless the
+    throttle is capped at 60 A.
+- [ ] **NAC-64-PHASE-TEST** — Owner decision 2026-11-11 (report Decision 3): before enlarging the pod's
+    lead conduit, load-bank three 200 deg C phase leads at about 38 A RMS at 176 deg F (80 deg C) on the
+    real lead length. Test 12 AWG AT121925 and 14 AWG AT141927 (the latter in the existing 0.197 in
+    conduit). If 14 AWG passes, no pod change; otherwise open the conduit and stage-2 slot to about
+    0.28 in (7.0 mm) for AT121925.
+- [ ] **[WARNING] NAC-64-FUSE-COORD** — Owner decision 2026-11-11 (report Decision 4, option B): the
+    BOM FUSE-ESC-40A is below the 44 A design current and the 57 A peak. Run a coordination study with
+    three curves on one plot: fuse time-current, wire short-time rating, and the ESC limit. **The ESC
+    current limit shall be I-squared-t / fold-back:** up to 60 A for at most 10 s, then fold back to no
+    more than the qualified wire continuous rating. The fuse carries 44 A continuous and 57-63 A for
+    10 s. The 297 MINI family likely tops out at 40 A (unverified), so expect a MIDI-class fuse and
+    holder; check bay space. OD-3 (ESC rating) stays open until the OSESC-NAC passes 44 A sustained at
+    bay temperature.
+
 ---
 
 ## §1.1.5 — Nacelle Trunnion Pivot and Tilt Drive

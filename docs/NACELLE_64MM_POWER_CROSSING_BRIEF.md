@@ -368,8 +368,14 @@ sprint; cut length = pod-side run + wing-side run + service loop.
    REF-NASA-001) gives 3 × OD for an overall harness. I applied it to each wire. If the four are bound as
    one harness the minimum is 3 × 0.523 in = 1.57 in (39.8 mm), and the shift roughly doubles. I did not
    re-fetch the standard this session. **Decision: confirm wires are routed unbound, or reopen OD-17.**
+   *Added 2026-11-11 (wire report review):* the 0.65 in channel passes 3 × OD by 0.7 mm measured on the
+   centreline. Measured to the inside of the bend it fails (about 13.3-13.9 mm against 15.8 mm), and the
+   105/30 silicone class carries a 10 × OD maker limit (Alpha 391000). Confirm the Table 7-1 basis; the
+   torsion test now includes the installed channel bend (`reports/UAV ESC wire market survey.md`).
 4. **Fairing skin.** You directed a hollow, foam-filled fairing with the minimum skin that holds its shape.
-   I built it at 0.079 in (2.0 mm), the `AGENTS.md` §7 exterior-shell skin. The SLS process minimum is
-   0.039 in (1.0 mm) [REF-MFG-001 p. 15]: shell 0.039 lbm (17.5 g) instead of 0.051 lbm (23.3 g) per side,
-   0.026 lbm (11.6 g) saved per aircraft, and it needs a §7 waiver. Neither skin is load-checked; the part
-   carries only its own air load. **Decision: 2.0 mm (as built) or 1.0 mm with a §7 waiver.**
+   I built it at 0.079 in (2.0 mm), the `AGENTS.md` §7 exterior-shell skin. *Corrected 2026-11-11:* the
+   earlier 0.039 in (1.0 mm) "SLS process minimum" mis-cited REF-MFG-001 p. 15 (a tank wall). The interim
+   floor for PA CF is **0.059 in (1.5 mm)** (`docs/SLS_MIN_WALL_THICKNESS.md`, foam-backed
+   non-load-bearing row), which needs OD-19 or a §7 waiver. Rebuild with
+   `tools/nacelle64_wing_fairing.py --skin 1.5` for the mesh mass. Neither skin is load-checked; the
+   part carries only its own air load. **Decision: 2.0 mm (as built) or 1.5 mm under OD-19.**
