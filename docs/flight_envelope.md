@@ -358,7 +358,7 @@ over a moving platform take more, so the budget is optimistic. With a 30 % reser
 (ASSUMED; Part 107 sets none) held **in addition to** the RTL-trigger margin, the **derived endurance
 target is 318 s (5.3 min) airborne, two cells, payload aboard.**
 
-> **WARNING**
+> **CAUTION**
 >
 > The aircraft as specified does **not** meet the derived target. Two cells
 > with the payload give about **66 s** of hover to the RTL trigger on the

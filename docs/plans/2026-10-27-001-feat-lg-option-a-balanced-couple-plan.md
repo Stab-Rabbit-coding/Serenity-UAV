@@ -46,7 +46,7 @@ execution: code
 - `tools/validate_stls.py` passes. The bay generator reports `PASS`. The symmetry and datum gates pass.
 - BOM CSV/JSON parity holds, and `tools/gen_todo_from_wbs.py --check` passes.
 
-> **WARNING**
+> **CAUTION**
 >
 > The tension-fuse plateau ends at necking, and no cited source gives uniform
 > elongation for 6061-T6. A bench firing (LG-15) shall confirm the stroke before

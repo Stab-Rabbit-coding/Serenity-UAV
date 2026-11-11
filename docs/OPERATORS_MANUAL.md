@@ -1,13 +1,13 @@
 <!-- SYNC-STAMP
-parent commit: bcda12a
-source digest: 7cada3ebc3dd
+parent commit: 8716a9a
+source digest: 4258d580b601
 current-specification/auw_ledger.json: dfff1a3b52
 current-specification/flight_limits.json: 25167e891e
 docs/CARGO_WINCH_SPECIFICATION.md: c8b91d0380
 docs/FIRST_FLIGHT_READINESS.md: 28b0ef9d53
 docs/POWER_DISTRIBUTION.md: 136c14ea8b
 docs/failsafe_thresholds.md: 6af0586b02
-docs/flight_envelope.md: df9071ef76
+docs/flight_envelope.md: 443a73762d
 graphical-build-guide/flight-phases/WBS.md: 371afee938
 tools/auw_ledger.py: 8f3e720c9b
 tools/flight_envelope_endurance.py: d178eaa242
@@ -159,8 +159,8 @@ Callouts follow CNAF M-3710.7 §1.5 [REF-MIL-003 §1.5] and always precede the t
 > **WARNING** — an operating procedure or condition that can cause injury, illness or death
 > if not followed.
 >
-> **CAUTION** — an operating procedure or condition that can cause equipment damage if not
-> followed.
+> **CAUTION** — an operating procedure or condition that can cause equipment damage, including
+> loss of the aircraft, if not followed (owner deviation from CNAF, `AGENTS.md`).
 >
 > **NOTE** — an item that needs emphasis; no hazard.
 
@@ -217,7 +217,7 @@ aircraft with PACE (Primary / Alternate / Contingency / Emergency) failover [roo
 | Payload | 8.0 oz (226.8 g) in a 4 in × 3 in × 3 in (102 × 76 × 76 mm) bay | `README.md` |
 <!-- /AUTO:config -->
 
-> **WARNING**
+> **CAUTION** *(WARNING if people are under or near the aircraft.)*
 >
 > The AUW and T/W above rest on a mass ledger whose printed-part masses were found understated
 > by 521.6 g, with the true AUW possibly higher [`docs/FIRST_FLIGHT_READINESS.md`, blocker 1].
@@ -272,7 +272,7 @@ The builder's plate is reproduced as an inspection item, not as a regulatory mar
   field-replaceable failure mode. The 3.0 in (76 mm) leg is the flight article
   [`docs/LANDING_GEAR_ANALYSIS.md`].
 
-> **WARNING**
+> **CAUTION** *(WARNING if people are under or near the aircraft.)*
 >
 > **The landing gear is not flight-cleared.** A bellcrank load-path issue is a build blocker,
 > and a side-hit study predicts fore-thigh failure in a hard bank-over crash
@@ -289,7 +289,7 @@ read by an off-axis AK7455 angle encoder. A servo-driven iris nozzle trims exhau
   of any one node leaves 50 % of thrust in both nacelles**
   [`graphical-build-guide/flight-phases/WBS.md` ESC assignment].
 
-> **WARNING**
+> **CAUTION** *(WARNING if people are under or near the aircraft.)*
 >
 > The tilt drive train is **not self-locking** and the actuator selection is open
 > [`docs/FIRST_FLIGHT_READINESS.md`, blocker 3]. On loss of tilt power the nacelle may drift.
@@ -404,7 +404,7 @@ The aircraft shall be operated under 14 CFR Part 107 [REF-FAA-002]:
 | Stall speed | **Not established** — CL_max unknown for the built wing section | `docs/flight_envelope.md` banner |
 <!-- /AUTO:design_limits -->
 
-> **WARNING**
+> **CAUTION** *(WARNING if people are under or near the aircraft.)*
 >
 > Do not fly to any speed in `docs/flight_envelope.md`'s V_min table. It rests on a CL_max that
 > does not describe the built wing section.
@@ -436,7 +436,7 @@ The aircraft shall be operated under 14 CFR Part 107 [REF-FAA-002]:
 
 ### 3.4 Endurance
 
-> **WARNING**
+> **CAUTION** *(WARNING if people are under or near the aircraft.)*
 >
 > **Hover endurance with two cells and the payload is about <!--V:t_PLANNING_pl-->66<!--/V--> s on the planning case (<!--V:t_NOMINAL_pl-->92<!--/V--> s
 > nominal) to the return-to-home trigger.** The derived mission need is <!--V:target_s-->318<!--/V--> s. The aircraft does
@@ -647,7 +647,7 @@ before the next.
    weight, which needs **airspeed of <!--V:vmin_pl_40-->18.9<!--/V-->–<!--V:vmin_pl_20-->69.9<!--/V--> kt between 40° and 20° tilt** on the design table
    (CL_max unverified) [`docs/flight_envelope.md` §1].
 
-> **WARNING**
+> **CAUTION** *(WARNING if people are under or near the aircraft.)*
 >
 > **Below about <!--V:theta_pl-->41.8<!--/V-->° nacelle tilt (two cells with payload), the aircraft cannot hold altitude on
 > thrust alone**, and the design table shows wing-borne flight needs airspeeds this airframe is
@@ -822,7 +822,7 @@ resumption at **1.5 m (4.9 ft)** [`docs/failsafe_thresholds.md` §3].
 
 ### 12.8 Tilt drive or nozzle failure
 
-> **WARNING**
+> **CAUTION** *(WARNING if people are under or near the aircraft.)*
 >
 > The tilt train is not self-locking (Ch. 2.2). If a nacelle moves from its commanded angle or
 > the two nacelles disagree, the aircraft will yaw or roll. **LAND IMMEDIATELY.** Do not attempt a
