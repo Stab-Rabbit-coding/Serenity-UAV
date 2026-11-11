@@ -58,7 +58,7 @@ The derived endurance target, 318 s airborne on one flight, is not met. Two cell
 - R9. **Unmet.** The available hover endurance after the diet is about 70 s (PLANNING) or 98 s (NOMINAL). Sortie 1 fits only on NOMINAL. Sortie 2 needs about 150–180 s and does not fit. R9 stays open until the decision gate (R10) closes it.
 - R10. **Propulsion decision gate.** After a tandem-pair thrust-stand test measures hover power, the owner decides between: accepting a shortened retrieval, a larger-fan nacelle, or an open-prop tilt-rotor.
 
-> **WARNING**
+> **CAUTION**
 >
 > Neither sortie shall be flown as a full profile until a bench discharge and a
 > tandem-pair thrust-stand test confirm hover endurance. First flights are hover

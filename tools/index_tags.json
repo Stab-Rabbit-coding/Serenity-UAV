@@ -10528,6 +10528,132 @@
       ],
       "archived": false
     },
+    "docs/figures/nacelle64_bay_stud_after.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_bay_stud_interaction.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_aft_fairing_horizontal.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_aft_fairing_section.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_aft_fairing_vertical.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_cfd_sections.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_cfd_wall_shear.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_glove_compare.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_optD_horizontal.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_optD_tip_extension.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_optD_vertical.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_s2_wire_paths.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_tail_cfd_sections.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_tail_cfd_wall_shear.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_tail_planform.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od1_spigot_cartridge.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_sections.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_war10_options.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/flight_envelope.md": {
       "description": "Serenity UAV \u2014 Flight Envelope Document",
       "tags": [
@@ -11676,6 +11802,30 @@
       "description": "Landing-Gear Corner Cartridge Field Swap - Plan",
       "tags": [
         "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-07-001-burndown-baseline.json": {
+      "description": "JSON data (7 top-level keys)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md": {
+      "description": "Rev U Completion \u2014 Measurable Execution Path, Roadmap and Sprint Plan",
+      "tags": [
+        "documentation",
+        "emi-hardening",
+        "security"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-11-001-sprint-2-handoff.md": {
+      "description": "Sprint 2 handoff \u2014 draw the 4 \u00d7 10 AWG route (WA-R10), from the OD-17 decision",
+      "tags": [
+        "documentation",
+        "security"
       ],
       "archived": false
     },
@@ -13390,6 +13540,13 @@
       ],
       "archived": false
     },
+    "docs/solutions/conventions/measure-sprint-burndown-by-closures-not-net-open.md": {
+      "description": "Measure a sprint by closures, not the net open count",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/solutions/conventions/one-limits-list-drives-the-printout-and-the-exit-code.md": {
       "description": "Context",
       "tags": [
@@ -13424,6 +13581,13 @@
     },
     "docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md": {
       "description": "Context",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/solutions/design-patterns/check-a-drawn-wire-path-for-kinks-and-wire-to-wire-overlap.md": {
+      "description": "Check a drawn wire path for kinks and wire-to-wire overlap",
       "tags": [
         "documentation"
       ],
@@ -13550,6 +13714,20 @@
       ],
       "archived": false
     },
+    "docs/solutions/logic-errors/cgal-touching-sheets-non-manifold-split-by-fan-pairing.md": {
+      "description": "A merged CGAL render can still be non-manifold where two sheets touch",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/solutions/logic-errors/loft-rings-index-by-station-not-by-resampled-position.md": {
+      "description": "Loft rings: keep correspondence and index before merging",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/solutions/logic-errors/mating-face-aperture-allowlist.md": {
       "description": "Mesh-repair pipelines silently re-cap intentional open fuselage mating faces",
       "tags": [
@@ -13572,8 +13750,22 @@
       ],
       "archived": false
     },
+    "docs/solutions/runtime-errors/autopep8-splits-fstrings-that-only-python312-can-parse.md": {
+      "description": "autopep8 can split f-strings in a way only Python 3.12+ parses",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/solutions/runtime-errors/curaengine-hangs-on-overlapping-mesh-faces.md": {
       "description": "CuraEngine hangs or crashes on an STL with overlapping faces trimesh reports as watertight",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/solutions/runtime-errors/openfoam-v1912-ubuntu-build-and-steady-rans-pitfalls.md": {
+      "description": "OpenFOAM v1912 (Ubuntu) pitfalls found in the OD-17 junction CFD",
       "tags": [
         "documentation"
       ],
@@ -13583,6 +13775,14 @@
       "description": "pcbnew: FOOTPRINT.Flip()/SetLayerAndFlip() segfaults if called before board.Add()",
       "tags": [
         "documentation"
+      ],
+      "archived": false
+    },
+    "docs/solutions/workflow-issues/a-recorded-route-or-clearance-goes-stale-when-its-part-changes.md": {
+      "description": "A recorded route or clearance goes stale when its part changes",
+      "tags": [
+        "documentation",
+        "security"
       ],
       "archived": false
     },
@@ -13902,7 +14102,7 @@
       "archived": false
     },
     "graphical-build-guide/REVN_BUILD_GUIDE_24IN.md": {
-      "description": "Serenity-Class Tiltrotor UAV \u2014 Build Guide Rev T+ (24-inch)",
+      "description": "Serenity-Class Tiltrotor UAV \u2014 Build Guide Rev U (24-inch)",
       "tags": [
         "build-guide",
         "documentation",
@@ -16672,6 +16872,24 @@
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
       "docs/figures/battery_bay_twin_tray.png",
+      "docs/figures/nacelle64_bay_stud_after.png",
+      "docs/figures/nacelle64_bay_stud_interaction.png",
+      "docs/figures/nacelle64_od17_aft_fairing_horizontal.png",
+      "docs/figures/nacelle64_od17_aft_fairing_section.png",
+      "docs/figures/nacelle64_od17_aft_fairing_vertical.png",
+      "docs/figures/nacelle64_od17_cfd_sections.png",
+      "docs/figures/nacelle64_od17_cfd_wall_shear.png",
+      "docs/figures/nacelle64_od17_glove_compare.png",
+      "docs/figures/nacelle64_od17_optD_horizontal.png",
+      "docs/figures/nacelle64_od17_optD_tip_extension.png",
+      "docs/figures/nacelle64_od17_optD_vertical.png",
+      "docs/figures/nacelle64_od17_s2_wire_paths.png",
+      "docs/figures/nacelle64_od17_tail_cfd_sections.png",
+      "docs/figures/nacelle64_od17_tail_cfd_wall_shear.png",
+      "docs/figures/nacelle64_od17_tail_planform.png",
+      "docs/figures/nacelle64_od1_spigot_cartridge.png",
+      "docs/figures/nacelle64_sections.png",
+      "docs/figures/nacelle64_war10_options.png",
       "docs/flight_envelope.md",
       "docs/handoffs/2026-10-20-aircraft-datum-r2-migration.md",
       "docs/handoffs/2026-10-26-split-battery-and-fe-pdb.md",
@@ -16827,6 +17045,9 @@
       "docs/plans/2026-11-01-001-feat-canonical-gear-box-plan.md",
       "docs/plans/2026-11-02-001-feat-build-guide-joint-torque-and-sequence-plan.md",
       "docs/plans/2026-11-02-001-feat-gear-cartridge-field-swap-plan.md",
+      "docs/plans/2026-11-07-001-burndown-baseline.json",
+      "docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md",
+      "docs/plans/2026-11-11-001-sprint-2-handoff.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/AC_43.13-1B_w-chg1.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
@@ -17033,11 +17254,13 @@
       "docs/sls-study/wing-polars/tip_t26.7_Re131000_cleanN9_xfoil.csv",
       "docs/sls-study/wing-polars/tip_t26.7_Re131000_trip5%c_xfoil.csv",
       "docs/sls-study/wing-polars/wing_section_polars.png",
+      "docs/solutions/conventions/measure-sprint-burndown-by-closures-not-net-open.md",
       "docs/solutions/conventions/one-limits-list-drives-the-printout-and-the-exit-code.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "docs/solutions/conventions/pb2-header-capability-from-soc-datasheet-not-srm-summary.md",
       "docs/solutions/design-patterns/annular-esc-bay-length-is-set-by-radial-stack-not-panel-width.md",
       "docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md",
+      "docs/solutions/design-patterns/check-a-drawn-wire-path-for-kinks-and-wire-to-wire-overlap.md",
       "docs/solutions/design-patterns/coaxial-worm-motor-clearance-is-set-by-worm-diameter-not-placement.md",
       "docs/solutions/design-patterns/cut-the-local-solid-with-a-true-offset-and-gate-the-joint.md",
       "docs/solutions/design-patterns/decide-cape-board-size-against-every-mount-and-guard-envelope-coupling-mechanically.md",
@@ -17055,11 +17278,16 @@
       "docs/solutions/design-patterns/self-locking-worm-and-vectoring-bandwidth-are-mutually-exclusive.md",
       "docs/solutions/design-patterns/void-formers-are-cut-from-the-shell-mesh-by-a-seeded-boolean.md",
       "docs/solutions/logic-errors/bom-csv-json-mirror-drift-and-in-place-rewrite-truncation.md",
+      "docs/solutions/logic-errors/cgal-touching-sheets-non-manifold-split-by-fan-pairing.md",
+      "docs/solutions/logic-errors/loft-rings-index-by-station-not-by-resampled-position.md",
       "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
       "docs/solutions/logic-errors/mesh-boolean-layout-proofs-silent-zero-volumes-and-shared-profiles.md",
       "docs/solutions/logic-errors/twisted-extrusion-worm-thread-needs-a-transverse-section-from-the-lead.md",
+      "docs/solutions/runtime-errors/autopep8-splits-fstrings-that-only-python312-can-parse.md",
       "docs/solutions/runtime-errors/curaengine-hangs-on-overlapping-mesh-faces.md",
+      "docs/solutions/runtime-errors/openfoam-v1912-ubuntu-build-and-steady-rans-pitfalls.md",
       "docs/solutions/runtime-errors/pcbnew-flip-segfault-before-board-add.md",
+      "docs/solutions/workflow-issues/a-recorded-route-or-clearance-goes-stale-when-its-part-changes.md",
       "docs/solutions/workflow-issues/generate-open-item-views-never-hand-patch-them.md",
       "docs/solutions/workflow-issues/read-the-decision-record-before-verifying-first-pass-geometry.md",
       "docs/structural_analysis.md",
@@ -17156,6 +17384,7 @@
       "docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md",
       "docs/plans/2026-09-29-001-tw-recovery-stem-to-stern-plan.md",
       "docs/plans/2026-10-26-003-feat-mass-diet-two-sortie-plan.md",
+      "docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "gcs/skipper/firmware/pb2i/dts/k3-am6254-pocketbeagle2-skipper-cape-b2.dts",
       "graphical-build-guide/REVN_BUILD_GUIDE_24IN.md",
@@ -17352,10 +17581,13 @@
       "docs/plans/2026-10-19-001-aircraft-datum-migration-plan.md",
       "docs/plans/2026-10-19-001-baseline-r1/landing_gear_bay_pad_fit.py.txt",
       "docs/plans/2026-11-02-001-feat-build-guide-joint-torque-and-sequence-plan.md",
+      "docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md",
+      "docs/plans/2026-11-11-001-sprint-2-handoff.md",
       "docs/solutions/conventions/one-limits-list-drives-the-printout-and-the-exit-code.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
       "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
+      "docs/solutions/workflow-issues/a-recorded-route-or-clearance-goes-stale-when-its-part-changes.md",
       "gcs/AGENTS.md",
       "gcs/README.md",
       "gcs/SKIPPER_SPEC.md",

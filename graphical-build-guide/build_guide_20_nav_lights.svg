@@ -24,8 +24,8 @@
 <text x="812" y="246" font-size="11" fill="#7a6f5c">REF-FAA-002 107.29</text>
 <text x="28" y="592" font-size="15" font-weight="bold" fill="#1f2a36">INSTRUCTIONS</text>
 <circle cx="40" cy="613" r="11" fill="#e8892a"/><text x="40" y="618" font-size="12" font-weight="bold" fill="#1f2a36" text-anchor="middle">1</text>
-<text x="60" y="618" font-size="13" fill="#222">Procedure pending the Rev T+ re-audit of guide Phases 4-11 (graphical-build-guide/WBS.md 1.5.6).</text>
-<text x="60" y="635" font-size="13" fill="#222">This card shows the Rev T+ architecture only; follow the authority documents named below.</text>
+<text x="60" y="618" font-size="13" fill="#222">Procedure pending the Rev U re-audit of guide Phases 4-11 (graphical-build-guide/WBS.md 1.5.6).</text>
+<text x="60" y="635" font-size="13" fill="#222">This card shows the Rev U architecture only; follow the authority documents named below.</text>
 <circle cx="40" cy="652" r="11" fill="#e8892a"/><text x="40" y="657" font-size="12" font-weight="bold" fill="#1f2a36" text-anchor="middle">2</text>
 <text x="60" y="657" font-size="13" fill="#222">Mount red on the port and green on the starboard nacelle outboard face.</text>
 <circle cx="40" cy="674" r="11" fill="#e8892a"/><text x="40" y="679" font-size="12" font-weight="bold" fill="#1f2a36" text-anchor="middle">3</text>

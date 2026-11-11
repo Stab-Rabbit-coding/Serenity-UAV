@@ -181,7 +181,7 @@ flowchart LR
 **Dependencies:** none.
 **Files:** `tools/hover_current.py` (new), `tools/tests/test_hover_current.py` (new), `docs/POWER_DISTRIBUTION.md`, `avionics/kicad/FlightEngineer/FlightEngineer.md`.
 **Approach:**
-1. Derive per-fan current at hover thrust (ledger AUW / 4) from the single cited rated point [REF-EDF-003] by the actuator-disc scaling P ∝ T^1.5 already used in `tools/flight_envelope_endurance.py`, with RTH margin. Name the flight-article motor variant first (2400KV at 22.2 V or 2300KV at 24 V; REF-EDF-003 lists both).
+1. Derive per-fan current at hover thrust (ledger AUW / 4) from the single cited rated point [REF-EDF-003] by the actuator-disc scaling P ∝ T^1.5 already used in `tools/flight_envelope_endurance.py`, with RTH margin. Name the flight-article motor variant first (2400KV at 22.2 V or 2300KV at 24 V; REF-EDF-003 lists both). *Resolved (owner, 2026-11-02): the QF2822-2300KV at 24 V is the specified motor; the 2400 KV was never specified or authorized.*
 2. Reconcile the hover-current figures in circulation (the ~76 A figure — locate and cite its source, which is not `FlightEngineer.md` — and WBS PWR-CONN-01's ~150 A), and record which one was wrong and why.
 3. Report per-branch continuous, per-side bus and main-bus currents.
 4. Decide the 57 A rated-point policy (carried continuously, or bounded by a stated throttle or time limit) and record it; U4 and U11 size against it.
