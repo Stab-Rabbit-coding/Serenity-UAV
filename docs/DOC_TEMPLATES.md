@@ -28,6 +28,28 @@ Detailed analysis documents (e.g., `LANDING_GEAR_ANALYSIS.md`) shall include:
 - **Standards citations:** Which regulations/standards informed the analysis
 - **References:** Sources for material properties, formulas, etc.
 
+## Owner Decision Briefs
+
+Owner direction, 2026-11-08: every option put to the owner for a decision (an OD-x item, a design
+choice, a part or spec change) is presented with the six checks below, each with a picture, and with
+vectors (force, moment, load-path or motion arrows) wherever a load or a motion is involved. A check
+that does not apply says so in one line and why; none is silently skipped. Units follow root
+`AGENTS.md` §5 (imperial first, metric in parentheses). Record the brief, or its figures, in the owning
+`WBS.md` entry and `docs/figures/`.
+
+| Check | What it must show |
+|---|---|
+| **Statics and dynamics** | Free-body diagram of the affected part(s): applied loads, reactions, moments as vectors with magnitudes; the governing load case (hover, gust, landing, tilt slew, vibration); stresses or allowables where one exists, and "requires verification" where it does not (`current-specification/allowables.json`). |
+| **Function** | What the part has to do and whether each option still does it (stroke, clearance, electrical or flow path, service access, install/remove). |
+| **Structural integrity** | Minimum walls (`AGENTS.md` §7), load path continuity, stress concentrations, fastener/insert margins, print orientation where it governs strength. |
+| **Mechanism and component interactions** | Every neighbour the change touches, at rest and through the full range of motion (tilt −5…+135°, nozzle stroke, doors): interference volumes, nearest gaps, wire/harness routes. Run both sides when the parts are handed. |
+| **Weight and balance** | Mass change per part and per aircraft (lbm (g)), CG shift, the nacelle pivot residual, hover arm and ground clearance, T/W; say which ledger picks the change up and when. |
+| **Canonical shape** | Effect on the outer mould line against the canonical references (`docs/AGENTS.md` authority order: QMx REF-CAD-003, then REF-CAD-002, then REF-CAD-004); "internal only" is an answer when true. |
+
+Each brief ends with the options side by side, a recommendation and its reason, and what is still
+unverified.
+
+## Compliance Records
 ## Compliance Records
 
 When implementing a standards requirement:

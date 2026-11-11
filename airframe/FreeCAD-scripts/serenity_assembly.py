@@ -97,7 +97,7 @@ References:
         output (R1.3+); pre-bake it was the hand-placed source the R1 bake
         extracted from (see git history for that revision).
     [2] tools/bake_hull_frame.py — canonical bake transforms.
-    [3] airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad
+    [3] airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad
     [4] CLAUDE.md — project standards.
 """
 
@@ -257,7 +257,7 @@ def transform_mesh(obj, rows):
 # Nacelle-internal sub-component placement (Rev R1.1, 2026-06-21)
 #
 # The nacelle pods (nacelle_port_revs.stl / nacelle_stbd_revs.stl) are
-# generated from airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad in
+# generated from airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad in
 # a part-local frame: local +Z is the duct/bore axis (intake at Z = 0,
 # nozzle exit at Z = NACELLE_L = 185.2 mm), local X is the spanwise/pylon
 # axis, and local Y is the third (mesh-offset) axis.  This is exactly the
@@ -314,7 +314,7 @@ T_BAKE_64 = {
 }
 T_BAKE = T_BAKE_64 if NACELLE_GEN == 64 else T_BAKE_50
 
-# Nacelle pylon-side sign, matching nacelle_pod_50mm_tandem.scad's
+# Nacelle pylon-side sign, matching nacelle_pod_64mm_tandem.scad's
 # PYLON_SIDE override table (Rev R1/nacelle-swap, 2026-06-11):
 #   Port nacelle (hull +X): PYLON_SIDE = -1 (inboard/pylon face at local X = -34)
 #   Stbd nacelle (hull -X): PYLON_SIDE = +1 (inboard/pylon face at local X = +34)
@@ -370,7 +370,7 @@ def nacelle_rows(side, r_local, t_local):
     ]
 
 
-# Nacelle local-frame Z stations, mm (nacelle_pod_50mm_tandem.scad):
+# Nacelle local-frame Z stations, mm (nacelle_pod_64mm_tandem.scad):
 #   intake Z=0 .. STATOR_SLV_Z_START=90.0 .. AFT_SLV_Z_START=122.5 ..
 #   NOZZLE_RING_Z(=CROWN_Z)=166.25 .. NACELLE_L=185.2 (nozzle exit).
 #   PIVOT_Z is the spar-crank / CG station, inside the sleeve span.
@@ -817,7 +817,7 @@ def assemble():
     # in FreeCAD; every entry below uses transform_mesh() via the
     # nacelle_rows() helper (see derivation comment above add_mesh()).
     # Station constants are taken from
-    # airframe/openscad/nacelles/nacelle_pod_50mm_tandem.scad — the
+    # airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad — the
     # canonical gear-train + iris-nozzle nacelle variant (TODO.md §1.1.3
     # build-task list references only this variant; the parallel
     # no-gear-train "_simple"/"_straight" variant is not on the tracked
@@ -854,110 +854,10 @@ def assemble():
                     "64 mm nozzle iris", "64 mm EDF rotors/motors", "70 A ESCs"):
             print(f"[assembly] COVERAGE GAP: {gap} — no placed solid", flush=True)
 
-    for side in (("port", "stbd") if NACELLE_GEN == 50 else ()):
-        label = "Port" if side == "port" else "Stbd"
-
-        # ── EDF1/EDF2 inter-stage stator sleeve ──────────────────────────
-        # edf_stator_sleeve.scad: part-local frame is coaxial with the
-        # nacelle duct (own local +Z = nacelle local +Z; sleeve forward
-        # face at its own Z = 0) — identity rotation, translate to the
-        # sleeve's forward-face station.
-        sleeve = add_mesh(
-            doc,
-            _stl("nacelles/edf_stator_sleeve.stl"),
-            f"Nacelle_{label}_Stator_Sleeve",
-        )
-        transform_mesh(
-            sleeve,
-            apply_tilt_to_rows(
-                nacelle_rows(side, _IDENTITY3, (0.0, 0.0, STATOR_SLV_Z_START)), side
-            ),
-        )
-
-        # ── EDF2 aft spider sleeve ────────────────────────────────────────
-        # edf_aft_spider_sleeve.scad: same coaxial convention, forward
-        # face at nacelle Z = AFT_SLV_Z_START.
-        aft_sleeve = add_mesh(
-            doc,
-            _stl("nacelles/edf_aft_spider_sleeve.stl"),
-            f"Nacelle_{label}_Aft_Spider_Sleeve",
-        )
-        transform_mesh(
-            aft_sleeve,
-            apply_tilt_to_rows(
-                nacelle_rows(side, _IDENTITY3, (0.0, 0.0, AFT_SLV_Z_START)), side
-            ),
-        )
-
-        # ── Nozzle pushrod drive — Rev T (Option B) ───────────────────────
-        # Rev T (2026-07-18, docs/NOZZLE_DRIVE_TRADE.md Option B; user
-        # decision 2026-07-18): the ENTIRE tilt-to-nozzle GEAR train is
-        # DELETED — Drive Pinion A, the Nozzle Drive Pinion, the bevel
-        # housing, the bevel pair, and the fixed sector gear (and, earlier,
-        # the compound idler).  Those five STL placements are removed; the
-        # parts are archived under airframe/archive/.  The nozzle is now
-        # driven by a PUSHROD/BELLCRANK: a spar crank clamps the rotating
-        # tilt spar and a ball-link pushrod strokes the unison-ring lever
-        # ear (nacelle_nozzle_pushrod.scad + the ring lever in
-        # nacelle_nozzle_iris.scad).
-        #
-        # FIRST-PASS PLACEMENT — VERIFY (spatial RSSR linkage, WBS §1.1.3):
-        # the spar crank sits on the pivot axis (Y=0, Z=PIVOT_Z), clamp bore
-        # along local X (the spar/tilt axis) — hence the 90 deg Y-rotation,
-        # as the old Pinion A used.  The exact crank clock angle, pushrod
-        # length, and ring-lever pose that give a monotonic 0..90 deg tilt ->
-        # 0..23.75 deg ring map are NOT yet solved; the pushrod link itself
-        # (COTS ball-link rod) is intentionally not placed here until that
-        # synthesis is closed.
-        # SUPERSEDED 2026-07-20 + ARCHIVED (ARCHIVE_INDEX.md): the spar-CLAMP
-        # crank cannot actuate the nozzle — the spar is keyed to the nacelle, so
-        # a crank on it shares the ring's rotating frame (zero relative motion).
-        # Replaced by a WING-REFERENCED sync gear + geared bellcrank (hybrid A+B,
-        # docs/NOZZLE_DRIVE_TRADE.md "DECISION AMENDMENT"; overlay
-        # port_tilt_spar_assembly.scad §6).
-        # RETIRED 2026-09-28 (servo drive, docs/NOZZLE_DRIVE_TRADE.md
-        # "DECISION AMENDMENT — servo drive (2026-09-28)"): that sync-gear
-        # drive could not be packaged either (0.0 mm axial room for the sun; pinion vs tilt-drive-shaft
-        # collision; ring over-travel past 90 deg tilt).  Both
-        # nacelle_nozzle_sync_gears.scad and nacelle_nozzle_pushrod.scad are
-        # archived.  The nozzle is now servo-driven from inside the pod; the
-        # servo mount is placed here once
-        # docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md U4
-        # produces it.  Nothing is placed for the nozzle drive until then.
-
-        # ── Nozzle iris assembly ──────────────────────────────────────────
-        # nacelle_nozzle_iris-{closed,open}.stl are the combined renders
-        # (cam-only unison ring + outer housing + 8 shingled master/seal
-        # flaps, Rev T3) from nacelle_nozzle_iris.scad, one per petal-state
-        # endpoint -- see nozzle_iris_stl() above for the tilt->file
-        # selection and its "not continuous" caveat. Rev T: the ring is a
-        # plain CAM disc (no gear teeth), servo-driven via a pull-only link
-        # since 2026-09-28; the housing has no drive-pinion relief and is rotationally
-        # symmetric, so identity rotation is fine. Translate to
-        # NOZZLE_RING_Z.
-        # History: Rev R1 compound idler (2026-06-22) -> Rev S1 internal ring
-        # gear (2026-07-07) -> Rev T pushrod/cam-only drive (2026-07-18,
-        # Option B) -> Rev T3 shingled flaps (2026-08-09); the entire gear
-        # train is deleted and archived — see ARCHIVE_INDEX.md and
-        # docs/NOZZLE_DRIVE_TRADE.md.
-        nozzle = add_mesh(
-            doc,
-            nozzle_iris_stl(side),
-            f"Nacelle_{label}_Nozzle_Iris",
-        )
-        transform_mesh(
-            nozzle,
-            apply_tilt_to_rows(
-                nacelle_rows(side, _IDENTITY3, (0.0, 0.0, NOZZLE_RING_Z)), side
-            ),
-        )
-
-        # Tip cap (outboard X-face end cap) — ARCHIVED 2026-06-22, legacy
-        # part, no longer needed.  STLs moved to airframe/archive/stls/
-        # nacelles/; see ARCHIVE_INDEX.md.  (Previously a best-guess VERIFY
-        # placeholder with no active SCAD source — see TODO.md §1.1.3
-        # history.)
-
+    # Rev U: the 50 mm sleeve / spider / pushrod placements that lived here were removed with
+    # the 50 mm nacelle sources (frozen in archives/rev-T-frozen.tar.gz).  The 64 mm nacelle's
+    # parts are listed in tools/check_nacelle_deps.py; the ones still unplaced are reported
+    # as COVERAGE GAPs above.
     # -------------------------------------------------------------------
     # NACELLE SERVO BRACKETS — Fuselage-mounted tilt-control actuators
     # VERIFY: all parts imported at origin (identity placement).

@@ -27,7 +27,7 @@
 |--------|-------------------|----------------|
 | Hull   | 609.6 mm CF-PETG / PU foam / CF skeleton | SCAD sources complete; all four fuselage SCAD shells at Rev S baseline, carried forward unchanged into Rev T; STLs pending regeneration where noted |
 | Wings | Fixed CF spar (20x16.3mm tube, 35% root chord), S1223-derived section, gear-linked nacelle tilt drive | Rev S1g: spar bonded wing member (not rotating shaft), root joint splits shear(socket)/moment(80x60 flange); 14T/50T reduction drive; SPAR-20-2 station 45.15→28.0mm |
-| Nacelles | Radially enlarged, QMx-proportioned shell around 2x64mm tandem EDFs, interstage stator, servo variable nozzle; axial length held | Current geometry remains 50mm Rev S4c/S4d; NAC-64-SERVO-01 active: servo nozzle drive designed and fit-closed 2026-10-04, uniform x1.06 enlargement wired through a single source 2026-10-05 (pivot, CFD, mass/CG and bench gates open) |
+| Nacelles | Radially enlarged, QMx-proportioned shell around 2x64mm tandem EDFs, interstage stator, servo variable nozzle; axial length held | Rev U: the 64 mm nacelle is current and the 50 mm Rev S4c/S4d geometry is archived; NAC-64-SERVO-01: servo nozzle drive designed and fit-closed 2026-10-04, uniform x1.06 enlargement wired through a single source 2026-10-05 (pivot, CFD, mass/CG and bench gates open) |
 | Nacelle EDFs | 2x QX-Motor 64mm EDF per nacelle, QF2822-2300KV (83.60 ozf / 2,370 gf at 24 V, 57.0 A; 80 A ESC, owner 2026-11-02); nominal 64mm thrust tube; QX 4xM3/16mm spider mounts | Existing 50mm XFly configuration remains current until 64mm fit, power, mass and thrust verification passes |
 | Landing gear | Sponson-mounted bays, canonical 1.5in leg (extended 3.0in variant retained) | Rev T (component design generation "R6" retained as its own permanent name): sponson wells CLOSED, leg length derived from nozzle clearance not belly height |
 | Rear propulsion | 55mm 6S EDF, reduced-area neck intake, fixed canonical elliptical tail nozzle (2.06x1.76 in / 52.3x44.7 mm) + 4 RCS bleed-air thrusters | DEFERRED — Phase 11. Adds ~1275g forward thrust; not counted in hover T/W; Phase 11 hover T/W ~1.43 |
@@ -103,7 +103,7 @@
 - [ ] LG-11 coupon — demoted at wing root (flange FOS 29.2); gates tenon/thwarts
 - [ ] ★ Aero revalidation of the re-lofted wing (S1223/t17.7–t26.7; XFOIL/RANS)
 - [ ] LG-PIN-SHEAR: verify 0.6 x Su pin shear for A2 pins (REF-MAT-005)
-- [ ] ★ ENDURANCE-TGT — WARNING: derived mission endurance target 318 s (5.3 min) airborne, two cells + payload, is NOT met (61 s PLANNING / 85 s NOMINAL hover) and is not reachable by battery capacity alone (mass-coupled). Leg durations and 30 % reserve ACCEPTED by owner 2026-10-26 (no better data); owner to choose a gap-closure path (docs/flight_envelope.md §6); tandem-pair thrust-stand hover-power measurement first
+- [ ] ★ ENDURANCE-TGT — CAUTION: derived mission endurance target 318 s (5.3 min) airborne, two cells + payload, is NOT met (61 s PLANNING / 85 s NOMINAL hover) and is not reachable by battery capacity alone (mass-coupled). Leg durations and 30 % reserve ACCEPTED by owner 2026-10-26 (no better data); owner to choose a gap-closure path (docs/flight_envelope.md §6); tandem-pair thrust-stand hover-power measurement first
 - [ ] MASS-DIET-2SORTIE — requirements in docs/plans/2026-10-26-003-feat-mass-diet-two-sortie-plan.md (−555 g: EMI hardening, gear, NoNFO stacks; two sorties); retrieval sortie R9 OPEN, propulsion gate R10 after tandem-pair thrust-stand test
 - [ ] EDF-64-REDLINE: define a 64 mm QF2822 RPM redline in governor_config.h (flight_envelope §2.2)
 - [ ] CELL-ORIGIN: Tattu cells retained (owner 2026-10-26) with PRC-origin flag on every BOM/procurement entry; evaluate a non-PRC equivalent before purchase (plan 2026-10-26-001 KTD4)
@@ -431,6 +431,7 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] ★ Bench-verify SPT5425LV stall current + pin-removal procedure (unblocks §5.4/§6)
 - [ ] RS-485 gateway integration for LibreServo v2 bus (J_FLEX has no local transceiver)
 - [x] Winch coupler trade closed: slip clutch in the spool hub
+- [ ] ★ WINCH-PKG-01 — Rev C1 stack doesn't fit the hull: owner pick
 - [ ] ★ Winch containment: 5 positive fixes (spool = projectile)
 - [ ] Verify Part 107 dropped-object section number
 - [ ] Containment checks on assembly + pre-flight cards
@@ -535,14 +536,14 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] Spar-crank placement in serenity_assembly.py is first-pass (Y=0…
 - [ ] User WIP `gear_option_compare.scad` / `gear_shell_compare.scad`…
 - [ ] [OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle OD…
-- [ ] [OPEN — WA-R10] The 4 × 10 AWG disconnect route is UNBLOCKED but not…
+- [x] WA-R10 — 4×10 AWG route drawn, clearance-proven (2026-11-11)
 - [ ] [OPEN — FLIGHT SAFETY, LG-HOVER-01] Hover ground clearance is still…
 - [ ] [OPEN — VERIFY] `serenity_assembly.py` still places the deleted parts
 - [ ] [OPEN — PRINT-BLOCKING] `MOTOR_BOLT_R` is still 10.0 mm and still…
 - [ ] [OPEN — NEW, and it is a safety item] The bay is now an unfiltered…
 - [ ] [OPEN — the flow, not the geometry] Bay velocity is not verified
 - [ ] 50 A sustained is not survivable on any path evaluated
-- [ ] [OPEN — WA-R10] The 4 × 10 AWG route now EXISTS but is not drawn
+- [x] WA-R10 (dup) — "route exists" superseded 2026-11-07 by measurement
 - [ ] Window structural allowance
 - [ ] [OPEN — cross-subsystem, rescoped 2026-07-26] `Pilot.md` §13 /…
 - [ ] AK7455 off-axis bench validation
@@ -551,6 +552,10 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] NAC-MOULD-01 — nacelle mould-line conformance + nozzle shortening
 - [ ] EDF-DATA-01 — datasheet or measured source for every EDF figure
 - [ ] NAC-64-SERVO-01 — radial 64 mm tandem-EDF nacelle + servo nozzle
+- [x] NAC-64-ASM-01 — spigot vs cartridge: cartridge 3 mm short (OD-1)
+- [x] NAC-64-ASM-02 — pinion sweep finding RETRACTED (sign error)
+- [x] NAC-64-ASM-03 — bay floor, 0.138 in inserts, mouth open (2026-11-08)
+- [ ] NAC-64-ASM-04 — assembly-check coverage gaps
 - [ ] SPAR-20-AERO — The re-lofted section is no longer S1223 (root 12.1 →…
 - [ ] SPAR-20-TSCALE — `s1223_section()` carries a note that `t_scale` was…
 - [ ] SPAR-20-ALLOW — No verified CF tube flexural allowable exists in…

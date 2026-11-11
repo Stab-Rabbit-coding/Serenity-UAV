@@ -174,28 +174,9 @@ COMPONENTS = {
         (hd.mirror_x(88.8501620), hd.WING_LE_ROOT_Y + 0.0000140, 137.9998840,
          0.0, 0.0, 0.0, 1.0),
     ),
-    # Nacelles: 270 deg about +X = cruise / forward-flight attitude.
-    # This is the canonical stored attitude; hover tilt is applied
-    # about the pivot (Z = PIVOT_Z = 111.5 mm from intake, the full-assembly
-    # CG station — see nacelle_pod_50mm_tandem.scad) downstream, not here.
-    #
-    # nacelle_port_revs.stl — port side (hull +X, Px ≈ +47 mm).
-    #   SWIRL_DIR=−1 (CCW from intake); harness exit on −X (inboard) face.
-    # nacelle_stbd_revs.stl — starboard side (hull −X, Px ≈ −385 mm).
-    #   SWIRL_DIR=+1 (CW from intake); harness exit on +X (inboard) face.
-    #
-    # NOTE: filenames were corrected 2026-06-11 (Rev R1 nacelle-swap).
-    # The original SCAD output used "port" for the NACELLE_SIDE=+1 (right
-    # outer shell, harness on +X face) part, which physically fits starboard.
-    # Files were renamed so each filename matches its physical mounting side.
-    "Nacelle_Port": (
-        "nacelles/nacelle_port_revs.stl",
-        (216.8499060, 241.7001280, 142.9998740, _SQ2, 0.0, 0.0, -_SQ2),  # R2 (50 mm, legacy)
-    ),
-    "Nacelle_Stbd": (
-        "nacelles/nacelle_stbd_revs.stl",
-        (-215.2460040, 235.7001400, 144.9719300, _SQ2, 0.0, 0.0, -_SQ2),  # R2 (50 mm, legacy)
-    ),
+    # Nacelles (Rev U: 64 mm only) are derived from the shared datums further below.  The 50 mm
+    # entries (nacelle_{port,stbd}_revs.stl) were removed with the 50 mm nacelle; their R2
+    # placement is in archives/rev-T-frozen.tar.gz.
 }
 
 # ---------------------------------------------------------------------------
@@ -228,7 +209,9 @@ COMPONENTS = {
 #      = (41.7 + axis shift + 7.0 stub) - 2.0  (53.84 at x1.00 shift 7.14).
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import nacelle_64_scale  # noqa: E402
-_N64_SEAT_SCALED = 41.7 + nacelle_64_scale.get("P64_AXIS_SHIFT_S") + 7.0 - 2.0
+_N64_SEAT_SCALED = (41.7 + nacelle_64_scale.get("P64_AXIS_SHIFT_S") + 7.0
+                    + nacelle_64_scale.get("P64_JOINT_SHIFT")
+                    - 2.0)   # OD-17 option D: joint +23 mm outboard
 # 2026-10-19 (drift found by fitting the published pods' duct bore): the pods
 # under airframe/stls/nacelles/ were baked at the x1.00 seat, axis X +60.540 /
 # -399.022, NOT at the x1.06 seat the scale file now gives (+63.01) -- the

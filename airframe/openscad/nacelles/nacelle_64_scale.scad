@@ -27,3 +27,7 @@ P64_K          = 1.21 * P64_SCALE;      // [-] radial shell scale  = 1.2826
 P64_A          = 1.13 * P64_SCALE;      // [-] axial shell scale   = 1.1978
 P64_Z_NOZ      = 166.25 * P64_A;        // [mm] nozzle-ring pocket station = 199.13
 P64_AXIS_SHIFT_S = 34.0 * P64_K - 34.0; // [mm] pylon-face axis shift  = 9.61
+// OD-17 option D (owner decision 2026-11-11): the tilt joint (spar tip, trunnion, collar seat, wing
+// tip pad) sits this far OUTBOARD of the pod's pylon face, which opens the bend chamber the four
+// 10 AWG wires need.  Read by the pod, the trunnion, the assembly check and the hull-frame bake.
+P64_JOINT_SHIFT = 23.0;                 // [mm] 0.91 in; the 18 mm first proposed fails (wire pair bends at R 16.5/22)

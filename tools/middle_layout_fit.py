@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""middle_layout_fit.py -- Rev T6 middle-section equipment layout and the
-power / data harness corridors that connect it to the cargo section, proved
+"""middle_layout_fit.py -- Rev U (carried forward from Rev T6) middle-section equipment layout and
+the power / data harness corridors that connect it to the cargo section, proved
 against the PUBLISHED shells.
 
 What is placed (hull frame: X = +port, Y = +aft, Z = +dorsal)

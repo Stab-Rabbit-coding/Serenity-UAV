@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""gen_cargo_void_formers.py -- Rev T5e (2026-09-16; Rev T5 2026-09-15 base)
+"""gen_cargo_void_formers.py -- Rev U (2026-11-07; carried forward from Rev T5e, 2026-09-16;
+Rev T5 2026-09-15 base)
 
 Generate the removable VOID FORMERS for the cargo section's one foamable
 zone (the chin compartment, hull Y -58..-22 forward of the payload bay),

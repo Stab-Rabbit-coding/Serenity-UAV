@@ -14,7 +14,7 @@ changelog).
 
 ## Current Status (2026-11-03)
 
-- **Rev U BOM:** 222 items: the 217 carried forward from Rev T plus five new printed-part rows (two hull sections, tray, sled, gate). SLS PA CF re-pricing of printed-part masses (1.05 → 1.11 g/cc, `tools/sls_auw_reconcile.py`) is **not** applied; the ledger still prices every printed part at 1.05 g/cc, and its battery model still uses the pre-twin-pack pack position. It folds in the tilt actuator (Pololu 20D 25:1, six-start worm, pin
+- **Rev U BOM:** 222 items: the 217 carried forward from Rev T plus five new printed-part rows (two hull sections, tray, sled, gate). Printed-part masses are on the SLS datasheet basis (PA CF 1.11 g/cc, PA11 1.03 g/cc; `tools/sls_materials.py`): every printed row the ledger prices from a mesh is synced to that mesh (`tools/check_bom_mesh_sync.py`, gated in CI). 22 printed rows have no ledger mesh and are listed by that check as NOT COVERED: legacy 50 mm nacelle and Rev T nozzle parts, cargo winch parts, PLA foam-pour tooling, and the node saddle. The ledger's battery model still uses the pre-twin-pack pack position. It folds in the tilt actuator (Pololu 20D 25:1, six-start worm, pin
   brake), the 3.0 in (76 mm) landing-gear flight article, the cargo chin node shelf and void
   former, measured-mass corrections from `docs/MASS_AUDIT_CARGO_WING_ROOT.md`, and the spider
   sleeve motor mount on the measured 90° pattern.
@@ -25,8 +25,9 @@ changelog).
     two Rev S sub-module rows. Per `avionics/AGENTS.md`, its mass comes from the PCB roll-up,
     not a hand entry.
   - **PCB masses:** Pilot and TACCO are still placeholder masses until routing closes.
-  - **64 mm nacelle:** the 50 mm EDF rows are current. The 64 mm tandem-EDF rows enter after
-    the NAC-64 fit, power, and mass gates close (`airframe/wings-nacelles/WBS.md`).
+  - **64 mm nacelle:** its rows are in the Rev U BOM and the 50 mm rows are retired at Qty 0. Open:
+    the ESC current rating and part (`OSESC-NAC`, WBS NAC-64-ESC-80A), the unpublished ESC bay covers
+    (`PRINT-NAC64-ESC-COVER`, no mesh), prices for the purchased parts, and the stale published pod STLs.
   - **AUW and T/W:** the 3,911 g figure and the 1.14 hover T/W are provisional pending the
     bottom-up AUW ledger recompute (`docs/WBS.md` §0.10.1).
 - **Known data defect:** a few rows in the JSON files have parse-shifted `Category` values
@@ -103,7 +104,7 @@ changelog).
 
 ### Propulsion
 
-- **EDFs:** 4× XFly Galaxy X5 50 mm (6S, 3200 KV, 12-blade rotor, 11-fin stator)
+- **EDFs:** 4× QX-Motor QF2822-2300KV with 12-blade 64 mm rotors (Rev U; the 50 mm XFly Galaxy X5 is retired)
 - **Servos:**
   - Nacelle tilt: **superseded** by the 2× Pololu 20D 25:1 worm drive with pin brake (Rev T5e, `GM-TILT-20D`); the SPT5425LV tilt servos are retired
   - 1× SPT5425LV + LibreServo v2 (winch motor, continuous rotation + encoder feedback, was STS3215)

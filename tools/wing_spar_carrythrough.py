@@ -76,7 +76,7 @@ REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 STL = {
     "shell": "airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl",
     "wing_port": "airframe/stls/wings/wing_port_s1223_revo.stl",
-    "nacelle_port": "airframe/stls/nacelles/nacelle_port_revs.stl",
+    "nacelle_port": "airframe/stls/nacelles/nacelle_port_64mm.stl",
 }
 
 sys.path.insert(0, os.path.join(REPO_ROOT, "airframe", "blender-scripts"))

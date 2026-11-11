@@ -7,7 +7,7 @@
 //   PRINT ORIENTATION below.
 // ===========================================================================
 // =============================================================================
-// nacelle_esc_cover.scad — Rev T4c — hinged-ESC bay access cover
+// nacelle_esc_cover.scad — Rev U (carried forward from Rev T4c) — hinged-ESC bay access cover.  NOTE: this source still renders the 50 mm bay; the 64 mm covers are NOT generated yet (blocked on the ESC part selection, WBS NAC-64-ESC-80A; tools/check_nacelle_deps.py lists them)
 // =============================================================================
 //
 // Author  : Steve Griffing, PE(CSE), CISSP-ISSEP, CPP

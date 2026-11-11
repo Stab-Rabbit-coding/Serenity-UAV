@@ -133,16 +133,18 @@ def test_gear_arm_further_aft_takes_less_energy():
 
 
 def test_reconcile_includes_nacelle_printed_parts():
-    """Guards the 14.09 -> 14.19 lbm fix: nacelle printed parts are re-priced too."""
+    """Nacelle printed parts are priced in the ledger at the SLS datasheet density,
+    so the SLS change against the ledger is exactly zero (no double counting) and the
+    FDM-solid change covers hull PRINT rows AND nacelle printed parts."""
     nac = 2 * sum(m for _n, m in rec.nacelle_printed_g())
-    assert nac > 800.0, nac                       # ~852 g at 1.05 g/cc today
+    assert nac > 850.0, nac                       # ~901 g at PA CF 1.11 g/cc today
     names = " ".join(n.lower() for n, _m in rec.nacelle_printed_g())
     assert "bearing" not in names and "motor" not in names
-    _solid, d_sls = rec.deltas()
-    d_hull_only = sum(r["mass_g"] / rec.RHO_LEDGER * rec.RHO[rec.SLS_MATERIAL.get(r["name"], "PA "
-                                                                                             "CF")]
-                      - r["mass_g"] for r in rec.ledger()["rows_hover"] if r["kind"] == "PRINT")
-    assert _close(d_sls - d_hull_only, nac * (1.11 / 1.05 - 1), 1e-6)
+    d_solid, d_sls = rec.deltas()
+    assert d_sls == 0.0
+    d_hull = sum(r["mass_g"] / rec.rho_ledger(r["name"]) * rec.RHO_FDM_SOLID - r["mass_g"]
+                 for r in rec.ledger()["rows_hover"] if r["kind"] == "PRINT")
+    assert _close(d_solid - d_hull, nac * (rec.RHO_FDM_SOLID / 1.11 - 1), 1e-6)
 
 
 def test_mesh_check_on_todays_rear_shell():

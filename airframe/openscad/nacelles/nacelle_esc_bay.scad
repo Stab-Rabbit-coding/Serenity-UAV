@@ -13,7 +13,7 @@
 // Analysis and code by Claude (Claude Opus 5, Anthropic) under the author's
 //           direction, per AGENTS.md §3 "Attribution and Licensing"
 // License : CERN-OHL-W-2.0 — see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
-// Date    : 2026-09-01  (Rev T4c)
+// Date    : 2026-09-01  (Rev U; carried forward from Rev T4c)
 //
 // THE BOARD — owner direction, 2026-09-01
 // ---------------------------------------
