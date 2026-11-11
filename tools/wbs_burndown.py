@@ -7,7 +7,7 @@ so recording a new finding (AGENTS.md requires it the same day) never counts aga
 
 The file list and the open-item rule are the federation's own: tools/gen_todo_from_wbs.py
 PAIRS and extract_open_items() (an open item = an unchecked box not inside another open
-box; the TODO.md line count).  A closed item is any checked box, at any depth.  The
+box; the per-folder open-items line count).  A closed item is any checked box, at any depth.  The
 root WBS.md is an index that repeats many subsystem lines AND owns project-wide items
 (0.x, 5.x, 6.x), so it is reported on its own row and never added to the subsystem total.
 
@@ -45,7 +45,7 @@ RULE = "open:top-level(gen_todo); closed:any-depth"
 def count_closed(text: str) -> int:
     """Every checked box, at any nesting depth.
 
-    Open items follow the TODO.md rule (top level only), but a closure is work done wherever it
+    Open items follow the open-items rule (top level only), but a closure is work done wherever it
     sits: many WBS entries (e.g. NAC-64-ASM-01) are sub-items of a still-open parent, and the
     top-level rule would hide their closure from the sprint measure.
     """
