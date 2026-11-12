@@ -106,9 +106,9 @@ Run with `tools/esc80_cooptimize.py` at nacelle scale 1.06 with the 70 A file's 
 
 | Design | ESC A bay margin | ESC B bay margin |
 |---|---|---|
-| 70 A (`esc70_design.json`) | +3.2 mm | +18.1 mm |
-| 80 A as designed (`esc80_design_m2.json`) | **−24.5 mm** | +19.2 mm |
-| 80 A with the 70 A board's 14 mm signal width | **−11.0 mm** | **−7.6 mm** |
+| 70 A (`esc70_design.json`) | +0.13 in (+3.2 mm) | +0.71 in (+18.1 mm) |
+| 80 A as designed (`esc80_design_m2.json`) | **−0.96 in (−24.5 mm)** | +0.76 in (+19.2 mm) |
+| 80 A with the 70 A board's 0.55 in (14 mm) signal width | **−0.43 in (−11.0 mm)** | **−0.30 in (−7.6 mm)** |
 
 The 80 A board does not fit at scale 1.06. Fitting it would mean a larger nacelle scale (re-opening
 the nacelle geometry, OD-17 and the pivot) or giving up one of the two bays.
@@ -117,12 +117,13 @@ the nacelle geometry, OD-17 and the pivot) or giving up one of the two bays.
 
 | Design | ESC mass (ESTIMATE) | Rotating-assembly CG shift |
 |---|---|---|
-| 70 A | 0.116 lbm (52.7 g) | 3.7 mm |
-| 80 A as designed | 0.114 lbm (51.5 g) | 4.0 mm |
-| 80 A, 14 mm signal width | 0.122 lbm (55.2 g) | 4.5 mm |
+| 70 A | 0.116 lbm (52.7 g) | 0.146 in (3.7 mm) |
+| 80 A as designed | 0.114 lbm (51.5 g) | 0.157 in (4.0 mm) |
+| 80 A, 0.55 in (14 mm) signal width | 0.122 lbm (55.2 g) | 0.177 in (4.5 mm) |
 
-Within 2.5 g per ESC (10 g per aircraft); not a discriminator. The AUW ledger and BOM already carry
-the 70 A roll-up (52.7 g, OSESC-NAC); no ledger change follows from the decision.
+Within 0.006 lbm (2.5 g) per ESC, 0.022 lbm (10 g) per aircraft; not a discriminator. The AUW
+ledger and BOM already carry
+the 70 A roll-up (0.116 lbm (52.7 g), OSESC-NAC); no ledger change follows from the decision.
 
 ## Canonical shape
 
@@ -134,9 +135,9 @@ larger nacelle scale to fit an 80 A board would change it.)
 | | A. 70 A Open-Secure-ESC | B. 80 A Open-Secure-ESC | C. Commercial ESC |
 |---|---|---|---|
 | Covers motor demand | yes (44 A sustained, 63 A peak) | yes | only if rated ≥ 80 A and analysed |
-| Fits the bays at scale 1.06 | yes (+3.2 / +18.1 mm) | **no** (−24.5 or −11.0 mm) | unknown per part |
+| Fits the bays at scale 1.06 | yes (+0.13 / +0.71 in (+3.2 / +18.1 mm)) | **no** (−0.96 or −0.43 in (−24.5 or −11.0 mm)) | unknown per part |
 | Thermal at operating current | same as B | same as A | unverified label |
-| Mass | 52.7 g | 51.5-55.2 g | per part |
+| Mass | 0.116 lbm (52.7 g) | 0.114-0.122 lbm (51.5-55.2 g) | per part |
 | Follows maker's 80 A figure | no (rating by analysis) | yes | must |
 | Cost and schedule | design exists | larger nacelle or one bay lost | analysis per part; loses the Open-Secure-ESC features |
 

@@ -56,15 +56,19 @@ I_WIRE = 48.0            # A, 10 AWG feed continuous on paper, option A (wire re
 RISE_70 = 68.1 - 25.0    # K at 70 A, esc80_cooptimize.py on esc70_design.json
 T_LIMIT_C = 125.0
 
+MM_IN = 25.4
+G_LBM = 453.592
+# Source values stay in the tool's native units (mm, g) so they trace to esc80_cooptimize.py;
+# the figures plot inches and lbm first, metric in parentheses (AGENTS.md section 5).
 FIT = {  # bay fit margin, mm (positive = fits); A and B are the two ESCs per nacelle
     "70 A\n(esc70_design)": (3.2, 18.1),
     "80 A as designed\n(scale 1.06)": (-24.5, 19.2),
-    "80 A, 14 mm\nsignal width": (-11.0, -7.6),
+    "80 A, 0.55 in (14 mm)\nsignal width": (-11.0, -7.6),
 }
 MASS = {  # ESC mass estimate g, CG shift of the rotating assembly mm
     "70 A\n(esc70_design)": (52.7, 3.7),
     "80 A as designed\n(scale 1.06)": (51.5, 4.0),
-    "80 A, 14 mm\nsignal width": (55.2, 4.5),
+    "80 A, 0.55 in (14 mm)\nsignal width": (55.2, 4.5),
 }
 
 
@@ -145,7 +149,7 @@ def fig_path(out: Path) -> None:
         ("Branch fuse\n(NAC-64-FUSE-COORD)", "carry 44 A cont.,\n57-63 A for 10 s"),
         ("4 x 10 AWG feed\nin the CF spar", "about 33-48 A on paper;\nthermal test decides"),
         ("Open-Secure-ESC\n70 A (OD-3)", "I²t limit: 60 A / 10 s,\nthen wire rating"),
-        ("3 x 12 AWG phase\n200 C", "about 38 A RMS at 44 A;\nload-bank test"),
+        ("3 x 12 AWG phase\n392 °F (200 °C)", "about 38 A RMS at 44 A;\nload-bank test"),
         ("QF2822-2300KV\nmotor", "57 A at 24 V;\n60 A / 10 s"),
     ]
     xs = np.linspace(1.0, 11.0, len(blocks))
@@ -207,27 +211,33 @@ def fig_fit_mass(out: Path) -> None:
     style(a1)
     for k, (col, lab) in enumerate(((BLUE, "ESC A bay"), (ORANGE, "ESC B bay"))):
         vals = [FIT[n][k] for n in names]
-        a1.bar(x + (k - 0.5) * (w + 0.02), vals, width=w, color=col, zorder=3, label=lab)
+        a1.bar(x + (k - 0.5) * (w + 0.02), [v / MM_IN for v in vals], width=w, color=col,
+               zorder=3, label=lab)
         for xi, v in zip(x, vals):
-            a1.text(xi + (k - 0.5) * (w + 0.02), v + (1 if v >= 0 else -1), f"{v:+.1f}",
-                    ha="center", va="bottom" if v >= 0 else "top", fontsize=8, color=INK)
+            vi = v / MM_IN
+            a1.text(xi + (k - 0.5) * (w + 0.02), vi + (0.04 if v >= 0 else -0.04),
+                    f"{vi:+.2f} in\n({v:+.1f} mm)", ha="center",
+                    va="bottom" if v >= 0 else "top", fontsize=7.5, color=INK)
     a1.axhline(0, color=INK, lw=1.2, zorder=4)
-    a1.text(2.55, 1.0, "fits above 0", ha="right", fontsize=8, color=INK2)
+    a1.text(2.55, 0.04, "fits above 0", ha="right", fontsize=8, color=INK2)
     a1.set_xticks(x, names, fontsize=8.5, color=INK)
-    a1.set_ylabel("bay fit margin, mm", color=INK2, fontsize=9)
-    a1.set_ylim(-30, 26)
+    a1.set_ylabel("bay fit margin, in", color=INK2, fontsize=9)
+    a1.set_ylim(-1.35, 1.1)
     a1.legend(frameon=False, fontsize=8, loc="lower left")
-    a1.set_title("Fit in the 64 mm nacelle bays (scale 1.06)", loc="left", fontsize=11, color=INK)
+    a1.set_title("Fit in the 2.5 in (64 mm) EDF nacelle bays (scale 1.06)", loc="left",
+                 fontsize=11, color=INK)
 
     style(a2)
     m = [MASS[n][0] for n in names]
-    a2.bar(x, m, width=0.5, color=BLUE, zorder=3)
+    a2.bar(x, [v / G_LBM for v in m], width=0.5, color=BLUE, zorder=3)
     for xi, v, n in zip(x, m, names):
-        a2.text(xi, v + 0.8, f"{v:.1f} g ({v / 453.592:.3f} lbm)\nCG shift {MASS[n][1]:.1f} mm",
+        cg = MASS[n][1]
+        a2.text(xi, v / G_LBM + 0.002, f"{v / G_LBM:.3f} lbm ({v:.1f} g)\n"
+                f"CG shift {cg / MM_IN:.3f} in ({cg:.1f} mm)",
                 ha="center", va="bottom", fontsize=8, color=INK)
     a2.set_xticks(x, names, fontsize=8.5, color=INK)
-    a2.set_ylabel("ESC mass estimate, g", color=INK2, fontsize=9)
-    a2.set_ylim(0, 70)
+    a2.set_ylabel("ESC mass estimate, lbm", color=INK2, fontsize=9)
+    a2.set_ylim(0, 0.16)
     a2.set_title("Mass and rotating-assembly CG shift (ESTIMATES)", loc="left", fontsize=11,
                  color=INK)
     fig.tight_layout()

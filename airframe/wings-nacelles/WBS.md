@@ -2377,7 +2377,7 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         and figures: `docs/ESC_RATING_OD3_BRIEF.md`, figures by `tools/od3_esc_figures.py`): demand is 44 A sustained (worst-loaded fan),
         57 A full throttle at 24 V, about 63 A on a fresh 25.2 V pack, and the motor's own limit is
         60 A / 10 s, so a 70 A board covers every current the motor can use. At nacelle scale 1.06 the
-        80 A layout misses the bays by 24.5 mm (11.0 mm with the 70 A signal width) and has the same
+        80 A layout misses the bays by 0.96 in (24.5 mm), or 0.43 in (11.0 mm) with the 70 A signal width, and has the same
         loss per A² (8.7 mW/A², two FETs per leg), so it buys no thermal margin at the operating
         current. Conditions: NAC-64-ESC70-QUAL below, and the I-squared-t current limit in
         NAC-64-FUSE-COORD. The 80 A sub-items that are about bay placement (.a, .b, .j, .k) now apply
