@@ -3341,7 +3341,7 @@ wing_spar_station_fit.py — Size the wing spar's chordwise station against the 
 
 ```text
 geom.py — od17_junction_cfd/geom.py -- OD-17 fairing-to-wing junction CFD screen. Build the two CFD bodies (1.5 in glov… [build-tooling]
-geom_asbuilt.py — od17_junction_cfd/geom_asbuilt.py -- OD17-FAIR-CFD: the as-built wing-tip fairing as a CFD body. [build-tooling]
+geom_asbuilt.py — od17_junction_cfd/geom_asbuilt.py -- OD17-FAIR-CFD: the as-built wing-tip fairing assembly as a CFD body. [build-tooling]
 mkcase.py — od17_junction_cfd/mkcase.py -- OD-17 fairing-to-wing junction CFD screen. Write an OpenFOAM v1912 simpleFoam… [build-tooling]
 post.py — od17_junction_cfd/post.py -- OD-17 fairing-to-wing junction CFD screen. Post-process: averaged drag, reversed… [build-tooling]
 run.sh — !/bin/bash [build-tooling]

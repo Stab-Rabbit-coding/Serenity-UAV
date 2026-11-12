@@ -16290,7 +16290,7 @@
       "archived": false
     },
     "tools/od17_junction_cfd/geom_asbuilt.py": {
-      "description": "od17_junction_cfd/geom_asbuilt.py -- OD17-FAIR-CFD: the as-built wing-tip fairing as a CFD body.",
+      "description": "od17_junction_cfd/geom_asbuilt.py -- OD17-FAIR-CFD: the as-built wing-tip fairing assembly as a CFD body.",
       "tags": [
         "build-tooling"
       ],
