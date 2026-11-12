@@ -410,8 +410,9 @@ def retranslate_y(name, dy):
 
     For parts whose bake is a rigid placement and whose SOURCE may not be
     re-rendered right now: the 64 mm nacelle group (pods, trunnions, tilt
-    pinions) is on owner HOLD NAC-64-REBAKE -- a re-render would pull in the
-    unapplied x1.06 enlargement -- yet its placement follows hd.SPAR_Y, which
+    pinions) was on owner HOLD NAC-64-REBAKE (released 2026-11-12, OD-4; the
+    re-bake is Sprint 3 work, so until it lands the pods stay as baked) -- a
+    re-render pulls in the unapplied x1.06 enlargement -- yet its placement follows hd.SPAR_Y, which
     the 2026-10-31 0.5 in wing-root shift moved +12.7 mm.  A pure Y
     translation of a rigidly placed mesh is exact; it is NOT a second bake (the
     placement transform is not re-applied), so the "never re-bake a baked
