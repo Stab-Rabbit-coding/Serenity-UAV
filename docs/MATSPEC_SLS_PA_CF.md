@@ -1,7 +1,7 @@
 # Material specification MS-SLS-PACF — SLS DuraForm PA CF flight parts
 
-**Revision:** Rev U, 2026-11-11, issue B (build-axis factors from proxy data; coupons pending). **Status:** proposed; owner
-approval required. **Applies to:** every Serenity UAV part printed in DuraForm PA CF (`AGENTS.md` §7:
+**Revision:** Rev U, 2026-11-11, issue B (build-axis factors from proxy data; coupons pending). **Status:** **approved by the owner
+2026-11-11** (issue B). The §2 build-axis factors remain ESTIMATES until the §8 coupons replace them. **Applies to:** every Serenity UAV part printed in DuraForm PA CF (`AGENTS.md` §7:
 hull sections, nacelle pods, collars, brackets, trays, gears, wing skins, fairings).
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (owner) — drafted by Claude (Anthropic, Claude
 Opus 5.5) under the author's direction, with the `3d-print-design` and `mechanical-engineering` skills.

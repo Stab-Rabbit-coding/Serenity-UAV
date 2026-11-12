@@ -746,16 +746,16 @@
     },
     {
       "Ref": "WIRE-10AWG",
-      "Description": "10AWG silicone wire — Flight Engineer XT30 outputs to ESC inputs",
+      "Description": "10 AWG feed wire, Daburn 2617/10 (UL 3212, 150 °C, 600 V) — Flight Engineer to ESC, 4 conductors per nacelle through the CF spar (WA-R10)",
       "Category": "Wiring",
       "Qty": "1",
       "Unit_Mass_g": "80",
       "Total_Mass_g": "80",
-      "Supplier": "Amazon / AliExpress",
-      "Supplier_PN_or_Search": "10AWG silicone wire red/black 1m each",
+      "Supplier": "Daburn Electronics & Cable (via distributor)",
+      "Supplier_PN_or_Search": "Daburn 2617/10 (colour suffix per vendor); 10 AWG UL 3212 silicone 600V 150C tinned copper 105/30",
       "Est_Unit_Price_USD": "15.00",
       "Est_Total_Price_USD": "15.00",
-      "Notes": "ESC branch wiring only (Flight Engineer XT30 to ESC XT30); 55A rated free air; 1 pair per ESC x4 = ~400mm per polarity total; NOT for main battery bus (use WIRE-4AWG)"
+      "Notes": "Rev U 2026-11-12 (owner, SPAR-20-WIREOD closed): Daburn 2617/10 [REF-PWR-016]: 105/30 tinned Cu, 0.207 in (5.30 mm) nominal OD, inside the 0.217 in (5.5 mm) envelope the OD-17 route and channels are built to; 46.69 lbm/1000 ft (69.5 g/m); 1.08 ohm/1000 ft. Ampacity: about 33-48 A in the spar bundle per FAA AC 43.13-1B (the old '55A rated free air' note was not supported), qualify by NAC-64-FEED-THERM; torsion and bend by NAC-64-WIRE-QUAL. Do not solder-tin crimped ends (NASA-STD-8739.4A 7.2.26). Mass 80 g is the OLD short-pair figure (about 3.8 ft of this wire): re-derive once the wing-side run is drawn (WBS WIRE-10AWG-MASS). Terminations: the WA-R10 route ends at M3 stud ring terminals in the nacelle disconnect bay; the XT30 named in earlier revisions is below the 44 A design current (WBS WIRE-10AWG-MASS). NOT for main battery bus (use WIRE-4AWG)"
     },
     {
       "Ref": "WIRE-16AWG",
@@ -2933,13 +2933,13 @@
       "Description": "wing_tip_fairing_{port,stbd}.stl — wing-fixed aft fairing behind the rotating tilt collar, with rounded end plate and fillet into the wing tip (OD-17 option D)",
       "Category": "Printed Part",
       "Qty": "2",
-      "Unit_Mass_g": "23.2",
-      "Total_Mass_g": "46.4",
+      "Unit_Mass_g": "20.7",
+      "Total_Mass_g": "41.4",
       "Supplier": "SLS service bureau (vendor not yet selected)",
       "Supplier_PN_or_Search": "SLS DuraForm PA CF [3DS-30108A] (REF-MAT-015)",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev U (2026-11-11, WA-R10, owner decision OD-17 option D). PRINT FROM airframe/stls/wings/wing_tip_fairing_{port,stbd}.stl, built by tools/nacelle64_wing_fairing.py. Bonds to the wing tip; wing-fixed (it does not tilt). NACA-type tail behind the Dia 2.13 in (54 mm) collar to the wing trailing-edge line; 0.24 in (6 mm) convex rounding, 0.04 in (1 mm) wall and 0.24 in (6 mm) concave fillet at the wing junction (CFD: 14 % less drag than the 1.50 in glove); 22.8 deg wing taper kept. Hollow 0.079 in (2.0 mm) SLS skin filled with 2 lb/ft3 closed-cell PU foam from FOAM-PU-2LB (owner 2026-11-11: not structural; 0.4 g foam per side, in the AUW ledger); two Dia 0.16 in (4 mm) fill/vent holes in the outboard cap double as the SLS powder-escape holes [REF-MFG-001 p. 6]. Solid it was 36.4 g. Outer half-thickness at the tilt axis is bore radius + 0.079 in (2.0 mm) for the minimum wall (OD17-FAIR-WALL). Mass synced to the STL mesh at the SLS datasheet density. Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 36.4 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
+      "Notes": "Rev U (2026-11-11, WA-R10, owner decision OD-17 option D). PRINT FROM airframe/stls/wings/wing_tip_fairing_{port,stbd}.stl, built by tools/nacelle64_wing_fairing.py. Bonds to the wing tip; wing-fixed (it does not tilt). NACA-type tail behind the Dia 2.13 in (54 mm) collar to the wing trailing-edge line; 0.24 in (6 mm) convex rounding, 0.04 in (1 mm) wall and 0.24 in (6 mm) concave fillet at the wing junction (CFD: 14 % less drag than the 1.50 in glove); 22.8 deg wing taper kept. Hollow 0.059 in (1.5 mm) SLS skin (owner OD-18 item 4 / OD-19 A, 2026-11-11) filled with 2 lb/ft3 closed-cell PU foam from FOAM-PU-2LB (owner 2026-11-11: not structural; 0.5 g foam per side, in the AUW ledger); two Dia 0.16 in (4 mm) fill/vent holes in the outboard cap double as the SLS powder-escape holes [REF-MFG-001 p. 6]. Solid it was 36.4 g. Outer half-thickness at the tilt axis is bore radius + 0.079 in (2.0 mm) for the minimum wall (OD17-FAIR-WALL). Mass synced to the STL mesh at the SLS datasheet density. Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 23.2 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "PRINT-NOZ64-THROAT",
@@ -3043,7 +3043,7 @@
       "Supplier_PN_or_Search": "Stab-Rabbit-coding/Open-Secure-ESC",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev U NEW. 52.7 g is the roll-up ESTIMATE (tools/esc80_cooptimize.py on esc70_design.json). Current rating is OPEN: the roll-up carries a 70 A design, the QX sheet recommends 80 A (WBS NAC-64-ESC-80A). Price not recorded. "
+      "Notes": "Rev U NEW. 52.7 g is the roll-up ESTIMATE (tools/esc80_cooptimize.py on esc70_design.json). Current rating: 70 A, owner decision OD-3 2026-11-12, conditional on WBS NAC-64-ESC70-QUAL. CAUTION: do not substitute any other ESC (commercial or another build) without a full engineering analysis for this motor and bay (current, hot-bay thermal, fit, current limit, fuse coordination); a commercial ESC shall be at least the motor maker's 80 A and still be analysed. Price not recorded. "
     },
     {
       "Ref": "SERVO-KST-X06",

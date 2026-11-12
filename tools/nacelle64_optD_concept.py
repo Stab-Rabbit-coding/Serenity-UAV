@@ -40,6 +40,9 @@ import nacelle64_assembly_check as a  # noqa: E402
 
 PZ, X0, DZ = a.PIVOT_Z, a.TRUNNION_X0, a.DISC_Z
 # assumed 10 AWG OD; 3 x OD minimum bend (repo citation)
+# 0.217 in (5.5 mm) wire envelope; the selected Daburn 2617/10 is 0.207 in (5.30 mm) nominal
+# [REF-PWR-016] (SPAR-20-WIREOD closed 2026-11-12), so the bend and clearance checks
+# are conservative.
 WIRE_D, R_MIN = 5.5, 3 * 5.5
 OFFS = [(-2.75, -2.75), (2.75, -2.75), (-2.75, 2.75), (2.75, 2.75)]   # 2 x 2 in the spar bore
 STUD_Y = {(-2.75, -2.75): -3.75, (2.75, -2.75): 3.75, (-2.75, 2.75): -11.25, (2.75, 2.75): 11.25}

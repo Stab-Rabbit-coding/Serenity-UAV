@@ -127,7 +127,7 @@ def main(argv: list[str] | None = None) -> int:
         n = sum(sync_row(r, mesh) for r in rows)
         m = sum(sync_row(r, mesh) for r in items)
         with BOM_CSV.open("w", encoding="utf-8", newline="") as fh:
-            w = csv.DictWriter(fh, fieldnames=fields, lineterminator="\r\n")
+            w = csv.DictWriter(fh, fieldnames=fields, lineterminator="\n")  # repo BOM is LF
             w.writeheader()
             w.writerows(rows)
         BOM_JSON.write_text(json.dumps(jdoc, ensure_ascii=False, indent=2) + "\n",

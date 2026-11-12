@@ -45,7 +45,8 @@
   "2026-10-05_70A": "Owner: 2135 gf per fan. REF-EDF-003 2400 KV: 57.0 A at 22.2 V; 70 A rating + 70 A firmware limit (WBS NAC-64-ESC-80A.m). One 0.5 mOhm shunt/phase (2.45 W < 3 W).",
   "keepouts": "Unscaled stations (harness multiplies z by nacelle_scale). Servo: cover Z 135.3 at x1.06 minus 10 mm owner buffer to past the ball (~203). Inboard/nav measured.",
   "nacelle_scale": "Uniform x1.06 from airframe/openscad/nacelles/nacelle_64_scale.scad",
-  "2026-11-11_motor": "SUPERSEDES 2026-10-05_70A: specified motor is QF2822-2300KV (owner 2026-11-02, REF-EDF-003): 57.0 A at 24 V, 60 A/10 s, 80 A ESC. 2400 KV never specified or authorized. 70 A design not yet re-sized (WBS NAC-64-EDF-2300KV item c)."
+  "2026-11-11_motor": "SUPERSEDES 2026-10-05_70A: specified motor is QF2822-2300KV (owner 2026-11-02, REF-EDF-003): 57.0 A at 24 V, 60 A/10 s, 80 A ESC. 2400 KV never specified or authorized. 70 A design not yet re-sized (WBS NAC-64-EDF-2300KV item c).",
+  "2026-11-12_OD3": "OD-3 DECIDED (owner 2026-11-12): this 70 A design is accepted for the QF2822-2300KV (44 A sustained, 57-63 A peak, motor 60 A/10 s), conditional on WBS NAC-64-ESC70-QUAL. CAUTION: no other ESC without a full engineering analysis."
  },
  "keepouts": [
   [

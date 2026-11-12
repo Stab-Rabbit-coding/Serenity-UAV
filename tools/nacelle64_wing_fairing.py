@@ -60,7 +60,7 @@ import sls_materials as sm  # noqa: E402
 PZ = a.PIVOT_Z
 R_COL = 27.0                    # collar boss radius (COLLAR_OD / 2)
 CLR = 1.0                       # running clearance, collar to fairing bore
-WALL = 2.0                      # AGENTS.md section 7 minimum wall
+WALL = 2.0                      # outer thickening at the tilt axis (OD-18 item 2, CFD hold)
 R_BORE = R_COL + CLR            # 28.0
 R_OUT = R_BORE + WALL           # 30.0: outer half-thickness at the tilt axis
 X0F = 52.8                      # 1.0 mm outboard of the pod's collar flare (pod X <= 51.8)
@@ -75,12 +75,13 @@ SPAN = R1 + WALL_EP + R2
 NS = 90                         # points per half-ring
 RHO = sm.rho_g_mm3(sm.PA_CF)    # g/mm^3
 # Hollow shell, foam filled (owner 2026-11-11: the fairing is not structural; minimum skin that
-# holds its shape with a foam core).  2.0 mm is the AGENTS.md section 7 exterior-shell skin; the
-# SLS process minimum is 1.0 mm [REF-MFG-001 p. 15] and is what --skin 1.0 builds (needs an owner
-# waiver of section 7).  Foam: 2 lb/ft3 (32.04 kg/m3) closed-cell PU, BOM FOAM-PU-2LB (AGENTS.md
-# section 7).  Two fill/vent holes through the outboard cap double as the SLS powder-escape holes
+# holds its shape with a foam core).  Skin 1.5 mm: owner OD-18 item 4 / OD-19 option A, 2026-11-11,
+# the foam-backed non-load-bearing row of docs/SLS_MIN_WALL_THICKNESS.md (interim PA CF floor; the
+# earlier "1.0 mm SLS process minimum" mis-cited REF-MFG-001 p. 15, a tank wall).
+# Foam: 2 lb/ft3 (32.04 kg/m3) closed-cell PU, BOM FOAM-PU-2LB (AGENTS.md section 7).  Two
+# fill/vent holes through the outboard cap double as the SLS powder-escape holes
 # (> 2 mm [REF-MFG-001 p. 6]).
-SKIN = 2.0
+SKIN = 1.5
 RHO_FOAM = 32.04e-6             # g/mm^3, 2 lb/ft3
 HOLE_D = 4.0                    # fill / vent / powder-escape hole, 0.16 in
 YZ = np.array([[0, 1, 0, 0], [0, 0, 1, 0], [1, 0, 0, 0]], float)
@@ -257,7 +258,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--write", action="store_true", help="write the two hull-frame STLs")
     ap.add_argument("--json", type=Path)
     ap.add_argument("--skin", type=float, default=SKIN,
-                    help="shell skin, mm (2.0 = AGENTS.md section 7; 1.0 = SLS process minimum)")
+                    help="shell skin, mm (1.5 = OD-19 A foam-backed non-load-bearing floor)")
     args = ap.parse_args(argv)
 
     h2l = a.hull_to_local("stbd")

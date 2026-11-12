@@ -32,6 +32,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 import trimesh  # noqa: E402
 from matplotlib.patches import Rectangle  # noqa: E402
+from matplotlib.ticker import FuncFormatter, MultipleLocator  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -41,13 +42,14 @@ import twin_head_pack_fit as t  # noqa: E402
 c, h, clf = t.c, t.h, t.clf
 OUT = os.path.join(c.REPO, "docs", "figures", "battery_bay_twin_tray.png")
 
-# CG offsets from twin_head_pack_fit (after the 0.5 in pivot shift)
+MM_IN = 25.4
+# CG offsets from twin_head_pack_fit (after the 0.5 in pivot shift), mm
 CG_F, CG_A = 2.4, 1.5
 THIRD = dict(y0=302.0, y1=372.0, zc=190.0, w=42.0, h=41.0)  # bare-pack fit band
 
 STYLE = {  # category: (face colour, edge colour, label)
     "pack": ("#2e7d32", "#1b5e20", "flight packs (2 x Tattu 6S 2200, flat)"),
-    "third": ("#a5d6a7", "#2e7d32", "optional 6S 1600 (bare-pack fit, 1 mm)"),
+    "third": ("#a5d6a7", "#2e7d32", "optional 6S 1600 (bare-pack fit, 0.04 in (1 mm))"),
     "tray": ("none", "#1565c0", "twin tray / stop / gate (PA CF)"),
     "corr": ("none", "#64b5f6", "loading corridor (pack slides fwd)"),
     "payload": ("#ffcc80", "#e65100", "payload envelope (3 x 4 x 3 in)"),
@@ -104,6 +106,18 @@ def rect(ax, x0, x1, y0, y1, key, alpha=0.55, lw=1.0, ls="-"):
                            alpha=alpha if fc != "none" else 1.0, lw=lw, ls=ls))
 
 
+def inch_axes(ax, x_step_in, y_step_in):
+    """Geometry stays in mm (as read from the fit tools); the bottom/left scales read inches
+    (AGENTS.md section 5, imperial first) and the top/right edges carry the mm scale."""
+    inch = FuncFormatter(lambda v, _: f"{v / MM_IN:g}")
+    ax.xaxis.set_major_locator(MultipleLocator(x_step_in * MM_IN))
+    ax.yaxis.set_major_locator(MultipleLocator(y_step_in * MM_IN))
+    ax.xaxis.set_major_formatter(inch)
+    ax.yaxis.set_major_formatter(inch)
+    ax.secondary_xaxis("top").tick_params(labelsize=8, colors="0.4")
+    ax.secondary_yaxis("right").tick_params(labelsize=8, colors="0.4")
+
+
 def outline(ax, mesh, origin, normal, ix, iy):
     sec = mesh.section(plane_origin=origin, plane_normal=normal)
     if sec is None:
@@ -155,16 +169,20 @@ def main():
         ax.axvline(tl, color="k", lw=1.5)
         ax.axvline(tl + CG_F, color="#c62828", lw=1.2, ls="--")
         ax.axvline(tl + CG_A, color="#ef6c00", lw=1.2, ls=":")
-    ax1.text(tl - 2, 262, f"thrust line\nY {tl:.1f}", ha="right", fontsize=9)
-    ax1.text(tl + CG_F + 2, 262, f"CG, 2 packs\n+{CG_F} mm", color="#c62828", fontsize=8)
-    ax1.text(tl + CG_F + 2, 247, f"CG, + 6S 1600\n+{CG_A} mm", color="#ef6c00", fontsize=8)
+    ax1.text(tl - 2, 262, f"thrust line\nY {tl / MM_IN:.2f} in ({tl:.1f} mm)", ha="right",
+             fontsize=9)
+    ax1.text(tl + CG_F + 2, 262, f"CG, 2 packs\n+{CG_F / MM_IN:.3f} in ({CG_F} mm)",
+             color="#c62828", fontsize=8)
+    ax1.text(tl + CG_F + 2, 247, f"CG, + 6S 1600\n+{CG_A / MM_IN:.3f} in ({CG_A} mm)",
+             color="#ef6c00", fontsize=8)
     ax1.set_title("SIDE VIEW (centreline cut of the one-piece head+cargo hull; items "
                   "as bounding boxes, projected)")
-    ax1.set_xlabel("Y, aft (mm, datum R2)")
-    ax1.set_ylabel("Z, up (mm)")
+    ax1.set_xlabel("Y, aft, in (mm on the top edge; datum R2)")
+    ax1.set_ylabel("Z, up, in (mm on the right edge)")
     ax1.set_xlim(-5, 460)
     ax1.set_ylim(70, 290)
     ax1.set_aspect("equal")
+    inch_axes(ax1, 2, 1)
     # ---------------- top view (Y aft, X port up), cut at the tray centre Z ---
     outline(ax2, hull, [0, 0, t.TRAY_ZC], [0, 0, 1], 1, 0)
     for name, k, b in its:
@@ -181,12 +199,14 @@ def main():
     ax2.annotate("", xy=(t.TRAY_Y1 - 30, -t.LANE_X), xytext=(t.TRAY_Y1 - 30, 0),
                  arrowprops=dict(arrowstyle="->", color="#1565c0"))
     ax2.text(t.TRAY_Y1 - 26, 2, "step into lane", color="#1565c0", fontsize=8)
-    ax2.set_title(f"TOP VIEW (hull cut at Z {t.TRAY_ZC:.0f}; port up)")
-    ax2.set_xlabel("Y, aft (mm, datum R2)")
-    ax2.set_ylabel("X, port (mm)")
+    ax2.set_title(f"TOP VIEW (hull cut at Z {t.TRAY_ZC / MM_IN:.2f} in "
+                  f"({t.TRAY_ZC:.0f} mm); port up)")
+    ax2.set_xlabel("Y, aft, in (mm on the top edge; datum R2)")
+    ax2.set_ylabel("X, port, in (mm on the right edge)")
     ax2.set_xlim(-5, 460)
     ax2.set_ylim(-105, 105)
     ax2.set_aspect("equal")
+    inch_axes(ax2, 2, 1)
     handles = [Rectangle((0, 0), 1, 1, facecolor=v[0], edgecolor=v[1],
                          alpha=0.6 if v[0] != "none" else 1) for v in STYLE.values()]
     labels = [v[2] for v in STYLE.values()]

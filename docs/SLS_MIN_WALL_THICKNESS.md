@@ -1,6 +1,6 @@
 # SLS minimum wall thickness, DuraForm PA CF (replaces the 0.079 in FDM rule)
 
-**Revision:** Rev U, 2026-11-11. **Status:** proposed; owner decision required (OD-19 below).
+**Revision:** Rev U, 2026-11-11. **Status:** **adopted** — owner chose OD-19 option A on 2026-11-11 (now `AGENTS.md` §7).
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (owner) — analysis by Claude (Anthropic,
 Claude Opus 5.5) under the author's direction, with the `mechanical-engineering` skill.
 **License:** CC BY-SA 4.0 — see LICENSES/CC-BY-SA-4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
@@ -122,6 +122,8 @@ wrinkling stress 0.5 (Ef Ec Gc)^(1/3). These textbooks are not yet catalogued in
   skins of unfixed orientation, still falls well short of stiffness parity (2.79 mm needed).
 - **C:** adopt A for non-load-bearing parts only; leave load-bearing parts at 2.0 mm pending Z-axis
   coupon data.
+
+**Owner decision (2026-11-11): option A**, adopted into `AGENTS.md` §7 with the OD-18 item 4 fairing skin at 1.5 mm.
 
 **Recommendation: A**, because it is the only option that is both lighter where it can be and stiff
 enough where it must be, and it ties the XY values to a stated print orientation as REF-FAA-002's

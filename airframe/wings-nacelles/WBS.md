@@ -2371,6 +2371,29 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         HET-matched rotor: no thrust gain over the QX QF2822 on 6S at equal current margin;
         Ø4 shafts vs the QX 3 mm hub; no published bolt pattern [REF-EDF-004]. Stages stay
         CO-ROTATING within each nacelle (port/stbd mirrored). Revisit only with 8S.
+    - [ ] **OD-3 DECIDED 2026-11-12 (owner): the 70 A Open-Secure-ESC (`tools/esc70_design.json`) is
+        accepted for the QF2822-2300KV; the 80 A builds below are not pursued.** Basis: independent
+        assessment 2026-11-12 (electrical-engineering skill; Owner Decision Brief with the six checks
+        and figures: `docs/ESC_RATING_OD3_BRIEF.md`, figures by `tools/od3_esc_figures.py`): demand is 44 A sustained (worst-loaded fan),
+        57 A full throttle at 24 V, about 63 A on a fresh 25.2 V pack, and the motor's own limit is
+        60 A / 10 s, so a 70 A board covers every current the motor can use. At nacelle scale 1.06 the
+        80 A layout misses the bays by 0.96 in (24.5 mm), or 0.43 in (11.0 mm) with the 70 A signal width, and has the same
+        loss per A² (8.7 mW/A², two FETs per leg), so it buys no thermal margin at the operating
+        current. Conditions: NAC-64-ESC70-QUAL below, and the I-squared-t current limit in
+        NAC-64-FUSE-COORD. The 80 A sub-items that are about bay placement (.a, .b, .j, .k) now apply
+        to the 70 A board.
+        **CAUTION — no other ESC without a full engineering analysis.** The 70 A rating is valid only for the Open-Secure-ESC design analysed here (`tools/esc70_design.json`). Do not substitute any other ESC (commercial, another Open-Secure-ESC build, or a changed layout) until it has been analysed for this motor and bay: current demand (44 A sustained, 57-63 A peak, 60 A / 10 s motor limit), thermal performance in the bay at hot ambient, fit, current-limit behaviour and fuse coordination. A commercial ESC's rating is an unverified label; any commercial ESC shall be rated at least the motor maker's 80 A recommendation and still be analysed. Consequence of an unanalysed ESC: overheating or cut-out in hover loses a fan and likely the aircraft (WARNING if people are under or near the aircraft; a FET that fails shorted across the 6S pack is a fire hazard, WARNING).
+    - [ ] **NAC-64-ESC70-QUAL — conditions of the OD-3 70 A acceptance (2026-11-12).** (1) Bench
+        thermal test of a built board at 44 A sustained in 176 deg F (80 deg C) air at hover
+        airflow, thermocouple on the FETs, against the 257 deg F (125 deg C) design limit. The model
+        predicts about 207 deg F (97 deg C) at 44 A and 176 deg F ambient, but uses a 77 deg F
+        (25 deg C) design ambient, omits switching loss and rests on an estimated 0.35 convection
+        factor. (2) Desync/stall detection and current-limit response time on the bench (cooling is
+        the fan's own airflow, which drops when current rises). (3) Read the TPHR8504PL
+        safe-operating-area and pulse ratings (REF-SEMI-001) against limit overshoot. (4) Bulk
+        capacitor ripple-current rating at 44 A sustained and 63 A peak (with NAC-64-ESC-80A.j item 2).
+        (5) Firmware limit per NAC-64-FUSE-COORD: up to 60 A for at most 10 s, folding back to the
+        qualified wire rating.
     - [ ] **NAC-64-ESC-80A — 80 A Open-Secure-ESC builds (owner 2026-10-03,
         Stab-Rabbit-coding: two 80 A 6S ESCs that fit against the 64 mm thrust
         tube; supersedes NAC-64-ESC-70A, the earlier 70 A placeholder).** The
@@ -2482,10 +2505,12 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             `nacelle_intake_cfd.py` results (thrust input now 23.24 N); (c) ESC bays and the
             Open-Secure-ESC design (`tools/esc70_design.json`, `nacelle_64_scale.scad`) are
             sized for **70 A** — an 80 A ESC may not fit at scale 1.06 (owner decision);
+            **RESOLVED 2026-11-12: owner accepted the 70 A ESC (OD-3, NAC-64-ESC70-QUAL);**
             (d) PWR-CONN-01 / fuse sizing against 57.0 A per fan; (e) the 2135 gf record below
             is historical.
         - [ ] **NAC-64-ESC-80A.m — SUPERSEDED 2026-11-02 by NAC-64-EDF-2300KV (the 2400 KV basis
-            below was never specified or authorized; 80 A ESCs per the 2300 KV sheet). Historical:
+            below was never specified or authorized). The 70 A conclusion was re-derived for the
+            2300 KV and accepted by the owner on 2026-11-12 (OD-3, above). Historical:
             70 A is sufficient (2026-10-05, Claude Opus
             5.5; owner requirement 2135 gf per fan).** REF-EDF-003 2400 KV row: 22.2
             V, 57.0 A, 1265.4 W, 2135 g. Static fan laws (T ∝ n², P ∝ n³; aero
@@ -2672,13 +2697,31 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
 - [ ] **SPAR-20-ALLOW** — No verified CF tube flexural allowable exists in
     `REFERENCES.md`. The FOS 9.1 quoted in the plan uses a 300 MPa cross-ply
     stand-in; obtain a real coupon/mill figure before release (TODO §0.8).
-- [ ] **SPAR-20-WIREOD** — `bom_revS.csv` records no OD for `WIRE-10AWG`. The
+- [x] **SPAR-20-WIREOD** — **CLOSED 2026-11-12 (owner): the feed wire is Daburn 2617/10**, 0.207 in
+    (5.30 mm) nominal OD per its spec sheet [REF-PWR-016], UL 3212, 150 °C, 600 V, 105/30 tinned. It sits
+    inside the 0.217 in (5.5 mm) envelope the OD-17 route, channels (`OD17_WIRE_D`) and checks are built
+    to, so nothing is re-cut; the 3 × OD bend check at 5.5 mm is conservative for 5.30 mm. Daburn states
+    no OD tolerance: measure incoming wire (receiving inspection) against the 5.5 mm envelope. BOM
+    WIRE-10AWG updated. Original item: `bom_revS.csv` records no OD for `WIRE-10AWG`. The
     whole bore chain scales off the assumed 5.5 mm; measure the procured wire.
     **2026-11-11 (S2):** still open. The BOM row is a generic marketplace wire with no manufacturer, so
     no datasheet can be cited for what will be procured. The as-built paths (bend R, channel size, bundle
     corridor) all scale off 0.217 in (5.5 mm); the checks re-run in seconds if `WIRE_D` changes. Needs the
     owner's caliper reading of the procured wire, or a named product with a manufacturer datasheet.
 
+- [ ] **WIRE-10AWG-MASS — feed-wire mass and terminations (finding 2026-11-12).** The BOM/ledger
+    carry WIRE-10AWG at 80 g, the old short-pair figure: about 3.8 ft (1.15 m) of Daburn 2617/10 at
+    69.5 g/m. The feed is four conductors per nacelle, eight in all, from the Flight Engineer through
+    the CF spar to the disconnect bay; the pod-side runs are 2.43 / 2.78 in (61.7 / 70.7 mm) and the
+    wing-side run is not drawn yet. Re-derive the length and mass when it is (likely several times
+    80 g). Also: the BOM previously named XT30 connectors on this wire; XT30 class is about 30 A,
+    below the 44 A design current, and the drawn route ends at M3 stud ring terminals in the bay.
+    Settle the Flight Engineer-end termination with the fuse study (NAC-64-FUSE-COORD).
+- [ ] **NAC-64-WIRE-QUAL** — Owner OD-18 item 3 (2026-11-11): the four feed wires run **unbound**.
+    Qualify the chosen 10 AWG wire by a cycle test on the real spar length: 140 deg twist per tilt
+    cycle **plus the installed 0.65 in (16.5 mm) centreline channel bend**, to the service life. Ask
+    Daburn for 2617/10's minimum bend radius first. If the test fails, redraw the channel to about
+    0.73 in (18.5 mm) centreline so the inside radius meets 3 x OD (check the bend chamber has room).
 - [ ] **NAC-64-FEED-THERM** — Owner decision 2026-11-11 (ESC wire report review,
     `reports/UAV ESC wire market survey.md` Decision 1): **test the current spar first.** Load-bank the
     four 10 AWG feed conductors in the spar at 44 A and 38 A sustained with a thermocouple on the spar
@@ -2703,8 +2746,8 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     current limit shall be I-squared-t / fold-back:** up to 60 A for at most 10 s, then fold back to no
     more than the qualified wire continuous rating. The fuse carries 44 A continuous and 57-63 A for
     10 s. The 297 MINI family likely tops out at 40 A (unverified), so expect a MIDI-class fuse and
-    holder; check bay space. OD-3 (ESC rating) stays open until the OSESC-NAC passes 44 A sustained at
-    bay temperature.
+    holder; check bay space. OD-3 (ESC rating) was decided 2026-11-12: 70 A, conditional on NAC-64-ESC70-QUAL (44 A
+    sustained at bay temperature).
 
 ---
 
@@ -2784,6 +2827,13 @@ and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
 
 - [ ] **OD17-FAIR-WALL — Fairing thickened 0.08 in (2 mm) per side** for
     the minimum wall (CFD body had zero wall at the collar bore); drag not re-run (OD-18 item 2).
+    **Owner 2026-11-11: CFD re-run first** — see OD17-FAIR-CFD.
+- [ ] **OD17-FAIR-CFD — Owner OD-18 item 2 (2026-11-11): re-run the junction drag CFD on the as-built
+    fairing** (outer half-thickness bore + 2.0 mm at the tilt axis, trailing edge cut at 2.0 mm) and
+    compare with the zero-wall body that gave 14 % less drag than the 1.50 in glove
+    (`od17_junction_cfd/`). Hold release of the fairing outer shape until done. If the drag penalty
+    matters, reduce the thickening at the axis (it is a printability allowance, not structure) and
+    re-run. Fold OD17-TOOLS-01 in first so the CFD body and the printed part come from one module.
 - [x] **OD17-FAIR-HOLLOW — Fairing hollow, foam filled (owner 2026-11-11).**
     Owner direction: not a structural part, so a hollow shell with the minimum skin that holds its shape
     with a foam core. Built in `tools/nacelle64_wing_fairing.py` (`--skin`, default 2.0 mm): cavity =
@@ -2795,7 +2845,10 @@ and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
     (X 2.08–3.04 in (52.8–77.3 mm)) is 2.0 mm; the thin readings (4 % of samples below 0.95 mm) are all
     in the end-plate fillet toe, which tapers onto the wing and is bonded. **Skin is open to the owner
     (OD17-FAIR-SKIN below).**
-- [ ] **OD17-FAIR-SKIN — Owner: fairing skin 2.0 mm (§7) or 1.0 mm (SLS min)?**
+- [x] **OD17-FAIR-SKIN — Owner: fairing skin 2.0 mm (§7) or 1.0 mm (SLS min)?** **DECIDED 2026-11-11
+    (OD-18 item 4): 1.5 mm under OD-19 option A.** Rebuilt: 20.7 g shell + 0.5 g foam per side, 5.0 g
+    saved per aircraft; BOM and ledger synced. The 1.0 mm figure below was a mis-citation
+    (SLS-WALL-FLOOR). Original brief:
     `AGENTS.md` §7 sets exterior shells at 2.0 mm; the SLS process minimum is 1.0 mm [REF-MFG-001 p. 15].
     1.0 mm: shell 0.039 lbm (17.5 g) + foam 0.5 g per side, saves 0.026 lbm (11.6 g) per aircraft, needs
     a §7 waiver; the outer half-thickness at the axis could then drop 1 mm toward the CFD shape

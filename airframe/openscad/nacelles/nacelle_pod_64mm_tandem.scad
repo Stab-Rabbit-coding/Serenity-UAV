@@ -2739,7 +2739,7 @@ module tilt_drive_relief() {
 // disconnect bay.  Same path as tools/nacelle64_optD_concept.py pod_side_path(); that tool and
 // tools/nacelle64_assembly_check.py verify it.  Wire OD 5.5 mm is ASSUMED (WBS SPAR-20-WIREOD);
 // 3 x OD is the minimum bend of NASA-STD-8739.4A Table 7-1 [REF-NASA-001 7.2.19].
-OD17_WIRE_D   = 5.5;                    // [mm] assumed 10 AWG silicone OD (SPAR-20-WIREOD)
+OD17_WIRE_D   = 5.5;                    // [mm] 10 AWG envelope; selected Daburn 2617/10 is 5.30 nominal [REF-PWR-016] (SPAR-20-WIREOD closed 2026-11-12)
 OD17_CH_D     = OD17_WIRE_D + 1.0;      // [mm] channel diameter, 0.5 mm clearance per side
 OD17_R_MIN    = 3 * OD17_WIRE_D;        // [mm] minimum centreline bend radius
 OD17_X_LUG    = 40.5;                   // [mm] |X| of the ring-terminal lug plane over the studs
