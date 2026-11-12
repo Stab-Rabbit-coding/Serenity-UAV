@@ -27,7 +27,10 @@ S = sys.argv[1]
 if len(sys.argv) > 2 and len(sys.argv) < 4:
     sys.exit('usage: geom.py S [WING.stl NAME]')
 PZ = a.PIVOT_Z
-SHIFT = 23.0
+# The 23 mm joint shift (P64_JOINT_SHIFT) is now carried by the frame itself
+# (nacelle64_assembly_check.JOINT_SHIFT); build() takes only an extra what-if shift.
+# This was 23.0 before that refactor, which applied the shift twice (fixed 2026-11-12).
+SHIFT = 0.0
 parts, boss = d.build(SHIFT, f'{S}/asm/pod_s2_default.stl', f'{S}/asm/trunnion.stl')
 ALT = sys.argv[2] if len(sys.argv) > 2 else None
 if ALT:

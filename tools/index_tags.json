@@ -16289,6 +16289,13 @@
       ],
       "archived": false
     },
+    "tools/od17_junction_cfd/geom_asbuilt.py": {
+      "description": "od17_junction_cfd/geom_asbuilt.py -- OD17-FAIR-CFD: the as-built wing-tip fairing as a CFD body.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/od17_junction_cfd/mkcase.py": {
       "description": "od17_junction_cfd/mkcase.py -- OD-17 fairing-to-wing junction CFD screen. Write an OpenFOAM v1912 simpleFoam\u2026",
       "tags": [
@@ -20774,6 +20781,7 @@
       "tools/observer_board_envelope.py",
       "tools/observer_nose_fit.py",
       "tools/od17_junction_cfd/geom.py",
+      "tools/od17_junction_cfd/geom_asbuilt.py",
       "tools/od17_junction_cfd/mkcase.py",
       "tools/od17_junction_cfd/post.py",
       "tools/od17_junction_cfd/run.sh",
