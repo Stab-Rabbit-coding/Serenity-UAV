@@ -102,11 +102,14 @@ p = pv.Plotter(off_screen=True, shape=(2, len(names)),
 for i, n in enumerate(names):
     b = out[n]['body'].copy()
     b.points = b.points * 1000 / 25.4
-    lim = float(np.percentile(np.abs(b.cell_data['tau_stream']), 95))
+    # plot in psf, imperial first (AGENTS.md section 5); 1 psf = 47.880 Pa, given in the title
+    b.cell_data['tau_stream_psf'] = b.cell_data['tau_stream'] * 0.0208854
+    lim = float(np.percentile(np.abs(b.cell_data['tau_stream_psf']), 95))
     for r_, (vn, d, up) in enumerate((('TOP', (0, -1, 0), (0, 0, -1)), ('BOTTOM', (0, 1, 0), (0, 0, -1)))):
         p.subplot(r_, i)
-        p.add_mesh(b, scalars='tau_stream', cmap='coolwarm', clim=(-lim, lim), show_edges=False,
-                   scalar_bar_args=dict(title='streamwise wall shear, Pa (blue = reversed flow)', n_labels=3, fmt='%.1f'))
+        p.add_mesh(b, scalars='tau_stream_psf', cmap='coolwarm', clim=(-lim, lim), show_edges=False,
+                   scalar_bar_args=dict(title='streamwise wall shear, psf (x 47.88 = Pa); blue = reversed flow',
+                                        n_labels=3, fmt='%.3f'))
         p.add_text(f"{n.upper()}  {vn} view: flow from the top of the page; nacelle flank at X 1.89 in",
                    font_size=11, position='upper_left')
         f = np.array([4.1, 0, 5.3])
