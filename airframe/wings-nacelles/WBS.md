@@ -2697,13 +2697,26 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
 - [ ] **SPAR-20-ALLOW** — No verified CF tube flexural allowable exists in
     `REFERENCES.md`. The FOS 9.1 quoted in the plan uses a 300 MPa cross-ply
     stand-in; obtain a real coupon/mill figure before release (TODO §0.8).
-- [ ] **SPAR-20-WIREOD** — `bom_revS.csv` records no OD for `WIRE-10AWG`. The
+- [x] **SPAR-20-WIREOD** — **CLOSED 2026-11-12 (owner): the feed wire is Daburn 2617/10**, 0.207 in
+    (5.30 mm) nominal OD per its spec sheet [REF-PWR-016], UL 3212, 150 °C, 600 V, 105/30 tinned. It sits
+    inside the 0.217 in (5.5 mm) envelope the OD-17 route, channels (`OD17_WIRE_D`) and checks are built
+    to, so nothing is re-cut; the 3 × OD bend check at 5.5 mm is conservative for 5.30 mm. Daburn states
+    no OD tolerance: measure incoming wire (receiving inspection) against the 5.5 mm envelope. BOM
+    WIRE-10AWG updated. Original item: `bom_revS.csv` records no OD for `WIRE-10AWG`. The
     whole bore chain scales off the assumed 5.5 mm; measure the procured wire.
     **2026-11-11 (S2):** still open. The BOM row is a generic marketplace wire with no manufacturer, so
     no datasheet can be cited for what will be procured. The as-built paths (bend R, channel size, bundle
     corridor) all scale off 0.217 in (5.5 mm); the checks re-run in seconds if `WIRE_D` changes. Needs the
     owner's caliper reading of the procured wire, or a named product with a manufacturer datasheet.
 
+- [ ] **WIRE-10AWG-MASS — feed-wire mass and terminations (finding 2026-11-12).** The BOM/ledger
+    carry WIRE-10AWG at 80 g, the old short-pair figure: about 3.8 ft (1.15 m) of Daburn 2617/10 at
+    69.5 g/m. The feed is four conductors per nacelle, eight in all, from the Flight Engineer through
+    the CF spar to the disconnect bay; the pod-side runs are 2.43 / 2.78 in (61.7 / 70.7 mm) and the
+    wing-side run is not drawn yet. Re-derive the length and mass when it is (likely several times
+    80 g). Also: the BOM previously named XT30 connectors on this wire; XT30 class is about 30 A,
+    below the 44 A design current, and the drawn route ends at M3 stud ring terminals in the bay.
+    Settle the Flight Engineer-end termination with the fuse study (NAC-64-FUSE-COORD).
 - [ ] **NAC-64-WIRE-QUAL** — Owner OD-18 item 3 (2026-11-11): the four feed wires run **unbound**.
     Qualify the chosen 10 AWG wire by a cycle test on the real spar length: 140 deg twist per tilt
     cycle **plus the installed 0.65 in (16.5 mm) centreline channel bend**, to the service life. Ask

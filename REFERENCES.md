@@ -3574,6 +3574,18 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Section applied** | Features: 4–80 V operating, reverse input to −40 V, controls single or back-to-back N-channel MOSFETs. Absolute Maximum Ratings: IN, SOURCE, SHDN −40 V to 100 V. Operation: SHDN low turns the gate off; SHDN open is pulled high by an internal 2.6 µA source (enabled). Load Switching section: back-to-back MOSFETs for load-switch use. Temperature grades C 0–70 °C, I −40–85 °C, H −40–125 °C. |
 | **Cited in** | `docs/plans/2026-10-26-002-feat-fe-multi-battery-pdb-plan.md` (KTD1, R2, R3, R13) |
 
+### REF-PWR-016: Daburn Electronics & Cable — #2617 Ultra-Flexible Silicone Rubber Wire, UL 3212, spec sheet 12-23-2013
+
+| Field | Value |
+|---|---|
+| **Publisher** | Daburn Electronics & Cable Corp. (US), product spec sheet #2617, dated 12-23-2013 |
+| **Official access** | <https://www.daburn.com/specs/2617_Spec_Sheet_12-23-2013.pdf> — read 2026-11-11 by the ESC wire market survey (`research_notes/UAV ESC wire market survey/verified_feed_wire.md`); product page <https://www.daburn.com/2617-Ultra-Flexible-Silicone-Rubber-Wire-> |
+| **Local copy** | none: no redistribution licence stated, so the sheet is cited, not archived |
+| **Section applied** | 10 AWG row 2617/10: 105/30 tinned copper, 0.045 in (1.15 mm) silicone wall, **0.207 in (5.30 mm per the sheet) nominal OD**, 1.08 Ω/1000 ft, 46.69 lbm/1000 ft (69.5 g/m). Rating -40 to +150 °C, 600 V UL (spark 6,000 V), FT2, UL Style 3212. |
+| **Not stated** | OD tolerance; minimum bend radius; torsion or flex life; current rating |
+| **Cited in** | `current-specification/bom_revU.csv` WIRE-10AWG; `airframe/wings-nacelles/WBS.md` SPAR-20-WIREOD; `reports/UAV ESC wire market survey.md` |
+| **Openness / sourcing** | Public spec sheet, no NDA. US-domiciled manufacturer |
+
 ### REF-CONN-001: Samtec TSM series — 0.100in surface-mount terminal strip product data
 
 | Field | Value |

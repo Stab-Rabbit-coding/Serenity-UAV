@@ -746,16 +746,16 @@
     },
     {
       "Ref": "WIRE-10AWG",
-      "Description": "10AWG silicone wire — Flight Engineer XT30 outputs to ESC inputs",
+      "Description": "10 AWG feed wire, Daburn 2617/10 (UL 3212, 150 °C, 600 V) — Flight Engineer to ESC, 4 conductors per nacelle through the CF spar (WA-R10)",
       "Category": "Wiring",
       "Qty": "1",
       "Unit_Mass_g": "80",
       "Total_Mass_g": "80",
-      "Supplier": "Amazon / AliExpress",
-      "Supplier_PN_or_Search": "10AWG silicone wire red/black 1m each",
+      "Supplier": "Daburn Electronics & Cable (via distributor)",
+      "Supplier_PN_or_Search": "Daburn 2617/10 (colour suffix per vendor); 10 AWG UL 3212 silicone 600V 150C tinned copper 105/30",
       "Est_Unit_Price_USD": "15.00",
       "Est_Total_Price_USD": "15.00",
-      "Notes": "ESC branch wiring only (Flight Engineer XT30 to ESC XT30); 55A rated free air; 1 pair per ESC x4 = ~400mm per polarity total; NOT for main battery bus (use WIRE-4AWG)"
+      "Notes": "Rev U 2026-11-12 (owner, SPAR-20-WIREOD closed): Daburn 2617/10 [REF-PWR-016]: 105/30 tinned Cu, 0.207 in (5.30 mm) nominal OD, inside the 0.217 in (5.5 mm) envelope the OD-17 route and channels are built to; 46.69 lbm/1000 ft (69.5 g/m); 1.08 ohm/1000 ft. Ampacity: about 33-48 A in the spar bundle per FAA AC 43.13-1B (the old '55A rated free air' note was not supported), qualify by NAC-64-FEED-THERM; torsion and bend by NAC-64-WIRE-QUAL. Do not solder-tin crimped ends (NASA-STD-8739.4A 7.2.26). Mass 80 g is the OLD short-pair figure (about 3.8 ft of this wire): re-derive once the wing-side run is drawn (WBS WIRE-10AWG-MASS). Terminations: the WA-R10 route ends at M3 stud ring terminals in the nacelle disconnect bay; the XT30 named in earlier revisions is below the 44 A design current (WBS WIRE-10AWG-MASS). NOT for main battery bus (use WIRE-4AWG)"
     },
     {
       "Ref": "WIRE-16AWG",
