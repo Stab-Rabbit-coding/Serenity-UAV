@@ -265,6 +265,54 @@ number. If you want to keep the canonical wing, take option 4 with fillets 1 and
 **Conclusion for OD-17:** of the two, the **rounded end plate with fillets** is better: less drag, the
 same or less reversed flow, no added wing mass, and the canonical wing is kept.
 
+
+## As-built fairing CFD (OD17-FAIR-CFD, owner OD-18 item 2; run 2026-11-12)
+
+**Question.** Does the fairing as thickened for printing (2.0 mm wall at the tilt axis, 2.0 mm trailing-edge
+cut, 94 % fillet toe) cost drag against the zero-wall body of the junction CFD above?
+
+**Method.** Same solver, flow, domain, averaging and post-processing as the junction CFD
+(`tools/od17_junction_cfd/`). The end-plate case was re-run in this container and reproduces the earlier
+result. The as-built body is built from the real parts by `geom_asbuilt.py`: the printed fairing with its bore
+cut, the pod collar as a solid r 1.10 in (28 mm) cylinder to X 2.94 in (74.8 mm) (the 0.04 in (1 mm)
+running gap closed, as this mesh cannot resolve it), and the actual trunnion, spar, pinion and wing. The foam
+cavity is not modelled. Mesh 1.51 M cells, y+ median 3.2, 95th percentile 12.1.
+
+| | Zero-wall end plate (idealised) | As-built fairing assembly |
+|---|---|---|
+| Drag of the strip | **0.147 lbf (0.652 N)**, sd 0.003 lbf (0.015 N) | **0.181 lbf (0.806 N)**, sd 0.004 lbf (0.016 N) |
+| of which pressure / viscous | 0.141 / 0.006 lbf (0.626 / 0.027 N) | 0.175 / 0.006 lbf (0.778 / 0.028 N) |
+| Drag area C_D·A | 3.90 in² (2,514 mm²) | 4.81 in² (3,105 mm²) |
+| Reversed-flow share of the junction strip | 30 % | 31 % |
+
+![As-built velocity sections, end plate above, as-built below](figures/nacelle64_od17_asbuilt_cfd_sections.png)
+
+![As-built streamwise wall shear](figures/nacelle64_od17_asbuilt_cfd_wall_shear.png)
+
+**What it shows.**
+1. **The as-built assembly has 23 % more drag than the idealised end plate:** 0.181 vs 0.147 lbf, a
+   difference of about ten times the iteration-to-iteration spread. It is also about 6 % above the 1.50 in
+   glove (0.171 lbf, earlier session). For the two fairings on the aircraft that is about 0.069 lbf (0.31 N)
+   more than the idealised shape at 40 kt; the aircraft's total drag was not computed here.
+2. **The cause is mainly the open bore, not the printing allowances.** Beyond the collar end (X 2.94 in
+   (74.8 mm)) and the trunnion (X 3.11 in (79.0 mm)) the fairing's 2.20 in (56 mm) bore holds only the wing
+   and a spar tube out to the fairing's end at X 3.71 in (94.3 mm). The section at X 3.27 in (83 mm)
+   shows the airflow meeting the wing nose, then a C-shaped wall with an open pocket and a wide separated
+   wake behind it. The idealised body, like the glove, had a solid nose through this zone, so neither earlier
+   case tested the printed surface.
+3. **What is not separated:** the thicker tail, the trailing-edge cut and the fillet toe are mixed in with
+   the open bore and the real collar, trunnion and spar steps; no run isolates them. The two bodies also
+   differ in the collar and trunnion detail, so the 23 % is a bound on the combined effect, not on one feature.
+4. **Reversed-flow share is unchanged** (31 % against 30 %), so the junction itself is not worse; the extra
+   drag is pressure drag from the larger separated wake.
+
+**Limits.** Steady k-ω SST on one 1.5 M-cell mesh, with the wake oscillating (averaged over iterations
+1,500-2,000); the running gap closed; the foam cavity not modelled; the end-plate case is a strip with
+slip walls, not the aircraft.
+
+**Retraction.** A first as-built run on 2026-11-12 gave 0.243 lbf. Its body had been built without the
+bore (a solid flat-faced tail block where the part is open); that number is withdrawn and is not used here.
+
 ## Longer-tail CFD: trailing edge 22.8 deg to 11.9 deg (2026-11-11)
 
 Same solver, mesh settings, averaging and limits as the junction CFD above. Both bodies carry the approved
