@@ -52,16 +52,18 @@ The four conductors are two independent +/- pairs, one pair per EDF. Each conduc
 | **Daburn 2616/12** (Daburn) | 65/30 tinned | 0.156 in (3.95 mm) | **27.05 lbm/1000 ft (40.3 kg/km)** | [V] ([Daburn 2616 sheet](http://www.daburn.com/specs/2616_Spec_Sheet_12-23-2013.pdf)) |
 | **Daburn 2627/12** (Daburn; silicone plus fibreglass braid) | 65/30 tinned | 0.176 in (4.46 mm) | not published | [V] ([Daburn 2627 sheet](http://www.daburn.com/specs/2627_Spec_Sheet_10-01-2014_Rev_A.pdf)) |
 
-### (3) ESC rating: one per motor (BOM OSESC-NAC, in-house build, OD-3)
+### (3) ESC rating: one per motor (BOM OSESC-NAC, in-house build, OD-3 decided: 70 A)
 
 | Attribute | Specification |
 |---|---|
-| Continuous rating | **80 A**, the manufacturer's recommendation [V] ([QX-Motor sheet](https://cdn.shopify.com/s/files/1/0713/6424/7837/files/64_2822-2300KV_00.png)). 80 A is the rating target from the datasheet. **OD-3 stays open** until the OSESC-NAC is shown to survive 38 A sustained (and the control-margin case) at bay temperature, per the earlier open finding that 50 A sustained is not thermally survivable in the bay |
+| Continuous rating | **70 A** Open-Secure-ESC (`tools/esc70_design.json`), **owner decision OD-3, 2026-11-12**, conditional on WBS NAC-64-ESC70-QUAL. The motor sheet recommends 80 A [V] ([QX-Motor sheet](https://cdn.shopify.com/s/files/1/0713/6424/7837/files/64_2822-2300KV_00.png)); that is a margin rule for commercial ESCs, and the in-house board's rating rests on its own analysis (44 A sustained, 57-63 A peak, motor limited to 60 A / 10 s). |
 | Duty it must survive | **44 A sustained (worst-loaded fan, control headroom) for the whole hover mission** at bay temperature [E; owner decision 2026-11-11]; **57 A at full throttle, 60 A for 10 s** [V] |
 | Input | 6S LiPo [V: motor rated 3-6S]. Feed input from (1), M3 stud ring terminals at the disconnect bay [project geometry] |
 | Output | Three 12 AWG phase leads per (2) |
 | Current limit | Set at or below the feed lead's short-time capability and coordinated with the branch fuse (Decision 4) [E] |
 | Part numbers | **None verified.** The BOM carries the in-house Open-Secure-ESC build (OSESC-NAC), whose 52.7 g mass is a roll-up estimate of a 70 A design. The research notes contain no verified commercial 80 A ESC datasheet |
+
+> **CAUTION — no other ESC without a full engineering analysis.** The 70 A rating is valid only for the Open-Secure-ESC design analysed here (`tools/esc70_design.json`). Do not substitute any other ESC (commercial, another Open-Secure-ESC build, or a changed layout) until it has been analysed for this motor and bay: current demand (44 A sustained, 57-63 A peak, 60 A / 10 s motor limit), thermal performance in the bay at hot ambient, fit, current-limit behaviour and fuse coordination. A commercial ESC's rating is an unverified label; any commercial ESC shall be rated at least the motor maker's 80 A recommendation and still be analysed. Consequence of an unanalysed ESC: overheating or cut-out in hover loses a fan and likely the aircraft (WARNING if people are under or near the aircraft; a FET that fails shorted across the 6S pack is a fire hazard, WARNING).
 
 ## The datasheet gives 57 A, but hover's 38 A runs all mission
 

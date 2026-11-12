@@ -3043,7 +3043,7 @@
       "Supplier_PN_or_Search": "Stab-Rabbit-coding/Open-Secure-ESC",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev U NEW. 52.7 g is the roll-up ESTIMATE (tools/esc80_cooptimize.py on esc70_design.json). Current rating is OPEN: the roll-up carries a 70 A design, the QX sheet recommends 80 A (WBS NAC-64-ESC-80A). Price not recorded. "
+      "Notes": "Rev U NEW. 52.7 g is the roll-up ESTIMATE (tools/esc80_cooptimize.py on esc70_design.json). Current rating: 70 A, owner decision OD-3 2026-11-12, conditional on WBS NAC-64-ESC70-QUAL. CAUTION: do not substitute any other ESC (commercial or another build) without a full engineering analysis for this motor and bay (current, hot-bay thermal, fit, current limit, fuse coordination); a commercial ESC shall be at least the motor maker's 80 A and still be analysed. Price not recorded. "
     },
     {
       "Ref": "SERVO-KST-X06",

@@ -2371,6 +2371,28 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         HET-matched rotor: no thrust gain over the QX QF2822 on 6S at equal current margin;
         Ø4 shafts vs the QX 3 mm hub; no published bolt pattern [REF-EDF-004]. Stages stay
         CO-ROTATING within each nacelle (port/stbd mirrored). Revisit only with 8S.
+    - [ ] **OD-3 DECIDED 2026-11-12 (owner): the 70 A Open-Secure-ESC (`tools/esc70_design.json`) is
+        accepted for the QF2822-2300KV; the 80 A builds below are not pursued.** Basis: independent
+        assessment 2026-11-12 (electrical-engineering skill): demand is 44 A sustained (worst-loaded fan),
+        57 A full throttle at 24 V, about 63 A on a fresh 25.2 V pack, and the motor's own limit is
+        60 A / 10 s, so a 70 A board covers every current the motor can use. At nacelle scale 1.06 the
+        80 A layout misses the bays by 24.5 mm (11.0 mm with the 70 A signal width) and has the same
+        loss per A² (8.7 mW/A², two FETs per leg), so it buys no thermal margin at the operating
+        current. Conditions: NAC-64-ESC70-QUAL below, and the I-squared-t current limit in
+        NAC-64-FUSE-COORD. The 80 A sub-items that are about bay placement (.a, .b, .j, .k) now apply
+        to the 70 A board.
+        **CAUTION — no other ESC without a full engineering analysis.** The 70 A rating is valid only for the Open-Secure-ESC design analysed here (`tools/esc70_design.json`). Do not substitute any other ESC (commercial, another Open-Secure-ESC build, or a changed layout) until it has been analysed for this motor and bay: current demand (44 A sustained, 57-63 A peak, 60 A / 10 s motor limit), thermal performance in the bay at hot ambient, fit, current-limit behaviour and fuse coordination. A commercial ESC's rating is an unverified label; any commercial ESC shall be rated at least the motor maker's 80 A recommendation and still be analysed. Consequence of an unanalysed ESC: overheating or cut-out in hover loses a fan and likely the aircraft (WARNING if people are under or near the aircraft; a FET that fails shorted across the 6S pack is a fire hazard, WARNING).
+    - [ ] **NAC-64-ESC70-QUAL — conditions of the OD-3 70 A acceptance (2026-11-12).** (1) Bench
+        thermal test of a built board at 44 A sustained in 176 deg F (80 deg C) air at hover
+        airflow, thermocouple on the FETs, against the 257 deg F (125 deg C) design limit. The model
+        predicts about 207 deg F (97 deg C) at 44 A and 176 deg F ambient, but uses a 77 deg F
+        (25 deg C) design ambient, omits switching loss and rests on an estimated 0.35 convection
+        factor. (2) Desync/stall detection and current-limit response time on the bench (cooling is
+        the fan's own airflow, which drops when current rises). (3) Read the TPHR8504PL
+        safe-operating-area and pulse ratings (REF-SEMI-001) against limit overshoot. (4) Bulk
+        capacitor ripple-current rating at 44 A sustained and 63 A peak (with NAC-64-ESC-80A.j item 2).
+        (5) Firmware limit per NAC-64-FUSE-COORD: up to 60 A for at most 10 s, folding back to the
+        qualified wire rating.
     - [ ] **NAC-64-ESC-80A — 80 A Open-Secure-ESC builds (owner 2026-10-03,
         Stab-Rabbit-coding: two 80 A 6S ESCs that fit against the 64 mm thrust
         tube; supersedes NAC-64-ESC-70A, the earlier 70 A placeholder).** The
@@ -2482,10 +2504,12 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             `nacelle_intake_cfd.py` results (thrust input now 23.24 N); (c) ESC bays and the
             Open-Secure-ESC design (`tools/esc70_design.json`, `nacelle_64_scale.scad`) are
             sized for **70 A** — an 80 A ESC may not fit at scale 1.06 (owner decision);
+            **RESOLVED 2026-11-12: owner accepted the 70 A ESC (OD-3, NAC-64-ESC70-QUAL);**
             (d) PWR-CONN-01 / fuse sizing against 57.0 A per fan; (e) the 2135 gf record below
             is historical.
         - [ ] **NAC-64-ESC-80A.m — SUPERSEDED 2026-11-02 by NAC-64-EDF-2300KV (the 2400 KV basis
-            below was never specified or authorized; 80 A ESCs per the 2300 KV sheet). Historical:
+            below was never specified or authorized). The 70 A conclusion was re-derived for the
+            2300 KV and accepted by the owner on 2026-11-12 (OD-3, above). Historical:
             70 A is sufficient (2026-10-05, Claude Opus
             5.5; owner requirement 2135 gf per fan).** REF-EDF-003 2400 KV row: 22.2
             V, 57.0 A, 1265.4 W, 2135 g. Static fan laws (T ∝ n², P ∝ n³; aero
@@ -2708,8 +2732,8 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     current limit shall be I-squared-t / fold-back:** up to 60 A for at most 10 s, then fold back to no
     more than the qualified wire continuous rating. The fuse carries 44 A continuous and 57-63 A for
     10 s. The 297 MINI family likely tops out at 40 A (unverified), so expect a MIDI-class fuse and
-    holder; check bay space. OD-3 (ESC rating) stays open until the OSESC-NAC passes 44 A sustained at
-    bay temperature.
+    holder; check bay space. OD-3 (ESC rating) was decided 2026-11-12: 70 A, conditional on NAC-64-ESC70-QUAL (44 A
+    sustained at bay temperature).
 
 ---
 

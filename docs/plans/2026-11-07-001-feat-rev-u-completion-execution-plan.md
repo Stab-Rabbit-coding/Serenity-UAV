@@ -144,7 +144,7 @@ shape, each with a picture and vectors where loads or motion are involved (owner
 |---|---|---|---|
 | OD-1 | Nozzle spigot vs cartridge: shorten cartridge 0.12 in (3 mm) or drop the spigot — **DECIDED 2026-11-07: option A; implemented, NAC-64-ASM-01 closed** | NAC-64-ASM-01 | S1 |
 | OD-2 | Winch layout: (a) aft/low spool + bridle, (b) right-angle/belt servo, (c) move tilt hardware, (d) two spools | WINCH-PKG-01 | S7 |
-| OD-3 | ESC part and rating (70 A vs 80 A) | NAC-64-ESC-80A | S4 |
+| OD-3 | ESC part and rating (70 A vs 80 A) — **decided 2026-11-12: 70 A Open-Secure-ESC** | NAC-64-ESC-80A, NAC-64-ESC70-QUAL | S4 |
 | OD-4 | Release the NAC-64-REBAKE hold | NAC-64-REBAKE | S3 |
 | OD-5 | Hover ground-clearance margin / mandatory gear height | LG-HOVER-01 | S12 |
 | OD-6 | Bay A forward thermal tier | BAYA-FWD-T1 | S21 |

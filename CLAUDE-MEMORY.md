@@ -1781,7 +1781,7 @@ metadata:
   type: project
 ---
 
-**SUPERSEDED (owner, 2026-11-02; restated 2026-11-11):** the specified motor is the QF2822-2300KV (2,370 gf, 24 V, 57.0 A, 80 A ESC). The 2400 KV was never specified or authorized; do not size anything from it. Historical record follows.
+**SUPERSEDED (owner, 2026-11-02; restated 2026-11-11):** the specified motor is the QF2822-2300KV (2,370 gf, 24 V, 57.0 A). **OD-3 decided 2026-11-12: the 70 A Open-Secure-ESC is accepted for it** (conditions WBS NAC-64-ESC70-QUAL); no other ESC without a full engineering analysis. The 2400 KV was never specified or authorized; do not size anything from it. Historical record follows.
 
 2026-10-05: The owner requires 2135 gf per fan. REF-EDF-003 (2400 KV, 22.2 V) gives 57.0 A,
 so the ESCs are **70 A rated with a 70 A firmware current limit**. 80 A only covers an
