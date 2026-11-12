@@ -56,7 +56,7 @@ The four conductors are two independent +/- pairs, one pair per EDF. Each conduc
 
 | Attribute | Specification |
 |---|---|
-| Continuous rating | **70 A** Open-Secure-ESC (`tools/esc70_design.json`), **owner decision OD-3, 2026-11-12**, conditional on WBS NAC-64-ESC70-QUAL. The motor sheet recommends 80 A [V] ([QX-Motor sheet](https://cdn.shopify.com/s/files/1/0713/6424/7837/files/64_2822-2300KV_00.png)); that is a margin rule for commercial ESCs, and the in-house board's rating rests on its own analysis (44 A sustained, 57-63 A peak, motor limited to 60 A / 10 s). |
+| Continuous rating | **70 A** Open-Secure-ESC (`tools/esc70_design.json`), **owner decision OD-3, 2026-11-12** (`docs/ESC_RATING_OD3_BRIEF.md`), conditional on WBS NAC-64-ESC70-QUAL. The motor sheet recommends 80 A [V] ([QX-Motor sheet](https://cdn.shopify.com/s/files/1/0713/6424/7837/files/64_2822-2300KV_00.png)); that is a margin rule for commercial ESCs, and the in-house board's rating rests on its own analysis (44 A sustained, 57-63 A peak, motor limited to 60 A / 10 s). |
 | Duty it must survive | **44 A sustained (worst-loaded fan, control headroom) for the whole hover mission** at bay temperature [E; owner decision 2026-11-11]; **57 A at full throttle, 60 A for 10 s** [V] |
 | Input | 6S LiPo [V: motor rated 3-6S]. Feed input from (1), M3 stud ring terminals at the disconnect bay [project geometry] |
 | Output | Three 12 AWG phase leads per (2) |

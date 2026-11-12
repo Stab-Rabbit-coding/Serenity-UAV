@@ -2373,7 +2373,8 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         CO-ROTATING within each nacelle (port/stbd mirrored). Revisit only with 8S.
     - [ ] **OD-3 DECIDED 2026-11-12 (owner): the 70 A Open-Secure-ESC (`tools/esc70_design.json`) is
         accepted for the QF2822-2300KV; the 80 A builds below are not pursued.** Basis: independent
-        assessment 2026-11-12 (electrical-engineering skill): demand is 44 A sustained (worst-loaded fan),
+        assessment 2026-11-12 (electrical-engineering skill; Owner Decision Brief with the six checks
+        and figures: `docs/ESC_RATING_OD3_BRIEF.md`, figures by `tools/od3_esc_figures.py`): demand is 44 A sustained (worst-loaded fan),
         57 A full throttle at 24 V, about 63 A on a fresh 25.2 V pack, and the motor's own limit is
         60 A / 10 s, so a 70 A board covers every current the motor can use. At nacelle scale 1.06 the
         80 A layout misses the bays by 24.5 mm (11.0 mm with the 70 A signal width) and has the same
