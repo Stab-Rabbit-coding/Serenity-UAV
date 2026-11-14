@@ -114,6 +114,19 @@
 - [ ] BAYA-FWD-B2 — Airspeed sensor footprint at the pitot hose turn (X…
 - [ ] BAYA-FWD-B3 — Re-check ring / CAN-FD bus length budgets with the…
 
+### §1.11 — Stern stack: NoNFO-Pilot-PB2 (2026-11-14)
+→ full detail: `WBS.md` §1.11
+
+- [ ] NFP-OD18 — ★ Owner: bus architecture A / A-diet / B / B+ (brief says…
+- [ ] NFP-OD19 — ★ Owner: PACE role of the merged stern stack
+- [ ] NFP-OD20 — ★ Owner: USB Wi-Fi module part (also blocks TACCO fab)
+- [ ] NFP-FIT — Real-mesh fit gate for the stern stack at Simon (S34)
+- [ ] NFP-MASS — Stern stack mass gate: ≤ 0.132 lbm (60 g) holds the…
+- [ ] NFP-LEDGER — Enter the stern stack in the AUW ledger and BOM (S41).
+- [ ] NFP-SADDLE — Couple the Simon saddle to the new outline in CI (S41).
+- [ ] NFP-POLICY — Update root `AGENTS.md` §1 and §9 to seven nodes (S41).
+- [ ] NFP-FW-IF — Hand Theme F the host-link and device-tree interface…
+
 ### §1.9.2 — Fleet Trust Module (MCU + TPM + isolated CAN-FD + isolated RS-485)
 → full detail: `WBS.md` §1.9.2
 

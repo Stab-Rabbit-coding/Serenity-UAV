@@ -157,6 +157,9 @@ shape, each with a picture and vectors where loads or motion are involved (owner
 | OD-13 | SLS vendor + quotes; source for part prices | BOM, §6.5 | S27 |
 | OD-14 | PE review of the Operator's Manual v0.1 | docs §0.10.3 | S28 |
 | OD-15 | Winch shed threshold vs maneuver envelope | fuselage-mid ★ | S7 |
+| OD-18 | NoNFO-Pilot-PB2 bus architecture: A / A-diet / B / B+ — brief in SecureControllers `kicad/NoNFO-Pilot/PB2/ARCHITECTURE_BRIEF.md` (recommends B+) | avionics §1.11 NFP-OD18 | S34 |
+| OD-19 | PACE role of the merged stern stack (`AGENTS.md` §9 says A/C/A/P; plan 2026-10-31-003 R3 says Emergency) | avionics §1.11 NFP-OD19 | S41 |
+| OD-20 | USB Wi-Fi module part (TACCO and NoNFO-Pilot-PB2) | avionics §1.11 NFP-OD20 | S35 |
 | OD-17 | WA-R10 power crossing: A clock-spring / B enclosed loop / C slip ring / D joint 0.91 in (23 mm) outboard — brief `docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md` — **DECIDED 2026-11-11: D + aft fairing + rounded end plate with fillets; 22.8° taper kept** | WA-R10 | S2 |
 | OD-16 | First-flight decisions D1–D4 and D6 (scope, nozzle datum, 3.0 in gear, hover T/W floor, XO board area; D5 decided) — D2 overlaps OD-9, D3 closes OD-5 | `docs/plans/2026-09-15-001-first-flight-readiness-plan.md` | S3 (D4 sets the T/W target), P4 |
 
@@ -289,6 +292,16 @@ Measured by `tools/validate_kicad.py` counts per board.
   B1..B3, PCB mass roll-up into `airframe/README.md`, branch reconciliation. Exit: avionics `TODO.md`
   A-items 0. −20. Est. 2/2/3.
 
+- **S34–S41 — NoNFO-Pilot-PB2 stern stack** (added 2026-11-14, owner decision 2026-11-12; needs OD-18,
+  OD-19, OD-20). The stern (Simon) stack becomes one merged Pilot + TACCO board on one PB2-I; three full
+  stacks stay. Eight sprints, each with its own exit, in
+  `docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md`: S34 ledgers and fit/mass gates,
+  S35 parts and footprints, S36 schematic (ERC 0), S37 isolation cells, S38 placement, S39 routing
+  (DRC 0, unconnected 0), S40 fab outputs, S41 airframe integration record. They may run any time from
+  S13 on. Exit: ERC 0, DRC 0, parity 0, Gerbers; stern stack ≤ 0.132 lbm (60 g); `avionics/WBS.md`
+  §1.11 items closed. −20. Est. 9/14/22. S15 (TACCO) and S13/S14 (Pilot) still build the three full
+  stacks' boards; their Simon copies are not built.
+
 ### Theme F — Firmware (`avionics/firmware`, Observer firmware, `gcs/`)
 
 Each item lands with host-side unit tests; bench verification becomes a P item.
@@ -338,7 +351,8 @@ Each item lands with host-side unit tests; bench verification becomes a P item.
 
 **Agent-sprint total:** 34 sprints (S0–S33) — optimistic 43, most likely **63**, pessimistic 93 sessions
 (PERT expected ≈ 65 sessions; sum of the per-sprint estimates above). Planned burndown through S33: at
-least 345 items closed or superseded (sum of the −n targets). The remainder are P items, closed in §7,
+least 345 items closed or superseded (sum of the −n targets). S34–S41 (added 2026-11-14) add 9 / **14** / 22
+sessions and at least 20 closures: 42 sprints, 52 / **77** / 115 sessions. The remainder are P items, closed in §7,
 plus the 43 deferred Phase 11 items.
 
 ## 7. Physical build blocks (owner-executed; agent record sprint after each)

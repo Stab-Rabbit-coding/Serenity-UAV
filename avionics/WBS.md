@@ -1089,6 +1089,48 @@ Spec `docs/BAY_A_FWD_LAYOUT.md`; thermal `docs/BAY_A_FWD_THERMAL.md`.
 - [ ] **BAYA-FWD-B3** — Re-check ring / CAN-FD bus length budgets with the routed
     Bay A lengths (`head_layout_fit.py` route report).
 
+### §1.11 — Stern stack: NoNFO-Pilot-PB2 (2026-11-14)
+
+**Design shift, owner decision 2026-11-12.** The stern (Simon) control stack becomes one
+NoNFO-Pilot-PB2 board on one PB2-I. Shepherd, Inara and River stay full stacks (Pilot + PB2-I
+and TACCO + PB2-I). The fleet goes from eight compute nodes to seven. Reason: weight off the
+longest avionics arm (Y 494.7) to move the CG forward; ledger credit −0.128 lbm (−58 g),
+about 0.055 in (1.4 mm) of CG (`tools/min_stretch_relocation.py`).
+
+Considered and rejected: two merged plus two full stacks (mass-diet plan 2026-10-26-003 KD3,
+superseded here); keeping NoNFO as a held fork (2026-10-26 status, superseded here); a
+3-port Ethernet switch on RMII2 (owner chose the Pilot pattern, DP83825I + AX88772E);
+GNSS from the dorsal puck alone (owner chose an on-cape MAX-M10S, first function removed if
+space, mass or routing is short). Grounding: plan 2026-10-31-003 R3; ideation 2026-10-31 row 4.
+
+Affected: Simon FC4 and CN4 nodes, the Simon saddle, `tools/auw_ledger.py`,
+`tools/middle_layout_fit.py`, `current-specification/bom_revU.csv`, root `AGENTS.md` §1 and
+§9. The board's design files and item list live in SecureControllers
+(`kicad/NoNFO-Pilot/PB2/`, `TODO.md` §5.2); it is a fleet product with Serenity as first
+customer. Plan and sprints S34–S41:
+`docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md`.
+
+- [ ] **NFP-OD18** — ★ Owner: bus architecture A / A-diet / B / B+ (brief says B+).
+    Brief: SecureControllers `kicad/NoNFO-Pilot/PB2/ARCHITECTURE_BRIEF.md`. The pin ledger
+    shows only B+ (trust-module MCU owns the buses and the slow lines) fits the PB2-I
+    header with every function aboard. Gates S34.
+- [ ] **NFP-OD19** — ★ Owner: PACE role of the merged stern stack.
+    Root `AGENTS.md` §9 lists Simon as A / C / A / P; plan 2026-10-31-003 R3 calls the merged
+    stack the PACE Emergency path. The two disagree. Gates S41.
+- [ ] **NFP-OD20** — ★ Owner: USB Wi-Fi module part (also blocks TACCO fab).
+    Open since 2026-09-29 (§1.2a). Gates S35.
+- [ ] **NFP-FIT** — Real-mesh fit gate for the stern stack at Simon (S34).
+    Outline 3.402 × 2.098 in (86.4 × 53.3 mm) against the present stack box of
+    2.28 × 3.03 × 0.87 in (58 × 77 × 22 mm): the board is 0.37 in (9.4 mm) longer than the
+    box. New tool `tools/nonfo_simon_fit.py`. A fail goes to the owner as a brief.
+- [ ] **NFP-MASS** — Stern stack mass gate: ≤ 0.132 lbm (60 g) holds the credit (S34).
+    The −58 g credit assumed a merged board as light as Pilot. First estimate: board about
+    0.14 lbm (63 g), stack about 0.18 lbm (81 g), credit about −37 g [CALC, unverified].
+- [ ] **NFP-LEDGER** — Enter the stern stack in the AUW ledger and BOM (S41).
+- [ ] **NFP-SADDLE** — Couple the Simon saddle to the new outline in CI (S41).
+- [ ] **NFP-POLICY** — Update root `AGENTS.md` §1 and §9 to seven nodes (S41).
+- [ ] **NFP-FW-IF** — Hand Theme F the host-link and device-tree interface (S41).
+
 ## §1.8 — Names
 
 *(root `WBS.md` §1.8)*
