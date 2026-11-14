@@ -1156,7 +1156,7 @@ customer. Plan and sprints S34–S41:
 - [x] **NFP-WIFI-DS** — Obtain the Sterling-LWB5+ module data sheet (Ezurio login).
     **DONE 2026-11-14:** owner supplied the module data sheet v5.2, the USB adapter data sheet
     and the DVK guide (REF-SENSOR-065, 066, 069). USB mode is the `CONFIG_HOST = 000` strap;
-    −40 to +85 °C; 0.7 g; rail at least 0.8 A. Variant pick (MHF4, 453-00046) is open in S35.
+    −40 to +85 °C; 0.7 g; rail at least 0.8 A. Variant 453-00046 (MHF4) approved by the owner 2026-11-14.
     Needed for the USB order code, strapping, temperature rating and mass (S35). Owner to
     rule whether a login-gated data sheet passes the sourcing rule.
 - [ ] **NFP-QA** — Track fastener, connector and harness mass and CG per board.

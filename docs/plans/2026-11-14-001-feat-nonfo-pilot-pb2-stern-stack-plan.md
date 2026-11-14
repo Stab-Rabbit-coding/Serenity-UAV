@@ -22,7 +22,7 @@ execution: code
 - **Objective.** Take NoNFO-Pilot-PB2 from ideation to fab-ready: ERC 0, DRC 0, schematic parity 0, unconnected 0, Gerbers generated, on KiCad 9.0.2. It becomes the stern (Simon) control stack of Serenity Rev U.
 - **Product authority.** Owner (Stab-Rabbit-coding). Sprint order is a recommendation; each owner-decision gate needs the owner's word.
 - **Mode.** Governed. This plan creates no second task list. Board items live in `SecureControllers:TODO.md` §5; airframe items live in `avionics/WBS.md` §1.11; sprints S34 to S41 are indexed in Theme A of `docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md`.
-- **Owner decisions in force (2026-11-14):** architecture B+; BBE-Black outline; mass minimised, not floored; PACE option B; Wi-Fi Ezurio Sterling-LWB5+ (USB).
+- **Owner decisions in force (2026-11-14):** architecture B+; BBE-Black outline; mass minimised, not floored; PACE option B; Wi-Fi Ezurio Sterling-LWB5+ 453-00046 (USB, MHF4).
 - **Stop conditions.** A sprint does not start if its owner decision is open. A fit or mass gate that still fails after the one pre-authorised re-run without GNSS stops layout and goes to the owner as an Owner Decision Brief (`docs/DOC_TEMPLATES.md`).
 - **Out of scope.** The BBE-hosted variant. Firmware (Theme F). Any change to the three full stacks.
 
@@ -71,7 +71,7 @@ Two facts make the board hard:
 - R8. The board shall carry the TACCO functions: mLRS radio (STM32WLE5JC), Bluetooth and 802.15.4, USB Wi-Fi, NOR flash with its write-block interlock, and fan drive.
 - R9. The board shall present two Ethernet ring ports: DP83825I on RMII2, and AX88772E on USB1 behind a USB 2.0 hub shared with the Wi-Fi module.
 - R10. The PB2-I console on UART0 shall stay free.
-- R11. Every field connector shall be a locking JST-GH or U.FL.
+- R11. Every field connector shall be a locking JST-GH or U.FL. Exception (owner, 2026-11-14): the Wi-Fi module's RF port is MHF4 (Ezurio Sterling-LWB5+ 453-00046).
 - R12. The board shall carry a u-blox MAX-M10S with a U.FL feed. If the fit, mass or routing gate fails, GNSS is the first function removed, and position then comes from the dorsal CAN-FD puck.
 
 #### Architecture and isolation

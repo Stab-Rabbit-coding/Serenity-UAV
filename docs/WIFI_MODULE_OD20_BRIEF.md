@@ -62,7 +62,7 @@ The owner supplied the module data sheet [REF-SENSOR-066], the USB adapter data 
 | Mainline driver | Confirmed: stock Ubuntu 6.8 `brcmfmac` lists USB ID `04B4:BD29` and firmware `brcm/brcmfmac4373.bin`. | module read 2026-11-14; [REF-SENSOR-068] |
 | Antenna variant | 453-00045 integrated chip antenna; **453-00046 MHF4 connector**; 453-00047 trace pin. | [REF-SENSOR-066] Ordering Information |
 
-**Variant recommendation (not yet decided): 453-00046, the MHF4 connector.** The fleet feeds radios from airframe antennas over coax, and a chip antenna on a board inside the hull would radiate poorly. MHF4 is smaller than U.FL, so the plan's "U.FL for RF" line (R11) needs an MHF4 exception or an MHF4-to-U.FL pigtail. Take C (cut tape) for prototypes and R (reel) for production.
+**Variant: 453-00046, the MHF4 connector — approved by the owner 2026-11-14,** with an MHF4 exception to plan R11. The fleet feeds radios from airframe antennas over coax, and a chip antenna on a board inside the hull would radiate poorly. MHF4 is smaller than U.FL, so the plan's "U.FL for RF" line (R11) needs an MHF4 exception or an MHF4-to-U.FL pigtail. Take C (cut tape) for prototypes and R (reel) for production.
 
 ## Still unverified
 
