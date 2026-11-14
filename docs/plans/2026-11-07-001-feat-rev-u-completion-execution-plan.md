@@ -157,10 +157,10 @@ shape, each with a picture and vectors where loads or motion are involved (owner
 | OD-13 | SLS vendor + quotes; source for part prices | BOM, §6.5 | S27 |
 | OD-14 | PE review of the Operator's Manual v0.1 | docs §0.10.3 | S28 |
 | OD-15 | Winch shed threshold vs maneuver envelope | fuselage-mid ★ | S7 |
-| OD-18 | NoNFO-Pilot-PB2 bus architecture: A / A-diet / B / B+ — brief in SecureControllers `kicad/NoNFO-Pilot/PB2/ARCHITECTURE_BRIEF.md` (recommends B+) | avionics §1.11 NFP-OD18 | S34 |
-| OD-19 | PACE role of the merged stern stack (`AGENTS.md` §9 says A/C/A/P; plan 2026-10-31-003 R3 says Emergency) | avionics §1.11 NFP-OD19 | S34 |
+| OD-18 | NoNFO-Pilot-PB2 bus architecture — **DECIDED 2026-11-14: B+** | avionics §1.11 NFP-OD18 | S34 |
+| OD-19 | PACE re-balance from node capability and loading (owner direction 2026-11-14) — brief `docs/PACE_REBALANCE_BRIEF.md`, recommends option A | avionics §1.11 NFP-OD19 | S34 |
 | OD-20 | USB Wi-Fi module part (TACCO and NoNFO-Pilot-PB2) | avionics §1.11 NFP-OD20 | S35 |
-| OD-21 | Smallest mass credit worth building the merged stern board for (first estimate −26 g against −58 g planned) | avionics §1.11 NFP-OD21 | S34 |
+| OD-21 | Mass floor for the merged stern board — **DECIDED 2026-11-14: no floor; minimise, BBE-Black outline kept** | avionics §1.11 NFP-OD21 | S34 |
 | OD-17 | WA-R10 power crossing: A clock-spring / B enclosed loop / C slip ring / D joint 0.91 in (23 mm) outboard — brief `docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md` — **DECIDED 2026-11-11: D + aft fairing + rounded end plate with fillets; 22.8° taper kept** | WA-R10 | S2 |
 | OD-16 | First-flight decisions D1–D4 and D6 (scope, nozzle datum, 3.0 in gear, hover T/W floor, XO board area; D5 decided) — D2 overlaps OD-9, D3 closes OD-5 | `docs/plans/2026-09-15-001-first-flight-readiness-plan.md` | S3 (D4 sets the T/W target), P4 |
 
@@ -299,7 +299,7 @@ Measured by `tools/validate_kicad.py` counts per board.
   `docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md`: S34 ledgers and fit/mass gates,
   S35 parts and footprints, S36 schematic (ERC 0), S37 isolation cells, S38 placement, S39 routing
   (DRC 0, unconnected 0), S40 fab outputs, S41 airframe integration record. They may run any time from
-  S13 on. Exit: ERC 0, DRC 0, parity 0, Gerbers; stern stack ≤ 0.108 lbm (49 g) or the OD-21 floor; `avionics/WBS.md`
+  S13 on. Exit: ERC 0, DRC 0, parity 0, Gerbers; stern stack below the 107 g pair it replaces, mass minimised; `avionics/WBS.md`
   §1.11 items closed. −20. Est. 9/14/22. S15 (TACCO) and S13/S14 (Pilot) still build the three full
   stacks' boards; their Simon copies are not built.
 

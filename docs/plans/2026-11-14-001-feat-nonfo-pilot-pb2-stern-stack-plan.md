@@ -22,6 +22,7 @@ execution: code
 - **Objective.** Take NoNFO-Pilot-PB2 from ideation to fab-ready: ERC 0, DRC 0, schematic parity 0, unconnected 0, Gerbers generated, on KiCad 9.0.2. It becomes the stern (Simon) control stack of Serenity Rev U.
 - **Product authority.** Owner (Stab-Rabbit-coding). Sprint order is a recommendation; each owner-decision gate needs the owner's word.
 - **Mode.** Governed. This plan creates no second task list. Board items live in `SecureControllers:TODO.md` §5; airframe items live in `avionics/WBS.md` §1.11; sprints S34 to S41 are indexed in Theme A of `docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md`.
+- **Owner decisions in force (2026-11-14):** architecture B+; BBE-Black outline; mass minimised, not floored.
 - **Stop conditions.** A sprint does not start if its owner decision is open. A fit or mass gate that still fails after the one pre-authorised re-run without GNSS stops layout and goes to the owner as an Owner Decision Brief (`docs/DOC_TEMPLATES.md`).
 - **Out of scope.** The BBE-hosted variant. Firmware (Theme F). Any change to the three full stacks.
 
@@ -49,14 +50,16 @@ Two facts make the board hard:
 - **KD3. Outline is the specification outline, 3.402 × 2.098 in (86.4 × 53.3 mm), gated first.** (session-settled: user-approved, 2026-11-12 — chosen over a custom outline fitted to the present Simon envelope, and over 55 × 35 mm: keeps mounts and harness positions common with the BBE variant.) Governs R4, R5.
 - **KD4. Ethernet follows the Pilot pattern.** DP83825I on RMII2 plus the AX88772E USB NIC, bridged in Linux. (session-settled: user-approved, 2026-11-12 — chosen over a 3-port switch on RMII2: same parts and software as the other three stacks.) Governs R9.
 - **KD5. GNSS receiver on the cape, first overboard.** (session-settled: user-directed, 2026-11-12 — chosen over the dorsal puck alone: "first thing to go overboard if space is an issue".) Governs R12.
-- **KD6. Architecture is open: OD-18.** The owner asked for a brief; it is written and recommends B+. Governs R8, R13.
+- **KD6. Architecture B+.** A trust-module MCU (MSPM0G3519-Q1) owns CAN-FD, RS-485, the HI-6138 and the slow lines; the PB2-I keeps sensors, DSHOT, Ethernet, radios and logging. (session-settled: user-directed, 2026-11-14 — chosen over A, A-diet and B, none of which fits the PB2-I header with every function aboard.) Governs R8, R13.
+- **KD7. Mass is minimised against the BBE-Black outline, not floored.** (session-settled: user-directed, 2026-11-14 — "It will weigh more than a Pilot cape. That's ok." Chosen over a mass floor that would force a smaller outline.) Governs R2.
+- **KD8. PACE is re-balanced from node capability and loading.** No single point of failure, no stack with a single tasking. (session-settled: user-directed, 2026-11-14.) The assignment itself is OD-19 (`docs/PACE_REBALANCE_BRIEF.md`). Governs R19.
 
 ### Requirements
 
 #### Stack and airframe
 
 - R1. The stern stack shall be one NoNFO-Pilot-PB2 board and one PB2-I. The other three stacks shall not change.
-- R2. The stern stack, pouched, shall weigh no more than 0.108 lbm (49 g). That holds the −0.128 lbm (−58 g) ledger credit against the present pouched pair of 0.236 lbm (107 g) (`tools/middle_layout_fit.py`: CN4 58 g + FC4 49 g). If the stack is heavier, the credit the owner accepts under OD-21 replaces this figure.
+- R2. The stern stack mass shall be minimised and shall stay below the present pouched pair of 0.236 lbm (107 g) (`tools/middle_layout_fit.py`: CN4 58 g + FC4 49 g). The ledger credit is whatever the computed stack mass gives; the −58 g figure in `tools/min_stretch_relocation.py` is replaced by it in S41.
 - R3. The board shall mate with the PB2-I P1/P2 headers and supply its 5 V.
 - R4. The board outline and mounting holes shall be 3.402 × 2.098 in (86.4 × 53.3 mm), common with the BBE variant.
 - R5. The assembled stack shall pass a real-mesh fit gate at the Simon site before layout starts.
@@ -77,6 +80,10 @@ Two facts make the board hard:
 - R14. The board shall keep Pilot Rev T's functional isolation: a named `ISO_BAND` rule area and a 0.5 mm `ISOLATION` rule in the `.kicad_dru`, with every isolated device in one island on one edge.
 - R15. Every part shall pass the component-sourcing gate (`AGENTS.md` §5) and every footprint shall be verified against its OEM datasheet before it enters the schematic.
 
+#### PACE
+
+- R19. The PACE assignment shall give every role four distinct holders and every stack one level of every role, and shall be the square the owner chooses under OD-19.
+
 #### Quality checks (owner direction 2026-11-14, PR #289)
 
 - R16. Every brief and design review for this board shall use the avionics check set in `docs/DOC_TEMPLATES.md`: electrical engineering (electrical load and emissions) in place of statics and dynamics, and wire-harness, fastener and mounting fit in place of canonical shape.
@@ -87,7 +94,7 @@ Two facts make the board hard:
 
 - `kicad-cli sch erc`: 0 errors. `kicad-cli pcb drc --schematic-parity`: 0 violations, 0 unconnected, 0 parity. Gerbers, drill, position and BOM files generated.
 - `pin_ledger.py --require <chosen option>` exits 0.
-- Fit gate PASS at Simon. Computed stack mass ≤ 0.108 lbm (49 g), or no less than the credit floor the owner sets under OD-21.
+- Fit gate PASS at Simon. Computed stack mass below 0.236 lbm (107 g), with the mass-lever table showing each lever taken or the reason it was not.
 - Every open item in `SecureControllers:TODO.md` §5.0 and §5.2 closed or carried with a dated note.
 
 ### Scope Boundaries
@@ -103,10 +110,10 @@ Two facts make the board hard:
 
 | ID | Question | Needed before |
 |---|---|---|
-| OD-18 | Architecture: A / A-diet / B / B+ (brief recommends B+). Decided after the pre-decision check PD1 below is appended to the brief. | S34 |
-| OD-19 | PACE role of the stern stack. `AGENTS.md` §9 lists Simon as A / C / A / P. The 2026-10-31 plan R3 calls the merged stack the PACE Emergency path. The two disagree; the owner adjudicates. The role is an input to OD-18: the brief's case for B+ leans on the Emergency role. | S34 |
+| OD-18 | Architecture — **decided 2026-11-14: B+** | — |
+| OD-19 | PACE re-balance: current / A (keep every Primary, recommended) / B (best balance). Brief `docs/PACE_REBALANCE_BRIEF.md`. | S34 |
 | OD-20 | USB Wi-Fi module part (open since 2026-09-29, a fab blocker on TACCO as well). A hard gate: S35 does not start without it. | S35 |
-| OD-21 | Smallest mass credit worth building the merged board for. The first estimate is about −26 g against the −58 g planned. Below the floor, the outline (KD3) or the whole merge goes back to the owner. | S34 |
+| OD-21 | Mass floor — **decided 2026-11-14: no floor; minimise, BBE-Black outline kept** | — |
 
 ---
 
@@ -171,7 +178,6 @@ Tooling: KiCad 9.0.2 (`kicad-cli version` reads 9.0.2). The cloud environment ca
 
 ```mermaid
 flowchart LR
-  OD18[OD-18 architecture] --> S34
   S34[S34 ledgers, fit and mass gates] --> S35[S35 parts and footprints]
   OD20[OD-20 Wi-Fi module] --> S35
   S35 --> S36[S36 schematic, ERC 0]
@@ -181,8 +187,6 @@ flowchart LR
   S39 --> S40[S40 fab outputs and reviews]
   S40 --> S41[S41 airframe integration record]
   OD19[OD-19 PACE role] --> S34
-  OD21[OD-21 mass floor] --> S34
-  PD1[PD1 MCU map check] --> OD18
   PB1[PB1 host-link bench] -.-> FAB[fab order]
   S40 --> FAB
 ```
@@ -220,7 +224,7 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 
 **Goal:** Turn "does it fit" into three computed answers (pins, volume, mass) before any schematic exists.
 
-**Requirements:** R2, R4, R5, R10, R13, R17, R18; KD3, KD6, KTD3, KTD6. Needs OD-18, OD-19, OD-21 and PD1.
+**Requirements:** R2, R4, R5, R10, R13, R17, R18; KD3, KD6, KTD3, KTD6. Needs OD-19. PD1 is its first task.
 
 **Dependencies:** none.
 
@@ -234,7 +238,7 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 - `SecureControllers:kicad/NoNFO-Pilot/PB2/NoNFO-Pilot-PB2.md` (new board status file)
 
 **Approach:**
-1. Freeze the net list for the chosen option and turn the PD1 mapping into the MCU-side ledger file.
+1. Run PD1 (map the 31 B+ lines onto the RGZ-48 function table), then freeze the net list and write the MCU-side ledger file.
 2. Write the zone contract: outline, holes, PB2-I shadow, isolation island edge, RF zone, power entry, height limits.
 3. Fit the stack envelope (board, PB2-I on top, tallest parts per zone) into the scaled aft-neck mesh at the Simon site, in the pattern of `tools/middle_layout_fit.py`.
 4. Compute stack mass from the merged part list for 0.063 in (1.6 mm) and 0.039 in (1.0 mm) boards, with fasteners, connectors and harness as separate lines, and fill the mass-lever table.
@@ -250,7 +254,7 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 - The fit tool reports FAIL for a box 0.04 in (1 mm) larger than the cavity and PASS for one 0.04 in smaller.
 - Dropping the GNSS nets raises the spare count.
 
-**Verification:** `pin_ledger.py --require <option>` exits 0 for the header and the MCU, and the CI ledger job is green. Fit gate prints PASS. Mass table meets R2 or the OD-21 floor. A failed gate follows the gate failure order in Assumptions. `SecureControllers:TODO.md` 5.0.2, 5.0.3, 5.2.3, 5.2.4, 5.2.6 closed; `avionics/WBS.md` §1.11 NFP-OD18, NFP-FIT, NFP-MASS closed. **Skills:** `computer-engineering`, `datasheets`, `mechanical-engineering`, `project-overseer`.
+**Verification:** `pin_ledger.py --require <option>` exits 0 for the header and the MCU, and the CI ledger job is green. Fit gate prints PASS. Mass table meets R2. A failed gate follows the gate failure order in Assumptions. `SecureControllers:TODO.md` 5.0.2, 5.0.3, 5.2.3, 5.2.4, 5.2.6 closed; `avionics/WBS.md` §1.11 NFP-OD18, NFP-FIT, NFP-MASS closed. **Skills:** `computer-engineering`, `datasheets`, `mechanical-engineering`, `project-overseer`.
 
 ### U2. S35 — Parts sourced, footprints verified
 
@@ -398,7 +402,7 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 - Thermal check: every part's computed junction temperature at peak load and design ambient is below its datasheet limit, with the margin stated.
 - The design review carries all six avionics checks, none blank.
 
-**Verification:** fab package complete; EMC, thermal and DFM records in the board file; R2 or the OD-21 floor holds. The fab order itself waits on bench task PB1. **Skills:** `kidoc`, `emc`, `bom`, `jlcpcb`, `pcbway`, `kicad`.
+**Verification:** fab package complete; EMC, thermal and DFM records in the board file; R2 holds. The fab order itself waits on bench task PB1. **Skills:** `kidoc`, `emc`, `bom`, `jlcpcb`, `pcbway`, `kicad`.
 
 ### U8. S41 — Airframe integration record
 

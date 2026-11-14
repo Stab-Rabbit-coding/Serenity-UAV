@@ -1110,11 +1110,16 @@ Affected: Simon FC4 and CN4 nodes, the Simon saddle, `tools/auw_ledger.py`,
 customer. Plan and sprints S34–S41:
 `docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md`.
 
-- [ ] **NFP-OD18** — ★ Owner: bus architecture A / A-diet / B / B+ (brief says B+).
+- [x] **NFP-OD18** — ★ Owner: bus architecture A / A-diet / B / B+ (brief says B+).
+    **DECIDED 2026-11-14 (owner): B+.** The trust-module MCU owns CAN-FD, RS-485, 1553 and the
+    slow lines.
     Brief: SecureControllers `kicad/NoNFO-Pilot/PB2/ARCHITECTURE_BRIEF.md`. The pin ledger
     shows only B+ (trust-module MCU owns the buses and the slow lines) fits the PB2-I
     header with every function aboard. Gates S34.
-- [ ] **NFP-OD19** — ★ Owner: PACE role of the merged stern stack.
+- [ ] **NFP-OD19** — ★ Owner: PACE re-balance — brief `docs/PACE_REBALANCE_BRIEF.md`.
+    Owner direction 2026-11-14: re-compute PACE from node capability and loading, no single
+    point of failure, no stack with a single tasking. Brief recommends option A (keep every
+    Primary; 7 cells change). Earlier note:
     Root `AGENTS.md` §9 lists Simon as A / C / A / P; plan 2026-10-31-003 R3 calls the merged
     stack the PACE Emergency path. The two disagree. The role is an input to OD-18. Gates S34.
 - [ ] **NFP-OD20** — ★ Owner: USB Wi-Fi module part (also blocks TACCO fab).
@@ -1129,9 +1134,14 @@ customer. Plan and sprints S34–S41:
     estimate: board about 0.14 lbm (63 g), pouched stack about 0.18 lbm (81 g), credit about
     −26 g [CALC, unverified]. Corrected 2026-11-14: the first entry used a 118 g baseline
     that no ledger tool carries.
-- [ ] **NFP-OD21** — ★ Owner: smallest mass credit worth building the merge for.
+- [x] **NFP-OD21** — ★ Owner: smallest mass credit worth building the merge for.
     First estimate is about −26 g against −58 g planned. Gates S34.
-- [ ] **NFP-PD1** — Map the 31 B+ lines onto the MSPM0G3519-Q1 RGZ-48 (before OD-18).
+    **DECIDED 2026-11-14 (owner):** the BBE-Black outline stays and the board may weigh more
+    than a Pilot cape. Mass is minimised, not floored. Agent reading, not the owner's words:
+    the stack stays lighter than the 107 g pair it replaces; a heavier result goes back to
+    the owner.
+- [ ] **NFP-PD1** — Map the 31 B+ lines onto the MSPM0G3519-Q1 RGZ-48 (first task of S34).
+    OD-18 was decided before this check (2026-11-14); a failure here means the 64-pin package.
     The package bonds 44 I/O pins, so the count fits; the function assignment is unchecked.
     Result is appended to the architecture brief.
 - [ ] **NFP-PB1** — Bench: PB2-I to MSPM0 host link at bus rate (gates the fab order).

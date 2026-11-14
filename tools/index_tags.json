@@ -10284,6 +10284,14 @@
       ],
       "archived": false
     },
+    "docs/PACE_REBALANCE_BRIEF.md": {
+      "description": "PACE Re-balance for the Merged Stern Stack \u2014 Owner Decision Brief (OD-19)",
+      "tags": [
+        "documentation",
+        "redundancy-failover"
+      ],
+      "archived": false
+    },
     "docs/PHASED_BUILD_GUIDE.md": {
       "description": "Serenity-Class Tiltrotor UAV \u2014 Phased Build Guide (Rev M \u2014 SUPERSEDED)",
       "tags": [
@@ -16344,6 +16352,14 @@
       ],
       "archived": false
     },
+    "tools/pace_balance.py": {
+      "description": "PACE assignment search for the four Serenity control stacks.",
+      "tags": [
+        "build-tooling",
+        "redundancy-failover"
+      ],
+      "archived": false
+    },
     "tools/placement_audit.py": {
       "description": "Serenity UAV -- verify every placed part sits where it belongs in the hull frame.",
       "tags": [
@@ -16604,6 +16620,14 @@
       "tags": [
         "build-tooling",
         "propulsion"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_pace_balance.py": {
+      "description": "Tests for tools/pace_balance.py.",
+      "tags": [
+        "build-tooling",
+        "redundancy-failover"
       ],
       "archived": false
     },
@@ -16907,6 +16931,7 @@
       "docs/OBSERVER_MANUFACTURING_READINESS.md",
       "docs/OPERATORS_MANUAL.md",
       "docs/OSHW_CERTIFICATION.md",
+      "docs/PACE_REBALANCE_BRIEF.md",
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/POWER_DISTRIBUTION.md",
       "docs/PROTO_PRINT_DAVINCI_JR.md",
@@ -17505,6 +17530,7 @@
       "docs/CARGO_DOOR_LATCH_SPEC.md",
       "docs/ETHERNET_PHY_TRADE.md",
       "docs/OPERATORS_MANUAL.md",
+      "docs/PACE_REBALANCE_BRIEF.md",
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/README.md",
       "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
@@ -17525,7 +17551,9 @@
       "graphical-build-guide/flight-phases/TODO.md",
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/TOOL_REFERENCE.md",
-      "tools/precommit_index.py"
+      "tools/pace_balance.py",
+      "tools/precommit_index.py",
+      "tools/tests/test_pace_balance.py"
     ],
     "security": [
       "AGENTS.md",
@@ -20803,6 +20831,7 @@
       "tools/od17_junction_cfd/run.sh",
       "tools/od3_esc_figures.py",
       "tools/open_mating_faces.py",
+      "tools/pace_balance.py",
       "tools/placement_audit.py",
       "tools/plot_battery_bay.py",
       "tools/precommit_doc_wording.py",
@@ -20839,6 +20868,7 @@
       "tools/tests/test_nacelle64_assembly_check.py",
       "tools/tests/test_nacelle_esc_service.py",
       "tools/tests/test_nozzle_servo_linkage.py",
+      "tools/tests/test_pace_balance.py",
       "tools/tests/test_sync_operators_manual.py",
       "tools/tests/test_tail_strike_requirement.py",
       "tools/tests/test_wbs_burndown.py",
