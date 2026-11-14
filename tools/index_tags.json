@@ -7115,6 +7115,23 @@
       ],
       "archived": false
     },
+    "avionics/kicad/NoNFO-Pilot-PB2/README.md": {
+      "description": "NoNFO-Pilot-PB2 (Serenity integration copy)",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/NoNFO-Pilot-PB2/zone_contract.json": {
+      "description": "JSON data (10 top-level keys)",
+      "tags": [
+        "avionics-hardware",
+        "pcb-design"
+      ],
+      "archived": false
+    },
     "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md": {
       "description": "Observer \u2194 phyCORE-AM62A SoM \u2014 Pad-Level Net Map",
       "tags": [
@@ -16313,6 +16330,13 @@
       ],
       "archived": false
     },
+    "tools/nonfo_simon_fit.py": {
+      "description": "nonfo_simon_fit.py -- S34 gates for the NoNFO-Pilot-PB2 stern stack at Simon's med bay.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/nozzle_servo_linkage.py": {
       "description": "Servo nozzle drive \u2014 schedule, linkage and force-margin tool (plan U2).",
       "tags": [
@@ -16659,6 +16683,13 @@
       ],
       "archived": false
     },
+    "tools/tests/test_nonfo_simon_fit.py": {
+      "description": "Mesh-free tests for tools/nonfo_simon_fit.py (the hull fit itself runs as a tool).",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/tests/test_nozzle_servo_linkage.py": {
       "description": "Tests for tools/nozzle_servo_linkage.py \u2014 servo nozzle drive (plan U2).",
       "tags": [
@@ -16903,6 +16934,7 @@
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
       "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
       "avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md",
+      "avionics/kicad/NoNFO-Pilot-PB2/README.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/PCBNEW_SWIG_BUG.md",
@@ -19683,6 +19715,8 @@
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
       "avionics/kicad/FlightEngineer/step/FlightEngineer.step",
       "avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md",
+      "avionics/kicad/NoNFO-Pilot-PB2/README.md",
+      "avionics/kicad/NoNFO-Pilot-PB2/zone_contract.json",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
@@ -20149,6 +20183,8 @@
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
       "avionics/kicad/FlightEngineer/step/FlightEngineer.step",
       "avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md",
+      "avionics/kicad/NoNFO-Pilot-PB2/README.md",
+      "avionics/kicad/NoNFO-Pilot-PB2/zone_contract.json",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
@@ -20872,6 +20908,7 @@
       "tools/nacelle_mass_cg_64.py",
       "tools/nacelle_tilt_dynamics.py",
       "tools/node_thermal_forced_air.py",
+      "tools/nonfo_simon_fit.py",
       "tools/nozzle_servo_linkage.py",
       "tools/nozzle_servo_linkage_64.py",
       "tools/observer_board_envelope.py",
@@ -20919,6 +20956,7 @@
       "tools/tests/test_joint_register.py",
       "tools/tests/test_nacelle64_assembly_check.py",
       "tools/tests/test_nacelle_esc_service.py",
+      "tools/tests/test_nonfo_simon_fit.py",
       "tools/tests/test_nozzle_servo_linkage.py",
       "tools/tests/test_pace_balance.py",
       "tools/tests/test_sync_operators_manual.py",

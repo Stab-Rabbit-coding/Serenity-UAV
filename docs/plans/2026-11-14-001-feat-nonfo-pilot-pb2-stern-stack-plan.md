@@ -220,6 +220,8 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 
 ### U1. S34 — Ledgers, zone contract, fit and mass gates
 
+**Status 2026-11-14: done.** Header and MCU ledgers fit; fit gate PASS (portrait, 1 mm margin); stack 91.0 g pouched on a 1.6 mm board; 5 V peak 3.12 A. Results in SecureControllers `kicad/NoNFO-Pilot/PB2/NoNFO-Pilot-PB2.md`. Carried over: REF-NFP-005 and 006 verification (hosts outside this session's network).
+
 **Goal:** Turn "does it fit" into three computed answers (pins, volume, mass) before any schematic exists.
 
 **Requirements:** R2, R4, R5, R10, R13, R17, R18; KD3, KD6, KTD3, KTD6. No open gate. PD1 is its first task.

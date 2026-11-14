@@ -1,0 +1,60 @@
+{
+  "_doc": "NoNFO-Pilot-PB2 zone contract (plan KTD6): outline, holes, zones, height limits, and the mass and power lines the S34 gates sum. Units mm and g unless named. Board frame: origin at the outline's lower-left corner, +X along the 3.400 in edge, +Y along the 2.150 in edge, +Z up from the carrier top face. [SRC] = read from the cited source; [ASSUMED] = planning value to be replaced; [CALC] = computed here. Consumers: generators (S35+), DRC rule areas (S37), Serenity-UAV tools/nonfo_simon_fit.py (copy-with-index). SPDX-License-Identifier: CERN-OHL-W-2.0.",
+  "revision": "S34 2026-11-14",
+  "outline": {
+    "w": 86.36, "h": 54.61, "corner_r": 6.35,
+    "source": "[SRC] KiCad 9.0.2 template BeagleBone-Black-Cape.kicad_pcb (Edge.Cuts 3.400 x 2.150 in, R 0.25 in corners). The template's RJ45 notch is not kept: no BeagleBone sits under this board.",
+    "note": "The SecureControllers spec quoted 86.4 x 53.3 mm from SanCloud's BBE page; the owner named the BeagleBone Black size, so the template governs."
+  },
+  "holes": {
+    "drill": 3.2, "keepout_r": 3.5,
+    "xy": [[14.605, 3.175], [14.605, 51.435], [80.645, 6.35], [80.645, 48.26]],
+    "source": "[SRC] same template, MH1..MH4 (M3, MountingHole_3.2mm_M3_DIN965)"
+  },
+  "pb2_shadow": {
+    "x0": 29.36, "x1": 84.36, "y0": 9.805, "y1": 44.805,
+    "rail_inset": 4.80,
+    "note": "PB2-I 55 x 35 mm PCB [SRC PB2 SRM Table 3.2], centred in Y, 2.0 mm from the +X edge so its USB-C can reach the outline edge (which PB2 end carries the USB-C: requires verification against avionics/datasheets/beagleboard/pocketbeagle2_revA_dimension.pdf). Rails 4.80 mm inside each long edge [SRC gen_pilot_pcb.py RAIL_V, REF-SENSOR-041 Fig 3.45]."
+  },
+  "stack": {
+    "carrier_t": 1.6,
+    "carrier_bottom_max": 1.0,
+    "rail_insulator": 2.54,
+    "pb2_max_height": 13.6,
+    "hold_down_bridge": 1.0,
+    "under_pb2_max": 5.04,
+    "carrier_top_max_outside_shadow": 8.9,
+    "source": "[SRC] PB2 SRM Table 3.2 (13.6 mm max height, 1.6 mm PCB); gen_pilot_pcb.py PB2_GAP (3.0 receptacle + 2.54 insulator) and B_MAX_H 5.04; 8.9 mm = Wurth 749010012A magnetics (tallest carrier part). [ASSUMED] carrier bottom face 0402-class passives only (1.0 mm), bridge 1.0 mm."
+  },
+  "zones": [
+    {"name": "iso_island", "x0": 0.0, "x1": 27.0, "y0": 0.0, "y1": 54.61, "note": "GND2 island: ISOW1044, ISOW1412, HI-6138 + PM-DB2791S, both Ethernet magnetics; locking JST-GH field connectors on the -X edge. One seam to the logic zone, crossed only by isolator pins."},
+    {"name": "logic", "x0": 27.0, "x1": 86.36, "y0": 0.0, "y1": 54.61, "note": "MCU, IMU, baro, TPM, flash, hub, AX88772E, DP83825I, PLD."},
+    {"name": "rf", "x0": 31.0, "x1": 60.0, "y0": 12.0, "y1": 42.0, "note": "Under the PB2 shadow (all modules are under 5.04 mm): Wi-Fi LWB5+ 453-00046 (MHF4), mLRS, Type 2EL, GNSS. Coax to airframe antennas. [ASSUMED] placement; S38 sets it."},
+    {"name": "power_entry", "x0": 60.0, "x1": 86.36, "y0": 0.0, "y1": 9.0, "note": "Nano-Fit 5 V entry and the input filter."}
+  ],
+  "mass_g": {
+    "board_fr4_6L": {"t1.6": 19.3, "t1.0": 14.0, "basis": "[CALC] 47.2 cm2 FR-4 at 1.85 g/cm3 plus six 35 um copper layers at 60 % fill"},
+    "components_from_pilot_and_tacco": {"g": 55.0, "basis": "[CALC] Pilot 31 g + TACCO 40 g (bom_revU.csv) less two 55 x 35 mm bare boards (about 8 g each)"},
+    "duplicates_removed": {"g": -10.0, "basis": "[ASSUMED] one each of TPM, ISOW1044, ISOW1412, HI-6138 with transformer and oscillator, DP83825I with magnetics, Nano-Fit, buck"},
+    "added_parts": {"g": 2.0, "basis": "[SRC/ASSUMED] MSPM0G3519 0.2, USB hub 0.1, LWB5+ 0.7 [REF-SENSOR-066], MAX-M10S about 0.6, passives 0.4"},
+    "pb2_i": {"g": 12.7, "basis": "[SRC] PB2 SRM Table 3.2 net weight"},
+    "pouch": {"g": 5.0, "basis": "[SRC] tools/auw_ledger.py NODE_POUCH_G"},
+    "fasteners": {"g": 4.0, "basis": "[ASSUMED] 4 x M3 steel screw + standoff, NFP-QA line"},
+    "connectors_mates": {"g": 3.0, "basis": "[ASSUMED] JST-GH and Nano-Fit mating halves, NFP-QA line"},
+    "harness": {"g": null, "basis": "not yet estimated: harness lengths are S41 work (NFP-QA)"}
+  },
+  "power_5v": {
+    "pb2_i": {"a_peak": 1.0, "basis": "[SRC] PB2 SRM Quick Start: 5 V at 1 A"},
+    "wifi_lwb5plus": {"a_peak": 0.62, "basis": "[CALC] 768 mA calibration peak at VBAT 3.3 V [REF-SENSOR-066], 3.3/5 at 82 % buck efficiency [ASSUMED]"},
+    "isolated_bus_converters": {"a_peak": 0.40, "basis": "[ASSUMED] ISOW1044 + ISOW1412 integrated DC-DC at full load"},
+    "m1553_tx": {"a_peak": 0.30, "basis": "[ASSUMED] HI-6138 transmitting; to be read from the Holt data sheet"},
+    "other_radios": {"a_peak": 0.35, "basis": "[ASSUMED] mLRS STM32WLE5 TX, Type 2EL BT/802.15.4, GNSS"},
+    "logic_and_ethernet": {"a_peak": 0.35, "basis": "[ASSUMED] MCU, IMU, baro, TPM, flash, hub, AX88772E, DP83825I"},
+    "fan": {"a_peak": 0.10, "basis": "[ASSUMED]"}
+  },
+  "limits": {
+    "stack_mass_g_max": 107.0, "stack_mass_basis": "plan R2: below the present pouched pair (tools/middle_layout_fit.py M_CN4 58 g + M_FC4 49 g)",
+    "stack_height_target": 20.5, "stack_height_basis": "ideation idea 7: unpouched height that matches the old two-pouch volume",
+    "design_ambient_c": 40.0, "design_ambient_basis": "[ASSUMED] Bay A design ambient ASSUMED 104 F / 40 C (avionics/WBS.md BAYA-FWD-T2)"
+  }
+}

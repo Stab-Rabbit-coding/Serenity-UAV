@@ -1130,26 +1130,34 @@ customer. Plan and sprints S34–S41:
     Brief `docs/WIFI_MODULE_OD20_BRIEF.md` (2026-11-14) recommends the Ezurio Sterling-LWB5+
     solder-down module in USB mode, once its integration guide confirms USB mode.
     Open since 2026-09-29 (§1.2a). Gates S35.
-- [ ] **NFP-FIT** — Real-mesh fit gate for the stern stack at Simon (S34).
+- [x] **NFP-FIT** — Real-mesh fit gate for the stern stack at Simon (S34).
     Outline 3.402 × 2.098 in (86.4 × 53.3 mm) against the present stack box of
     2.28 × 3.03 × 0.87 in (58 × 77 × 22 mm): the board is 0.37 in (9.4 mm) longer than the
     box. New tool `tools/nonfo_simon_fit.py`. A fail goes to the owner as a brief.
-- [ ] **NFP-MASS** — Stern stack mass gate: ≤ 0.108 lbm (49 g) holds the credit (S34).
+    **DONE 2026-11-14 (S34):** `tools/nonfo_simon_fit.py` PASS standing portrait (3.40 in
+    vertical), 1 mm to starboard, harness zone to port; landscape fails. Margin 1 mm: re-run on
+    the placed board's STEP in S38. Stack 0.777 in (19.74 mm) tall.
+- [x] **NFP-MASS** — Stern stack mass gate: ≤ 0.108 lbm (49 g) holds the credit (S34).
     Baseline is the pouched pair, 0.236 lbm (107 g) (`tools/middle_layout_fit.py` CN4 58 g +
     FC4 49 g). The −58 g credit assumed a merged board as light as Pilot (31 g). First
     estimate: board about 0.14 lbm (63 g), pouched stack about 0.18 lbm (81 g), credit about
     −26 g [CALC, unverified]. Corrected 2026-11-14: the first entry used a 118 g baseline
     that no ledger tool carries.
+    **DONE 2026-11-14 (S34):** pouched stack 0.201 lbm (91.0 g) on a 1.6 mm board, 0.189 lbm
+    (85.7 g) on 1.0 mm; PASS below 107 g. Credit −16.0 to −21.3 g [CALC; assumed lines in the
+    zone contract]. The −58 g in `tools/min_stretch_relocation.py` is replaced in S41.
 - [x] **NFP-OD21** — ★ Owner: smallest mass credit worth building the merge for.
     First estimate is about −26 g against −58 g planned. Gates S34.
     **DECIDED 2026-11-14 (owner):** the BBE-Black outline stays and the board may weigh more
     than a Pilot cape. Mass is minimised, not floored. Agent reading, not the owner's words:
     the stack stays lighter than the 107 g pair it replaces; a heavier result goes back to
     the owner.
-- [ ] **NFP-PD1** — Map the 31 B+ lines onto the MSPM0G3519-Q1 RGZ-48 (first task of S34).
+- [x] **NFP-PD1** — Map the 31 B+ lines onto the MSPM0G3519-Q1 RGZ-48 (first task of S34).
     OD-18 was decided before this check (2026-11-14); a failure here means the 64-pin package.
     The package bonds 44 I/O pins, so the count fits; the function assignment is unchecked.
     Result is appended to the architecture brief.
+    **DONE 2026-11-14 (S34):** 31 lines fit with 12 ports spare; SWD and BSL kept free.
+    SecureControllers `kicad/NoNFO-Pilot/PB2/pin_ledger/mcu_ledger.py`.
 - [ ] **NFP-PB1** — Bench: PB2-I to MSPM0 host link at bus rate (gates the fab order).
     Owner, physical. CAN-FD frames at bus rate beside IMU traffic on SPI0, on Observer
     hardware; record worst-case latency.
