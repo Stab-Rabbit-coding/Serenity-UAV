@@ -95,7 +95,7 @@ sprints. P items are grouped into build blocks (§7), and each block has an agen
 | Horizon | Theme | Outcome | Status |
 |---|---|---|---|
 | **Now** | S0 Record + plan | Findings recorded, plan and burndown in place | **Done** this session |
-| **Now** | N — Nacelle mechanical close | Assembly clashes 0, cable route found, pivot converged, pods re-baked | Blocked on OD-1, OD-3, OD-4 |
+| **Now** | N — Nacelle mechanical close | Assembly clashes 0, cable route found, pivot converged, pods re-baked | Unblocked: OD-1 (2026-11-07), OD-3 (2026-11-12, 70 A) and OD-4 (2026-11-12) decided |
 | **Next** | H — Hull and cargo close | Winch built to an owner-chosen layout; doors, latches, Bay A, mid/rear bays | Blocked on OD-2 |
 | **Next** | G — Landing gear close | LG design items closed, gear re-massed for the measured aircraft | OD-5, OD-7 |
 | **Next** | A — Avionics fab-ready | Pilot, TACCO, Commo, FE, gateway, Observer: DRC 0, ERC 0, Gerbers | OD-6, OD-11, OD-12 |
@@ -145,7 +145,7 @@ shape, each with a picture and vectors where loads or motion are involved (owner
 | OD-1 | Nozzle spigot vs cartridge: shorten cartridge 0.12 in (3 mm) or drop the spigot — **DECIDED 2026-11-07: option A; implemented, NAC-64-ASM-01 closed** | NAC-64-ASM-01 | S1 |
 | OD-2 | Winch layout: (a) aft/low spool + bridle, (b) right-angle/belt servo, (c) move tilt hardware, (d) two spools | WINCH-PKG-01 | S7 |
 | OD-3 | ESC part and rating (70 A vs 80 A) — **decided 2026-11-12: 70 A Open-Secure-ESC** | NAC-64-ESC-80A, NAC-64-ESC70-QUAL | S4 |
-| OD-4 | Release the NAC-64-REBAKE hold | NAC-64-REBAKE | S3 |
+| OD-4 | Release the NAC-64-REBAKE hold — **RELEASED by the owner 2026-11-12** | NAC-64-REBAKE | S3 |
 | OD-5 | Hover ground-clearance margin / mandatory gear height | LG-HOVER-01 | S12 |
 | OD-6 | Bay A forward thermal tier | BAYA-FWD-T1 | S21 |
 | OD-7 | Nozzle strike during a full ductile-fuse arrest | LG-28 | S12 |

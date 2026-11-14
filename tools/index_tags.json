@@ -10571,6 +10571,20 @@
       ],
       "archived": false
     },
+    "docs/figures/nacelle64_od17_asbuilt_cfd_sections.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_od17_asbuilt_cfd_wall_shear.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/figures/nacelle64_od17_cfd_sections.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -16290,7 +16304,7 @@
       "archived": false
     },
     "tools/od17_junction_cfd/geom_asbuilt.py": {
-      "description": "od17_junction_cfd/geom_asbuilt.py -- OD17-FAIR-CFD: the as-built wing-tip fairing as a CFD body.",
+      "description": "od17_junction_cfd/geom_asbuilt.py -- OD17-FAIR-CFD: the as-built wing-tip fairing assembly as a CFD body.",
       "tags": [
         "build-tooling"
       ],
@@ -16933,6 +16947,8 @@
       "docs/figures/nacelle64_od17_aft_fairing_horizontal.png",
       "docs/figures/nacelle64_od17_aft_fairing_section.png",
       "docs/figures/nacelle64_od17_aft_fairing_vertical.png",
+      "docs/figures/nacelle64_od17_asbuilt_cfd_sections.png",
+      "docs/figures/nacelle64_od17_asbuilt_cfd_wall_shear.png",
       "docs/figures/nacelle64_od17_cfd_sections.png",
       "docs/figures/nacelle64_od17_cfd_wall_shear.png",
       "docs/figures/nacelle64_od17_glove_compare.png",
