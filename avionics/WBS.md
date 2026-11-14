@@ -1124,7 +1124,9 @@ customer. Plan and sprints S34–S41:
     Primary; 7 cells change). Earlier note:
     Root `AGENTS.md` §9 lists Simon as A / C / A / P; plan 2026-10-31-003 R3 calls the merged
     stack the PACE Emergency path. The two disagree. The role is an input to OD-18. Gates S34.
-- [ ] **NFP-OD20** — ★ Owner: USB Wi-Fi module part (also blocks TACCO fab).
+- [x] **NFP-OD20** — ★ Owner: USB Wi-Fi module part (also blocks TACCO fab).
+    **DECIDED 2026-11-14 (owner): option 1**, Ezurio Sterling-LWB5+ solder-down module in USB
+    mode. Data sheets catalogued REF-SENSOR-065..068; the module data sheet body is login-gated.
     Brief `docs/WIFI_MODULE_OD20_BRIEF.md` (2026-11-14) recommends the Ezurio Sterling-LWB5+
     solder-down module in USB mode, once its integration guide confirms USB mode.
     Open since 2026-09-29 (§1.2a). Gates S35.
@@ -1151,6 +1153,9 @@ customer. Plan and sprints S34–S41:
 - [ ] **NFP-PB1** — Bench: PB2-I to MSPM0 host link at bus rate (gates the fab order).
     Owner, physical. CAN-FD frames at bus rate beside IMU traffic on SPI0, on Observer
     hardware; record worst-case latency.
+- [ ] **NFP-WIFI-DS** — Obtain the Sterling-LWB5+ module data sheet (Ezurio login).
+    Needed for the USB order code, strapping, temperature rating and mass (S35). Owner to
+    rule whether a login-gated data sheet passes the sourcing rule.
 - [ ] **NFP-QA** — Track fastener, connector and harness mass and CG per board.
     Owner direction 2026-11-14 (PR #289). Starts with the stern stack (S34, S41); the same
     lines are owed for Pilot, TACCO, Commo, Flight Engineer, gateway and Observer.

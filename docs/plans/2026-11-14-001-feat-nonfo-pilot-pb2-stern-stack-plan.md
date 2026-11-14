@@ -22,7 +22,7 @@ execution: code
 - **Objective.** Take NoNFO-Pilot-PB2 from ideation to fab-ready: ERC 0, DRC 0, schematic parity 0, unconnected 0, Gerbers generated, on KiCad 9.0.2. It becomes the stern (Simon) control stack of Serenity Rev U.
 - **Product authority.** Owner (Stab-Rabbit-coding). Sprint order is a recommendation; each owner-decision gate needs the owner's word.
 - **Mode.** Governed. This plan creates no second task list. Board items live in `SecureControllers:TODO.md` §5; airframe items live in `avionics/WBS.md` §1.11; sprints S34 to S41 are indexed in Theme A of `docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md`.
-- **Owner decisions in force (2026-11-14):** architecture B+; BBE-Black outline; mass minimised, not floored; PACE option B.
+- **Owner decisions in force (2026-11-14):** architecture B+; BBE-Black outline; mass minimised, not floored; PACE option B; Wi-Fi Ezurio Sterling-LWB5+ (USB).
 - **Stop conditions.** A sprint does not start if its owner decision is open. A fit or mass gate that still fails after the one pre-authorised re-run without GNSS stops layout and goes to the owner as an Owner Decision Brief (`docs/DOC_TEMPLATES.md`).
 - **Out of scope.** The BBE-hosted variant. Firmware (Theme F). Any change to the three full stacks.
 
@@ -112,7 +112,7 @@ Two facts make the board hard:
 |---|---|---|
 | OD-18 | Architecture — **decided 2026-11-14: B+** | — |
 | OD-19 | PACE re-balance — **decided 2026-11-14: option B** (`docs/PACE_REBALANCE_BRIEF.md`) | — |
-| OD-20 | USB Wi-Fi module part (open since 2026-09-29, a fab blocker on TACCO as well). A hard gate: S35 does not start without it. | S35 |
+| OD-20 | USB Wi-Fi module — **decided 2026-11-14: Ezurio Sterling-LWB5+ solder-down, USB mode** (`docs/WIFI_MODULE_OD20_BRIEF.md`) | — |
 | OD-21 | Mass floor — **decided 2026-11-14: no floor; minimise, BBE-Black outline kept** | — |
 
 ---
@@ -146,7 +146,7 @@ Two facts make the board hard:
 | The −58 g credit assumed a merged board as light as Pilot (31 g). A first estimate puts the board near 0.14 lbm (63 g) and the pouched stack near 0.18 lbm (81 g): a credit of about −26 g, under half the plan figure [CALC, unverified] | R2 is not expected to hold as written; CG closes by about 0.02 in (0.6 mm), not 0.055 in (1.4 mm) | OD-21 sets the smallest credit worth building for, before S34. S34 computes mass from the part list and fills the lever table below |
 | Host-link firmware does not exist (options B, B+), and the link shares SPI0 with the IMU, barometer, TPM, flash and 802.15.4 radio | A throughput or electrical fault found after fab costs a respin | Bench task PB1 (owner, physical): a PB2-I to MSPM0G3519-Q1 SPI link on Observer hardware carrying CAN-FD frames at bus rate beside IMU traffic, worst-case latency measured. PB1 gates the fab **order**, not Gerber generation. S41 hands Theme F the written interface |
 | MSPM0G3519-Q1 RGZ-48 function map unverified for 31 lines (the package bonds 44 I/O pins, so the count fits; the function assignment is unchecked) | Option B+ may need the 64-pin package | Pre-decision check PD1, before OD-18 |
-| Wi-Fi module still unchosen | Fab blocker | OD-20 is a hard gate on S35 |
+| Wi-Fi module data sheet is login-gated | S35 cannot verify the footprint, strapping or mass | NFP-WIFI-DS: owner obtains it or rules on the sourcing test |
 
 ### Mass levers (first estimate, all [CALC, unverified]; S34 replaces every row with a computed value)
 
@@ -179,7 +179,6 @@ Tooling: KiCad 9.0.2 (`kicad-cli version` reads 9.0.2). The cloud environment ca
 ```mermaid
 flowchart LR
   S34[S34 ledgers, fit and mass gates] --> S35[S35 parts and footprints]
-  OD20[OD-20 Wi-Fi module] --> S35
   S35 --> S36[S36 schematic, ERC 0]
   S36 --> S37[S37 isolation cells]
   S37 --> S38[S38 floorplan and placement]

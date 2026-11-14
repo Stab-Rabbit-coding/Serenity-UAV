@@ -3298,6 +3298,50 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 
 **Used in:** `tools/head_layout_fit.py` and `airframe/openscad/fuselage/bow_sensor_pod.scad` (ToF pod, Rev H2), where it is the recommended part pending procurement.
 
+
+### REF-SENSOR-065: Ezurio Sterling-LWB5+ USB Adapter data sheet (450-00137), v1.2
+
+| Field | Value |
+|---|---|
+| **Publisher** | Ezurio (formerly Laird Connectivity), Akron, Ohio, *Sterling-LWB5+ USB Adapter* data sheet, v1.2, 3 Jan 2024 (revision table in the document) |
+| **Official access** | <https://www.ezurio.com/documentation/datasheet-sterling-lwb5-usb-dongle> (HTTP 200, 2026-11-14; HTML page rendered with JavaScript) |
+| **Local copy** | `avionics/datasheets/ezurio/sterling-lwb5plus-usb-adapter-datasheet-v1.2.pdf` (printed from the page in Chromium 2026-11-14, MD5 5a6fe5425d8d96cc2f7a1beaf0163d28) |
+| **Section applied** | "Environmental" (operating −40 to +85 °C); WLAN transmitter current tables, 2.4 GHz and 5 GHz, "Maximum Current Consumption @ USB VBUS" (peak 345 mA, 5210 MHz VHT80 MCS0); "Mechanical" (about 7 g, adapter only); "Power" (VBUS 5.0 V ±10 %) |
+| **Cited in** | `docs/WIFI_MODULE_OD20_BRIEF.md` |
+| **Openness / sourcing** | Public, no NDA. Ezurio is US-domiciled. The figures are for the USB adapter, whose own buck regulator feeds the same CYW4373E; they bound, not replace, the solder-down module's figures. |
+
+### REF-SENSOR-066: Ezurio Sterling-LWB5+ module data sheet (453-00045 to 453-00049) — access-gated
+
+| Field | Value |
+|---|---|
+| **Publisher** | Ezurio, *Sterling-LWB5+* data sheet (series 453-00045 to 453-00049) |
+| **Official access** | <https://www.ezurio.com/documentation/datasheet-sterling-lwb5-0>. Only the contents and scope are public; the body opens after an Ezurio account login (`/account?read_doc=Sterling LWB5+`), checked 2026-11-14. |
+| **Local copy** | none |
+| **Section applied** | Scope (public): "either SDIO or USB2.0 interface for WLAN connection and UART/PCM, USB2.0/PCM for Bluetooth". No other section is cited until the full document is in hand. |
+| **Cited in** | `docs/WIFI_MODULE_OD20_BRIEF.md` |
+| **Openness / sourcing** | **Requires verification** against the sourcing rule: a free account login is not an NDA, but the document is not public. Owner to decide. |
+
+### REF-SENSOR-067: Infineon AIROC CYW4373 / CYW4373E product brief
+
+| Field | Value |
+|---|---|
+| **Publisher** | Infineon Technologies, *AIROC CYW4373 Wi-Fi 5 + Bluetooth 5.2 Combo* product brief |
+| **Official access** | <https://www.infineon.com/assets/row/public/documents/30/45/infineon-wifi-cyw4373-productbrief-en.pdf?fileId=8ac78c8c8eeb092c018f39765aa9351b> (HTTP 200, 2026-11-14) |
+| **Local copy** | `avionics/datasheets/infineon/infineon-wifi-cyw4373-productbrief-en.pdf` (MD5 23b8e888170d2617eb075f0f5f58bebc) |
+| **Section applied** | Page 1 description: the CYW4373E variant supports −40 to +85 °C; host interfaces SDIO, PCIe and "USB Hub shared with Bluetooth" |
+| **Cited in** | `docs/WIFI_MODULE_OD20_BRIEF.md` |
+| **Openness / sourcing** | Public. Infineon is German-domiciled. The full CYW4373E data sheet is behind an Infineon sign-in ("gated"). |
+
+### REF-SENSOR-068: Infineon Connectivity technical brief for Linux
+
+| Field | Value |
+|---|---|
+| **Publisher** | Infineon Technologies, *Connectivity technical brief for Linux* (additional technical information) |
+| **Official access** | <https://www.infineon.com/assets/row/public/documents/30/57/infineon-connectivity-technical-brief-for-linux-additionaltechnicalinformation-en.pdf> (HTTP 200, 2026-11-14) |
+| **Local copy** | `avionics/datasheets/infineon/infineon-connectivity-technical-brief-for-linux-en.pdf` (MD5 4b21fe7a368bfd3f14061beda9507b01) |
+| **Section applied** | §2.2 Kernel support policy (backports for non-EOL LTS kernels); device status table (CYW4373/4373E: ACTIVE); host interfaces SDIO and USB |
+| **Cited in** | `docs/WIFI_MODULE_OD20_BRIEF.md` |
+| **Openness / sourcing** | Public. |
 ### REF-SENSOR-022: TDK InvenSense ICM-42688-P — 6-axis IMU data sheet DS-000347 v1.6
 
 | Field | Value |

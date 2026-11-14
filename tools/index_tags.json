@@ -3881,6 +3881,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/ezurio/sterling-lwb5plus-usb-adapter-datasheet-v1.2.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/feetech/6391731564544371956530548.pdf": {
       "description": "PDF document",
       "tags": [
@@ -3951,10 +3958,25 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/infineon/infineon-connectivity-technical-brief-for-linux-en.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/infineon/infineon-optiga-trust-m-datasheet-en.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/infineon/infineon-wifi-cyw4373-productbrief-en.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware",
+        "comms-protocol"
       ],
       "archived": false
     },
@@ -19069,6 +19091,7 @@
       "airframe/placeholders/gcs/Antenna_49MHz_whip_940mm.stl",
       "airframe/placeholders/wiring/Post_49MHz_base_load_coil.stl",
       "airframe/placeholders/wiring/Wire_49MHz_antenna_0p3mm_470mm.stl",
+      "avionics/datasheets/infineon/infineon-wifi-cyw4373-productbrief-en.pdf",
       "avionics/firmware/cn/src/xcvr_kiss.c",
       "avionics/firmware/cn/src/xcvr_kiss.h",
       "avionics/firmware/common/include/ax25_types.h",
@@ -19237,6 +19260,7 @@
       "avionics/datasheets/extracted/AM625_PB2I_header_mux.json",
       "avionics/datasheets/extracted/TPSM828224SILR_c2607d.json",
       "avionics/datasheets/extracted/manifest.json",
+      "avionics/datasheets/ezurio/sterling-lwb5plus-usb-adapter-datasheet-v1.2.pdf",
       "avionics/datasheets/feetech/6391731564544371956530548.pdf",
       "avionics/datasheets/feetech/feetech-sts3215-c018.pdf",
       "avionics/datasheets/hirose/hiro-s-a0003496442-1.pdf",
@@ -19247,7 +19271,9 @@
       "avionics/datasheets/infineon/SLB_9670VQ20_Infineon.pdf",
       "avionics/datasheets/infineon/SLB_9672XU20_Infineon.pdf",
       "avionics/datasheets/infineon/esd101-b1.pdf",
+      "avionics/datasheets/infineon/infineon-connectivity-technical-brief-for-linux-en.pdf",
       "avionics/datasheets/infineon/infineon-optiga-trust-m-datasheet-en.pdf",
+      "avionics/datasheets/infineon/infineon-wifi-cyw4373-productbrief-en.pdf",
       "avionics/datasheets/infineon/slb9672.pdf",
       "avionics/datasheets/johanson/johanson-0915lp15b026e.pdf",
       "avionics/datasheets/johanson/johanson-2450bp15e0100.pdf",

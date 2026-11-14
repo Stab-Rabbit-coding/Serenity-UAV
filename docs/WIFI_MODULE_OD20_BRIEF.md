@@ -48,14 +48,21 @@ The PB2-I brings no SDIO to its headers, so Wi-Fi has to come in over USB1 (owne
 | Wire harness, fastener and mounting fit | Option 1: one U.FL pigtail to the antenna. Option 2: adds an M.2 socket, standoff and screw. Option 3: adds a cable and a non-locking plug. |
 | Thermal load | Not yet computed; the radio's transmit dissipation joins the board budget in S34. |
 
+## Checks run after the decision (2026-11-14)
+
+| Open item | Finding | Source |
+|---|---|---|
+| Temperature rating | The CYW4373E silicon is rated −40 to +85 °C; so is the Ezurio USB adapter built on it. The solder-down module's own rating is in its gated data sheet. | [REF-SENSOR-067], [REF-SENSOR-065] |
+| USB mode on the solder-down module | The module data sheet's public scope says the series provides "either SDIO or USB2.0 interface for WLAN" and "USB2.0/PCM for Bluetooth". Which order code is the USB build, and its strapping, are in the gated body. | [REF-SENSOR-066] |
+| Mainline driver | **Confirmed.** The stock Ubuntu `linux-modules-extra-6.8.0-149-generic` `brcmfmac.ko` lists USB ID `04B4:BD29` and requests `brcm/brcmfmac4373.bin` (the USB firmware; the SDIO build uses `brcmfmac4373-sdio.bin`). Infineon lists CYW4373/4373E as ACTIVE with backports for non-EOL LTS kernels. Whether `brcmfmac4373.bin` ships in `linux-firmware` was not checked. | module read 2026-11-14; [REF-SENSOR-068] |
+| Transmit current | Adapter peak at USB VBUS (5 V): 345 mA (5 GHz, VHT80, MCS0); 2.4 GHz peak 300 mA. That is about 1.7 W at the adapter input, an upper bound for the module, which drops the adapter's buck regulator. | [REF-SENSOR-065] |
+| Mass | The adapter is about 0.25 oz (7 g) with its case and USB-A plug; the bare module is lighter. Module mass is in the gated data sheet. | [REF-SENSOR-065] |
+
 ## Still unverified
 
-1. USB mode and the temperature rating of the solder-down 453-00045 module, from Ezurio's hardware integration guide.
-2. Whether the 453-00049 M.2 part is USB (Ezurio) or SDIO (one distributor).
-3. The CYW4373E USB ID in the current mainline brcmfmac device table, and its firmware in linux-firmware.
-4. Transmit current and module mass.
-
-None of these sources is catalogued in `REFERENCES.md` yet; that is S35 work, before any design file cites them.
+1. The USB order code of the solder-down 453-00045 family, its USB strapping, its own temperature rating and its mass: all in the module data sheet behind the Ezurio login.
+2. Whether a login-gated data sheet satisfies the sourcing rule's "public, NDA-free" test (owner).
+3. `brcmfmac4373.bin` in `linux-firmware`.
 
 ## Sources
 
@@ -70,4 +77,4 @@ None of these sources is catalogued in `REFERENCES.md` yet; that is S35 work, be
 
 ## Owner decision
 
-- [ ] OD-20: USB Wi-Fi module — **1 (recommended, after the integration-guide check)** / 2 / 3.
+- [x] OD-20: USB Wi-Fi module — **1** / 2 / 3. **Decided 2026-11-14 by the owner: option 1**, the Sterling-LWB5+ solder-down module in USB mode.
