@@ -10472,6 +10472,15 @@
       ],
       "archived": false
     },
+    "docs/WIFI_MODULE_OD20_BRIEF.md": {
+      "description": "USB Wi-Fi Module for TACCO and NoNFO-Pilot-PB2 \u2014 Owner Decision Brief (OD-20)",
+      "tags": [
+        "comms-protocol",
+        "documentation",
+        "emi-hardening"
+      ],
+      "archived": false
+    },
     "docs/WING_ATTACH_INTERFACE.md": {
       "description": "Wing Attachment Interface Specification \u2014 Rev S1e",
       "tags": [
@@ -16954,6 +16963,7 @@
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
       "docs/WBS_FEDERATION.md",
+      "docs/WIFI_MODULE_OD20_BRIEF.md",
       "docs/WING_ATTACH_INTERFACE.md",
       "docs/WING_SECTION_POLAR_COMPARISON.md",
       "docs/attribution_and_licensing.md",
@@ -17467,6 +17477,7 @@
       "docs/TILT_SPAR_ANALYSIS.md",
       "docs/Tilt-Rotor 10AWG Wire Clearance Analysis.md",
       "docs/WBS_FEDERATION.md",
+      "docs/WIFI_MODULE_OD20_BRIEF.md",
       "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
       "docs/electrical_fault_margins.md",
       "docs/ideation/2026-10-31-aft-cg-single-pivot-options-ideation.md",
@@ -19079,6 +19090,7 @@
       "avionics/kicad/complete_xcvr_49mhz2.py",
       "avionics/kicad/fix_xcvr_labels.py",
       "avionics/kicad/tools/swap_1553_hi6138.py",
+      "docs/WIFI_MODULE_OD20_BRIEF.md",
       "docs/brainstorms/2026-09-29-commo-49mhz-single-chip-search.md",
       "docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md",
       "gcs/skipper/software/config/mavlink_router.conf",

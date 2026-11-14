@@ -1125,6 +1125,8 @@ customer. Plan and sprints S34–S41:
     Root `AGENTS.md` §9 lists Simon as A / C / A / P; plan 2026-10-31-003 R3 calls the merged
     stack the PACE Emergency path. The two disagree. The role is an input to OD-18. Gates S34.
 - [ ] **NFP-OD20** — ★ Owner: USB Wi-Fi module part (also blocks TACCO fab).
+    Brief `docs/WIFI_MODULE_OD20_BRIEF.md` (2026-11-14) recommends the Ezurio Sterling-LWB5+
+    solder-down module in USB mode, once its integration guide confirms USB mode.
     Open since 2026-09-29 (§1.2a). Gates S35.
 - [ ] **NFP-FIT** — Real-mesh fit gate for the stern stack at Simon (S34).
     Outline 3.402 × 2.098 in (86.4 × 53.3 mm) against the present stack box of
