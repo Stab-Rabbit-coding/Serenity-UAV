@@ -22,7 +22,7 @@ execution: code
 - **Objective.** Take NoNFO-Pilot-PB2 from ideation to fab-ready: ERC 0, DRC 0, schematic parity 0, unconnected 0, Gerbers generated, on KiCad 9.0.2. It becomes the stern (Simon) control stack of Serenity Rev U.
 - **Product authority.** Owner (Stab-Rabbit-coding). Sprint order is a recommendation; each owner-decision gate needs the owner's word.
 - **Mode.** Governed. This plan creates no second task list. Board items live in `SecureControllers:TODO.md` §5; airframe items live in `avionics/WBS.md` §1.11; sprints S34 to S41 are indexed in Theme A of `docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md`.
-- **Stop conditions.** A sprint does not start if its owner decision is open. A failed fit or mass gate stops layout and goes to the owner as an Owner Decision Brief (`docs/DOC_TEMPLATES.md`).
+- **Stop conditions.** A sprint does not start if its owner decision is open. A fit or mass gate that still fails after the one pre-authorised re-run without GNSS stops layout and goes to the owner as an Owner Decision Brief (`docs/DOC_TEMPLATES.md`).
 - **Out of scope.** The BBE-hosted variant. Firmware (Theme F). Any change to the three full stacks.
 
 ---
@@ -35,7 +35,7 @@ One board carries the Pilot and TACCO functions on one PocketBeagle 2 Industrial
 
 ### Problem Frame
 
-The 2026-10-31 forward-trim work showed the CG cannot close by relocation alone at 24 in (610 mm). The stern stack sits at Y 494.7, the longest avionics arm, so mass removed there buys the most trim. The ledger credits the merged stack with −0.128 lbm (−58 g) and about 0.055 in (1.4 mm) of CG (`tools/min_stretch_relocation.py`, `docs/ideation/2026-10-31-forward-trim-relocation-ideation.md` row 4).
+The 2026-10-31 forward-trim work showed the CG cannot close by relocation alone at 24 in (610 mm). The stern stack sits at Y 494.7, the longest avionics arm, so mass removed there buys the most trim. The ledger credits the merged stack with −0.128 lbm (−58 g) and about 0.055 in (1.4 mm) of CG (`tools/min_stretch_relocation.py`, `docs/ideation/2026-10-31-forward-trim-relocation-ideation.md` row 4). That credit assumed a merged board as light as Pilot; the first estimate here is under half of it (see Risks).
 
 Two facts make the board hard:
 
@@ -56,7 +56,7 @@ Two facts make the board hard:
 #### Stack and airframe
 
 - R1. The stern stack shall be one NoNFO-Pilot-PB2 board and one PB2-I. The other three stacks shall not change.
-- R2. The stern stack, pouched or shielded as fitted, shall weigh no more than 0.132 lbm (60 g), which holds the −0.128 lbm (−58 g) ledger credit against the present 0.260 lbm (118 g) pair.
+- R2. The stern stack, pouched, shall weigh no more than 0.108 lbm (49 g). That holds the −0.128 lbm (−58 g) ledger credit against the present pouched pair of 0.236 lbm (107 g) (`tools/middle_layout_fit.py`: CN4 58 g + FC4 49 g). If the stack is heavier, the credit the owner accepts under OD-21 replaces this figure.
 - R3. The board shall mate with the PB2-I P1/P2 headers and supply its 5 V.
 - R4. The board outline and mounting holes shall be 3.402 × 2.098 in (86.4 × 53.3 mm), common with the BBE variant.
 - R5. The assembled stack shall pass a real-mesh fit gate at the Simon site before layout starts.
@@ -77,16 +77,22 @@ Two facts make the board hard:
 - R14. The board shall keep Pilot Rev T's functional isolation: a named `ISO_BAND` rule area and a 0.5 mm `ISOLATION` rule in the `.kicad_dru`, with every isolated device in one island on one edge.
 - R15. Every part shall pass the component-sourcing gate (`AGENTS.md` §5) and every footprint shall be verified against its OEM datasheet before it enters the schematic.
 
+#### Quality checks (owner direction 2026-11-14, PR #289)
+
+- R16. Every brief and design review for this board shall use the avionics check set in `docs/DOC_TEMPLATES.md`: electrical engineering (electrical load and emissions) in place of statics and dynamics, and wire-harness, fastener and mounting fit in place of canonical shape.
+- R17. The mass and CG of the board's fasteners, connectors and wire harness shall be tracked as separate ledger lines for this board.
+- R18. A thermal load check shall cover the board, its host and its power parts at the worst-case electrical load.
+
 ### Success Criteria
 
 - `kicad-cli sch erc`: 0 errors. `kicad-cli pcb drc --schematic-parity`: 0 violations, 0 unconnected, 0 parity. Gerbers, drill, position and BOM files generated.
 - `pin_ledger.py --require <chosen option>` exits 0.
-- Fit gate PASS at Simon. Measured or computed stack mass ≤ 0.132 lbm (60 g), or an owner-accepted revised credit.
+- Fit gate PASS at Simon. Computed stack mass ≤ 0.108 lbm (49 g), or no less than the credit floor the owner sets under OD-21.
 - Every open item in `SecureControllers:TODO.md` §5.0 and §5.2 closed or carried with a dated note.
 
 ### Scope Boundaries
 
-- Not in this plan: the BBE variant; the host-link, device-tree and MCU firmware (handed to S22 and S23); a new Simon saddle print (airframe work, only if the fit gate asks for it).
+- Not in this plan: the BBE variant; the host-link, device-tree and MCU firmware (handed to S22 and S23); printing or structurally redesigning the Simon saddle (airframe work). The saddle's parametric source and its envelope-sync check **are** in scope for S41, sized by the S34 fit result.
 
 #### Deferred to Follow-Up Work
 
@@ -97,9 +103,10 @@ Two facts make the board hard:
 
 | ID | Question | Needed before |
 |---|---|---|
-| OD-18 | Architecture: A / A-diet / B / B+ (brief recommends B+) | S34 |
-| OD-19 | PACE role of the stern stack. `AGENTS.md` §9 lists Simon as A / C / A / P. The 2026-10-31 plan R3 calls the merged stack the PACE Emergency path. The two disagree; the owner adjudicates. | S41 |
-| OD-20 | USB Wi-Fi module part (open since 2026-09-29, a fab blocker on TACCO as well) | S35 |
+| OD-18 | Architecture: A / A-diet / B / B+ (brief recommends B+). Decided after the pre-decision check PD1 below is appended to the brief. | S34 |
+| OD-19 | PACE role of the stern stack. `AGENTS.md` §9 lists Simon as A / C / A / P. The 2026-10-31 plan R3 calls the merged stack the PACE Emergency path. The two disagree; the owner adjudicates. The role is an input to OD-18: the brief's case for B+ leans on the Emergency role. | S34 |
+| OD-20 | USB Wi-Fi module part (open since 2026-09-29, a fab blocker on TACCO as well). A hard gate: S35 does not start without it. | S35 |
+| OD-21 | Smallest mass credit worth building the merged board for. The first estimate is about −26 g against the −58 g planned. Below the floor, the outline (KD3) or the whole merge goes back to the owner. | S34 |
 
 ---
 
@@ -111,7 +118,7 @@ Two facts make the board hard:
 - **KTD2. Generate, then gate.** Schematic, footprints and PCB come from generator scripts, in the gate order recorded in `avionics/kicad/Pilot/Pilot.md` (gen sch → ERC 0 → netlist → footprints → gen PCB → DRC with parity → route → finish → Gerbers).
 - **KTD3. The pin ledger is the single source for the header.** The schematic header table and the Markdown pin map are generated from `pb2_net_demand.json`; nothing is typed twice. This closes the failure recorded in `avionics/WBS.md` where a hand map shorted VIN to ground.
 - **KTD4. Isolation cells first.** Each bus cell is placed, routed and DRC-proven alone on a stripped board, then injected as a locked group. Routers start from stripped boards only: freerouting 2.2.4 hangs on existing copper (`avionics/kicad/Pilot/Pilot.md`).
-- **KTD5. The PB2-I rides on top.** The carrier is the base with its header strips up; only the PB2-I shadow keeps the low height limit, and the PB2-I's own USB-C is the programming port (ideation idea 4). The fit gate in S34 tests this arrangement.
+- **KTD5. The PB2-I rides on top.** The carrier is the base with its header strips up; only the PB2-I shadow keeps the low height limit, and the PB2-I's own USB-C is the programming port (idea 4 of `SecureControllers:docs/ideation/2026-10-12-nonfo-pilot-pb2-ideation.html`). The fit gate in S34 tests this arrangement.
 - **KTD6. One zone contract file.** Outline, holes, connector edge, zones and height limits sit in one file read by the generators, the DRC rule areas and the fit gate, so the BBE variant can reuse it.
 - **KTD7. Sprint numbers are new, not renumbered.** S34 to S41 extend the Rev U plan after S33 and are indexed under Theme A. They may run any time from S13 on; they depend only on their own gates.
 
@@ -120,17 +127,30 @@ Two facts make the board hard:
 - The TACCO microSD slot is not carried: MMC2 data does not reach the PB2-I header, so the slot has no host. Logging uses the PB2-I eMMC and the NOR flash.
 - One TPM, on the PB2-I SPI0, in every architecture option.
 - The 49 MHz sub-module header named in the BBE plan is not carried unless the owner asks; Commo owns 49 MHz under Rev T.
-- Mass diet KD1 (no foil pouch) applies; the stack height limit is then 0.81 in (20.5 mm) unpouched.
+- The mass-diet plan's decision to drop foil pouches (2026-10-26-003, its KD1) applies; the stack height limit is then 0.81 in (20.5 mm) unpouched. R2 is stated pouched so it compares like with like against the ledger.
+- Requirements R7 and R12, the file lists and the session estimates assume option B+, the only option the pin ledger shows carrying the full function set. A different OD-18 choice reopens R7, R8 and R12 and the estimates before S34 starts.
+- **Gate failure order.** KD5 pre-authorises removing GNSS. A failed fit, mass or routing gate is re-run once without GNSS before anything else. If it still fails, work stops and the result goes to the owner as an Owner Decision Brief. The routing gate is S39 reaching its pessimistic estimate with unconnected above 0.
 
 ### Risks
 
 | Risk | Effect | Mitigation |
 |---|---|---|
 | The outline is 0.37 in (9.4 mm) longer than the present Simon stack box (3.03 in (77 mm)) | Fit gate fails | S34 runs the gate on real meshes before any layout; a fail goes to the owner with options (new saddle, rotate, custom outline) |
-| The −58 g credit assumed a merged board as light as Pilot. A first estimate puts the board near 0.14 lbm (63 g) and the stack near 0.18 lbm (81 g), a credit of about −37 g [CALC, unverified] | CG closes by less than planned | S34 computes mass from the part list and a 0.039 in (1.0 mm) board option; R2 is a gate; GNSS goes first |
-| Host-link firmware does not exist (options B, B+) | Board fabs before it can talk to its buses | Board sprints do not depend on it; S41 hands a written interface to Theme F |
-| MSPM0G3519-Q1 RGZ-48 function map unverified for 31 lines | Option B+ may need the 64-pin package | First task of S34 |
-| Wi-Fi module still unchosen | Fab blocker | OD-20 gates S35; the hub lets the board fab with the module footprint unpopulated |
+| The −58 g credit assumed a merged board as light as Pilot (31 g). A first estimate puts the board near 0.14 lbm (63 g) and the pouched stack near 0.18 lbm (81 g): a credit of about −26 g, under half the plan figure [CALC, unverified] | R2 is not expected to hold as written; CG closes by about 0.02 in (0.6 mm), not 0.055 in (1.4 mm) | OD-21 sets the smallest credit worth building for, before S34. S34 computes mass from the part list and fills the lever table below |
+| Host-link firmware does not exist (options B, B+), and the link shares SPI0 with the IMU, barometer, TPM, flash and 802.15.4 radio | A throughput or electrical fault found after fab costs a respin | Bench task PB1 (owner, physical): a PB2-I to MSPM0G3519-Q1 SPI link on Observer hardware carrying CAN-FD frames at bus rate beside IMU traffic, worst-case latency measured. PB1 gates the fab **order**, not Gerber generation. S41 hands Theme F the written interface |
+| MSPM0G3519-Q1 RGZ-48 function map unverified for 31 lines (the package bonds 44 I/O pins, so the count fits; the function assignment is unchecked) | Option B+ may need the 64-pin package | Pre-decision check PD1, before OD-18 |
+| Wi-Fi module still unchosen | Fab blocker | OD-20 is a hard gate on S35 |
+
+### Mass levers (first estimate, all [CALC, unverified]; S34 replaces every row with a computed value)
+
+| Lever | Recovers | Note |
+|---|---:|---|
+| Board 0.039 in (1.0 mm) in place of 0.063 in (1.6 mm) | about 5 g | Stiffness over the 3.4 in span to be checked |
+| No foil pouch (mass-diet plan 2026-10-26-003) | 5 g | Also removes 5 g from the baseline pair's share, so the net gain in credit is 0 if all pouches go |
+| GNSS removed (KD5) | about 2 g | Receiver, filter, connector |
+| Outline cut to fit the function, not the BBE outline | about 1 g per 0.4 in² (2.6 cm²) | Reverses KD3; owner decision only |
+
+No listed lever closes the gap from about 81 g to 49 g. That is why OD-21 exists.
 
 ### Sources and Research
 
@@ -147,7 +167,7 @@ Two facts make the board hard:
 
 Sprints follow §4 of the Rev U plan: one session, 7 points of scope, the same close-out ritual (`ce-doc-review`, `ce-code-review`, `ce-compound`, `ce-commit-push-pr`, burndown). **Est.** is sessions, optimistic / most likely / pessimistic. **Exit** is what has to measure true. **Skills** names the repository skills each sprint uses.
 
-Tooling: KiCad 9.0.2 (`kicad-cli version` reads 9.0.2). The cloud environment cannot reach the KiCad PPA, so the session unpacks the official `kicad/kicad:9.0.2` image; S34 records the method in `docs/solutions/`.
+Tooling: KiCad 9.0.2 (`kicad-cli version` reads 9.0.2). The cloud environment cannot reach the KiCad PPA, so the session unpacks the official `kicad/kicad:9.0.2` image; S35, the first sprint to run KiCad, records the method in `docs/solutions/`.
 
 ```mermaid
 flowchart LR
@@ -160,7 +180,11 @@ flowchart LR
   S38 --> S39[S39 routing, DRC 0]
   S39 --> S40[S40 fab outputs and reviews]
   S40 --> S41[S41 airframe integration record]
-  OD19[OD-19 PACE role] --> S41
+  OD19[OD-19 PACE role] --> S34
+  OD21[OD-21 mass floor] --> S34
+  PD1[PD1 MCU map check] --> OD18
+  PB1[PB1 host-link bench] -.-> FAB[fab order]
+  S40 --> FAB
 ```
 
 | Sprint | Unit | Goal | Est. | Closes (min.) |
@@ -176,6 +200,18 @@ flowchart LR
 
 Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 items closed.
 
+**Pre-decision check PD1 (before OD-18, under one session).** Map the 31 B+ lines onto the MSPM0G3519-Q1 RGZ-48 function table [REF-SENSOR-017 Table 6-2], and count the write-block PLD inputs its fuse map really uses. Append the result to `SecureControllers:kicad/NoNFO-Pilot/PB2/ARCHITECTURE_BRIEF.md`. Exit: every line has a pin and a function, or the brief names the 64-pin package.
+
+**Session checkpoints.** A sprint estimated at more than one session closes one checkpoint per session, each with its own measurable exit:
+
+| Sprint | Session checkpoints (exit) |
+|---|---|
+| S35 | (a) reused footprints loaded and verified (0 unverified among reused); (b) new parts sourced and verified (0 unverified overall) |
+| S36 | (a) all generator blocks emit a netlist (ledger-match test passes); (b) ERC 0 and CI job green |
+| S37 | (a) CAN-FD, RS-485 and 1553 cells DRC 0; (b) two Ethernet magnetics cells DRC 0 |
+| S38 | (a) every part placed in its zone (height map passes); (b) pre-route DRC hard classes 0 and fit gate PASS |
+| S39 | (a) USB, RMII and clock nets routed to rule (those nets unconnected 0); (b) autoroute pass (unconnected ≤ 10); (c) pours, stitching, DRC 0 and unconnected 0 |
+
 ---
 
 ## Implementation Units
@@ -184,7 +220,7 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 
 **Goal:** Turn "does it fit" into three computed answers (pins, volume, mass) before any schematic exists.
 
-**Requirements:** R2, R4, R5, R10, R13; KD3, KD6, KTD3, KTD6. Needs OD-18.
+**Requirements:** R2, R4, R5, R10, R13, R17, R18; KD3, KD6, KTD3, KTD6. Needs OD-18, OD-19, OD-21 and PD1.
 
 **Dependencies:** none.
 
@@ -193,14 +229,16 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 - `SecureControllers:kicad/NoNFO-Pilot/PB2/pin_ledger/mcu_net_demand.json` (new, options B and B+ only)
 - `SecureControllers:kicad/NoNFO-Pilot/PB2/zone_contract.json` (new)
 - `SecureControllers:kicad/NoNFO-Pilot/PB2/tests/test_pin_ledger.py` (new)
+- `SecureControllers:.github/workflows/kicad.yml` (new; ledger and test job only)
 - `tools/nonfo_simon_fit.py`, `tools/tests/test_nonfo_simon_fit.py` (new)
 - `SecureControllers:kicad/NoNFO-Pilot/PB2/NoNFO-Pilot-PB2.md` (new board status file)
 
 **Approach:**
-1. Freeze the net list for the chosen option and check the MCU side against the MSPM0G3519-Q1 RGZ-48 function table [REF-SENSOR-017 Table 6-2].
+1. Freeze the net list for the chosen option and turn the PD1 mapping into the MCU-side ledger file.
 2. Write the zone contract: outline, holes, PB2-I shadow, isolation island edge, RF zone, power entry, height limits.
 3. Fit the stack envelope (board, PB2-I on top, tallest parts per zone) into the scaled aft-neck mesh at the Simon site, in the pattern of `tools/middle_layout_fit.py`.
-4. Compute stack mass from the merged part list for 0.063 in (1.6 mm) and 0.039 in (1.0 mm) boards.
+4. Compute stack mass from the merged part list for 0.063 in (1.6 mm) and 0.039 in (1.0 mm) boards, with fasteners, connectors and harness as separate lines, and fill the mass-lever table.
+6. Write the electrical load budget (5 V and 3V3, typical and peak) and a first thermal load estimate against the Bay D ambient.
 5. Catalogue the inherited references under non-colliding IDs (`SecureControllers:TODO.md` 5.0.2).
 
 **Patterns to follow:** `tools/middle_layout_fit.py`, `tools/check_tacco_envelope_sync.py`.
@@ -212,7 +250,7 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 - The fit tool reports FAIL for a box 0.04 in (1 mm) larger than the cavity and PASS for one 0.04 in smaller.
 - Dropping the GNSS nets raises the spare count.
 
-**Verification:** `pin_ledger.py --require <option>` exits 0 for the header and the MCU. Fit gate prints PASS, or an Owner Decision Brief is filed. Mass table shows ≤ 0.132 lbm (60 g), or a brief is filed. `SecureControllers:TODO.md` 5.0.2, 5.0.3, 5.2.2, 5.2.3, 5.2.4 closed. **Skills:** `computer-engineering`, `datasheets`, `mechanical-engineering`, `project-overseer`.
+**Verification:** `pin_ledger.py --require <option>` exits 0 for the header and the MCU, and the CI ledger job is green. Fit gate prints PASS. Mass table meets R2 or the OD-21 floor. A failed gate follows the gate failure order in Assumptions. `SecureControllers:TODO.md` 5.0.2, 5.0.3, 5.2.3, 5.2.4, 5.2.6 closed; `avionics/WBS.md` §1.11 NFP-OD18, NFP-FIT, NFP-MASS closed. **Skills:** `computer-engineering`, `datasheets`, `mechanical-engineering`, `project-overseer`.
 
 ### U2. S35 — Parts sourced, footprints verified
 
@@ -238,7 +276,7 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 - Summed courtyard area per zone is no more than 80 % of that zone.
 - A part from a restricted-country manufacturer fails the gate (negative control with a known rejected candidate).
 
-**Verification:** 0 footprints unverified; courtyard budget table passes; rejected-candidate table present. **Skills:** `datasheets`, `digikey`, `mouser`, `bom`, `kicad`, `pcb-engineer`.
+**Verification:** 0 footprints unverified; courtyard budget table passes; rejected-candidate table present. `SecureControllers:TODO.md` 5.2.5 and 5.2.7 closed; `avionics/WBS.md` §1.11 NFP-OD20 closed. **Skills:** `datasheets`, `digikey`, `mouser`, `bom`, `kicad`, `pcb-engineer`.
 
 ### U3. S36 — Schematic generator, ERC 0
 
@@ -252,7 +290,7 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 - `SecureControllers:kicad/NoNFO-Pilot/PB2/scripts/gen_nonfo_pb2_sch.py` (new)
 - `SecureControllers:kicad/NoNFO-Pilot/PB2/kicads/NoNFO-Pilot-PB2.kicad_sch`, `.kicad_pro`, `.kicad_sym`, `sym-lib-table`, `fp-lib-table`, `.net` (generated)
 - `SecureControllers:kicad/NoNFO-Pilot/PB2/tests/test_sch_matches_ledger.py` (new)
-- `SecureControllers:.github/workflows/kicad.yml` (new)
+- `SecureControllers:.github/workflows/kicad.yml` (extended with the ERC and ledger-match jobs)
 
 **Approach:** Port the Pilot and TACCO generator blocks, one block per function, with the header table read from the ledger. Size the 5 V entry and the 3V3 rails for the merged worst case with radio transmit peaks, and simulate the regulator and filter blocks.
 
@@ -341,7 +379,7 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 
 **Goal:** A fabrication package and its review records.
 
-**Requirements:** R2, Success Criteria.
+**Requirements:** R2, R16, R17, R18, Success Criteria.
 
 **Dependencies:** U6.
 
@@ -357,14 +395,16 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 - EMC review: 0 critical findings; each accepted finding has a reason.
 - Fabricator rule check: 0 violations for the chosen fabricator.
 - Computed board mass from the STEP agrees with the U1 estimate within 10 %.
+- Thermal check: every part's computed junction temperature at peak load and design ambient is below its datasheet limit, with the margin stated.
+- The design review carries all six avionics checks, none blank.
 
-**Verification:** fab package complete; EMC and DFM records in the board file; R2 holds. **Skills:** `kidoc`, `emc`, `bom`, `jlcpcb`, `pcbway`, `kicad`.
+**Verification:** fab package complete; EMC, thermal and DFM records in the board file; R2 or the OD-21 floor holds. The fab order itself waits on bench task PB1. **Skills:** `kidoc`, `emc`, `bom`, `jlcpcb`, `pcbway`, `kicad`.
 
 ### U8. S41 — Airframe integration record
 
-**Goal:** Serenity's records describe the aircraft as built: seven nodes, a merged stern stack.
+**Goal:** Serenity's records describe the aircraft as designed: seven nodes, a merged stern stack.
 
-**Requirements:** R1, R2. Needs OD-19.
+**Requirements:** R1, R2, R17.
 
 **Dependencies:** U7.
 
@@ -375,7 +415,7 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 - `airframe/openscad/` Simon saddle source and `tools/check_tacco_envelope_sync.py`
 - `avionics/WBS.md` §1.11, `docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md`
 
-**Approach:** Enter the stern stack in the ledger at its measured mass and station. Add a BOM row. Couple the saddle to the board outline in CI. Hand Theme F a written host-link and device-tree interface.
+**Approach:** Enter the stern stack in the ledger at its computed mass (S40 STEP and BOM, marked [CALC] until a built board is weighed) and station, with its fasteners, connectors and harness as their own lines. Add a BOM row. Update the saddle's parametric source to the outline and couple the two in CI. Hand Theme F a written host-link and device-tree interface.
 
 **Test scenarios:**
 - The ledger's total falls by the stack's mass delta and the CG moves forward.
@@ -383,7 +423,7 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 - The envelope-sync check fails when the board outline constant is changed without the saddle (negative control).
 - `gen_todo_from_wbs.py --check` and `precommit_index.py --check` exit 0.
 
-**Verification:** ledger, BOM and policy files agree on seven nodes; all `--check` tools exit 0; §1.11 items closed. **Skills:** `aeronautical-engineering`, `statics-and-dynamics`, `project-overseer`.
+**Verification:** ledger, BOM and policy files agree on seven nodes; all `--check` tools exit 0; `avionics/WBS.md` §1.11 NFP-OD19, NFP-LEDGER, NFP-SADDLE, NFP-POLICY, NFP-FW-IF closed and no §1.11 item left open. **Skills:** `aeronautical-engineering`, `statics-and-dynamics`, `project-overseer`.
 
 ---
 
@@ -397,6 +437,6 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 ## Definition of Done
 
 - Every Success Criterion measures true and is recorded in `SecureControllers:kicad/NoNFO-Pilot/PB2/NoNFO-Pilot-PB2.md`.
-- OD-18, OD-19 and OD-20 are recorded as decided, with dates.
+- OD-18, OD-19, OD-20 and OD-21 are recorded as decided, with dates.
 - No abandoned generator, cell or scratch board remains in either repository.
 - Each sprint's lessons are in `docs/solutions/`.

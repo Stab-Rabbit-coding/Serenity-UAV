@@ -1116,16 +1116,31 @@ customer. Plan and sprints S34–S41:
     header with every function aboard. Gates S34.
 - [ ] **NFP-OD19** — ★ Owner: PACE role of the merged stern stack.
     Root `AGENTS.md` §9 lists Simon as A / C / A / P; plan 2026-10-31-003 R3 calls the merged
-    stack the PACE Emergency path. The two disagree. Gates S41.
+    stack the PACE Emergency path. The two disagree. The role is an input to OD-18. Gates S34.
 - [ ] **NFP-OD20** — ★ Owner: USB Wi-Fi module part (also blocks TACCO fab).
     Open since 2026-09-29 (§1.2a). Gates S35.
 - [ ] **NFP-FIT** — Real-mesh fit gate for the stern stack at Simon (S34).
     Outline 3.402 × 2.098 in (86.4 × 53.3 mm) against the present stack box of
     2.28 × 3.03 × 0.87 in (58 × 77 × 22 mm): the board is 0.37 in (9.4 mm) longer than the
     box. New tool `tools/nonfo_simon_fit.py`. A fail goes to the owner as a brief.
-- [ ] **NFP-MASS** — Stern stack mass gate: ≤ 0.132 lbm (60 g) holds the credit (S34).
-    The −58 g credit assumed a merged board as light as Pilot. First estimate: board about
-    0.14 lbm (63 g), stack about 0.18 lbm (81 g), credit about −37 g [CALC, unverified].
+- [ ] **NFP-MASS** — Stern stack mass gate: ≤ 0.108 lbm (49 g) holds the credit (S34).
+    Baseline is the pouched pair, 0.236 lbm (107 g) (`tools/middle_layout_fit.py` CN4 58 g +
+    FC4 49 g). The −58 g credit assumed a merged board as light as Pilot (31 g). First
+    estimate: board about 0.14 lbm (63 g), pouched stack about 0.18 lbm (81 g), credit about
+    −26 g [CALC, unverified]. Corrected 2026-11-14: the first entry used a 118 g baseline
+    that no ledger tool carries.
+- [ ] **NFP-OD21** — ★ Owner: smallest mass credit worth building the merge for.
+    First estimate is about −26 g against −58 g planned. Gates S34.
+- [ ] **NFP-PD1** — Map the 31 B+ lines onto the MSPM0G3519-Q1 RGZ-48 (before OD-18).
+    The package bonds 44 I/O pins, so the count fits; the function assignment is unchecked.
+    Result is appended to the architecture brief.
+- [ ] **NFP-PB1** — Bench: PB2-I to MSPM0 host link at bus rate (gates the fab order).
+    Owner, physical. CAN-FD frames at bus rate beside IMU traffic on SPI0, on Observer
+    hardware; record worst-case latency.
+- [ ] **NFP-QA** — Track fastener, connector and harness mass and CG per board.
+    Owner direction 2026-11-14 (PR #289). Starts with the stern stack (S34, S41); the same
+    lines are owed for Pilot, TACCO, Commo, Flight Engineer, gateway and Observer.
+- [ ] **NFP-THERM** — Thermal load check for the stern stack at peak electrical load (S40).
 - [ ] **NFP-LEDGER** — Enter the stern stack in the AUW ledger and BOM (S41).
 - [ ] **NFP-SADDLE** — Couple the Simon saddle to the new outline in CI (S41).
 - [ ] **NFP-POLICY** — Update root `AGENTS.md` §1 and §9 to seven nodes (S41).
