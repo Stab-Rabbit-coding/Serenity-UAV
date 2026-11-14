@@ -3881,7 +3881,21 @@
       ],
       "archived": false
     },
-    "avionics/datasheets/ezurio/sterling-lwb5plus-usb-adapter-datasheet-v1.2.pdf": {
+    "avionics/datasheets/ezurio/ezurio-datasheet-sterling-lwb5plus-usb-adapter.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ezurio/ezurio-datasheet-sterling-lwb5plus-v5.2.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ezurio/ezurio-guide-dvk-lwb5plus-v2.1.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -19260,7 +19274,9 @@
       "avionics/datasheets/extracted/AM625_PB2I_header_mux.json",
       "avionics/datasheets/extracted/TPSM828224SILR_c2607d.json",
       "avionics/datasheets/extracted/manifest.json",
-      "avionics/datasheets/ezurio/sterling-lwb5plus-usb-adapter-datasheet-v1.2.pdf",
+      "avionics/datasheets/ezurio/ezurio-datasheet-sterling-lwb5plus-usb-adapter.pdf",
+      "avionics/datasheets/ezurio/ezurio-datasheet-sterling-lwb5plus-v5.2.pdf",
+      "avionics/datasheets/ezurio/ezurio-guide-dvk-lwb5plus-v2.1.pdf",
       "avionics/datasheets/feetech/6391731564544371956530548.pdf",
       "avionics/datasheets/feetech/feetech-sts3215-c018.pdf",
       "avionics/datasheets/hirose/hiro-s-a0003496442-1.pdf",

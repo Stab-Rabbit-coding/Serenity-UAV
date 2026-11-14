@@ -1126,7 +1126,7 @@ customer. Plan and sprints S34–S41:
     stack the PACE Emergency path. The two disagree. The role is an input to OD-18. Gates S34.
 - [x] **NFP-OD20** — ★ Owner: USB Wi-Fi module part (also blocks TACCO fab).
     **DECIDED 2026-11-14 (owner): option 1**, Ezurio Sterling-LWB5+ solder-down module in USB
-    mode. Data sheets catalogued REF-SENSOR-065..068; the module data sheet body is login-gated.
+    mode. Data sheets catalogued REF-SENSOR-065..069.
     Brief `docs/WIFI_MODULE_OD20_BRIEF.md` (2026-11-14) recommends the Ezurio Sterling-LWB5+
     solder-down module in USB mode, once its integration guide confirms USB mode.
     Open since 2026-09-29 (§1.2a). Gates S35.
@@ -1153,7 +1153,10 @@ customer. Plan and sprints S34–S41:
 - [ ] **NFP-PB1** — Bench: PB2-I to MSPM0 host link at bus rate (gates the fab order).
     Owner, physical. CAN-FD frames at bus rate beside IMU traffic on SPI0, on Observer
     hardware; record worst-case latency.
-- [ ] **NFP-WIFI-DS** — Obtain the Sterling-LWB5+ module data sheet (Ezurio login).
+- [x] **NFP-WIFI-DS** — Obtain the Sterling-LWB5+ module data sheet (Ezurio login).
+    **DONE 2026-11-14:** owner supplied the module data sheet v5.2, the USB adapter data sheet
+    and the DVK guide (REF-SENSOR-065, 066, 069). USB mode is the `CONFIG_HOST = 000` strap;
+    −40 to +85 °C; 0.7 g; rail at least 0.8 A. Variant pick (MHF4, 453-00046) is open in S35.
     Needed for the USB order code, strapping, temperature rating and mass (S35). Owner to
     rule whether a login-gated data sheet passes the sourcing rule.
 - [ ] **NFP-QA** — Track fastener, connector and harness mass and CG per board.

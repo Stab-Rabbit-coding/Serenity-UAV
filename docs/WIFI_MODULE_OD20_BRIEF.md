@@ -50,19 +50,24 @@ The PB2-I brings no SDIO to its headers, so Wi-Fi has to come in over USB1 (owne
 
 ## Checks run after the decision (2026-11-14)
 
-| Open item | Finding | Source |
+The owner supplied the module data sheet [REF-SENSOR-066], the USB adapter data sheet [REF-SENSOR-065] and the development-kit guide [REF-SENSOR-069]. Every open item is now closed.
+
+| Item | Finding | Source |
 |---|---|---|
-| Temperature rating | The CYW4373E silicon is rated −40 to +85 °C; so is the Ezurio USB adapter built on it. The solder-down module's own rating is in its gated data sheet. | [REF-SENSOR-067], [REF-SENSOR-065] |
-| USB mode on the solder-down module | The module data sheet's public scope says the series provides "either SDIO or USB2.0 interface for WLAN" and "USB2.0/PCM for Bluetooth". Which order code is the USB build, and its strapping, are in the gated body. | [REF-SENSOR-066] |
-| Mainline driver | **Confirmed.** The stock Ubuntu `linux-modules-extra-6.8.0-149-generic` `brcmfmac.ko` lists USB ID `04B4:BD29` and requests `brcm/brcmfmac4373.bin` (the USB firmware; the SDIO build uses `brcmfmac4373-sdio.bin`). Infineon lists CYW4373/4373E as ACTIVE with backports for non-EOL LTS kernels. Whether `brcmfmac4373.bin` ships in `linux-firmware` was not checked. | module read 2026-11-14; [REF-SENSOR-068] |
-| Transmit current | Adapter peak at USB VBUS (5 V): 345 mA (5 GHz, VHT80, MCS0); 2.4 GHz peak 300 mA. That is about 1.7 W at the adapter input, an upper bound for the module, which drops the adapter's buck regulator. | [REF-SENSOR-065] |
-| Mass | The adapter is about 0.25 oz (7 g) with its case and USB-A plug; the bare module is lighter. Module mass is in the gated data sheet. | [REF-SENSOR-065] |
+| USB mode on the solder-down module | **Yes, by strap.** `CONFIG_HOST[2:0] = 000` puts Wi-Fi and Bluetooth both on USB 2.0 through the module's own hub. It is a strap on any 453-00045/46/47 part, not a separate order code. | [REF-SENSOR-066] Host Configuration Options |
+| Temperature | −40 to +85 °C operating and storage, module and silicon. | [REF-SENSOR-066], [REF-SENSOR-067] |
+| Mass and size | About 0.025 oz (0.7 g); 0.67 × 0.47 × 0.084 in (17 × 12 × 2.13 mm). | [REF-SENSOR-066] Mechanical |
+| Supply | VBAT 3.2 to 4.8 V (EVM and harmonics better at 3.6 V or more). With VBAT ≥ 3.6 V, the module's VOUT_3P3 feeds its VDDIO_RF and USB2_AVDD33. | [REF-SENSOR-066] |
+| Current | Transmit up to 441 mA (5 GHz, VHT80, MCS0, VBAT 3.6 V). Peak PHY calibration 768 mA (2.4 GHz, VBAT 3.3 V). **Size the rail for at least 0.8 A**, about 2.9 W at 3.6 V. | [REF-SENSOR-066] Current Consumption |
+| Mainline driver | Confirmed: stock Ubuntu 6.8 `brcmfmac` lists USB ID `04B4:BD29` and firmware `brcm/brcmfmac4373.bin`. | module read 2026-11-14; [REF-SENSOR-068] |
+| Antenna variant | 453-00045 integrated chip antenna; **453-00046 MHF4 connector**; 453-00047 trace pin. | [REF-SENSOR-066] Ordering Information |
+
+**Variant recommendation (not yet decided): 453-00046, the MHF4 connector.** The fleet feeds radios from airframe antennas over coax, and a chip antenna on a board inside the hull would radiate poorly. MHF4 is smaller than U.FL, so the plan's "U.FL for RF" line (R11) needs an MHF4 exception or an MHF4-to-U.FL pigtail. Take C (cut tape) for prototypes and R (reel) for production.
 
 ## Still unverified
 
-1. The USB order code of the solder-down 453-00045 family, its USB strapping, its own temperature rating and its mass: all in the module data sheet behind the Ezurio login.
-2. Whether a login-gated data sheet satisfies the sourcing rule's "public, NDA-free" test (owner).
-3. `brcmfmac4373.bin` in `linux-firmware`.
+1. `brcmfmac4373.bin` in `linux-firmware`.
+2. The supply choice: a dedicated 3.6 V rail (better EVM, and it lets the module make its own 3.3 V) or the shared 3V3_RF rail. S36 decides it in the power budget.
 
 ## Sources
 

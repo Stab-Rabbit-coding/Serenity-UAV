@@ -3299,27 +3299,38 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 **Used in:** `tools/head_layout_fit.py` and `airframe/openscad/fuselage/bow_sensor_pod.scad` (ToF pod, Rev H2), where it is the recommended part pending procurement.
 
 
-### REF-SENSOR-065: Ezurio Sterling-LWB5+ USB Adapter data sheet (450-00137), v1.2
+### REF-SENSOR-065: Ezurio Sterling-LWB5+ USB Adapter data sheet (450-00137)
 
 | Field | Value |
 |---|---|
-| **Publisher** | Ezurio (formerly Laird Connectivity), Akron, Ohio, *Sterling-LWB5+ USB Adapter* data sheet, v1.2, 3 Jan 2024 (revision table in the document) |
-| **Official access** | <https://www.ezurio.com/documentation/datasheet-sterling-lwb5-usb-dongle> (HTTP 200, 2026-11-14; HTML page rendered with JavaScript) |
-| **Local copy** | `avionics/datasheets/ezurio/sterling-lwb5plus-usb-adapter-datasheet-v1.2.pdf` (printed from the page in Chromium 2026-11-14, MD5 5a6fe5425d8d96cc2f7a1beaf0163d28) |
-| **Section applied** | "Environmental" (operating −40 to +85 °C); WLAN transmitter current tables, 2.4 GHz and 5 GHz, "Maximum Current Consumption @ USB VBUS" (peak 345 mA, 5210 MHz VHT80 MCS0); "Mechanical" (about 7 g, adapter only); "Power" (VBUS 5.0 V ±10 %) |
+| **Publisher** | Ezurio (formerly Laird Connectivity), Akron, Ohio, *Sterling-LWB5+ USB Adapter* data sheet; revision table ends at v1.4, 22 May 2024 |
+| **Official access** | <https://www.ezurio.com/documentation/datasheet-sterling-lwb5-usb-dongle> (HTTP 200, 2026-11-14) |
+| **Local copy** | `avionics/datasheets/ezurio/ezurio-datasheet-sterling-lwb5plus-usb-adapter.pdf` (owner-supplied PDF 2026-11-14, MD5 19fe5a4828cb5b3eac74fdbffbf8f0f4; replaces an agent print of the web page) |
+| **Section applied** | "Environmental" (−40 to +85 °C); WLAN transmit current tables at USB VBUS (peak 345 mA, 5210 MHz VHT80 MCS0); "Mechanical" (about 7 g) |
 | **Cited in** | `docs/WIFI_MODULE_OD20_BRIEF.md` |
-| **Openness / sourcing** | Public, no NDA. Ezurio is US-domiciled. The figures are for the USB adapter, whose own buck regulator feeds the same CYW4373E; they bound, not replace, the solder-down module's figures. |
+| **Openness / sourcing** | Public, no NDA. Ezurio is US-domiciled. |
 
-### REF-SENSOR-066: Ezurio Sterling-LWB5+ module data sheet (453-00045 to 453-00049) — access-gated
+### REF-SENSOR-066: Ezurio Sterling-LWB5+ module data sheet (453-00045 to 453-00049), v5.2
 
 | Field | Value |
 |---|---|
-| **Publisher** | Ezurio, *Sterling-LWB5+* data sheet (series 453-00045 to 453-00049) |
-| **Official access** | <https://www.ezurio.com/documentation/datasheet-sterling-lwb5-0>. Only the contents and scope are public; the body opens after an Ezurio account login (`/account?read_doc=Sterling LWB5+`), checked 2026-11-14. |
-| **Local copy** | none |
-| **Section applied** | Scope (public): "either SDIO or USB2.0 interface for WLAN connection and UART/PCM, USB2.0/PCM for Bluetooth". No other section is cited until the full document is in hand. |
+| **Publisher** | Ezurio, *Sterling LWB5+ Datasheet*, v5.2, 24 Jun 2026 (revision table) |
+| **Official access** | <https://www.ezurio.com/documentation/datasheet-sterling-lwb5-0>; the body opens after a free Ezurio account login |
+| **Local copy** | `avionics/datasheets/ezurio/ezurio-datasheet-sterling-lwb5plus-v5.2.pdf` (owner-supplied 2026-11-14, MD5 999dce4921a6720a1a4f132a67e042e5) |
+| **Section applied** | Specification Summary: host interface and `CONFIG_HOST[2:0]` strap table (000 = USB Wi-Fi and USB Bluetooth); Input Voltage (VBAT 3.2 to 4.8 V; EVM improved at VBAT ≥ 3.6 V); Mechanical (17 × 12 × 2.13 mm, about 0.7 g); Environmental (−40 to +85 °C). Pin definitions: STRAP_0 pin 5, STRAP_2 pin 4; VOUT_3P3 pin 6 feeds VDDIO_RF and USB2_AVDD33 when VBAT ≥ 3.6 V. Current consumption: 5 GHz VHT80 MCS0 441 mA at VBAT 3.6 V; Peak PHY Calibration Current 768 mA (2.4 GHz, unassociated, VBAT 3.3 V). Ordering Information (453-00045 integrated antenna, -00046 MHF4, -00047 trace pin; R reel, C cut tape). |
 | **Cited in** | `docs/WIFI_MODULE_OD20_BRIEF.md` |
-| **Openness / sourcing** | **Requires verification** against the sourcing rule: a free account login is not an NDA, but the document is not public. Owner to decide. |
+| **Openness / sourcing** | Login-gated, not under NDA; supplied by the owner 2026-11-14. |
+
+### REF-SENSOR-069: Ezurio DVK-LWB5+ development kit user guide, v2.1
+
+| Field | Value |
+|---|---|
+| **Publisher** | Ezurio, *DVK-LWB5+ User Guide*, v2.1 |
+| **Official access** | Ezurio documentation portal (login) |
+| **Local copy** | `avionics/datasheets/ezurio/ezurio-guide-dvk-lwb5plus-v2.1.pdf` (owner-supplied 2026-11-14, MD5 2a5be1a458070ddb0fa6dff664c5896f) |
+| **Section applied** | Configuration modes SDIO/UART and USB/USB; boot-mode strapping switches SW1 to SW3; USB2 bridge for Wi-Fi and Bluetooth (reference for bring-up) |
+| **Cited in** | `docs/WIFI_MODULE_OD20_BRIEF.md` |
+| **Openness / sourcing** | Login-gated, not under NDA; supplied by the owner. |
 
 ### REF-SENSOR-067: Infineon AIROC CYW4373 / CYW4373E product brief
 
