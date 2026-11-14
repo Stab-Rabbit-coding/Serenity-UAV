@@ -1116,7 +1116,9 @@ customer. Plan and sprints S34–S41:
     Brief: SecureControllers `kicad/NoNFO-Pilot/PB2/ARCHITECTURE_BRIEF.md`. The pin ledger
     shows only B+ (trust-module MCU owns the buses and the slow lines) fits the PB2-I
     header with every function aboard. Gates S34.
-- [ ] **NFP-OD19** — ★ Owner: PACE re-balance — brief `docs/PACE_REBALANCE_BRIEF.md`.
+- [x] **NFP-OD19** — ★ Owner: PACE re-balance — brief `docs/PACE_REBALANCE_BRIEF.md`.
+    **DECIDED 2026-11-14 (owner): option B** (best balance, 12 cells changed). Applied to
+    root `AGENTS.md` §9 and §1.9 above.
     Owner direction 2026-11-14: re-compute PACE from node capability and loading, no single
     point of failure, no stack with a single tasking. Brief recommends option A (keep every
     Primary; 7 cells change). Earlier note:
@@ -1186,13 +1188,19 @@ customer. Plan and sprints S34–S41:
 
 - UAV Tasks with PACE prioritization and failover per stack (primary, alternative, contingency, emergency)
 
--- Watchdog: P - Shepherd; A - Inara; C - Simon, E - River
+-- Watchdog: P - Simon; A - Shepherd; C - Inara; E - River
 
--- Comms: P - Inara; A - Shepherd; C - River; E - Simon
+-- Comms: P - Shepherd; A - River; C - Simon; E - Inara
 
--- Flight Control: P - River; A - Simon; C - Shepherd; E - Inara
+-- Flight Control: P - River; A - Inara; C - Shepherd; E - Simon
 
--- Payload Control: P - Simon; A - River; C - Inara; E - Shepherd
+-- Payload Control: P - Inara; A - Simon; C - River; E - Shepherd
+
+- **Re-balanced 2026-11-14 (owner, OD-19, option B)** for the merged stern stack
+  (`docs/PACE_REBALANCE_BRIEF.md`). Replaced: Watchdog P Shepherd / A Inara / C Simon / E River;
+  Comms P Inara / A Shepherd / C River / E Simon; Flight Control P River / A Simon / C Shepherd /
+  E Inara; Payload P Simon / A River / C Inara / E Shepherd. The crew narrative below predates the
+  re-balance; root `AGENTS.md` §9 "Per-stack tasking" is current.
 
 ---
 

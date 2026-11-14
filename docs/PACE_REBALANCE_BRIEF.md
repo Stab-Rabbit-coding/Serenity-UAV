@@ -70,4 +70,4 @@ Simon is the busiest node per PB2-I in every option. Only more compute at the st
 
 ## Owner decision
 
-- [ ] OD-19: PACE assignment — current / **A (recommended)** / B. On a decision, root `AGENTS.md` §9 and `avionics/WBS.md` §1.9 are both updated to the chosen square in one commit.
+- [x] OD-19: PACE assignment — current / A (recommended) / **B**. **Decided 2026-11-14 by the owner: option B.** Applied the same day to root `AGENTS.md` §9 and `avionics/WBS.md` §1.9. On a decision, root `AGENTS.md` §9 and `avionics/WBS.md` §1.9 are both updated to the chosen square in one commit.

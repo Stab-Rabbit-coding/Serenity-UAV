@@ -3435,7 +3435,6 @@
         "documentation",
         "emi-hardening",
         "project-tracking",
-        "redundancy-failover",
         "security"
       ],
       "archived": false
@@ -17501,7 +17500,6 @@
       "airframe/openscad/fuselage/middle_canonical_shell24.scad",
       "avionics/AGENTS.md",
       "avionics/README.md",
-      "avionics/TODO.md",
       "avionics/emi-hardening/WBS.md",
       "avionics/firmware/AK7455_CALIBRATION_SPECIFICATION.md",
       "avionics/firmware/WBS.md",

@@ -22,7 +22,7 @@ execution: code
 - **Objective.** Take NoNFO-Pilot-PB2 from ideation to fab-ready: ERC 0, DRC 0, schematic parity 0, unconnected 0, Gerbers generated, on KiCad 9.0.2. It becomes the stern (Simon) control stack of Serenity Rev U.
 - **Product authority.** Owner (Stab-Rabbit-coding). Sprint order is a recommendation; each owner-decision gate needs the owner's word.
 - **Mode.** Governed. This plan creates no second task list. Board items live in `SecureControllers:TODO.md` §5; airframe items live in `avionics/WBS.md` §1.11; sprints S34 to S41 are indexed in Theme A of `docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md`.
-- **Owner decisions in force (2026-11-14):** architecture B+; BBE-Black outline; mass minimised, not floored.
+- **Owner decisions in force (2026-11-14):** architecture B+; BBE-Black outline; mass minimised, not floored; PACE option B.
 - **Stop conditions.** A sprint does not start if its owner decision is open. A fit or mass gate that still fails after the one pre-authorised re-run without GNSS stops layout and goes to the owner as an Owner Decision Brief (`docs/DOC_TEMPLATES.md`).
 - **Out of scope.** The BBE-hosted variant. Firmware (Theme F). Any change to the three full stacks.
 
@@ -111,7 +111,7 @@ Two facts make the board hard:
 | ID | Question | Needed before |
 |---|---|---|
 | OD-18 | Architecture — **decided 2026-11-14: B+** | — |
-| OD-19 | PACE re-balance: current / A (keep every Primary, recommended) / B (best balance). Brief `docs/PACE_REBALANCE_BRIEF.md`. | S34 |
+| OD-19 | PACE re-balance — **decided 2026-11-14: option B** (`docs/PACE_REBALANCE_BRIEF.md`) | — |
 | OD-20 | USB Wi-Fi module part (open since 2026-09-29, a fab blocker on TACCO as well). A hard gate: S35 does not start without it. | S35 |
 | OD-21 | Mass floor — **decided 2026-11-14: no floor; minimise, BBE-Black outline kept** | — |
 
@@ -186,7 +186,6 @@ flowchart LR
   S38 --> S39[S39 routing, DRC 0]
   S39 --> S40[S40 fab outputs and reviews]
   S40 --> S41[S41 airframe integration record]
-  OD19[OD-19 PACE role] --> S34
   PB1[PB1 host-link bench] -.-> FAB[fab order]
   S40 --> FAB
 ```
@@ -224,7 +223,7 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 
 **Goal:** Turn "does it fit" into three computed answers (pins, volume, mass) before any schematic exists.
 
-**Requirements:** R2, R4, R5, R10, R13, R17, R18; KD3, KD6, KTD3, KTD6. Needs OD-19. PD1 is its first task.
+**Requirements:** R2, R4, R5, R10, R13, R17, R18; KD3, KD6, KTD3, KTD6. No open gate. PD1 is its first task.
 
 **Dependencies:** none.
 
@@ -427,7 +426,7 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 - The envelope-sync check fails when the board outline constant is changed without the saddle (negative control).
 - `gen_todo_from_wbs.py --check` and `precommit_index.py --check` exit 0.
 
-**Verification:** ledger, BOM and policy files agree on seven nodes; all `--check` tools exit 0; `avionics/WBS.md` §1.11 NFP-OD19, NFP-LEDGER, NFP-SADDLE, NFP-POLICY, NFP-FW-IF closed and no §1.11 item left open. **Skills:** `aeronautical-engineering`, `statics-and-dynamics`, `project-overseer`.
+**Verification:** ledger, BOM and policy files agree on seven nodes; all `--check` tools exit 0; `avionics/WBS.md` §1.11 NFP-LEDGER, NFP-SADDLE, NFP-POLICY, NFP-FW-IF closed and no §1.11 item left open. **Skills:** `aeronautical-engineering`, `statics-and-dynamics`, `project-overseer`.
 
 ---
 

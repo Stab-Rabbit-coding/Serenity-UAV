@@ -353,10 +353,15 @@ here; canonical source is `docs/OBSERVER_LASER_ANALYSIS.md` (current revision) a
 
 | Stack | Watchdog | Comms | Flight Control | Payload |
 | --- | --- | --- | --- | --- |
-| Shepherd | P | A | C | E |
-| Inara | A | P | E | C |
-| River | C | E | P | A |
-| Simon | A | C | A | P |
+| Shepherd | A | P | C | E |
+| Inara | C | E | A | P |
+| River | E | A | P | C |
+| Simon | P | C | E | A |
+
+Re-balanced 2026-11-14 (owner, OD-19, option B) for the seven-node fleet: Simon is one PB2-I plus a
+trust-module MCU, so it takes the lightest Primary and Flight Control E. Every role has four distinct
+holders and every stack holds one level of every role. Basis: `docs/PACE_REBALANCE_BRIEF.md`,
+`tools/pace_balance.py`. Corrects the earlier table, whose Watchdog column had two A holders and no E.
 
 Radio assignment follows the hardware each stack actually carries, not a fixed link name. The
 current per-board radio complement and per-stack link priority are in `avionics/README.md`
@@ -370,10 +375,12 @@ current per-board radio complement and per-stack link priority are in `avionics/
 
 Per-stack tasking:
 
-- Shepherd: watchdog/fault-detect/failover/authentication.
-- Inara: camera/external sensors/high-bandwidth ground link.
-- River: forward EDF + nacelle tilt sync + most resilient comms.
-- Simon: aft EDF + alternate watchdog + Observer/cargo oversight.
+- Shepherd: primary comms (high-bandwidth ground link) + alternate watchdog.
+- Inara: payload and cargo control (Observer, winch, cameras and external sensors) + alternate
+  flight control.
+- River: forward EDF + nacelle tilt sync + primary flight control + alternate comms.
+- Simon: aft EDF + primary watchdog/fault-detect/failover/authentication (the trust-module MCU
+  keeps its bus presence through a host reboot) + alternate payload.
 
 ## 10. Workflow
 

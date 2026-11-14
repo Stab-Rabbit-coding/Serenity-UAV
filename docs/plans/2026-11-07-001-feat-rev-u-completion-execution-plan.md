@@ -158,7 +158,7 @@ shape, each with a picture and vectors where loads or motion are involved (owner
 | OD-14 | PE review of the Operator's Manual v0.1 | docs §0.10.3 | S28 |
 | OD-15 | Winch shed threshold vs maneuver envelope | fuselage-mid ★ | S7 |
 | OD-18 | NoNFO-Pilot-PB2 bus architecture — **DECIDED 2026-11-14: B+** | avionics §1.11 NFP-OD18 | S34 |
-| OD-19 | PACE re-balance from node capability and loading (owner direction 2026-11-14) — brief `docs/PACE_REBALANCE_BRIEF.md`, recommends option A | avionics §1.11 NFP-OD19 | S34 |
+| OD-19 | PACE re-balance from node capability and loading (owner direction 2026-11-14) — **DECIDED 2026-11-14: option B** (`docs/PACE_REBALANCE_BRIEF.md`) | avionics §1.11 NFP-OD19 | S34 |
 | OD-20 | USB Wi-Fi module part (TACCO and NoNFO-Pilot-PB2) | avionics §1.11 NFP-OD20 | S35 |
 | OD-21 | Mass floor for the merged stern board — **DECIDED 2026-11-14: no floor; minimise, BBE-Black outline kept** | avionics §1.11 NFP-OD21 | S34 |
 | OD-17 | WA-R10 power crossing: A clock-spring / B enclosed loop / C slip ring / D joint 0.91 in (23 mm) outboard — brief `docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md` — **DECIDED 2026-11-11: D + aft fairing + rounded end plate with fillets; 22.8° taper kept** | WA-R10 | S2 |

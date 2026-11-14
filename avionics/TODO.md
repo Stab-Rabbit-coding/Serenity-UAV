@@ -117,7 +117,6 @@
 ### §1.11 — Stern stack: NoNFO-Pilot-PB2 (2026-11-14)
 → full detail: `WBS.md` §1.11
 
-- [ ] NFP-OD19 — ★ Owner: PACE re-balance — brief `docs/PACE_REBALANCE_BRIE…
 - [ ] NFP-OD20 — ★ Owner: USB Wi-Fi module part (also blocks TACCO fab)
 - [ ] NFP-FIT — Real-mesh fit gate for the stern stack at Simon (S34)
 - [ ] NFP-MASS — Stern stack mass gate: ≤ 0.108 lbm (49 g) holds the…
