@@ -58,6 +58,7 @@ The aircraft is already aft-heavy. The ledger puts the hover CG at Y 351.2, whic
 - KD4. **One coordinated plan covers the fan configuration and the EDF upgrade.** (session-settled: user-directed, 2026-11-15 — chosen over planning the printed provisions alone: the baffled insert and the intakes constrain the geometry printed now.) Governs R8, R10.
 - KD5. **Baseline is Rev U: the one-piece aft SLS hull, datum R2.** (session-settled: user-directed, 2026-11-15 — chosen over the separate middle and rear shells.) Governs R13, R14.
 - KD6. **CFD is tied to the node thermal budget, in both configurations.** (session-settled: user-directed, 2026-11-15 — chosen over a flow-only CFD pass.) Governs R10, R11.
+- KD7. **After the upgrade, the EDF holds a minimum cooling flow in hover, and nacelle tilt compensates its thrust.** (session-settled: user-directed, 2026-11-15 — chosen over leaving the EDF stopped in hover, which leaves the nodes with no forced air: the EDF is the only air mover once the fan is removed.) Governs R18, R19.
 
 ### Requirements
 
@@ -75,6 +76,8 @@ The aircraft is already aft-heavy. The ledger puts the hover CG at Y 351.2, whic
 - R6. The aft hull shall carry the thrust tube and the fixed elliptical nozzle, 2.06 × 1.76 in (52.3 × 44.7 mm). The nozzle is never an iris.
 - R7. Four RCS jets shall be piped. Each pipe shall have a printed cap on its interior orifice that can be cut off. Mounts for the valves and servos shall be printed and left empty.
 - R8. In the EDF configuration, a baffled insert shall admit cooling air from the fuselage interior into the EDF intake stream. The interior flow shall be no less than the fan-configuration flow. Most EDF air shall come from the opened external intakes.
+- R18. In the EDF configuration, the EDF shall run at no less than a minimum cooling throttle whenever the avionics are powered in hover. At that throttle every node shall stay under its temperature limit in the average-power case.
+- R19. The thrust of the EDF at the minimum cooling throttle shall be trimmed by nacelle tilt in hover. The analysis shall state the trim angle and the hover lift it costs.
 - R9. Until they are cut, the covers and caps shall be airtight under the cooling stream's suction.
 
 **Analysis**
@@ -99,6 +102,7 @@ The aircraft is already aft-heavy. The ledger puts the hover CG at Y 351.2, whic
 - AE2. **Covers R5, R7, R9.** Given the fan configuration, when a point-containment probe tests each intake cover and each RCS cap, then every one is closed.
 - AE3. **Covers R4, R8.** Given the EDF configuration, when the covers and caps are removed in the model and the insert is fitted, then the hull mesh outside those apertures is unchanged from the fan configuration.
 - AE4. **Covers R8.** Given the EDF configuration at each analysed throttle point, when the CFD run converges, then the flow through the baffle from the interior is no less than the fan-configuration flow.
+- AE6. **Covers R18, R19.** Given the EDF configuration in hover at the minimum cooling throttle, when the coupled analysis runs, then every node passes the average-power case, and the stated nacelle tilt balances the EDF thrust.
 - AE5. **Covers R12.** Given the ledger with all new parts, when the CG moves aft by more than the G2 limit, then the run fails and an Owner Decision Brief is written.
 
 ### Success Criteria
@@ -123,6 +127,7 @@ The aircraft is already aft-heavy. The ledger puts the hover CG at Y 351.2, whic
 
 - Selecting and buying the 55 mm EDF unit and its ESC (Phase 11, `deferred/WBS.md`).
 - The GW-RCS gateway board, the RCS valves, the servos, and the attitude mixer (Phase 11).
+- The flight-control change that holds the minimum cooling throttle and applies the nacelle tilt trim (Phase 11 firmware). This plan supplies the throttle, thrust, and trim figures.
 - EDF thrust, nozzle performance, and RCS jet authority analysis. This plan analyses the EDF only as a flow sink for cooling.
 - A transient thermal model with measured pouch time constants (`docs/BAY_A_FWD_THERMAL.md` §3).
 - Bench measurement of the ASSUMED thermal inputs (BAYA-FWD-T3).
@@ -134,6 +139,7 @@ All are deferred to an owner gate inside the plan. None blocks the start of U1 a
 - OQ1 (gate G1). **RCS jet stations.** No station is defined anywhere in the repo. U3 proposes four from geometry and canon.
 - OQ2 (gate G1). **55 mm EDF envelope.** No make or model is named. `EDF-55-6S` in `current-specification/bom_revU.json` is unsourced. U3 proposes an envelope. The owner accepts it or names a unit.
 - OQ3 (gate G1). **Intake count and position.** The legacy design had four radial scoops at the neck. U3 re-derives them on the Rev U hull against canon.
+- OQ5 (deferred to U8). **EDF cooling outside hover.** KD7 covers hover. On the ground the nacelles cannot react EDF thrust without lift, and an EDF or ESC fault leaves no air mover. U8 states the thrust at the minimum cooling throttle and the time to limit with the EDF stopped, for the owner to decide.
 - OQ4 (gate G2). **Aft CG limit.** The ±0.25 in (±6.4 mm) working band is ASSUMED and already exceeded.
 
 ---
@@ -149,8 +155,10 @@ All are deferred to an owner gate inside the plan. None blocks the start of U1 a
 - KTD5. **The node tool stays the temperature authority; CFD replaces its flow inputs.** `tools/node_thermal_forced_air.py` gains an input path for CFD station velocities, flow rate, and air temperatures. Its 1-D system curve stays as the cross-check. Disagreement between the two beyond a stated tolerance is a reported finding.
 - KTD6. **The fan is a `fanPressure` outlet using the datasheet P-Q curve.** The EDF is a fixed-flow sink at the EDF face, swept over throttle points. The opened intakes are total-pressure inlets. Free-stream effects on the intakes are outside the internal domain and are an ASSUMED boundary condition.
 - KTD7. **One case writer, two configurations.** `tools/cfd_cooling_case.py` takes a configuration name. Geometry differences come from the same provision module as the hull build, so the CFD and the print cannot drift apart.
-- KTD8. **The baffle is sized by the interior-flow requirement, at the EDF's lowest analysed throttle.** That is the worst case for R8. The insert carries a replaceable orifice plate so the area can be trimmed after bench measurement.
+- KTD8. **The baffle is sized at the minimum cooling throttle.** That is the lowest throttle the EDF runs with the avionics powered (R18), so it is the worst case for R8. U8 finds that throttle from the node budget. The insert carries a replaceable orifice plate so the area can be trimmed after bench measurement.
 - KTD9. **Follow the v1912 pitfalls already recorded.** No function objects in `controlDict`. Decompose with `hierarchical`. One MPI job at a time. Average the final iterations and report the standard deviation. Treat a single mesh as valid only for A-against-B comparison. Source: `docs/solutions/runtime-errors/openfoam-v1912-ubuntu-build-and-steady-rans-pitfalls.md`.
+- KTD11. **The CFD mesh comes from the real surfaces, not from the voxel mask.** `blockMesh` and `snappyHexMesh` mesh the hull and provision-module surfaces, with refinement at the bow inlets, the fan aperture, the intakes, and the baffle orifice. A minimum cell count across each aperture is a quality gate. The 0.098 in (2.5 mm) voxel flood fill stays as the leak check and the patch locator only. (session-settled: user-approved, 2026-11-15 — chosen over meshing from the voxel mask: wall dilation narrows every opening by about 0.2 in (5 mm) and would mis-size the inlets and the orifice.) Governs R10.
+- KTD12. **The EDF thrust at the minimum cooling throttle is an ASSUMED input until a unit is selected.** U8 scales it from the `EDF-55-6S` row and marks the trim angle PROVISIONAL. Implements KD7; governs R19.
 - KTD10. **Mirror starboard from port, and gate every boolean in mm³.** Reuse the hull's keep-out functions. Check the manifold status and compare volume with `trimesh`. A zero-volume result is a failure, not a pass.
 
 ### High-Level Technical Design
@@ -166,7 +174,7 @@ flowchart TB
   MID --> REAR[Rear cone]
   REAR -->|fan config| ADP[Adapter + Delta fan on spider mount]
   ADP --> TUBE[Thrust tube]
-  REAR -->|EDF config| BAF[Baffled insert, metered]
+  REAR -->|EDF config, EDF never below minimum cooling throttle| BAF[Baffled insert, metered]
   EXT[Opened external intakes] -->|EDF config, most of the flow| PLEN[EDF intake stream]
   BAF --> PLEN
   PLEN --> EDF[55 mm EDF]
@@ -241,6 +249,7 @@ These are computed here from stated inputs. They size the problem. They are not 
 | Fan curve digitized, not tabulated | Operating point error | U1 cites the datasheet; U8 states the sensitivity |
 | Single-mesh CFD | Absolute values uncertain | KTD9; report standard deviation; one mesh-refinement check on the fan case |
 | Merged hull tarball size | Push fails at 100 MB | Tarball rule already in `tools/check_hull_tarballs.py` |
+| EDF thrust at the minimum cooling throttle costs hover lift and tilt authority | Hover margin falls after the upgrade | U8 states the trim angle and lift loss; KTD12 marks them PROVISIONAL until a unit is selected |
 | Free-stream pressure at the intakes unknown in the internal model | EDF-case flow split error | Sweep the intake total pressure; state the bound in U8 |
 
 ### Sources and Research
@@ -409,14 +418,15 @@ These are computed here from stated inputs. They size the problem. They are not 
 - **Files:** `tools/cfd_internal_air_domain.py`, `tools/cfd_cooling_case.py`, `tools/cfd_cooling_post.py`, `tools/tests/test_cfd_cooling_case.py`, `reports/cfd_cooling/`.
 - **Approach:**
     1. Extend the air domain to take a configuration. Designed apertures become named patches. Any other route to the boundary is still reported as a leak.
-    2. Write the case from the air mask: mesh, patches, node heat-flux walls, fan or EDF boundary, intake boundaries.
-    3. Run the fan case at average and peak power. Run the EDF case at three throttle points and across the intake pressure sweep.
+    2. Write the case from the hull and provision-module surfaces per KTD11: mesh, patches, node heat-flux walls, fan or EDF boundary, intake boundaries. Use the air mask to locate patches.
+    3. Run the fan case at average and peak power. Run the EDF case at the minimum cooling throttle, at two higher throttle points, and across the intake pressure sweep.
     4. Post-process outside the solver: flow at each aperture, velocity and air temperature at each `STREAM` station, mean and standard deviation over the final iterations.
     5. Write the results as a file that U2's input path reads.
 - **Execution note:** Prove the case writer on a straight duct with a known answer before the hull domain.
 - **Patterns to follow:** `tools/od17_junction_cfd/mkcase.py`, `post.py`, `run.sh`; the `openfoam-cfd` skill.
 - **Test scenarios:**
     - Straight-duct check: outlet flow equals inlet flow, and bulk temperature rise equals power over ṁ·c_p within tolerance.
+    - Each aperture has at least the minimum cell count across it; a coarsened refinement region fails the gate.
     - The written case has every required dictionary and every patch named in the configuration.
     - Fan configuration: mass flow in at the bow inlets equals mass flow out at the fan within the stated imbalance.
     - EDF configuration: bow inlet flow plus intake flow equals EDF flow.
@@ -428,18 +438,25 @@ These are computed here from stated inputs. They size the problem. They are not 
 ### U8. Coupled analysis and baffle sizing
 
 - **Goal:** Produce the thermal result for both configurations and size the baffle.
-- **Requirements:** R2, R8, R10, R11, R16.
+- **Requirements:** R2, R8, R10, R11, R16, R18, R19.
 - **Dependencies:** U7.
 - **Files:** `docs/FUSELAGE_COOLING_ANALYSIS.md`, `docs/BAY_A_FWD_THERMAL.md`, `tools/cooling_baffle_sizing.py`, `tools/tests/test_cooling_baffle_sizing.py`, `REFERENCES.md`.
 - **Approach:**
     1. Run the node tool with the CFD inputs for each case.
-    2. Size the orifice so that interior flow at the lowest EDF throttle meets R8. Feed the area back to U5.
-    3. Write the analysis document to the `docs/DOC_TEMPLATES.md` analysis template: problem, assumptions, calculations with units, results, references. Give imperial units first.
-    4. State the sensitivity of the result to the fan curve, the ambient, and the intake pressure bound.
-    5. Update `docs/BAY_A_FWD_THERMAL.md` §3 and §4 with the new fan-tier figures. Leave the T1 decision to the owner.
+    2. Find the minimum cooling throttle: the lowest EDF flow at which every node passes the average-power case (R18).
+    3. Size the orifice so that interior flow at that throttle meets R8. Cross-check the area against the orifice equation. Feed the area back to U5.
+    4. Compute the EDF thrust at that throttle and the nacelle tilt that balances it in hover, with the hover lift lost (R19, KTD12).
+    5. State the thrust on the ground and the time to limit with the EDF stopped (OQ5).
+    6. Write the analysis document to the `docs/DOC_TEMPLATES.md` analysis template: problem, assumptions, calculations with units, results, references. Give imperial units first.
+    7. State the sensitivity of the result to the fan curve, the ambient, and the intake pressure bound.
+    8. Update `docs/BAY_A_FWD_THERMAL.md` §3 and §4 with the new fan-tier figures. Leave the T1 decision to the owner.
 - **Test scenarios:**
     - Covers AE4. For each EDF throttle point, sized interior flow is at least the fan-configuration flow.
+    - Covers AE6. At the minimum cooling throttle every node passes the average-power case; one step lower, at least one node fails.
+    - The tilt trim balances the EDF thrust: the net fore-and-aft force in hover is zero within tolerance.
+    - Zero EDF thrust gives zero trim angle and no lift loss.
     - A larger orifice gives more interior flow; the relation is monotonic.
+    - The sized orifice area agrees with the orifice equation within the stated tolerance.
     - An orifice that would starve the EDF inlet beyond a stated pressure loss fails the gate.
     - When the requirement cannot be met inside the insert's area range, the tool fails and names the limiting throttle point.
     - Limits list: a node over its limit in the average case fails the run.
@@ -518,7 +535,7 @@ Run every command with `/usr/bin/python3`. The `.venv` hides `trimesh`.
 | Thermal limits | `tools/node_thermal_forced_air.py` with CFD inputs | U8 |
 | Tracking | `tools/gen_todo_from_wbs.py --check`, `tools/precommit_index.py --check`, `tools/sync_operators_manual.py --check` | U1, U11 |
 | Visual | OpenSCAD multi-angle previews, each image viewed | U4, U5, U6 |
-| CFD quality | `checkMesh` clean; residual and imbalance limits met; standard deviation reported | U7 |
+| CFD quality | `checkMesh` clean; minimum cells across each aperture; residual and imbalance limits met; standard deviation reported | U7 |
 
 pytest is not part of CI today. The executor runs it by hand and states the result in the pull request.
 
@@ -528,7 +545,7 @@ pytest is not part of CI today. The executor runs it by hand and states the resu
 
 **Global**
 
-- Every requirement R1 to R17 is met or is the subject of a written owner decision.
+- Every requirement R1 to R19 is met or is the subject of a written owner decision.
 - Gates G1 and G2 are closed in writing.
 - Every Verification Contract gate passes, or its failure is recorded with the rule and the reason.
 - Every analysis result carries its inputs, its citations, its margin, and its PROVISIONAL mark where an input is ASSUMED.
