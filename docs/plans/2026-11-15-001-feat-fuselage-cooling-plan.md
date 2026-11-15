@@ -64,6 +64,7 @@ The aircraft is already aft-heavy. The ledger puts the hover CG at Y 351.2, whic
 - KD9. **The stern stack's fan-drive output powers the cooling fan and reads its tach.** (session-settled: user-directed, 2026-11-15 — chosen over deciding the source at gate G1, and over tracking fan electrical outside this plan.) Governs R20.
 - KD10. **The thrust tube is fused into the aft hull.** (session-settled: user-directed, 2026-11-15 — chosen over a separate bolted tube: issue #290 asks for the tube printed with the hull. Accepted cost: a tube change means a new hull.) Governs R6.
 - KD11. **The owner sets the aft CG limit at gate G1, before hull geometry work.** (session-settled: user-approved, 2026-11-15 — chosen over deciding at G2 on mesh-derived masses: a late refusal would discard the hull work.) Governs R12.
+- KD12. **Printed flow guides raise the local air speed at the nodes that fail in the open stream.** (session-settled: user-approved, 2026-11-15 — chosen over brass spreaders with re-drawn mounts, and over lower node power: the measured baseline shows bulk flow is enough and local speed is not.) Governs R2, R22.
 
 ### Requirements
 
@@ -102,6 +103,7 @@ The aircraft is already aft-heavy. The ledger puts the hover CG at Y 351.2, whic
 - R17. The work shall be tracked in the owning `WBS.md` files before geometry work starts, with `TODO.md` regenerated and every citation indexed in `REFERENCES.md`.
 - R20. The cooling fan shall take power from the stern stack's fan-drive output, and the stern stack shall read the fan tach. A stopped fan shall be reported as a fault.
 - R21. The fused intake area, thrust tube bore, and RCS pipe bores shall be sized to a stated bounding EDF flow and RCS bleed fraction, each cited or ASSUMED, with the margin shown at gate G1.
+- R22. Printed flow guides shall neck the stream at each node that fails the average-power case in the open stream, without blocking the payload, the cargo doors, or a harness route.
 
 ### Acceptance Examples
 
@@ -147,7 +149,6 @@ All are deferred to an owner gate inside the plan. None blocks the start of U1 a
 - OQ2 (gate G1). **EDF envelope.** KD8 names the motor and rotor diameter. The shroud, stator, and motor-mount envelope are not drawn. U3 proposes them from the X5 motor datasheet and the nacelle motor mount.
 - OQ3 (gate G1). **Intake count and position.** The legacy design had four radial scoops at the neck. U3 re-derives them on the Rev U hull against canon.
 - OQ5 (deferred to U8). **EDF cooling outside hover.** KD7 covers hover. On the ground the nacelles cannot react EDF thrust without lift, and an EDF or ESC fault leaves no air mover. U8 states the thrust at the minimum cooling throttle and the time to limit with the EDF stopped, for the owner to decide.
-- OQ6 (gate G1). **Flow guides.** The measured baseline shows three nodes fail the average case in the open stream. U12 proposes printed flow guides. The owner accepts them at G1, or chooses another remedy: brass spreaders with re-drawn mounts, or lower node power.
 - OQ4 (gate G1). **Aft CG limit.** The ±0.25 in (±6.4 mm) working band is ASSUMED and already exceeded. The owner sets the limit in the G1 brief (KD11).
 
 ---
@@ -269,7 +270,7 @@ Measured during planning on the Rev U meshes, with the repo tools and a scratch 
 **What this means for the plan.**
 
 - R2 is not met by the fan and the open stream alone. Three nodes fail the average case, and the tool finds no room for a brass spreader that would fix them.
-- The fix is local air speed, not more fan. Unit U12 adds printed flow guides that neck the stream past the chin nodes and the stern stack, as the inlet duct already does for CN1.
+- The fix is local air speed, not more fan. Unit U12 adds printed flow guides (KD12) that neck the stream past the chin nodes and the stern stack, as the inlet duct already does for CN1.
 - The fan's working pressure is 0.031 in H₂O (7.8 Pa). Dynamic pressure at 25 kt is about 0.4 in H₂O (100 Pa). Outside flow therefore dominates the stream in forward flight, for better or worse. The still-air and cruise sweep of KTD6 is the governing analysis, not a side check.
 
 **Rear cone, measured on `middle_rear_shell24_2mm_merged.stl`.**
@@ -303,7 +304,7 @@ Measured during planning on the Rev U meshes, with the repo tools and a scratch 
 | --- | --- | --- |
 | Aft mass makes an out-of-band CG worse | Trim does not close | Owner sets the limit at G1 from envelope estimates (KD11); U9 confirms on mesh masses |
 | Bulk air heats along the stream; aft nodes see air warmed by forward nodes | Aft nodes fail at low flow | U7 reports air temperature at each station; U8 reports margin per node |
-| Three nodes fail the average case in the open stream (measured) | R2 not met | U12 flow guides; OQ6 at G1 |
+| Three nodes fail the average case in the open stream (measured) | R2 not met | U12 flow guides (KD12) |
 | Rotor clearance at Y 640 is 0.12 in (3 mm) radial | Shroud does not fit | U3 fixes the rotor station first; R21 margin |
 | Hull seams leak under suction | Flow bypasses the forward nodes | U10 seal gate; HULL-LEAK-04 door seal |
 | Custom rotor or shroud differs from the U3 envelope | Spider reprint; a tube bore change means a new hull (KD10) | Tube bore fixed by KD8; R21 margin; spider stays bolted |
@@ -404,7 +405,7 @@ Measured during planning on the Rev U meshes, with the repo tools and a scratch 
     7. Route the fan lead from the stern stack's fan-drive output to the fan, with its tach line, and place a sealed pass-through in the adapter (R20).
     8. Size the intake area, tube bore, and RCS pipe bores to a stated bounding EDF flow and bleed fraction, and show the margin (R21).
     9. Estimate the mass and CG shift of the fan and EDF configurations from the placed envelopes.
-    10. Write an Owner Decision Brief for OQ1, OQ2, OQ3, OQ4, and OQ6 with the six template checks and figures. It carries the sizing basis and the CG estimate, and asks for the aft CG limit.
+    10. Write an Owner Decision Brief for OQ1, OQ2, OQ3, and OQ4 with the six template checks and figures. It carries the sizing basis and the CG estimate, and asks for the aft CG limit.
 - **Patterns to follow:** `tools/middle_layout_fit.py`, `tools/nonfo_simon_fit.py` and its test; `docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md`; `docs/solutions/workflow-issues/a-recorded-route-or-clearance-goes-stale-when-its-part-changes.md`.
 - **Test scenarios:**
     - Every envelope lies inside the measured cavity with the stated clearance.
@@ -413,7 +414,7 @@ Measured during planning on the Rev U meshes, with the repo tools and a scratch 
     - Moving an envelope through the skin fails the gate.
     - Port and starboard placements mirror about the centreline.
     - The stern stack, the aft gear bays, and the tail light cableway do not clash with any envelope.
-- **Verification:** The fit tool passes. The brief is in the repo. **Gate G1:** the owner has decided OQ1 to OQ4 and OQ6 in writing.
+- **Verification:** The fit tool passes. The brief is in the repo. **Gate G1:** the owner has decided OQ1 to OQ4 in writing.
 
 ### U4. Fused aft hull provisions
 
@@ -589,8 +590,8 @@ Measured during planning on the Rev U meshes, with the repo tools and a scratch 
 ### U12. Node flow guides
 
 - **Goal:** Raise the local air speed at the nodes that fail in the open stream.
-- **Requirements:** R1, R2, R14.
-- **Dependencies:** U3 with G1 passed (OQ6), U7.
+- **Requirements:** R1, R2, R14, R22. Implements KD12.
+- **Dependencies:** U3 with G1 passed, U7.
 - **Files:** `tools/node_flow_guides.py`, `tools/tests/test_node_flow_guides.py`, `tools/cargo_layout_fit.py`, `tools/middle_layout_fit.py`, `airframe/stls/fuselage/`, `tools/node_thermal_forced_air.py`.
 - **Approach:**
     1. For each failing node, find the air speed the node tool needs to pass the average case.
@@ -638,7 +639,7 @@ pytest is not part of CI today. The executor runs it by hand and states the resu
 
 **Global**
 
-- Every requirement R1 to R21 is met or is the subject of a written owner decision.
+- Every requirement R1 to R22 is met or is the subject of a written owner decision.
 - Gates G1 and G2 are closed in writing.
 - Every Verification Contract gate passes, or its failure is recorded with the rule and the reason.
 - Every analysis result carries its inputs, its citations, its margin, and its PROVISIONAL mark where an input is ASSUMED.
