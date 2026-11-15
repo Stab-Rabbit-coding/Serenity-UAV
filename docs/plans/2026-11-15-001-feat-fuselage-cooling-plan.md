@@ -394,7 +394,7 @@ Measured during planning on the Rev U meshes, with the repo tools and a scratch 
 - **Goal:** Fix the stations of every aft provision on the Rev U hull and get the owner's decision.
 - **Requirements:** R4, R5, R6, R7, R12, R13, R14, R20, R21.
 - **Dependencies:** U1.
-- **Files:** `tools/rear_cone_layout_fit.py`, `tools/tests/test_rear_cone_layout_fit.py`, `docs/FUSELAGE_COOLING_LAYOUT_BRIEF.md`, `tools/hull_datums.py`.
+- **Files:** `tools/rear_cone_layout_fit.py`, `tools/tests/test_rear_cone_layout_fit.py`, `tools/cooling_g1_figures.py`, `docs/FUSELAGE_COOLING_LAYOUT_BRIEF.md`, `docs/figures/cooling_g1_*.png`, `tools/hull_datums.py`.
 - **Approach:**
     1. Measure the rear cone cavity on the live merged mesh. Record which mesh was measured. Start from the Measured Baseline: rotor no further aft than about Y 640, nozzle exit near Y 680. Explain the open sections at Y 560 and aft of Y 645.
     2. Place envelopes for the mounting ring, spider, X5 motor, 2.165 in (55 mm) rotor and shroud, thrust tube, nozzle, intakes, plenum volume, four RCS pipes, four valve and servo mounts, and the GW-RCS board. The GW-RCS envelope is a space reservation only.
@@ -405,7 +405,23 @@ Measured during planning on the Rev U meshes, with the repo tools and a scratch 
     7. Route the fan lead from the stern stack's fan-drive output to the fan, with its tach line, and place a sealed pass-through in the adapter (R20).
     8. Size the intake area, tube bore, and RCS pipe bores to a stated bounding EDF flow and bleed fraction, and show the margin (R21).
     9. Estimate the mass and CG shift of the fan and EDF configurations from the placed envelopes.
-    10. Write an Owner Decision Brief for OQ1, OQ2, OQ3, and OQ4 with the six template checks and figures. It carries the sizing basis and the CG estimate, and asks for the aft CG limit.
+    10. Write the G1 Owner Decision Brief for OQ1, OQ2, OQ3, and OQ4 to the G1 package below. Generate every figure from the live meshes with one script, so a figure cannot drift from the layout.
+- **G1 package.** Gate G1 crosses airframe, propulsion, thermal, and avionics. The brief therefore applies both check sets in `docs/DOC_TEMPLATES.md`: the six airframe checks, plus the Electrical, Harness and mounting fit, and Thermal load checks from the avionics set. Each check has a picture. Loads and motions are drawn as vectors with magnitudes. A check that does not apply says so in one line. Each decision ends with its options side by side, a recommendation, and what is unverified.
+
+| Check | What the brief shows for this gate | Figure |
+| --- | --- | --- |
+| Statics and dynamics | Free-body diagram of the ring, spider, and fused tube: EDF thrust, motor torque, fan and EDF weight under the hover, landing, and tail-strike cases; reactions into the hull; RCS jet reaction at each proposed station | `cooling_g1_fbd.png` |
+| Function | Air path in each configuration; fan fit and removal; cover and cap cut lines; upgrade sequence; service access to the fan, spider, and valves | `cooling_g1_airpath_fan.png`, `cooling_g1_airpath_edf.png`, `cooling_g1_upgrade_sequence.png` |
+| Structural integrity | Wall thickness map of every added feature against `docs/SLS_MIN_WALL_THICKNESS.md`; load path from the ring into the hull; membrane thickness and groove; print orientation | `cooling_g1_walls.png` |
+| Mechanism and component interactions | Every neighbour, port and starboard: stern stack, aft gear bays through their stroke, tail light cableway, cargo doors, GW-RCS reservation; nearest gaps and any interference volume | `cooling_g1_rear_cone_sections.png`, `cooling_g1_clearances.png` |
+| Weight and balance | Mass per part and per aircraft; CG shift for the fan and EDF configurations against the pivot; hover arm, ground clearance, T/W; the proposed aft CG limit (OQ4) | `cooling_g1_cg.png` |
+| Canonical shape | Intakes, nozzle exit, RCS jets, and bow inlets overlaid on the QMx and Henning references, in authority order; deviation stated per feature | `cooling_g1_canon_side.png`, `cooling_g1_canon_aft.png`, `cooling_g1_canon_bow.png` |
+| Aerodynamics and flow sizing | Intake area, tube bore, and RCS bore against the bounding EDF flow and bleed fraction (R21), with margin; Reynolds and Mach number at each; fan and system curves with the operating point | `cooling_g1_sizing.png`, `cooling_g1_fan_curve.png` |
+| Electrical | Fan current against the stern stack fan-drive rating; tach input; wire gauge and connector rating with margin (R20) | `cooling_g1_fan_electrical.png` |
+| Harness and mounting fit | Fan lead route and bend radius; sealed pass-through; connector mating clearance; spider and adapter fasteners, length and engagement | `cooling_g1_harness.png` |
+| Thermal load | Measured-baseline node table; local air speed along the stream; proposed flow-guide positions (KD12); the stated limits of the model | `cooling_g1_thermal_baseline.png`, `cooling_g1_flow_guides.png` |
+
+- **G1 decisions, each with options side by side:** RCS jet stations (OQ1); EDF shroud and motor-mount envelope (OQ2); intake count and position (OQ3); aft CG limit (OQ4).
 - **Patterns to follow:** `tools/middle_layout_fit.py`, `tools/nonfo_simon_fit.py` and its test; `docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md`; `docs/solutions/workflow-issues/a-recorded-route-or-clearance-goes-stale-when-its-part-changes.md`.
 - **Test scenarios:**
     - Every envelope lies inside the measured cavity with the stated clearance.
@@ -414,7 +430,9 @@ Measured during planning on the Rev U meshes, with the repo tools and a scratch 
     - Moving an envelope through the skin fails the gate.
     - Port and starboard placements mirror about the centreline.
     - The stern stack, the aft gear bays, and the tail light cableway do not clash with any envelope.
-- **Verification:** The fit tool passes. The brief is in the repo. **Gate G1:** the owner has decided OQ1 to OQ4 in writing.
+    - The figure script writes every figure named in the G1 package; a missing figure fails the run.
+    - Every check row in the brief has a figure or a one-line not-applicable statement.
+- **Verification:** The fit tool passes. The brief is in the repo with every G1 package figure, and each figure has been viewed. **Gate G1:** the owner has decided OQ1 to OQ4 in writing.
 
 ### U4. Fused aft hull provisions
 
