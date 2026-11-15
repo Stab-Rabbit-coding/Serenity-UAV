@@ -53,11 +53,11 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 - KD4. **On the ground the EDF idles and the aircraft is restrained.** (session-settled: user-directed, 2026-11-15 — chosen over a ground cooling cart, a power-on time limit, and a standby fan.) Governs R9.
 - KD5. **The cargo doors are fused shut, with one bolted belly service hatch.** There is no internal cargo. (session-settled: user-directed, 2026-11-15 — chosen over bolted door panels and over sealed actuated doors.) Governs R11, R12.
 - KD6. **The ramp is a louvred panel on its canon outline, with a screen behind it.** (session-settled: user-directed, 2026-11-15 — chosen over a ramp lowered as a scoop and over a plain open hole.) Governs R5, R6.
-- KD7. **The winch sits on the cargo floor, with its motor as far forward as it fits.** The load line leaves the belly under the tilt pivot. (session-settled: user-directed, 2026-11-15 — chosen over a fairlead under the empty hover CG: a slung load then pulls the CG toward the pivot and adds no pitching moment in hover.) Governs R13, R14, R15.
+- KD7. **The winch sits on the cargo floor at its present station, and the load line leaves the belly under the tilt pivot.** The winch and the Cargo Observer move forward only if bench balance needs it. (session-settled: user-directed, 2026-11-15 — the owner first asked for the winch motor as far forward as it fits; on the corrected ledger that move leaves the aircraft nose-heavy, and he chose to leave both in place for trim. The fairlead under the pivot was chosen over one under the empty hover CG: a slung load then adds no pitching moment in hover.) Governs R13, R14, R15, R20.
 - KD8. **RCS is populated in the first build.** (session-settled: user-directed, 2026-11-15 — chosen over capped stubs with empty mounts, and over dropping RCS.) Governs R16, R17.
 - KD9. **Priority when the intake limits the EDF: cooling, then RCS, then thrust.** Added thrust remains a goal. (session-settled: user-directed, 2026-11-15 — chosen over RCS first, and over a fixed thrust share that could force the ramp beyond its canon outline.) Governs R7, R10.
 - KD10. **The EDF motor is mounted as a pusher, ahead of the rotor.** (session-settled: user-directed, 2026-11-15 — chosen over the motor behind the rotor in the exhaust.) Governs R18.
-- KD11. **Three items move forward: the Flight Engineer box, the tail EDF speed controller and the RCS servos.** (session-settled: user-directed, 2026-11-15 — the owner first chose six moves on the uncorrected ledger; on the corrected ledger six overshoot and leave the aircraft nose-heavy, and he chose the QX 64 mm with the Flight Engineer box forward. The battery is already forward in the twin tray. The winch and the Cargo Observer stay near their present stations unless bench balance calls for them.) Governs R19, R20.
+- KD11. **Three items move forward: the Flight Engineer box, the tail EDF speed controller and the RCS servos.** (session-settled: user-directed, 2026-11-15 — the owner first chose six moves on the uncorrected ledger; on the corrected ledger six overshoot and leave the aircraft nose-heavy, and he chose the QX 64 mm with the Flight Engineer box forward. The battery is already forward in the twin tray. The winch and the Cargo Observer stay in place under KD7.) Governs R19.
 - KD12. **The stern stack becomes the single Pilot-NoNFO stack and stays aft of the pivot.** (session-settled: user-directed, 2026-11-15 — chosen over moving it forward into the cargo bay.) Governs R21.
 - KD14. **The tail EDF is the QX-Motor 64 mm unit used in the nacelles: QF2822 2300 KV motor, 12-blade rotor, OSESC-NAC speed controller, in a printed pusher shroud.** (session-settled: user-directed, 2026-11-15 — chosen over the XFly X5 50 mm, and over the X5 motor with a custom 2.165 in (55 mm) rotor. The owner's rule was to drop the QX if it left the controllable envelope. On the uncorrected mass ledger it did, and the X5 was substituted; on the corrected ledger, with the Flight Engineer box forward, the QX trims at 25 % of control or less, and the owner chose it. Supersedes the earlier plan's KD8.) Governs R18, R29, R30, R38.
 - KD15. **The ramp louvres are designed for low pressure loss.** (session-settled: user-directed, 2026-11-15 — chosen over ordinary louvres: installed thrust and RCS authority both fall with intake loss, and behind ordinary louvres the X5 also fails the 50 % trim criterion.) Governs R5, R6, R27, R30.
@@ -95,7 +95,7 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 
 **Winch and sling load**
 
-- R13. The cargo winch shall mount on the cargo bay floor, with its motor as far forward as it fits and as trim allows.
+- R13. The cargo winch shall mount on the cargo bay floor at its present station. It shall move forward only if bench balance needs it.
 - R14. The load line shall leave the belly through a fairlead under the tilt pivot.
 - R15. A small recess in the belly shall house the hook or magnet when the line is retracted.
 - R26. The winch line and fairlead shall be kept clear of the air stream to the EDF, so that a slack line cannot reach the rotor.
@@ -120,7 +120,7 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 **Mass and trim**
 
 - R19. The Flight Engineer box, the tail EDF speed controller and the RCS servos shall move forward as far as fit and function allow.
-- R20. The Cargo Observer shall view its subject through orifices in the belly.
+- R20. The Cargo Observer shall stay at its present station, and shall view its subject through orifices in the belly.
 - R21. The stern stack shall be the single Pilot-NoNFO stack, aft of the pivot.
 - R23. The hover CG shall lie inside the limit that the owner sets, with and without a slung load. The estimated window is 0.04 to 0.15 in (1.0 to 3.9 mm) aft of the pivot.
 - R34. The bow shall have an adjustable ballast pocket, used after real equipment has been placed forward.
