@@ -118,6 +118,7 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 - R20. The Cargo Observer shall view its subject through orifices in the belly.
 - R21. The stern stack shall be the single Pilot-NoNFO stack, aft of the pivot.
 - R23. The hover CG shall lie inside the limit that the owner sets, with and without a slung load. The estimated window is 0.04 to 0.12 in (1.0 to 3.0 mm) aft of the pivot.
+- R34. The bow shall have a trim pocket that takes real equipment first and ballast second, adjustable after the as-built CG is weighed.
 
 ### Acceptance Examples
 
@@ -204,6 +205,11 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
     - The CG window that the estimate supports is 0.04 to 0.12 in (1.0 to 3.0 mm) aft of the pivot. The present estimate, 0.16 in (4.0 mm), is outside it by 0.04 in (1.0 mm).
     - A tail EDF fault in hover leaves the trim moment unopposed: with the present CG, about 4.7 rad/s² of pitch acceleration, or 30° in about half a second.
     - The QX 64 mm needs a 1.57 in (40 mm) ventral jet for the same criterion, which confirms KD14.
+- **Bow trim, checked 2026-11-15.** Mass at the bow moves the CG about 0.002 in per gram (0.05 mm per gram). The nose has free room: a pocket of about 0.4 to 1.4 in² (240 to 890 mm²) in section from station Y 8 to Y 22, and 2.2 to 3.7 in² (1,430 to 2,410 mm²) from Y 30 to Y 50, measured on the head hull less the head layout envelopes.
+    - **The ledger baseline is not reliable to 0.04 in (1 mm).** The nose Observer board, its camera, ToF and laser pods and the pitot parts are in `tools/head_layout_fit.py` but not in the ledger. `docs/CG_RELOCATION_STUDY.md` carries the board as an ASSUMED 2.1 oz (60 g); at its centroid, Y 59.8, that moves the CG 0.10 in (2.5 mm) forward. The ledger puts the Bay A nodes at Y 45.7, but the head layout puts them at Y 91 and Y 117, which moves the CG about 0.04 in (1.0 mm) aft. Net, the CG may already be near 0.10 in (2.5 mm) aft of the pivot, inside the window. WBS item BAYA-FWD-08 is the open ledger update.
+    - **GNSS antenna.** The retention ring for the GNSS patch is on the cargo roof at Y 415.7; the patch itself is not in the ledger. An ASSUMED 0.5 oz (15 g) patch moved to the nose gives about 0.03 in (0.85 mm). It needs a sky view through a wall that passes GNSS signals, which carbon-filled PA may not.
+    - **49 MHz loading coil.** The forward post and coil are 0.14 oz (4 g) at Y 155.7. Moved to the bow they give 0.003 in (0.08 mm), which is not worth it for trim. The move would lengthen the end-fed wire by about 5 in (125 mm).
+    - **Ballast.** 1.2 oz (35 g) at Y 15 gives 0.07 in (1.7 mm). It is the last resort, sized on the bench after the as-built CG is weighed.
 - **Not assessed.** Gust and ground-effect moments, RCS valve and EDF spool dynamics, and the transition from hover to forward flight. The pitch plant is a double integrator with a point-mass inertia of about 0.055 kg·m²; no loop has been tuned and no stability margin is claimed.
 - **Installed thrust, planning estimate.** Constant shaft power, calibrated to each unit's free-air static thrust; louvre and screen losses ASSUMED. All units keep about 40 to 47 % of free-air thrust behind louvred ramp intake; a plain screened ramp keeps about 56 to 66 %.
 
@@ -226,7 +232,7 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 
 - OQ1. **Thrust target.** Default: report installed thrust against free-air thrust, with no fixed share. Planning estimate for the X5: about 1.3 lbf (5.7 N) behind ordinary louvres, about 1.8 lbf (8.1 N) behind a plain screened opening, against 2.7 lbf (12.2 N) free air.
 - OQ5. **Hover endurance.** The tail EDF runs at or near full throttle in hover. Planning states the power this adds and the endurance it costs.
-- OQ6. **Closing the CG window.** The present estimate is 0.04 in (1.0 mm) aft of the window. Planning finds the further forward move, or the owner widens the window with larger jets.
+- OQ6. **Closing the CG window.** The present estimate is 0.04 in (1.0 mm) aft of the window, but the ledger omits the nose Observer and misplaces the Bay A nodes. Planning reconciles the ledger first, then moves the GNSS antenna to the nose if its signal path allows, then sizes bow ballast for what is left.
 - OQ2. **Response to an EDF fault in flight.** Default for planning: shed radio transmit power, report the fault, and land. The owner confirms or changes it.
 - OQ3. **RCS jet pattern and size.** The estimate supports two ventral jets at 255° and 285°, 0.75 in (19 mm) bore, and two upper jets at 45° and 135°, 0.55 in (14 mm) bore, all at station Y 634. Planning confirms it with the measured jet path loss, or moves the CG forward and shrinks the jets.
 - OQ4. **What the Cargo Observer watches** now that there is no internal cargo. Default: the sling load and the ground below, through the belly.
