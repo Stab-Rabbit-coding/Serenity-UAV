@@ -59,9 +59,9 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 - KD10. **The EDF motor is mounted as a pusher, ahead of the rotor.** (session-settled: user-directed, 2026-11-15 — chosen over the motor behind the rotor in the exhaust.) Governs R18.
 - KD11. **Six items move forward: the Flight Engineer box, the winch, the tail EDF speed controller, the battery, the RCS servos and the Cargo Observer.** (session-settled: user-directed, 2026-11-15 — chosen over moving all eight candidates: the aft nodes stay.) Governs R19, R20.
 - KD12. **The stern stack becomes the single Pilot-NoNFO stack and stays aft of the pivot.** (session-settled: user-directed, 2026-11-15 — chosen over moving it forward into the cargo bay.) Governs R21.
-- KD14. **The tail EDF is the QX-Motor 64 mm unit used in the nacelles: QF2822 2300 KV motor, 12-blade rotor, OSESC-NAC speed controller, in a printed pusher shroud.** (session-settled: user-directed, 2026-11-15 — chosen over the XFly X5 50 mm with its stock rotor, and over the X5 motor with a custom 2.165 in (55 mm) rotor: the custom rotor gains nothing installed, and the 64 mm unit gives about 60 % more installed thrust with nacelle-common spares. Supersedes the earlier plan's KD8.) Governs R18, R27, R28.
-- KD15. **The ramp louvres are designed for low pressure loss.** (session-settled: user-directed, 2026-11-15 — chosen with KD14: behind high-loss louvres the 64 mm fan runs at the edge of stall.) Governs R5, R6, R27.
-- KD13. **Carried from the earlier plan.** The EDF holds a minimum cooling throttle in hover, with nacelle tilt compensating its thrust. Printed flow guides raise local air speed at failing nodes. The thrust tube is fused into the aft hull. The owner sets the aft CG limit before hull geometry work. CFD is tied to the node thermal budget. (session-settled: user-directed, 2026-11-15, in `docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md` KD7, KD8, KD10, KD11, KD12, KD6.) Governs R4, R8, R22, R23.
+- KD14. **The tail EDF is the XFly Galaxy X5 50 mm unit with its stock rotor, in a printed pusher shroud.** (session-settled: user-directed, 2026-11-15 — the owner chose the QX 64 mm nacelle unit on the condition that it stay inside the controllable envelope; the hover trim estimate puts the QX at 51 to 89 % of the pitch control moment against the 50 % criterion, and the X5 at 33 % behind a low-loss ramp. Chosen over the QX 64 mm, and over the X5 motor with a custom 2.165 in (55 mm) rotor, which gains nothing installed. Supersedes the earlier plan's KD8.) Governs R18, R29, R30.
+- KD15. **The ramp louvres are designed for low pressure loss.** (session-settled: user-directed, 2026-11-15 — chosen over ordinary louvres: installed thrust and RCS authority both fall with intake loss, and behind ordinary louvres the X5 also fails the 50 % trim criterion.) Governs R5, R6, R27, R30.
+- KD13. **Carried from the earlier plan.** Nacelle tilt compensates the tail EDF thrust in hover. Printed flow guides raise local air speed at failing nodes. The thrust tube is fused into the aft hull. The owner sets the aft CG limit before hull geometry work. CFD is tied to the node thermal budget. (session-settled: user-directed, 2026-11-15, in `docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md` KD7, KD8, KD10, KD11, KD12, KD6.) Governs R4, R8, R22, R23.
 
 ### Requirements
 
@@ -78,10 +78,10 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 **Cooling, RCS and thrust**
 
 - R7. Every node shall stay under its temperature limit in the average-power case, at the minimum cooling throttle, in still air and at cruise airspeed.
-- R8. The EDF shall run at no less than the minimum cooling throttle whenever the avionics are powered, in flight and in hover.
+- R8. In hover the tail EDF shall run at the throttle that pitch trim and RCS authority need. The estimate is 89 % or more. A lower "minimum cooling throttle" applies only where the RCS is not needed.
 - R9. On the ground, the EDF shall run at the minimum cooling throttle with the aircraft restrained against its thrust.
 - R10. The analysis shall state the tail EDF thrust that the intake and interior path leave, at each analysed throttle, against the EDF's free-air thrust.
-- R24. The requirements shall state the aircraft's response to an EDF or speed-controller fault in flight, which leaves no forced air.
+- R24. The requirements shall state the aircraft's response to a tail EDF, speed-controller or RCS fault in hover, which removes pitch control, and in forward flight, which removes forced cooling.
 
 **Sealed cargo bay**
 
@@ -104,7 +104,9 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 **Tail EDF installation**
 
 - R18. The EDF motor shall sit ahead of the rotor, on a shaft short enough to run below its first critical speed with margin.
-- R28. The tail EDF shall share its motor, rotor and speed controller part numbers with the nacelle EDFs.
+- R29. The tail EDF, its speed controller and the RCS shall be treated as flight-critical in hover: they are the only pitch trim and pitch control the aircraft has there.
+- R30. Hover pitch trim shall use no more than 50 % of the pitch control moment, the criterion adopted in `docs/CG_RELOCATION_STUDY.md` §1.
+- R31. The RCS pattern shall give pitch authority in both directions. The estimate shows almost none in the nose-up direction.
 - R22. The aft hull shall carry the mounting ring, the fused thrust tube and the fixed elliptical nozzle, 2.06 × 1.76 in (52.3 × 44.7 mm).
 
 **Mass and trim**
@@ -112,12 +114,13 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 - R19. The Flight Engineer box, the winch, the tail EDF speed controller, the battery, the RCS servos and the Cargo Observer shall move forward as far as fit and function allow.
 - R20. The Cargo Observer shall view its subject through orifices in the belly.
 - R21. The stern stack shall be the single Pilot-NoNFO stack, aft of the pivot.
-- R23. The hover CG shall lie inside the aft limit that the owner sets, with and without a slung load.
+- R23. The hover CG shall lie inside the limit that the owner sets, with and without a slung load. The estimated window is from the pivot to 0.20 in (5.1 mm) aft of it.
 
 ### Acceptance Examples
 
 - AE1. **Covers R1, R25.** Given the built configuration, when the enclosure check runs, then every path from outside air to the EDF passes through the fuselage interior, and the only openings are those R25 names.
-- AE2. **Covers R7, R8.** Given hover at the minimum cooling throttle, when the coupled analysis runs, then every node passes the average-power case.
+- AE2. **Covers R7, R9.** Given the aircraft restrained on the ground at the minimum cooling throttle, when the coupled analysis runs, then every node passes the average-power case.
+- AE7. **Covers R8, R30.** Given hover at the stated tail throttle, when the trim analysis runs, then pitch trim uses no more than 50 % of the pitch control moment.
 - AE3. **Covers R10.** Given each analysed throttle, when the analysis runs, then it reports installed thrust beside free-air thrust.
 - AE4. **Covers R23.** Given the ledger with every moved and added part, when the hover CG is aft of the owner's limit, then the run fails and an Owner Decision Brief is written.
 - AE5. **Covers R17.** Given the chosen RCS stations, when the jet-path check runs, then all four jets are clear.
@@ -126,9 +129,10 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 ### Success Criteria
 
 - Every node passes the average-power case, with stated margins and stated uncertainty.
-- The RCS has stated pitch and yaw authority at the minimum cooling throttle.
+- The RCS has stated pitch and yaw authority at the hover tail throttle.
 - Installed tail thrust is reported, and the plan shows what was done to raise it inside the canon ramp outline.
 - The hover CG is inside the owner's limit.
+- Hover pitch trim uses no more than 50 % of the pitch control moment, with the tail throttle it needs stated.
 - The first build needs no later hull reprint to gain the EDF, the RCS or the winch.
 
 ### Scope Boundaries
@@ -145,7 +149,7 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 
 - Bench measurement of the ASSUMED thermal inputs, and a transient thermal model.
 - Drawing and bench-testing the custom rotor and its shroud.
-- Flight-control firmware for the minimum cooling throttle, the tilt trim and the RCS mixer.
+- Flight-control firmware for the tail throttle schedule, the tilt trim and the RCS mixer.
 
 ### Dependencies and Assumptions
 
@@ -162,18 +166,33 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 | Cargo Observer | 0.13 lbm (60 g) | 0.04 in (1.1 mm) |
 | Tail EDF speed controller | 0.08 lbm (35 g) | 0.04 in (1.0 mm) |
 
-- **Trim does not yet close on these estimates.** The six moves recover about 0.54 in (13.8 mm). With the 64 mm tail EDF and RCS, the aircraft starts about 0.96 in (24.3 mm) aft of the pivot. That leaves about 0.41 in (10.5 mm) aft, against an ASSUMED working band of ±0.25 in (6.4 mm). The Pilot-NoNFO merge, shorter power wiring and the deleted door hardware are not yet counted. Closing trim needs more forward mass, a further battery move, or a wider band set by the owner.
+- **Hover trim and control limits, planning estimate.** Free-body model in hover: nacelle thrust acts at the tilt pivot (Y 339.4, Z 146.9); the tail EDF thrust acts on the tail axis (Z 165.2); weight acts at the CG. A CG aft of the pivot gives a nose-up moment W·d. Two things oppose it. The tail thrust and the nacelle tilt that cancels it form a nose-down couple on a 0.72 in (18.4 mm) arm. Downward RCS jets at the tail give a nose-down moment on an arm of about 11 in (285 mm). Nacelle tilt alone cannot trim pitch, because the pivot is 0.41 in (10.3 mm) below the CG. Jet force is taken as momentum flux, 15 % bleed through two open 0.47 in (12 mm) jets; it falls with the square of tail throttle. CG is recomputed from `current-specification/auw_ledger.json` with every change in this document applied; added masses and destination stations are ASSUMED.
+
+| | XFly X5 50 mm | QX 64 mm |
+| --- | --- | --- |
+| Hover mass | 14.62 lbm (6,634 g) | 14.93 lbm (6,770 g) |
+| CG aft of the pivot | 0.16 in (4.0 mm) | 0.32 in (8.1 mm) |
+| Trim moment needed | 2.30 lbf·in (0.260 N·m) | 4.77 lbf·in (0.539 N·m) |
+| Trim use of RCS pitch moment, low-loss ramp, full tail throttle | 33 % | 51 % |
+| Trim use, ordinary louvres, full tail throttle | 60 % | 89 % |
+| Lowest tail throttle that meets the 50 % criterion, low-loss ramp | 89 % | none (fails at 100 %) |
+| Lowest tail throttle that can trim at all, low-loss ramp | 70 % | 79 % |
+| CG limit aft of the pivot, 50 % criterion, low-loss ramp | 0.20 in (5.1 mm) | 0.31 in (8.0 mm) |
+| Nacelle tilt to cancel tail thrust at full throttle | 6.1° | 9.6° |
+
+- **What the estimate means.** With the X5 and a low-loss ramp the CG is inside the limit by 0.04 in (1.1 mm). At half tail throttle neither unit can trim. A tail EDF fault in hover leaves the trim moment unopposed: about 4.7 rad/s² of pitch acceleration with the X5, or 30° in about half a second. Pitch authority in the nose-up direction is almost nil, so the CG shall not be forward of the pivot.
+- **Not assessed.** Gust and ground-effect moments, RCS valve and EDF spool dynamics, and the transition from hover to forward flight. The pitch plant is a double integrator with a point-mass inertia of about 0.055 kg·m²; no loop has been tuned and no stability margin is claimed.
 - **Installed thrust, planning estimate.** Constant shaft power, calibrated to each unit's free-air static thrust; louvre and screen losses ASSUMED. All units keep about 40 to 47 % of free-air thrust behind louvred ramp intake; a plain screened ramp keeps about 56 to 66 %.
 
 | Unit | Free air | Louvred ramp | Plain screened ramp |
 | --- | --- | --- | --- |
-| XFly X5 50 mm, stock | 2.73 lbf (12.2 N) | 1.27 lbf (5.7 N) | 1.82 lbf (8.1 N) |
+| XFly X5 50 mm, stock (chosen) | 2.73 lbf (12.2 N) | 1.27 lbf (5.7 N) | 1.82 lbf (8.1 N) |
 | X5 motor, custom 55 mm rotor | 2.90 lbf (12.9 N) | 1.29 lbf (5.7 N) | 1.84 lbf (8.2 N) |
-| QX 64 mm, 2300 KV (chosen) | 5.22 lbf (23.2 N) | 2.03 lbf (9.0 N) | 2.93 lbf (13.0 N) |
+| QX 64 mm, 2300 KV | 5.22 lbf (23.2 N) | 2.03 lbf (9.0 N) | 2.93 lbf (13.0 N) |
 
-- **64 mm stall margin.** Behind louvres with an ASSUMED loss coefficient of 2.3 on 55 % open area, the 64 mm fan needs about 1.26 psi (8.7 kPa) against about 1.25 psi (8.6 kPa) available at full power. KD15 and R27 exist for this reason.
-- **64 mm unit, other data.** 1,368 W and 57 A at full throttle [REF-EDF-003]. Mass with shroud and speed controller about 8.6 oz (243 g), against about 4.4 oz (125 g) for the X5, which moves the CG about 0.15 in (3.7 mm) further aft. Shroud lip OD 3.03 in (77 mm), so the rotor fits forward of about station Y 627. Nozzle area is 0.68 of the swept area.
-- **Shaft critical speed.** The QF2822 motor's speed at full throttle is not yet established. For a short shaft, the X5 motor turns up to about 71,000 rpm unloaded. A 0.16 in (4 mm) steel shaft runs clear of its first critical speed at 2 in (50 mm) unsupported, and inside its running range at 4 in (100 mm). Simply supported, ASSUMED properties, rotor overhang not counted.
+- **Stall margin.** Behind louvres with an ASSUMED loss coefficient of 2.3 on 55 % open area, the X5 needs about 0.83 psi (5.7 kPa) of about 1.20 psi (8.3 kPa) available. The QX 64 mm would need all of its 1.25 psi (8.6 kPa).
+- **QX 64 mm, for the record.** 1,368 W and 57 A at full throttle [REF-EDF-003]; about 0.26 lbm (118 g) heavier than the X5 installed; shroud lip OD 3.03 in (77 mm).
+- **Shaft critical speed.** The X5 motor turns up to about 71,000 rpm unloaded.
 - **RCS stations.** On the Rev U aft hull, a ventral jet is clear from station Y 628 aft. A straight dorsal jet is blocked by the dorsal pod neck. Source: `tools/rear_cone_layout_fit.py`.
 - **Repo rules that change.** Root `AGENTS.md` §1 calls the tail EDF optional and deferred to Phase 11. This plan makes it part of the first build. The design-shift gate in `AGENTS.md` §10 requires the WBS record before any geometry change.
 - **Affected documents.** `docs/CARGO_WINCH_SPECIFICATION.md`, `docs/CARGO_DOOR_GATEWAY_SPEC.md`, `docs/CARGO_SECTION_LAYOUT.md`, `docs/POWER_DISTRIBUTION.md`, `deferred/WBS.md`, and the stern stack plan `docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md`.
@@ -182,7 +201,8 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 
 **Deferred to Planning**
 
-- OQ1. **Thrust target.** Default: report installed thrust against free-air thrust, with no fixed share. Planning estimate for the 64 mm unit: about 2.0 lbf (9 N) behind high-loss louvres, about 2.9 lbf (13 N) behind a plain screened opening, against 5.2 lbf (23.2 N) free air. The owner may set a share once the first analysis shows what the ramp leaves.
+- OQ1. **Thrust target.** Default: report installed thrust against free-air thrust, with no fixed share. Planning estimate for the X5: about 1.3 lbf (5.7 N) behind ordinary louvres, about 1.8 lbf (8.1 N) behind a plain screened opening, against 2.7 lbf (12.2 N) free air.
+- OQ5. **Hover endurance.** The tail EDF runs at 89 % throttle or more in hover. Planning states the power this adds and the endurance it costs. The owner may set a share once the first analysis shows what the ramp leaves.
 - OQ2. **Response to an EDF fault in flight.** Default for planning: shed radio transmit power, report the fault, and land. The owner confirms or changes it.
 - OQ3. **RCS jet pattern.** Planning proposes four stations that meet R17 and gives pitch and yaw authority for each option.
 - OQ4. **What the Cargo Observer watches** now that there is no internal cargo. Default: the sling load and the ground below, through the belly.
@@ -199,4 +219,5 @@ The draft gate G1 tools, `tools/rear_cone_layout_fit.py` and `tools/cooling_g1_f
 - `tools/cargo_layout_fit.py` for the ramp opening; `docs/CARGO_SECTION_LAYOUT.md` §5 for the ramp fairing.
 - `current-specification/auw_ledger.json` for masses and stations.
 - `tools/rear_cone_layout_fit.py` for rear-cone stations and RCS jet paths.
-- [REF-EDF-003] for the QX 64 mm unit; [REF-EDF-001], [REF-EDF-002] for the X5 unit compared against it.
+- [REF-EDF-001], [REF-EDF-002] for the X5 unit; [REF-EDF-003] for the QX 64 mm unit compared against it.
+- `docs/CG_RELOCATION_STUDY.md` §1 for the 50 % control-reserve criterion.
