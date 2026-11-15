@@ -1,37 +1,48 @@
 {
  "configs": {
   "cargo_2800_payload": {
-   "I_pitch_gmm2": 68095363.77714247,
-   "T_W": 1.431563047698006,
+   "I_pitch_gmm2": 70183907.84153908,
+   "T_W": 1.418708800268209,
    "cg": [
-    -0.09088851683484188,
-    351.8839621028913,
-    155.68913301230245
+    -0.09007241338593293,
+    350.29056972923746,
+    156.93976925653223
    ],
-   "k_pitch_mm": 101.40511065302249,
-   "mass_g": 6622.132371497091
+   "k_pitch_mm": 102.4852195229906,
+   "mass_g": 6682.132371497091
   },
   "heaviest_4000_payload": {
-   "I_pitch_gmm2": 68489274.0546476,
-   "T_W": 1.410476609596723,
+   "I_pitch_gmm2": 70559802.27838872,
+   "T_W": 1.3979966000733106,
    "cg": [
-    -0.08954975981157481,
-    351.39517359723436,
-    156.1797907838659
+    -0.08875741635642667,
+    349.82936852686305,
+    157.40782719578502
    ],
-   "k_pitch_mm": 100.94621905548053,
-   "mass_g": 6721.132371497091
+   "k_pitch_mm": 102.00643423438737,
+   "mass_g": 6781.132371497091
   },
   "hover_4000": {
-   "I_pitch_gmm2": 68311033.34819658,
-   "T_W": 1.4597343433801873,
+   "I_pitch_gmm2": 70361329.88627018,
+   "T_W": 1.4463715696240547,
    "cg": [
-    -0.0926770844330252,
-    351.2168989783946,
-    157.1254917733527
+    -0.09182869515168246,
+    349.59854422129587,
+    158.3873648274016
    ],
-   "k_pitch_mm": 102.56003768615138,
-   "mass_g": 6494.332371497091
+   "k_pitch_mm": 103.61026615130955,
+   "mass_g": 6554.332371497091
+  },
+  "hover_twin_2200": {
+   "I_pitch_gmm2": 79243366.56295401,
+   "T_W": 1.4424103140481588,
+   "cg": [
+    -0.09157719896748172,
+    340.1657325051924,
+    158.66656973205082
+   ],
+   "k_pitch_mm": 109.80489469882971,
+   "mass_g": 6572.332371497091
   }
  },
  "nacelle_printed_unit_g": {
@@ -706,15 +717,15 @@
   },
   {
    "cg": [
-    0.0,
-    45.7,
-    200.0
+    -0.0,
+    104.0,
+    229.2
    ],
    "kind": "BOM",
    "mass_g": 13.0,
    "name": "PB2-I-FC (node A)",
    "ref": "PB2-I-FC",
-   "source": "BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"
+   "source": "BOM Unit_Mass_g; head_layout_fit Bay A node CN1 + FC1 envelopes (mean centroid)"
   },
   {
    "cg": [
@@ -754,15 +765,15 @@
   },
   {
    "cg": [
-    0.0,
-    45.7,
-    200.0
+    -0.0,
+    104.0,
+    229.2
    ],
    "kind": "BOM",
    "mass_g": 13.0,
    "name": "PB2-I-CN (node A)",
    "ref": "PB2-I-CN",
-   "source": "BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"
+   "source": "BOM Unit_Mass_g; head_layout_fit Bay A node CN1 + FC1 envelopes (mean centroid)"
   },
   {
    "cg": [
@@ -802,15 +813,15 @@
   },
   {
    "cg": [
-    0.0,
-    45.7,
-    200.0
+    -0.0,
+    104.0,
+    229.2
    ],
    "kind": "BOM",
    "mass_g": 31.0,
    "name": "Pilot (node A)",
    "ref": "Pilot",
-   "source": "BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"
+   "source": "BOM Unit_Mass_g; head_layout_fit Bay A node CN1 + FC1 envelopes (mean centroid)"
   },
   {
    "cg": [
@@ -850,15 +861,15 @@
   },
   {
    "cg": [
-    0.0,
-    45.7,
-    200.0
+    -0.0,
+    104.0,
+    229.2
    ],
    "kind": "BOM",
    "mass_g": 40.0,
    "name": "TACCO (node A)",
    "ref": "TACCO",
-   "source": "BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"
+   "source": "BOM Unit_Mass_g; head_layout_fit Bay A node CN1 + FC1 envelopes (mean centroid)"
   },
   {
    "cg": [
@@ -910,15 +921,15 @@
   },
   {
    "cg": [
-    0.0,
-    45.7,
-    200.0
+    -0.0,
+    104.0,
+    229.2
    ],
    "kind": "BOM",
    "mass_g": 1.0,
    "name": "MICROSD-LOG (node A)",
    "ref": "MICROSD-LOG",
-   "source": "BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"
+   "source": "BOM Unit_Mass_g; head_layout_fit Bay A node CN1 + FC1 envelopes (mean centroid)"
   },
   {
    "cg": [
@@ -1582,15 +1593,15 @@
   },
   {
    "cg": [
-    0.0,
-    45.7,
-    200.0
+    -0.0,
+    104.0,
+    229.2
    ],
    "kind": "BOM",
    "mass_g": 10.0,
    "name": "FAR-BOND-STRAP (node A)",
    "ref": "FAR-BOND-STRAP",
-   "source": "BOM Unit_Mass_g; ESTIMATE: Bay A, head sta 0-91 mm (docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"
+   "source": "BOM Unit_Mass_g; head_layout_fit Bay A node CN1 + FC1 envelopes (mean centroid)"
   },
   {
    "cg": [
@@ -2002,9 +2013,9 @@
   },
   {
    "cg": [
-    0.0,
-    45.7,
-    200.0
+    -0.0,
+    104.0,
+    229.2
    ],
    "kind": "GAP",
    "mass_g": 10.0,
@@ -2075,6 +2086,18 @@
   {
    "cg": [
     0.0,
+    59.8,
+    237.4
+   ],
+   "kind": "GAP",
+   "mass_g": 60.0,
+   "name": "Nose Observer board (vision/ToF/laser carrier)",
+   "ref": "GAP",
+   "source": "ESTIMATE 60 g -- no BOM row; docs/CG_RELOCATION_STUDY.md sec 2 ASSUMED; head_layout_fit.observer_board() centroid"
+  },
+  {
+   "cg": [
+    0.0,
     356.5,
     223.4
    ],
@@ -2111,7 +2134,7 @@
  ],
  "subtotals_hover_g": {
   "BOM": 2386.9040000000005,
-  "GAP": 219.5714,
+  "GAP": 279.57140000000004,
   "NACELLE": 1977.876227046352,
   "PRINT": 1909.9807444507396
  },

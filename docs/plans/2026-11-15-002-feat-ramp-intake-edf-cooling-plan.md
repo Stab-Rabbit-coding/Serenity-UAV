@@ -62,6 +62,9 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 - KD14. **The tail EDF is the XFly Galaxy X5 50 mm unit with its stock rotor, in a printed pusher shroud.** (session-settled: user-directed, 2026-11-15 — the owner chose the QX 64 mm nacelle unit on the condition that it stay inside the controllable envelope; the hover trim estimate shows the QX needs a 1.57 in (40 mm) ventral RCS jet to hold trim to 50 % of control, against 1.02 in (26 mm) for the X5. Chosen over the QX 64 mm, and over the X5 motor with a custom 2.165 in (55 mm) rotor, which gains nothing installed. Supersedes the earlier plan's KD8.) Governs R18, R29, R30.
 - KD15. **The ramp louvres are designed for low pressure loss.** (session-settled: user-directed, 2026-11-15 — chosen over ordinary louvres: installed thrust and RCS authority both fall with intake loss, and behind ordinary louvres the X5 also fails the 50 % trim criterion.) Governs R5, R6, R27, R30.
 - KD16. **The ventral RCS jet sits at station Y 628 or further aft.** (session-settled: user-directed, 2026-11-15 — chosen over piping the jet through the skid crossbar, and over moving the crossbar forward 0.25 in (6.4 mm): the crossbar ends at about Y 627, the jet path is clear from Y 628 to Y 640, and no skid structure changes.) Governs R17, R32.
+- KD17. **The GNSS antenna sits under the bridge window, behind a cover that passes radio signals and matches the canon window.** (session-settled: user-directed, 2026-11-15 — chosen over the cargo roof station at Y 415.7: it puts real equipment in the nose in place of ballast.) Governs R35.
+- KD18. **The bow carries an adjustable ballast pocket, and final balance is done on the bench.** (session-settled: user-directed, 2026-11-15 — chosen over trimming with RCS in flight: dead weight is less desired than equipment, but better than spending endurance on trim control.) Governs R34, R36.
+- KD19. **RCS exhausts are trapezoidal openings that follow the canon ribs and plate sections of the rear cone.** They read as missing plates or designed openings, not round holes. Plate joints may shift radially to put each exhaust at its required angle, keeping the canon pattern as far as possible. (session-settled: user-directed, 2026-11-15, comment on PR #291 — chosen over round or elliptical jet holes.) Governs R37.
 - KD13. **Carried from the earlier plan.** Nacelle tilt compensates the tail EDF thrust in hover. Printed flow guides raise local air speed at failing nodes. The thrust tube is fused into the aft hull. The owner sets the aft CG limit before hull geometry work. CFD is tied to the node thermal budget. (session-settled: user-directed, 2026-11-15, in `docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md` KD7, KD8, KD10, KD11, KD12, KD6.) Governs R4, R8, R22, R23.
 
 ### Requirements
@@ -110,6 +113,7 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 - R30. Hover pitch trim shall use no more than 50 % of the pitch control moment, the criterion adopted in `docs/CG_RELOCATION_STUDY.md` §1.
 - R31. The RCS shall give pitch authority in both directions about the trim point, and yaw authority.
 - R33. The RCS jets shall be sized from the duct's total pressure and the jet path loss, so that hover pitch trim meets R30.
+- R37. Each RCS exhaust shall be a trapezoidal opening on the canon plate pattern of the rear cone, with the flow area that R33 requires.
 - R22. The aft hull shall carry the mounting ring, the fused thrust tube and the fixed elliptical nozzle, 2.06 × 1.76 in (52.3 × 44.7 mm).
 
 **Mass and trim**
@@ -118,7 +122,9 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 - R20. The Cargo Observer shall view its subject through orifices in the belly.
 - R21. The stern stack shall be the single Pilot-NoNFO stack, aft of the pivot.
 - R23. The hover CG shall lie inside the limit that the owner sets, with and without a slung load. The estimated window is 0.04 to 0.12 in (1.0 to 3.0 mm) aft of the pivot.
-- R34. The bow shall have a trim pocket that takes real equipment first and ballast second, adjustable after the as-built CG is weighed.
+- R34. The bow shall have an adjustable ballast pocket, used after real equipment has been placed forward.
+- R35. The GNSS antenna shall sit under the bridge window, behind a cover that passes GNSS signals and matches the canon window.
+- R36. The build plan shall include a bench balance step, with a stated allowance of ballast mass and CG travel to cover the difference between the estimate and the as-built aircraft.
 
 ### Acceptance Examples
 
@@ -156,6 +162,23 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 - Flight-control firmware for the tail throttle schedule, the tilt trim and the RCS mixer.
 
 ### Dependencies and Assumptions
+
+- **Corrected mass baseline, 2026-11-15. This supersedes every CG figure further down this section.** `tools/auw_ledger.py` carried a retired single battery in the cargo bay, the Bay A nodes at a stale station, and no nose Observer. Corrected, with the two cells in the published twin tray, the hover CG is 0.03 in (0.8 mm) aft of the pivot. The earlier figure of 0.46 in (11.8 mm) was wrong. The battery is already forward, so the battery move in KD11 has no further travel to give.
+
+| Tail EDF | Forward moves applied | CG from the pivot | CG the thrust couple alone trims |
+| --- | --- | --- | --- |
+| X5 50 mm | speed controller and RCS servos only | 0.17 in (4.4 mm) aft | 0.09 in (2.3 mm) aft |
+| X5 50 mm | plus winch and Cargo Observer | 0.06 in (1.5 mm) aft | 0.09 in (2.3 mm) aft |
+| X5 50 mm | plus Flight Engineer box as well | 0.19 in (4.8 mm) FORWARD | 0.09 in (2.3 mm) aft |
+| QX 64 mm | speed controller and RCS servos only | 0.33 in (8.4 mm) aft | 0.14 in (3.6 mm) aft |
+| QX 64 mm | plus Flight Engineer box | 0.09 in (2.3 mm) aft | 0.14 in (3.6 mm) aft |
+| QX 64 mm | plus winch and Cargo Observer as well | 0.02 in (0.5 mm) FORWARD | 0.14 in (3.6 mm) aft |
+
+- **What the corrected baseline changes.**
+    - All six forward moves together now overshoot: the aircraft would be nose-heavy, where pitch authority is weakest.
+    - With the X5, the Flight Engineer box should stay where it is.
+    - The QX 64 mm is no longer outside the controllable envelope on CG grounds. With the Flight Engineer box moved forward it sits forward of the point its own thrust couple trims. KD14 was decided on the uncorrected baseline and is open again (OQ7).
+    - The RCS sizing and the CG window were computed for the X5 at a CG of 0.16 in (4.0 mm) aft. They need a re-run for whichever unit and set of moves the owner chooses.
 
 - **Measured baseline.** The fan operating point, node temperatures, rear-cone stations and the CG arm are in `docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md`, "Measured Baseline". Every thermal input is ASSUMED.
 - **Ramp opening.** The sealed ramp fairing measures about 2.0 × 1.4 in (52 × 36 mm), or 2.9 in² (1,870 mm²), in `tools/cargo_layout_fit.py`. The rotor's swept area is about 2.7 in² (1,760 mm²), with an ASSUMED 1.1 in (28 mm) hub. Louvres and a screen reduce the open area.
@@ -233,6 +256,8 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 - OQ1. **Thrust target.** Default: report installed thrust against free-air thrust, with no fixed share. Planning estimate for the X5: about 1.3 lbf (5.7 N) behind ordinary louvres, about 1.8 lbf (8.1 N) behind a plain screened opening, against 2.7 lbf (12.2 N) free air.
 - OQ5. **Hover endurance.** The tail EDF runs at or near full throttle in hover. Planning states the power this adds and the endurance it costs.
 - OQ6. **Closing the CG window.** The present estimate is 0.04 in (1.0 mm) aft of the window, but the ledger omits the nose Observer and misplaces the Bay A nodes. Planning reconciles the ledger first, then moves the GNSS antenna to the nose if its signal path allows, then sizes bow ballast for what is left.
+- OQ7. **Tail EDF, reopened.** KD14 chose the X5 because the QX 64 mm fell outside the controllable envelope on the uncorrected baseline. On the corrected baseline the QX is trimmable with the Flight Engineer box forward. The owner chooses the unit and the set of forward moves together; planning then re-runs the RCS sizing and the CG window.
+- OQ8. **Bench balance allowance.** Planning sizes the ballast pocket and states the CG travel it gives, from the spread between estimated and as-built mass.
 - OQ2. **Response to an EDF fault in flight.** Default for planning: shed radio transmit power, report the fault, and land. The owner confirms or changes it.
 - OQ3. **RCS jet pattern and size.** The estimate supports two ventral jets at 255° and 285°, 0.75 in (19 mm) bore, and two upper jets at 45° and 135°, 0.55 in (14 mm) bore, all at station Y 634. Planning confirms it with the measured jet path loss, or moves the CG forward and shrinks the jets.
 - OQ4. **What the Cargo Observer watches** now that there is no internal cargo. Default: the sling load and the ground below, through the belly.

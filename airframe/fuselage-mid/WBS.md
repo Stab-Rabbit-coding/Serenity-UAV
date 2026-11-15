@@ -1220,6 +1220,14 @@ Plan `docs/plans/2026-11-01-001-feat-bay-a-forward-adoption-plan.md`; spec
     datasheet, per the sourcing rules; update `M25_INSERT`.
 - [ ] **BAYA-FWD-08** — Mass ledger: add drawer, shelf, gate, hatch flange/cover and any fan
     to `tools/auw_ledger.py`; re-run the CG roll-up.
+    - 2026-11-15, done: Bay A node station now read from `tools/head_layout_fit.py`
+      (was a typed estimate at Y 45.7); nose Observer added as an ASSUMED 60 g; new
+      configuration `hover_twin_2200` carries the two cells in the published twin tray.
+      Hover CG with the twin tray: 0.03 in (0.8 mm) aft of the pivot. The retired single
+      cargo pack (`hover_4000`) read 0.40 in (10.2 mm) aft.
+    - Still open: drawer, shelf, gate, hatch flange and cover masses; nose pods and
+      pitot masses; a BOM row for the 6S 2200 cells; owner decision to make
+      `hover_twin_2200` the headline configuration for the tools that read `hover_4000`.
 - [ ] **BAYA-FWD-09** — Assembly/build guide: use `head_cargo_shell24_2mm_merged_hatch.stl`
     and the new parts; retire the single-cell rail/sled/catch from the assembly.
 - [ ] **BAYA-FWD-10** — Hatch seal (rain/dust) and cover-to-PGND bond decision.

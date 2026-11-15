@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-14",
+  "generated": "2026-11-15",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -10606,6 +10606,133 @@
       ],
       "archived": false
     },
+    "docs/figures/cooling_g1_airpath_edf.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "docs/figures/cooling_g1_airpath_fan.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/cooling_g1_canon_aft.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/cooling_g1_canon_bow.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/cooling_g1_canon_side.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/cooling_g1_cg.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/cooling_g1_clearances.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/cooling_g1_fan_curve.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/cooling_g1_fan_electrical.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/cooling_g1_fbd.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/cooling_g1_flow_guides.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/cooling_g1_harness.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/cooling_g1_rcs_options.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/cooling_g1_rear_cone_sections.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/cooling_g1_sizing.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/cooling_g1_thermal_baseline.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/cooling_g1_upgrade_sequence.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/cooling_g1_walls.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/figures/nacelle64_bay_stud_after.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -11946,6 +12073,21 @@
         "documentation",
         "redundancy-failover",
         "security"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md": {
+      "description": "Fuselage Cooling and Tail EDF Provisions - Plan",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md": {
+      "description": "Cargo-Ramp Intake, Tail EDF Cooling and Forward Relocation - Plan",
+      "tags": [
+        "documentation",
+        "propulsion"
       ],
       "archived": false
     },
@@ -15748,6 +15890,13 @@
       ],
       "archived": false
     },
+    "tools/cooling_g1_figures.py": {
+      "description": "Python script",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/datum_r2_stl_list.txt": {
       "description": "Datum migration U4 (plan docs/plans/2026-10-19-001-aircraft-datum-migration-plan.md):",
       "tags": [
@@ -16491,6 +16640,13 @@
       ],
       "archived": false
     },
+    "tools/rear_cone_layout_fit.py": {
+      "description": "rear_cone_layout_fit.py -- gate G1 layout of the fuselage cooling fan and the tail EDF",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/scad_flatten.py": {
       "description": "scad_flatten.py -- flatten an OpenSCAD file that layers parameter overrides on a base file.",
       "tags": [
@@ -17041,6 +17197,24 @@
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
       "docs/figures/battery_bay_twin_tray.png",
+      "docs/figures/cooling_g1_airpath_edf.png",
+      "docs/figures/cooling_g1_airpath_fan.png",
+      "docs/figures/cooling_g1_canon_aft.png",
+      "docs/figures/cooling_g1_canon_bow.png",
+      "docs/figures/cooling_g1_canon_side.png",
+      "docs/figures/cooling_g1_cg.png",
+      "docs/figures/cooling_g1_clearances.png",
+      "docs/figures/cooling_g1_fan_curve.png",
+      "docs/figures/cooling_g1_fan_electrical.png",
+      "docs/figures/cooling_g1_fbd.png",
+      "docs/figures/cooling_g1_flow_guides.png",
+      "docs/figures/cooling_g1_harness.png",
+      "docs/figures/cooling_g1_rcs_options.png",
+      "docs/figures/cooling_g1_rear_cone_sections.png",
+      "docs/figures/cooling_g1_sizing.png",
+      "docs/figures/cooling_g1_thermal_baseline.png",
+      "docs/figures/cooling_g1_upgrade_sequence.png",
+      "docs/figures/cooling_g1_walls.png",
       "docs/figures/nacelle64_bay_stud_after.png",
       "docs/figures/nacelle64_bay_stud_interaction.png",
       "docs/figures/nacelle64_od17_aft_fairing_horizontal.png",
@@ -17222,6 +17396,8 @@
       "docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md",
       "docs/plans/2026-11-11-001-sprint-2-handoff.md",
       "docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md",
+      "docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md",
+      "docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/AC_43.13-1B_w-chg1.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
@@ -18858,6 +19034,7 @@
       "docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md",
       "docs/NACELLE_64MM_VERIFICATION.md",
       "docs/NOZZLE_DRIVE_TRADE.md",
+      "docs/figures/cooling_g1_airpath_edf.png",
       "docs/handoffs/2026-11-02-nacelle-exterior-canon.md",
       "docs/images/nacelle_64mm_nozzle_servo_option1.png",
       "docs/images/nacelle_64mm_nozzle_servo_option2.png",
@@ -18883,6 +19060,7 @@
       "docs/plans/2026-10-03-001-feat-nacelle-pour-foam-core-plan.md",
       "docs/plans/2026-10-19-001-baseline-r1/nacelle_esc_bay_fit.py.txt",
       "docs/plans/2026-10-19-001-baseline-r1/nozzle_linkage_check.py.txt",
+      "docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/1.jpg",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/2.jpg",
@@ -20831,6 +21009,7 @@
       "tools/check_nacelle_deps.py",
       "tools/check_tacco_envelope_sync.py",
       "tools/compact_bom_entries.py",
+      "tools/cooling_g1_figures.py",
       "tools/datum_r2_stl_list.txt",
       "tools/datum_regression.py",
       "tools/dorsal_shroud_resize_64.py",
@@ -20929,6 +21108,7 @@
       "tools/precommit_sanitize.py",
       "tools/prep_nacelle_64_bake.py",
       "tools/purge_stale_fcstd_objects.py",
+      "tools/rear_cone_layout_fit.py",
       "tools/scad_flatten.py",
       "tools/shift_baked_stl.py",
       "tools/skid_failure_mode_study.py",

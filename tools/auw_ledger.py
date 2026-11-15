@@ -68,6 +68,8 @@ sys.path.insert(0, str(HERE))
 import cargo_layout_fit as clf  # noqa: E402  (sibling tool, path set above)
 import sls_materials as sls  # noqa: E402  datasheet densities (single source)
 import middle_layout_fit as mlf  # noqa: E402
+import head_layout_fit as hlf  # noqa: E402  Bay A nodes, nose Observer, battery cell
+import twin_head_pack_fit as twin  # noqa: E402  twin pack tray station
 import nacelle_mass_cg_64 as nac64  # noqa: E402
 
 BOM = REPO / "current-specification" / "bom_revU.csv"
@@ -111,9 +113,17 @@ SPOOL_Z = clf.SPOOL_Z0 + 10.0
 NODE_POUCH_G = 5.0        # foil pouch per node, middle_layout_fit.py convention
 
 # Node stations (hull frame, centre of each node envelope).
+# Bay A (2026-11-15, WBS BAYA-FWD-08): the station is read from the published head
+# layout, the mean of the CN1 and FC1 node envelopes.  It was a typed estimate at Y 45.7
+# from before the Bay A forward layout, 58 mm forward of where the nodes sit.
+_HEAD = hlf.layout()[0]
+_BAY_A = [_HEAD[k]["solid"].centroid for k in sorted(_HEAD) if k.startswith("Bay A node")]
+if len(_BAY_A) != 2:
+    raise RuntimeError(f"expected the CN1 and FC1 Bay A node envelopes, found {len(_BAY_A)}")
+_BAY_A_C = tuple(float(v) for v in np.mean(_BAY_A, axis=0))
+_OBS_NOSE_C = tuple(float(v) for v in hlf.observer_board().centroid)
 NODE_ST = {
-    "A": ((X_CL, 45.7, 200.0), "ESTIMATE: Bay A, head sta 0-91 mm "
-          "(docs/AVIONICS_PB2_REDESIGN.md) -> hull Y -305.7..-214.7"),
+    "A": (_BAY_A_C, "head_layout_fit Bay A node CN1 + FC1 envelopes (mean centroid)"),
     "chin": ((X_CL, 0.5 * (clf.N_CHIN_Y0 + clf.N_CHIN_Y1),
               0.5 * (clf.N_CHIN_Z0 + clf.N_CHIN_Z1)),
              "cargo_layout_fit N_CHIN_* (CN2/CN3)"),
@@ -413,6 +423,13 @@ GAPS = [
      ((X_CL, clf.OBSERVER_Y0 + clf.OBSERVER_T / 2, clf.OBSERVER_Z0 + clf.OBSERVER_W / 2),
       "cargo_layout_fit OBSERVER_*"),  # was a typed R1 Z 50 (below the R2 belly)
      "ESTIMATE 60 g -- no BOM row; envelope 76.8 x 70.8 x 20 mm"),
+    # Nose Observer (2026-11-15, WBS BAYA-FWD-08): in the head layout since Rev H2 but
+    # never in this ledger.  60 g is the figure docs/CG_RELOCATION_STUDY.md section 2
+    # assumes, the same as the cargo Observer estimate above.  Its camera, ToF and laser
+    # pods and the pitot parts have no mass data and are NOT included.
+    ("Nose Observer board (vision/ToF/laser carrier)", 60.0,
+     (_OBS_NOSE_C, "head_layout_fit.observer_board() centroid"),
+     "ESTIMATE 60 g -- no BOM row; docs/CG_RELOCATION_STUDY.md sec 2 ASSUMED"),
     ("CAN-PERIPH-GW-1 gateways x2 (winch, tilt encoders)", 12.0, WINCH_ST,
      "ESTIMATE 6 g each, as CAN-PERIPH-GW-DOOR -- no BOM rows"),
     ("Structural epoxy (West System 105/206 + 406), bonded joints", 40.0,
@@ -587,6 +604,20 @@ def battery_item(ref: str, bom: dict[str, dict]) -> Item:
     return Item(ref, ref, m, (x, y, z), inertia, f"BOM; {s}; solid box", "BOM")
 
 
+def twin_pack_items() -> list[Item]:
+    """Two Tattu R-Line 6S 2200 cells flat in the twin pack tray (published
+    2026-11-01, WBS BAYA-FWD-02).  Cell mass and size from head_layout_fit; the
+    cells have no BOM row yet (root WBS: BOM and ledger update for the twin tray)."""
+    m = hlf.CELL_G
+    y = 0.5 * (twin.TRAY_Y0 + twin.TRAY_Y1)
+    ln, w, ht = hlf.CELL_L, hlf.CELL_H, hlf.CELL_W  # flat: 34 lateral, 38.5 tall
+    inertia = m / 12.0 * np.diag([ln * ln + ht * ht, w * w + ht * ht, w * w + ln * ln])
+    return [Item(f"Tattu R-Line 6S 2200 cell ({side})", "CELL-6S-2200", m,
+                 (sgn * twin.LANE_X, y, twin.TRAY_ZC), inertia,
+                 "head_layout_fit CELL_G; twin_head_pack_fit tray lane; solid box", "BOM")
+            for side, sgn in (("port", 1.0), ("stbd", -1.0))]
+
+
 def build() -> dict:
     bom = bom_rows()
     missing = classify(bom)
@@ -597,6 +628,10 @@ def build() -> dict:
         "hover_4000": base + [battery_item("BATT-6S-4000", bom)],
         "cargo_2800_payload": base + [battery_item("BATT-6S-2800", bom), payload],
         "heaviest_4000_payload": base + [battery_item("BATT-6S-4000", bom), payload],
+        # The published battery arrangement.  The three configurations above keep the
+        # retired single cargo pack so that their consumers do not change silently; the
+        # owner decides when this one becomes the headline (root WBS, twin tray BOM item).
+        "hover_twin_2200": base + twin_pack_items(),
     }
     thrust = THRUST_PER_FAN_GF * N_FANS
     result: dict[str, Any] = {"unclassified": missing, "thrust_gf": thrust, "configs": {}}
@@ -635,7 +670,10 @@ def report(r: dict) -> None:
               f"({p['k_pitch_mm'] / 25.4:4.2f} in)  T/W {p['T_W']:.2f}"
               f"{'' if p['T_W'] >= T_W_FLOOR else '  ** BELOW ' + str(T_W_FLOOR) + ' **'}")
     print(f"  hover thrust line (tilt pivot) Y +{PIVOT['port'][1]:.1f} mm; "
-          f"CG offset {r['configs']['hover_4000']['cg'][1] - PIVOT['port'][1]:+.1f} mm")
+          f"CG offset {r['configs']['hover_4000']['cg'][1] - PIVOT['port'][1]:+.1f} mm "
+          f"(hover_4000: retired single cargo pack)")
+    print(f"  CG offset {r['configs']['hover_twin_2200']['cg'][1] - PIVOT['port'][1]:+.1f} mm "
+          f"(hover_twin_2200: two cells in the published twin tray)")
     if r["unclassified"]:
         print("\nUNCLASSIFIED airborne BOM rows (Qty > 0):")
         for ref in r["unclassified"]:
