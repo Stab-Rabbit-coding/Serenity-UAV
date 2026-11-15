@@ -29,7 +29,7 @@ execution: code
 - **Stop conditions.**
     - Gate G1 (U3) is open: no hull geometry unit starts.
     - Gate G2 (U9) fails: stop and send the owner an Owner Decision Brief (`docs/DOC_TEMPLATES.md`).
-    - NFP-THERM is open: U2 step 2 does not start. Do not substitute an assumed stern load.
+    - NFP-THERM is open: U2 step 3 does not start. Do not substitute an assumed stern load.
     - Research finds that a settled decision cannot work: stop and report. Do not work around it.
 - **Tail ownership.** The executor closes COOL-01 and the new sub-items in the owning `WBS.md`, regenerates `TODO.md`, and opens the pull request.
 
@@ -127,7 +127,7 @@ The aircraft is already aft-heavy. The ledger puts the hover CG at Y 351.2, whic
 
 - Closing BAYA-FWD-T1. The sustained transmit limit stays an owner decision.
 - The Bay A internal vent and duct geometry (BAYA-FWD-T4). This plan gives it the inlet position and the flow figures.
-- Brass spreader design at each node. The node tool sizes it; the mounts are drawn elsewhere.
+- Brass spreader design at each node. The node tool sizes it; the mounts are drawn elsewhere. Printed flow guides are in scope (U12).
 - Building or flying anything.
 
 #### Deferred to Follow-Up Work
@@ -147,6 +147,7 @@ All are deferred to an owner gate inside the plan. None blocks the start of U1 a
 - OQ2 (gate G1). **EDF envelope.** KD8 names the motor and rotor diameter. The shroud, stator, and motor-mount envelope are not drawn. U3 proposes them from the X5 motor datasheet and the nacelle motor mount.
 - OQ3 (gate G1). **Intake count and position.** The legacy design had four radial scoops at the neck. U3 re-derives them on the Rev U hull against canon.
 - OQ5 (deferred to U8). **EDF cooling outside hover.** KD7 covers hover. On the ground the nacelles cannot react EDF thrust without lift, and an EDF or ESC fault leaves no air mover. U8 states the thrust at the minimum cooling throttle and the time to limit with the EDF stopped, for the owner to decide.
+- OQ6 (gate G1). **Flow guides.** The measured baseline shows three nodes fail the average case in the open stream. U12 proposes printed flow guides. The owner accepts them at G1, or chooses another remedy: brass spreaders with re-drawn mounts, or lower node power.
 - OQ4 (gate G1). **Aft CG limit.** The ±0.25 in (±6.4 mm) working band is ASSUMED and already exceeded. The owner sets the limit in the G1 brief (KD11).
 
 ---
@@ -226,6 +227,10 @@ flowchart TB
   U8 --> U11
   U9 -->|G2| U11
   U10 --> U11
+  U3 -->|G1| U12
+  U7 --> U12
+  U12 -.->|re-run with guides| U7
+  U12 --> U11
 ```
 
 The U8 to U5 edge is a revision, not a dependency: baffle sizing may change the orifice plate. It does not change the hull.
@@ -236,12 +241,59 @@ These are computed here from stated inputs. They size the problem. They are not 
 
 - **Fan free delivery.** 0.122 m³/min from the digitized curve in `tools/node_thermal_forced_air.py`, which is 4.3 cfm. The operating point will be lower.
 - **EDF flow, order of magnitude.** From momentum theory, Q = √(T·A/ρ). With T = 3.3 lbf (14.7 N) from the unsourced `EDF-55-6S` row, used as a stand-in until the custom rotor of KD8 has data, A = 2.85 in² (1,836 mm²) for the nozzle ellipse, and ρ = 0.0765 lbm/ft³ (1.225 kg/m³), Q is about 310 cfm (0.15 m³/s). ASSUMED thrust. The interior bleed that R8 needs is therefore on the order of 1 % of EDF flow.
-- **CG sensitivity.** A mass m at arm a moves the CG by m·a/M. With M = 14.3 lbm (6,494 g) and an arm of about 8.7 in (220 mm) to the rear cone, each 0.22 lbm (100 g) moves the CG about 0.13 in (3.4 mm) aft. The arm is ASSUMED until U3 fixes the stations.
+- **CG sensitivity.** A mass m at arm a moves the CG by m·a/M. With M = 14.3 lbm (6,494 g) and the measured arm of 10.2 to 13.4 in (260 to 340 mm) from the pivot to the rear cone, each 0.22 lbm (100 g) moves the CG 0.16 to 0.21 in (4.0 to 5.2 mm) aft.
+
+### Measured Baseline (2026-11-15)
+
+Measured during planning on the Rev U meshes, with the repo tools and a scratch script. Every thermal input is still ASSUMED, so every figure is PROVISIONAL. The model has the eight old pouches, not the seven-node layout.
+
+**The node tool's present output is invalid.** `cavity_at` in `tools/node_thermal_forced_air.py` takes the largest closed interior ring of a hull section. Through the cargo bay, Y 273 to 430, the section is not a closed ring, because the doors and wing-root parts are separate meshes. The tool then reports a free area of 0.005 in² (3 mm²) at the CHIN and AFT stations, and a fan flow of 0.05 cfm. The cargo cavity is in fact about 18 to 21 in² (11,800 to 13,700 mm²).
+
+**With the cargo cavity approximated by the closed-door outline less a 0.08 in (2 mm) skin:**
+
+- The fan runs at 3.95 cfm (0.112 m³/min) against 0.031 in H₂O (7.8 Pa). That is close to free delivery, so the stream has little resistance.
+- Bulk air warms only 13.5 °F (7.5 K) from inlet to stern in the average case. Bulk flow is enough.
+- Local air speed is the problem. It is 6.6 ft/s (2.02 m/s) at the ducted CN1, and 0.5 ft/s (0.16 m/s) in the open cargo bay.
+
+| Node | Average case | Board temperature | Highest sustained power |
+| --- | --- | --- | --- |
+| CN1 Bay A | pass, 0.5 °F (0.3 K) margin | 184.5 °F (84.7 °C) | 6.66 W |
+| FC1 Bay A | pass | 151 °F (66.3 °C) | 3.50 W |
+| CN2 chin port | FAIL | 396 °F (202 °C) | 1.06 W |
+| CN3 chin starboard | FAIL | 398 °F (204 °C) | 1.02 W |
+| FC2 aft port | pass | 177 °F (80.7 °C) | 2.00 W |
+| FC3 aft starboard | pass | 178 °F (81.3 °C) | 1.95 W |
+| CN4 stern | FAIL | 247 °F (119 °C) | 2.23 W |
+| FC4 stern | pass | 172 °F (78.0 °C) | 1.91 W |
+
+**What this means for the plan.**
+
+- R2 is not met by the fan and the open stream alone. Three nodes fail the average case, and the tool finds no room for a brass spreader that would fix them.
+- The fix is local air speed, not more fan. Unit U12 adds printed flow guides that neck the stream past the chin nodes and the stern stack, as the inlet duct already does for CN1.
+- The fan's working pressure is 0.031 in H₂O (7.8 Pa). Dynamic pressure at 25 kt is about 0.4 in H₂O (100 Pa). Outside flow therefore dominates the stream in forward flight, for better or worse. The still-air and cruise sweep of KTD6 is the governing analysis, not a side check.
+
+**Rear cone, measured on `middle_rear_shell24_2mm_merged.stl`.**
+
+| Station Y | Largest circle on the centreline | Note |
+| --- | --- | --- |
+| 600 | 4.2 in (107 mm) | cavity 14.7 in² (9,480 mm²) |
+| 620 | 3.5 in (90 mm) | |
+| 640 | 2.6 in (67 mm) | a 2.165 in (55 mm) rotor with a 0.12 in (3 mm) shroud needs 2.4 in (61 mm) |
+| 650 to 680 | not a closed cavity | thin shell; outline about 3.1 × 4.5 in (78 × 115 mm) at Y 680 |
+| 685 to 690 | hull closes | outline 0.7 in (18 mm) tall at Y 685 |
+
+- The rotor fits no further aft than about Y 640, with 0.12 in (3 mm) radial clearance to spare. That is tight.
+- The fixed nozzle with a 0.08 in (2 mm) wall fits the outline as far aft as Y 680. It does not fit at Y 685. The exit plane is therefore near Y 680, and the tube and nozzle run about 1.6 in (40 mm).
+- The aft hull section is not a closed ring at Y 560 or aft of Y 645. U3 must find out why before it places parts there.
+
+**Toolchain, checked.** OpenFOAM v1912 is installed from the Ubuntu package. `buoyantSimpleFoam`, `snappyHexMesh`, and the `fanPressure` boundary condition are present. No case has been run. The Python tools also need `shapely`, `scipy`, `manifold3d`, `rtree`, and `pytest`, which `requirements-dev.txt` does not list.
+
+**Test baseline.** 115 of 120 tests pass before any work. Four failures read a KiCad board at a path on the owner's machine (`tools/tests/test_esc80_cooptimize.py`, `tools/tests/test_nacelle_esc_service.py`). One is a numeric regression in `tools/tests/test_tail_strike_requirement.py`. None is caused by this plan.
 
 ### Assumptions
 
 - The Rev U aft hull is the merged shell built by `tools/merge_middle_rear_shell.py`. Gates G1 to G3 of the aft hull plan are still open, so the hull may change under this work.
-- OpenFOAM v1912 and `shapely` are not installed in the cloud container used for planning. CFD units need a machine that has them.
+- A cloud container loses its installed tools when the session ends. Each execution session installs OpenFOAM v1912 and the Python libraries named in the Measured Baseline first.
 - Design ambient is 104 °F (40 °C), ASSUMED, pending BAYA-FWD-T2.
 - The stern is one NoNFO-Pilot-PB2 stack (`avionics/WBS.md` §1.11), not two pouches. Its dissipation comes from the stern thermal check NFP-THERM, which is open.
 
@@ -251,9 +303,11 @@ These are computed here from stated inputs. They size the problem. They are not 
 | --- | --- | --- |
 | Aft mass makes an out-of-band CG worse | Trim does not close | Owner sets the limit at G1 from envelope estimates (KD11); U9 confirms on mesh masses |
 | Bulk air heats along the stream; aft nodes see air warmed by forward nodes | Aft nodes fail at low flow | U7 reports air temperature at each station; U8 reports margin per node |
+| Three nodes fail the average case in the open stream (measured) | R2 not met | U12 flow guides; OQ6 at G1 |
+| Rotor clearance at Y 640 is 0.12 in (3 mm) radial | Shroud does not fit | U3 fixes the rotor station first; R21 margin |
 | Hull seams leak under suction | Flow bypasses the forward nodes | U10 seal gate; HULL-LEAK-04 door seal |
 | Custom rotor or shroud differs from the U3 envelope | Spider reprint; a tube bore change means a new hull (KD10) | Tube bore fixed by KD8; R21 margin; spider stays bolted |
-| Stern stack dissipation not yet known (NFP-THERM open) | U2, U7, and U8 cannot finish | Geometry units U3 to U6 proceed; the thermal chain stops at U2 step 2 until NFP-THERM closes |
+| Stern stack dissipation not yet known (NFP-THERM open) | U2, U7, and U8 cannot finish | Geometry units U3 to U6 proceed; the thermal chain stops at U2 step 3 until NFP-THERM closes |
 | Fan curve digitized, not tabulated | Operating point error | U1 cites the datasheet; U8 states the sensitivity |
 | Single-mesh CFD | Absolute values uncertain | KTD9; report standard deviation; one mesh-refinement check on the fan case |
 | Merged hull tarball size | Push fails at 100 MB | Tarball rule already in `tools/check_hull_tarballs.py` |
@@ -287,14 +341,15 @@ These are computed here from stated inputs. They size the problem. They are not 
 | U8 | Coupled analysis and baffle sizing | `docs/FUSELAGE_COOLING_ANALYSIS.md` | U7 |
 | U9 | Mass, CG, and gate G2 | `tools/auw_ledger.py`, `current-specification/bom_revU.json` | U4, U5, G1 limit |
 | U10 | Seal and aperture gate | `tools/assembly_integrity_check.py` | U4 |
-| U11 | Build guide, Phase 11 records, closeout | `docs/PHASED_BUILD_GUIDE.md`, `deferred/WBS.md` | U8, U9, U10 |
+| U11 | Build guide, Phase 11 records, closeout | `docs/PHASED_BUILD_GUIDE.md`, `deferred/WBS.md` | U8, U9, U10, U12 |
+| U12 | Node flow guides | `tools/node_flow_guides.py` | U3 (G1), U7 |
 
 ### U1. Tracking entries and reference repair
 
 - **Goal:** Put the work in the WBS before geometry starts, and make every thermal citation resolve.
 - **Requirements:** R11, R17.
 - **Dependencies:** none.
-- **Files:** `airframe/fuselage-mid/WBS.md`, `deferred/WBS.md`, `avionics/WBS.md`, `REFERENCES.md`, `airframe/datasheets/`, `tools/node_thermal_forced_air.py`, generated `TODO.md` files.
+- **Files:** `requirements-dev.txt`, `airframe/fuselage-mid/WBS.md`, `deferred/WBS.md`, `avionics/WBS.md`, `REFERENCES.md`, `airframe/datasheets/`, `tools/node_thermal_forced_air.py`, generated `TODO.md` files.
 - **Approach:**
     1. Split COOL-01 into sub-items that match U2 to U11. Link issue #290.
     2. Add a cross-reference from BAYA-FWD-T4 to the bow inlet item.
@@ -302,6 +357,7 @@ These are computed here from stated inputs. They size the problem. They are not 
     4. Add `REF-HT-001` for the heat-transfer text behind the flat-plate and fin equations. Verify each section number against the book. Mark any that cannot be verified "requires verification" and open a TODO §0.x item.
     5. Add a new REF-MAT entry for C26000 brass and re-point the tool's citation away from `REF-MAT-008`. Record the correction under "Removed / Superseded Citations".
     6. Regenerate `TODO.md` with `tools/gen_todo_from_wbs.py`.
+    7. Add the missing Python libraries to `requirements-dev.txt`. Record the five pre-existing test failures in the owning `WBS.md`.
 - **Patterns to follow:** `docs/AGENTS.md` reference lifecycle; `docs/solutions/workflow-issues/generate-open-item-views-never-hand-patch-them.md`.
 - **Test scenarios:** Test expectation: none -- tracking and citation records only. The generator's `--check` mode and the pre-commit hooks are the proof.
 - **Verification:** Every REF-ID in the thermal and CFD tools resolves in `REFERENCES.md`. `tools/gen_todo_from_wbs.py --check` passes.
@@ -314,12 +370,15 @@ These are computed here from stated inputs. They size the problem. They are not 
 - **Files:** `tools/node_thermal_forced_air.py`, `tools/cfd_internal_air_domain.py`, `tools/tests/test_node_thermal_forced_air.py`.
 - **Approach:**
     1. Load the merged aft hull in place of the separate middle and rear shells.
-    2. Replace the two stern pouches with the single stern stack. Take its dissipation from the closed NFP-THERM item (`avionics/WBS.md` §1.11). Wait for that item; do not assume a value.
-    3. Add an optional input for CFD results: flow rate, station velocities, and station air temperatures (KTD5).
-    4. Put the limits in one list that drives the printout and the exit code.
-- **Execution note:** Add characterization tests of the current outputs before changing the model, so each change in a result is intended.
+    2. Fix the cavity measurement. Close each section with the doors, wing-root flanges, and gear bays that close the hull in the built aircraft, as `tools/cfd_internal_air_domain.py` already does. Fail the run when a station's cavity is implausibly small, instead of reporting it.
+    3. Replace the two stern pouches with the single stern stack. Take its dissipation from the closed NFP-THERM item (`avionics/WBS.md` §1.11). Wait for that item; do not assume a value.
+    4. Add an optional input for CFD results: flow rate, station velocities, and station air temperatures (KTD5).
+    5. Put the limits in one list that drives the printout and the exit code.
+- **Execution note:** The present outputs are invalid (Measured Baseline), so do not lock them in. Write the tests against the closed-cavity figures in the Measured Baseline, within a stated tolerance.
 - **Patterns to follow:** `tools/tests/test_bay_a_thermal_budget.py`; `docs/solutions/conventions/one-limits-list-drives-the-printout-and-the-exit-code.md`.
 - **Test scenarios:**
+    - Free area at the CHIN and AFT stations is within tolerance of the Measured Baseline figures, not 3 mm².
+    - A section that is not a closed ring fails with the station named.
     - The fan and system curves cross at one flow; the operating point lies between zero and free delivery.
     - Zero flow gives zero fan-curve intercept error: pressure equals the shut-off value.
     - Air temperature rises monotonically along the stream, and the rise equals upstream power over ṁ·c_p.
@@ -336,7 +395,7 @@ These are computed here from stated inputs. They size the problem. They are not 
 - **Dependencies:** U1.
 - **Files:** `tools/rear_cone_layout_fit.py`, `tools/tests/test_rear_cone_layout_fit.py`, `docs/FUSELAGE_COOLING_LAYOUT_BRIEF.md`, `tools/hull_datums.py`.
 - **Approach:**
-    1. Measure the rear cone cavity on the live merged mesh. Record which mesh was measured.
+    1. Measure the rear cone cavity on the live merged mesh. Record which mesh was measured. Start from the Measured Baseline: rotor no further aft than about Y 640, nozzle exit near Y 680. Explain the open sections at Y 560 and aft of Y 645.
     2. Place envelopes for the mounting ring, spider, X5 motor, 2.165 in (55 mm) rotor and shroud, thrust tube, nozzle, intakes, plenum volume, four RCS pipes, four valve and servo mounts, and the GW-RCS board. The GW-RCS envelope is a space reservation only.
     3. Place the Delta fan and its adapter on the spider. Check the spider arm clocking against the load-bearing azimuths.
     4. Model the air path through the rear cone as a keep-out solid.
@@ -345,7 +404,7 @@ These are computed here from stated inputs. They size the problem. They are not 
     7. Route the fan lead from the stern stack's fan-drive output to the fan, with its tach line, and place a sealed pass-through in the adapter (R20).
     8. Size the intake area, tube bore, and RCS pipe bores to a stated bounding EDF flow and bleed fraction, and show the margin (R21).
     9. Estimate the mass and CG shift of the fan and EDF configurations from the placed envelopes.
-    10. Write an Owner Decision Brief for OQ1, OQ2, OQ3, and OQ4 with the six template checks and figures. It carries the sizing basis and the CG estimate, and asks for the aft CG limit.
+    10. Write an Owner Decision Brief for OQ1, OQ2, OQ3, OQ4, and OQ6 with the six template checks and figures. It carries the sizing basis and the CG estimate, and asks for the aft CG limit.
 - **Patterns to follow:** `tools/middle_layout_fit.py`, `tools/nonfo_simon_fit.py` and its test; `docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md`; `docs/solutions/workflow-issues/a-recorded-route-or-clearance-goes-stale-when-its-part-changes.md`.
 - **Test scenarios:**
     - Every envelope lies inside the measured cavity with the stated clearance.
@@ -354,7 +413,7 @@ These are computed here from stated inputs. They size the problem. They are not 
     - Moving an envelope through the skin fails the gate.
     - Port and starboard placements mirror about the centreline.
     - The stern stack, the aft gear bays, and the tail light cableway do not clash with any envelope.
-- **Verification:** The fit tool passes. The brief is in the repo. **Gate G1:** the owner has decided OQ1 to OQ4 in writing.
+- **Verification:** The fit tool passes. The brief is in the repo. **Gate G1:** the owner has decided OQ1 to OQ4 and OQ6 in writing.
 
 ### U4. Fused aft hull provisions
 
@@ -515,7 +574,7 @@ These are computed here from stated inputs. They size the problem. They are not 
 
 - **Goal:** Record how to build the fan configuration and how to upgrade, and close the tracking.
 - **Requirements:** R4, R17.
-- **Dependencies:** U8, U9, U10.
+- **Dependencies:** U8, U9, U10, U12.
 - **Files:** `docs/PHASED_BUILD_GUIDE.md`, `deferred/WBS.md`, `deferred/README.md`, `deferred/aft-edf/README.md`, `airframe/fuselage-mid/WBS.md`, `docs/OPERATORS_MANUAL.md`, `REFERENCES.md`, `PROJECT_INDEX.md`, `ARCHIVE_INDEX.md`, generated `TODO.md` files.
 - **Approach:**
     1. Write the fan installation steps and the upgrade steps: cut covers, cut caps, fit insert, fit EDF. Mark hazards to personnel as WARNING and hazards to equipment as CAUTION.
@@ -526,6 +585,28 @@ These are computed here from stated inputs. They size the problem. They are not 
     6. Capture the internal-flow CFD learning under `docs/solutions/`.
 - **Test scenarios:** Test expectation: none -- documentation and tracking. The sync and index checks are the proof.
 - **Verification:** `tools/sync_operators_manual.py --check`, `tools/precommit_index.py --check`, and `tools/gen_todo_from_wbs.py --check` pass. The upgrade procedure contains no hull print step.
+
+### U12. Node flow guides
+
+- **Goal:** Raise the local air speed at the nodes that fail in the open stream.
+- **Requirements:** R1, R2, R14.
+- **Dependencies:** U3 with G1 passed (OQ6), U7.
+- **Files:** `tools/node_flow_guides.py`, `tools/tests/test_node_flow_guides.py`, `tools/cargo_layout_fit.py`, `tools/middle_layout_fit.py`, `airframe/stls/fuselage/`, `tools/node_thermal_forced_air.py`.
+- **Approach:**
+    1. For each failing node, find the air speed the node tool needs to pass the average case.
+    2. Draw a printed guide that necks the stream to the free area that gives that speed. Keep the added pressure loss inside what the fan curve allows.
+    3. Add each guide to the cargo or middle layout fit gate, and to the CFD geometry of U7.
+    4. Re-run U7 and U8 with the guides. Repeat until R2 passes or the fan curve is exhausted.
+    5. When R2 cannot be met, stop and write an Owner Decision Brief.
+- **Patterns to follow:** the CN1 inlet duct and `DUCT_WINDOW` in `tools/node_thermal_forced_air.py`; `tools/cargo_layout_fit.py`.
+- **Test scenarios:**
+    - A guide that halves the free area at a node doubles the local speed and raises the system pressure loss.
+    - With the guides, CN2, CN3, and the stern stack pass the average case in the node tool.
+    - The fan operating point with the guides stays on the fan curve, above a stated minimum flow.
+    - No guide clashes with the payload envelope, the cargo doors, the twin tray, or a harness route.
+    - A guide that blocks the stream fails the gate.
+    - Every guide wall meets the minimum for its category.
+- **Verification:** The layout fit gates pass. The node tool passes the average case at every node with CFD inputs, or an Owner Decision Brief is in the repo.
 
 ---
 
@@ -549,7 +630,7 @@ Run every command with `/usr/bin/python3`. The `.venv` hides `trimesh`.
 | Visual | OpenSCAD multi-angle previews, each image viewed | U4, U5, U6 |
 | CFD quality | `checkMesh` clean; minimum cells across each aperture; residual and imbalance limits met; standard deviation reported | U7 |
 
-pytest is not part of CI today. The executor runs it by hand and states the result in the pull request.
+pytest is not part of CI today. The executor runs it by hand and states the result in the pull request. Five tests fail before this work (Measured Baseline); the executor reports them and does not count them against the plan.
 
 ---
 
