@@ -61,6 +61,7 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 - KD12. **The stern stack becomes the single Pilot-NoNFO stack and stays aft of the pivot.** (session-settled: user-directed, 2026-11-15 — chosen over moving it forward into the cargo bay.) Governs R21.
 - KD14. **The tail EDF is the XFly Galaxy X5 50 mm unit with its stock rotor, in a printed pusher shroud.** (session-settled: user-directed, 2026-11-15 — the owner chose the QX 64 mm nacelle unit on the condition that it stay inside the controllable envelope; the hover trim estimate puts the QX at 51 to 89 % of the pitch control moment against the 50 % criterion, and the X5 at 33 % behind a low-loss ramp. Chosen over the QX 64 mm, and over the X5 motor with a custom 2.165 in (55 mm) rotor, which gains nothing installed. Supersedes the earlier plan's KD8.) Governs R18, R29, R30.
 - KD15. **The ramp louvres are designed for low pressure loss.** (session-settled: user-directed, 2026-11-15 — chosen over ordinary louvres: installed thrust and RCS authority both fall with intake loss, and behind ordinary louvres the X5 also fails the 50 % trim criterion.) Governs R5, R6, R27, R30.
+- KD16. **The ventral RCS jet sits at station Y 628 or further aft.** (session-settled: user-directed, 2026-11-15 — chosen over piping the jet through the skid crossbar, and over moving the crossbar forward 0.25 in (6.4 mm): the crossbar ends at about Y 627, the jet path is clear from Y 628 to Y 640, and no skid structure changes.) Governs R17, R32.
 - KD13. **Carried from the earlier plan.** Nacelle tilt compensates the tail EDF thrust in hover. Printed flow guides raise local air speed at failing nodes. The thrust tube is fused into the aft hull. The owner sets the aft CG limit before hull geometry work. CFD is tied to the node thermal budget. (session-settled: user-directed, 2026-11-15, in `docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md` KD7, KD8, KD10, KD11, KD12, KD6.) Governs R4, R8, R22, R23.
 
 ### Requirements
@@ -100,6 +101,7 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 
 - R16. Four RCS jets shall be fitted and working in the first build, with their valves, servos and gateway.
 - R17. Each RCS jet shall have a clear discharge path past the dorsal pod, the skids and the skid crossbar.
+- R32. The ventral RCS jet shall be at station Y 628 or further aft, clear of the skid crossbar.
 
 **Tail EDF installation**
 
@@ -193,7 +195,7 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 - **Stall margin.** Behind louvres with an ASSUMED loss coefficient of 2.3 on 55 % open area, the X5 needs about 0.83 psi (5.7 kPa) of about 1.20 psi (8.3 kPa) available. The QX 64 mm would need all of its 1.25 psi (8.6 kPa).
 - **QX 64 mm, for the record.** 1,368 W and 57 A at full throttle [REF-EDF-003]; about 0.26 lbm (118 g) heavier than the X5 installed; shroud lip OD 3.03 in (77 mm).
 - **Shaft critical speed.** The X5 motor turns up to about 71,000 rpm unloaded.
-- **RCS stations.** On the Rev U aft hull, a ventral jet is clear from station Y 628 aft. A straight dorsal jet is blocked by the dorsal pod neck. Source: `tools/rear_cone_layout_fit.py`.
+- **RCS stations.** On the Rev U aft hull, the skid crossbar runs from about station Y 612 to Y 627. A ventral jet is clear from Y 628 to Y 640, with a stub of about 0.6 in (16 mm). A straight dorsal jet is blocked by the dorsal pod neck. The draft tool still places the RCS station at Y 621 and needs this change. Source: `tools/rear_cone_layout_fit.py`.
 - **Repo rules that change.** Root `AGENTS.md` §1 calls the tail EDF optional and deferred to Phase 11. This plan makes it part of the first build. The design-shift gate in `AGENTS.md` §10 requires the WBS record before any geometry change.
 - **Affected documents.** `docs/CARGO_WINCH_SPECIFICATION.md`, `docs/CARGO_DOOR_GATEWAY_SPEC.md`, `docs/CARGO_SECTION_LAYOUT.md`, `docs/POWER_DISTRIBUTION.md`, `deferred/WBS.md`, and the stern stack plan `docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md`.
 
@@ -204,7 +206,7 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 - OQ1. **Thrust target.** Default: report installed thrust against free-air thrust, with no fixed share. Planning estimate for the X5: about 1.3 lbf (5.7 N) behind ordinary louvres, about 1.8 lbf (8.1 N) behind a plain screened opening, against 2.7 lbf (12.2 N) free air.
 - OQ5. **Hover endurance.** The tail EDF runs at 89 % throttle or more in hover. Planning states the power this adds and the endurance it costs. The owner may set a share once the first analysis shows what the ramp leaves.
 - OQ2. **Response to an EDF fault in flight.** Default for planning: shed radio transmit power, report the fault, and land. The owner confirms or changes it.
-- OQ3. **RCS jet pattern.** Planning proposes four stations that meet R17 and gives pitch and yaw authority for each option.
+- OQ3. **RCS jet pattern.** The ventral jet is fixed by KD16. Planning proposes the other three stations to meet R17 and R31, and gives pitch and yaw authority for each option.
 - OQ4. **What the Cargo Observer watches** now that there is no internal cargo. Default: the sling load and the ground below, through the belly.
 
 ### Relationship to the Earlier Plan
