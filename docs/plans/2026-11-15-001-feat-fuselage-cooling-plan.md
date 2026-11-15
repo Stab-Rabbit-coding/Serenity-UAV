@@ -29,6 +29,7 @@ execution: code
 - **Stop conditions.**
     - Gate G1 (U3) is open: no hull geometry unit starts.
     - Gate G2 (U9) fails: stop and send the owner an Owner Decision Brief (`docs/DOC_TEMPLATES.md`).
+    - NFP-THERM is open: U2 step 2 does not start. Do not substitute an assumed stern load.
     - Research finds that a settled decision cannot work: stop and report. Do not work around it.
 - **Tail ownership.** The executor closes COOL-01 and the new sub-items in the owning `WBS.md`, regenerates `TODO.md`, and opens the pull request.
 
@@ -59,13 +60,17 @@ The aircraft is already aft-heavy. The ledger puts the hover CG at Y 351.2, whic
 - KD5. **Baseline is Rev U: the one-piece aft SLS hull, datum R2.** (session-settled: user-directed, 2026-11-15 — chosen over the separate middle and rear shells.) Governs R13, R14.
 - KD6. **CFD is tied to the node thermal budget, in both configurations.** (session-settled: user-directed, 2026-11-15 — chosen over a flow-only CFD pass.) Governs R10, R11.
 - KD7. **After the upgrade, the EDF holds a minimum cooling flow in hover, and nacelle tilt compensates its thrust.** (session-settled: user-directed, 2026-11-15 — chosen over leaving the EDF stopped in hover, which leaves the nodes with no forced air: the EDF is the only air mover once the fan is removed.) Governs R18, R19.
+- KD8. **The tail EDF is an XFly Galaxy X5 motor driving a custom 2.165 in (55 mm) rotor.** (session-settled: user-directed, 2026-11-15 — chosen over an off-the-shelf 55 mm EDF unit, the unsourced `EDF-55-6S` row.) The rotor and its shroud are not yet drawn, so thrust and flow stay ASSUMED until they are bench-tested. Governs R4, R21.
+- KD9. **The stern stack's fan-drive output powers the cooling fan and reads its tach.** (session-settled: user-directed, 2026-11-15 — chosen over deciding the source at gate G1, and over tracking fan electrical outside this plan.) Governs R20.
+- KD10. **The thrust tube is fused into the aft hull.** (session-settled: user-directed, 2026-11-15 — chosen over a separate bolted tube: issue #290 asks for the tube printed with the hull. Accepted cost: a tube change means a new hull.) Governs R6.
+- KD11. **The owner sets the aft CG limit at gate G1, before hull geometry work.** (session-settled: user-approved, 2026-11-15 — chosen over deciding at G2 on mesh-derived masses: a late refusal would discard the hull work.) Governs R12.
 
 ### Requirements
 
 **Cooling function**
 
 - R1. One air stream shall run from the bow inlets, past every avionics node, to the tail exit.
-- R2. In the fan configuration, every node shall stay under its temperature limit in the average-power case, with the margin stated.
+- R2. In the fan configuration, every node shall stay under its temperature limit in the average-power case, in still air and at cruise airspeed, with the margin stated.
 - R3. The fan shall mount on a removable adapter that seals on the EDF spider mount, so that all fan air comes from inside the fuselage.
 - R16. For the peak-power case, the analysis shall report the highest sustained dissipation each node can carry. It shall not claim to close blocker BAYA-FWD-T1.
 
@@ -95,6 +100,8 @@ The aircraft is already aft-heavy. The ledger puts the hover CG at Y 351.2, whic
 **Tracking**
 
 - R17. The work shall be tracked in the owning `WBS.md` files before geometry work starts, with `TODO.md` regenerated and every citation indexed in `REFERENCES.md`.
+- R20. The cooling fan shall take power from the stern stack's fan-drive output, and the stern stack shall read the fan tach. A stopped fan shall be reported as a fault.
+- R21. The fused intake area, thrust tube bore, and RCS pipe bores shall be sized to a stated bounding EDF flow and RCS bleed fraction, each cited or ASSUMED, with the margin shown at gate G1.
 
 ### Acceptance Examples
 
@@ -125,7 +132,7 @@ The aircraft is already aft-heavy. The ledger puts the hover CG at Y 351.2, whic
 
 #### Deferred to Follow-Up Work
 
-- Selecting and buying the 55 mm EDF unit and its ESC (Phase 11, `deferred/WBS.md`).
+- Designing, building, and bench-testing the custom 2.165 in (55 mm) rotor and its shroud, and buying the X5 motor and ESC (Phase 11, `deferred/WBS.md`).
 - The GW-RCS gateway board, the RCS valves, the servos, and the attitude mixer (Phase 11).
 - The flight-control change that holds the minimum cooling throttle and applies the nacelle tilt trim (Phase 11 firmware). This plan supplies the throttle, thrust, and trim figures.
 - EDF thrust, nozzle performance, and RCS jet authority analysis. This plan analyses the EDF only as a flow sink for cooling.
@@ -137,10 +144,10 @@ The aircraft is already aft-heavy. The ledger puts the hover CG at Y 351.2, whic
 All are deferred to an owner gate inside the plan. None blocks the start of U1 and U2.
 
 - OQ1 (gate G1). **RCS jet stations.** No station is defined anywhere in the repo. U3 proposes four from geometry and canon.
-- OQ2 (gate G1). **55 mm EDF envelope.** No make or model is named. `EDF-55-6S` in `current-specification/bom_revU.json` is unsourced. U3 proposes an envelope. The owner accepts it or names a unit.
+- OQ2 (gate G1). **EDF envelope.** KD8 names the motor and rotor diameter. The shroud, stator, and motor-mount envelope are not drawn. U3 proposes them from the X5 motor datasheet and the nacelle motor mount.
 - OQ3 (gate G1). **Intake count and position.** The legacy design had four radial scoops at the neck. U3 re-derives them on the Rev U hull against canon.
 - OQ5 (deferred to U8). **EDF cooling outside hover.** KD7 covers hover. On the ground the nacelles cannot react EDF thrust without lift, and an EDF or ESC fault leaves no air mover. U8 states the thrust at the minimum cooling throttle and the time to limit with the EDF stopped, for the owner to decide.
-- OQ4 (gate G2). **Aft CG limit.** The ±0.25 in (±6.4 mm) working band is ASSUMED and already exceeded.
+- OQ4 (gate G1). **Aft CG limit.** The ±0.25 in (±6.4 mm) working band is ASSUMED and already exceeded. The owner sets the limit in the G1 brief (KD11).
 
 ---
 
@@ -148,17 +155,17 @@ All are deferred to an owner gate inside the plan. None blocks the start of U1 a
 
 ### Key Technical Decisions
 
-- KTD1. **The spider mount and thrust tube are separate parts on a hull-fused mounting ring.** The hull carries only the ring, the nozzle, the intake fairings, and the RCS pipes. The EDF unit is not selected (OQ2), so a fused spider could force a reprint. A bolted spider cannot. The fan adapter and the Phase 11 insert seat on the same ring-and-spider interface. Implements KD2 and KD3; governs R3, R4, R6.
+- KTD1. **The hull carries the mounting ring, the thrust tube, the nozzle, the intake fairings, and the RCS pipes. The spider mount is a separate bolted part.** The tube bore is fixed by the 2.165 in (55 mm) rotor (KD8), so the fused tube does not wait on the shroud design. The motor mount pattern is not final, so the spider stays bolted. The fan adapter and the Phase 11 insert seat on the same ring-and-spider interface. Implements KD2, KD3, KD10; governs R3, R4, R6.
 - KTD2. **Fused provisions are built in the hull's own build chain.** A new module supplies the provision solids to `tools/merge_middle_rear_shell.py`. Published STLs are never patched. Follows R8 of `docs/plans/2026-10-31-001-feat-one-piece-aft-sls-hull-plan.md`.
 - KTD3. **Covers and caps are thin membranes with a scored cut line.** The membrane is the 0.059 in (1.5 mm) SLS floor wall. A groove marks the cut. The membrane is non-structural, so the load-bearing wall rule does not apply to it. Governs R5, R7, R9, R14.
 - KTD4. **The CFD solver is steady RANS with buoyancy and heat sources: `buoyantSimpleFoam`, k-ω SST, OpenFOAM v1912.** Each node envelope is a wall with its dissipation applied as heat flux. The run gives station velocity, flow split, and bulk air temperature. Conduction inside the pouch stays in the node tool. A full conjugate model (`chtMultiRegionFoam`) is rejected for now because every solid property is ASSUMED (BAYA-FWD-T3). It would add cost without adding truth. Implements KD6; governs R10, R11.
 - KTD5. **The node tool stays the temperature authority; CFD replaces its flow inputs.** `tools/node_thermal_forced_air.py` gains an input path for CFD station velocities, flow rate, and air temperatures. Its 1-D system curve stays as the cross-check. Disagreement between the two beyond a stated tolerance is a reported finding.
-- KTD6. **The fan is a `fanPressure` outlet using the datasheet P-Q curve.** The EDF is a fixed-flow sink at the EDF face, swept over throttle points. The opened intakes are total-pressure inlets. Free-stream effects on the intakes are outside the internal domain and are an ASSUMED boundary condition.
+- KTD6. **The fan is a `fanPressure` outlet using the datasheet P-Q curve.** The EDF is a fixed-flow sink at the EDF face, swept over throttle points. The opened intakes are total-pressure inlets. Free-stream effects are outside the internal domain. They enter as an ASSUMED pressure difference between the bow inlets and the tail exit, swept in both configurations from still air to cruise.
 - KTD7. **One case writer, two configurations.** `tools/cfd_cooling_case.py` takes a configuration name. Geometry differences come from the same provision module as the hull build, so the CFD and the print cannot drift apart.
 - KTD8. **The baffle is sized at the minimum cooling throttle.** That is the lowest throttle the EDF runs with the avionics powered (R18), so it is the worst case for R8. U8 finds that throttle from the node budget. The insert carries a replaceable orifice plate so the area can be trimmed after bench measurement.
 - KTD9. **Follow the v1912 pitfalls already recorded.** No function objects in `controlDict`. Decompose with `hierarchical`. One MPI job at a time. Average the final iterations and report the standard deviation. Treat a single mesh as valid only for A-against-B comparison. Source: `docs/solutions/runtime-errors/openfoam-v1912-ubuntu-build-and-steady-rans-pitfalls.md`.
 - KTD11. **The CFD mesh comes from the real surfaces, not from the voxel mask.** `blockMesh` and `snappyHexMesh` mesh the hull and provision-module surfaces, with refinement at the bow inlets, the fan aperture, the intakes, and the baffle orifice. A minimum cell count across each aperture is a quality gate. The 0.098 in (2.5 mm) voxel flood fill stays as the leak check and the patch locator only. (session-settled: user-approved, 2026-11-15 — chosen over meshing from the voxel mask: wall dilation narrows every opening by about 0.2 in (5 mm) and would mis-size the inlets and the orifice.) Governs R10.
-- KTD12. **The EDF thrust at the minimum cooling throttle is an ASSUMED input until a unit is selected.** U8 scales it from the `EDF-55-6S` row and marks the trim angle PROVISIONAL. Implements KD7; governs R19.
+- KTD12. **The EDF thrust at the minimum cooling throttle is an ASSUMED input until the custom rotor is bench-tested.** U8 estimates it from the X5 motor datasheet and the 2.165 in (55 mm) rotor disc, and marks the trim angle PROVISIONAL. Implements KD7, KD8; governs R19.
 - KTD10. **Mirror starboard from port, and gate every boolean in mm³.** Reuse the hull's keep-out functions. Check the manifold status and compare volume with `trimesh`. A zero-volume result is a failure, not a pass.
 
 ### High-Level Technical Design
@@ -228,7 +235,7 @@ The U8 to U5 edge is a revision, not a dependency: baffle sizing may change the 
 These are computed here from stated inputs. They size the problem. They are not results.
 
 - **Fan free delivery.** 0.122 m³/min from the digitized curve in `tools/node_thermal_forced_air.py`, which is 4.3 cfm. The operating point will be lower.
-- **EDF flow, order of magnitude.** From momentum theory, Q = √(T·A/ρ). With T = 3.3 lbf (14.7 N) from the unsourced `EDF-55-6S` row, A = 2.85 in² (1,836 mm²) for the nozzle ellipse, and ρ = 0.0765 lbm/ft³ (1.225 kg/m³), Q is about 310 cfm (0.15 m³/s). ASSUMED thrust. The interior bleed that R8 needs is therefore on the order of 1 % of EDF flow.
+- **EDF flow, order of magnitude.** From momentum theory, Q = √(T·A/ρ). With T = 3.3 lbf (14.7 N) from the unsourced `EDF-55-6S` row, used as a stand-in until the custom rotor of KD8 has data, A = 2.85 in² (1,836 mm²) for the nozzle ellipse, and ρ = 0.0765 lbm/ft³ (1.225 kg/m³), Q is about 310 cfm (0.15 m³/s). ASSUMED thrust. The interior bleed that R8 needs is therefore on the order of 1 % of EDF flow.
 - **CG sensitivity.** A mass m at arm a moves the CG by m·a/M. With M = 14.3 lbm (6,494 g) and an arm of about 8.7 in (220 mm) to the rear cone, each 0.22 lbm (100 g) moves the CG about 0.13 in (3.4 mm) aft. The arm is ASSUMED until U3 fixes the stations.
 
 ### Assumptions
@@ -236,16 +243,17 @@ These are computed here from stated inputs. They size the problem. They are not 
 - The Rev U aft hull is the merged shell built by `tools/merge_middle_rear_shell.py`. Gates G1 to G3 of the aft hull plan are still open, so the hull may change under this work.
 - OpenFOAM v1912 and `shapely` are not installed in the cloud container used for planning. CFD units need a machine that has them.
 - Design ambient is 104 °F (40 °C), ASSUMED, pending BAYA-FWD-T2.
-- The stern is one NoNFO-Pilot-PB2 stack (`avionics/WBS.md` §1.11), not two pouches.
+- The stern is one NoNFO-Pilot-PB2 stack (`avionics/WBS.md` §1.11), not two pouches. Its dissipation comes from the stern thermal check NFP-THERM, which is open.
 
 ### Risks and Mitigations
 
 | Risk | Effect | Mitigation |
 | --- | --- | --- |
-| Aft mass makes an out-of-band CG worse | Trim does not close | G2 gate in U9; KTD1 keeps the spider and tube removable so they can stay off until Phase 11 if the owner so decides |
+| Aft mass makes an out-of-band CG worse | Trim does not close | Owner sets the limit at G1 from envelope estimates (KD11); U9 confirms on mesh masses |
 | Bulk air heats along the stream; aft nodes see air warmed by forward nodes | Aft nodes fail at low flow | U7 reports air temperature at each station; U8 reports margin per node |
 | Hull seams leak under suction | Flow bypasses the forward nodes | U10 seal gate; HULL-LEAK-04 door seal |
-| EDF unit differs from the assumed envelope | Spider and tube reprint | KTD1; only separate parts change |
+| Custom rotor or shroud differs from the U3 envelope | Spider reprint; a tube bore change means a new hull (KD10) | Tube bore fixed by KD8; R21 margin; spider stays bolted |
+| Stern stack dissipation not yet known (NFP-THERM open) | U2, U7, and U8 cannot finish | Geometry units U3 to U6 proceed; the thermal chain stops at U2 step 2 until NFP-THERM closes |
 | Fan curve digitized, not tabulated | Operating point error | U1 cites the datasheet; U8 states the sensitivity |
 | Single-mesh CFD | Absolute values uncertain | KTD9; report standard deviation; one mesh-refinement check on the fan case |
 | Merged hull tarball size | Push fails at 100 MB | Tarball rule already in `tools/check_hull_tarballs.py` |
@@ -270,14 +278,14 @@ These are computed here from stated inputs. They size the problem. They are not 
 | U-ID | Title | Key files | Depends on |
 | --- | --- | --- | --- |
 | U1 | Tracking entries and reference repair | `airframe/fuselage-mid/WBS.md`, `REFERENCES.md` | — |
-| U2 | Thermal model refresh | `tools/node_thermal_forced_air.py` | U1 |
+| U2 | Thermal model refresh | `tools/node_thermal_forced_air.py` | U1, NFP-THERM closed |
 | U3 | Rear-cone layout and gate G1 | `tools/rear_cone_layout_fit.py`, `docs/FUSELAGE_COOLING_LAYOUT_BRIEF.md` | U1 |
 | U4 | Fused aft hull provisions | `tools/aft_cooling_provisions.py`, `tools/merge_middle_rear_shell.py` | U3 (G1) |
 | U5 | Separate parts | `airframe/openscad/fuselage/aft-cooling/` | U4 |
 | U6 | Bow inlets | `tools/bow_inlet_provisions.py` | U4 |
 | U7 | CFD case, both configurations | `tools/cfd_cooling_case.py` | U2, U5, U6 |
 | U8 | Coupled analysis and baffle sizing | `docs/FUSELAGE_COOLING_ANALYSIS.md` | U7 |
-| U9 | Mass, CG, and gate G2 | `tools/auw_ledger.py`, `current-specification/bom_revU.json` | U4, U5 |
+| U9 | Mass, CG, and gate G2 | `tools/auw_ledger.py`, `current-specification/bom_revU.json` | U4, U5, G1 limit |
 | U10 | Seal and aperture gate | `tools/assembly_integrity_check.py` | U4 |
 | U11 | Build guide, Phase 11 records, closeout | `docs/PHASED_BUILD_GUIDE.md`, `deferred/WBS.md` | U8, U9, U10 |
 
@@ -306,7 +314,7 @@ These are computed here from stated inputs. They size the problem. They are not 
 - **Files:** `tools/node_thermal_forced_air.py`, `tools/cfd_internal_air_domain.py`, `tools/tests/test_node_thermal_forced_air.py`.
 - **Approach:**
     1. Load the merged aft hull in place of the separate middle and rear shells.
-    2. Replace the two stern pouches with the single stern stack and its dissipation from `avionics/WBS.md` §1.11.
+    2. Replace the two stern pouches with the single stern stack. Take its dissipation from the closed NFP-THERM item (`avionics/WBS.md` §1.11). Wait for that item; do not assume a value.
     3. Add an optional input for CFD results: flow rate, station velocities, and station air temperatures (KTD5).
     4. Put the limits in one list that drives the printout and the exit code.
 - **Execution note:** Add characterization tests of the current outputs before changing the model, so each change in a result is intended.
@@ -324,17 +332,20 @@ These are computed here from stated inputs. They size the problem. They are not 
 ### U3. Rear-cone layout and gate G1
 
 - **Goal:** Fix the stations of every aft provision on the Rev U hull and get the owner's decision.
-- **Requirements:** R4, R5, R6, R7, R13, R14.
+- **Requirements:** R4, R5, R6, R7, R12, R13, R14, R20, R21.
 - **Dependencies:** U1.
 - **Files:** `tools/rear_cone_layout_fit.py`, `tools/tests/test_rear_cone_layout_fit.py`, `docs/FUSELAGE_COOLING_LAYOUT_BRIEF.md`, `tools/hull_datums.py`.
 - **Approach:**
     1. Measure the rear cone cavity on the live merged mesh. Record which mesh was measured.
-    2. Place envelopes for the mounting ring, spider, EDF, thrust tube, nozzle, intakes, plenum volume, four RCS pipes, four valve and servo mounts, and the GW-RCS board.
+    2. Place envelopes for the mounting ring, spider, X5 motor, 2.165 in (55 mm) rotor and shroud, thrust tube, nozzle, intakes, plenum volume, four RCS pipes, four valve and servo mounts, and the GW-RCS board. The GW-RCS envelope is a space reservation only.
     3. Place the Delta fan and its adapter on the spider. Check the spider arm clocking against the load-bearing azimuths.
     4. Model the air path through the rear cone as a keep-out solid.
     5. Trace the tail exit and any intake lines from the canon images under `docs/references/`, in authority order.
     6. Check intake capture area against the 4.79 in² (3,090 mm²) figure in `tools/middle_layout_fit.py`, and re-derive that figure for the 55 mm unit.
-    7. Write an Owner Decision Brief for OQ1, OQ2, and OQ3 with the six template checks and figures.
+    7. Route the fan lead from the stern stack's fan-drive output to the fan, with its tach line, and place a sealed pass-through in the adapter (R20).
+    8. Size the intake area, tube bore, and RCS pipe bores to a stated bounding EDF flow and bleed fraction, and show the margin (R21).
+    9. Estimate the mass and CG shift of the fan and EDF configurations from the placed envelopes.
+    10. Write an Owner Decision Brief for OQ1, OQ2, OQ3, and OQ4 with the six template checks and figures. It carries the sizing basis and the CG estimate, and asks for the aft CG limit.
 - **Patterns to follow:** `tools/middle_layout_fit.py`, `tools/nonfo_simon_fit.py` and its test; `docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md`; `docs/solutions/workflow-issues/a-recorded-route-or-clearance-goes-stale-when-its-part-changes.md`.
 - **Test scenarios:**
     - Every envelope lies inside the measured cavity with the stated clearance.
@@ -343,11 +354,11 @@ These are computed here from stated inputs. They size the problem. They are not 
     - Moving an envelope through the skin fails the gate.
     - Port and starboard placements mirror about the centreline.
     - The stern stack, the aft gear bays, and the tail light cableway do not clash with any envelope.
-- **Verification:** The fit tool passes. The brief is in the repo. **Gate G1:** the owner has decided OQ1 to OQ3 in writing.
+- **Verification:** The fit tool passes. The brief is in the repo. **Gate G1:** the owner has decided OQ1 to OQ4 in writing.
 
 ### U4. Fused aft hull provisions
 
-- **Goal:** Build the mounting ring, nozzle, intake fairings with covers, and RCS pipes with caps and mounts into the one-piece aft hull.
+- **Goal:** Build the mounting ring, thrust tube, nozzle, intake fairings with covers, and RCS pipes with caps and mounts into the one-piece aft hull.
 - **Requirements:** R4, R5, R6, R7, R9, R13, R14. Implements KTD1, KTD2, KTD3, KTD10.
 - **Dependencies:** U3 with G1 passed.
 - **Files:** `tools/aft_cooling_provisions.py`, `tools/merge_middle_rear_shell.py`, `tools/tests/test_aft_cooling_provisions.py`, `airframe/stls/fuselage/middle_rear_shell24_2mm_merged.stl.tar.gz`.
@@ -371,10 +382,10 @@ These are computed here from stated inputs. They size the problem. They are not 
 
 ### U5. Separate parts
 
-- **Goal:** Draw the spider mount, thrust tube, fan adapter, and Phase 11 baffled insert.
+- **Goal:** Draw the spider mount, fan adapter, and Phase 11 baffled insert.
 - **Requirements:** R3, R4, R6, R8, R14. Implements KTD1, KTD8.
 - **Dependencies:** U4. The orifice plate is revised after U8.
-- **Files:** `airframe/openscad/fuselage/aft-cooling/edf_55_motor_mount.scad`, `edf_55_thrust_tube.scad`, `cooling_fan_adapter.scad`, `edf_cooling_baffle_insert.scad` (same folder), `airframe/stls/fuselage/aft-cooling/`, `tools/tests/test_aft_cooling_parts.py`, `deferred/aft-edf/README.md`.
+- **Files:** `airframe/openscad/fuselage/aft-cooling/edf_55_motor_mount.scad`, `cooling_fan_adapter.scad`, `edf_cooling_baffle_insert.scad` (same folder), `airframe/stls/fuselage/aft-cooling/`, `tools/tests/test_aft_cooling_parts.py`, `deferred/aft-edf/README.md`.
 - **Approach:**
     1. Parametrize each part from the U3 stations and the EDF envelope. Take hull interface dimensions from the provision module, not from typed copies.
     2. The adapter seals on the spider and holds the 0.98 in (25 mm) fan frame. It blocks every other path through the ring.
@@ -386,7 +397,7 @@ These are computed here from stated inputs. They size the problem. They are not 
     - The adapter and fan, placed at the U3 station, fit the ring with the stated clearance and do not clash with the tube.
     - With the adapter fitted in the model, no path joins the upstream and downstream sides except through the fan aperture.
     - The insert, placed with the EDF envelope, leaves the EDF inlet face clear.
-    - Changing the EDF envelope diameter changes the spider and tube, and leaves the hull ring interface unchanged.
+    - Changing the motor mount pattern changes the spider, and leaves the hull ring interface unchanged.
     - Every wall meets the minimum for its category.
 - **Verification:** All four parts export in the R2 frame and pass `tools/validate_stls.py`. Previews from six angles are viewed.
 
@@ -419,7 +430,7 @@ These are computed here from stated inputs. They size the problem. They are not 
 - **Approach:**
     1. Extend the air domain to take a configuration. Designed apertures become named patches. Any other route to the boundary is still reported as a leak.
     2. Write the case from the hull and provision-module surfaces per KTD11: mesh, patches, node heat-flux walls, fan or EDF boundary, intake boundaries. Use the air mask to locate patches.
-    3. Run the fan case at average and peak power. Run the EDF case at the minimum cooling throttle, at two higher throttle points, and across the intake pressure sweep.
+    3. Run the fan case at average and peak power, in still air and across the outside pressure sweep to cruise. Run the EDF case at the minimum cooling throttle, at two higher throttle points, and across the same sweep.
     4. Post-process outside the solver: flow at each aperture, velocity and air temperature at each `STREAM` station, mean and standard deviation over the final iterations.
     5. Write the results as a file that U2's input path reads.
 - **Execution note:** Prove the case writer on a straight duct with a known answer before the hull domain.
@@ -448,7 +459,7 @@ These are computed here from stated inputs. They size the problem. They are not 
     4. Compute the EDF thrust at that throttle and the nacelle tilt that balances it in hover, with the hover lift lost (R19, KTD12).
     5. State the thrust on the ground and the time to limit with the EDF stopped (OQ5).
     6. Write the analysis document to the `docs/DOC_TEMPLATES.md` analysis template: problem, assumptions, calculations with units, results, references. Give imperial units first.
-    7. State the sensitivity of the result to the fan curve, the ambient, and the intake pressure bound.
+    7. State the sensitivity of the result to the fan curve, the ambient, and the outside pressure difference. Report the pressure difference at which a node first exceeds its limit.
     8. Update `docs/BAY_A_FWD_THERMAL.md` §3 and §4 with the new fan-tier figures. Leave the T1 decision to the owner.
 - **Test scenarios:**
     - Covers AE4. For each EDF throttle point, sized interior flow is at least the fan-configuration flow.
@@ -469,10 +480,10 @@ These are computed here from stated inputs. They size the problem. They are not 
 - **Dependencies:** U4, U5.
 - **Files:** `tools/auw_ledger.py`, `current-specification/bom_revU.json`, `current-specification/bom_revU.csv`, `current-specification/auw_ledger.json`, `tools/tests/test_auw_ledger_cooling.py`.
 - **Approach:**
-    1. Add the fused provisions through the hull mesh. Add the spider, tube, adapter, and fan as rows with stations. Keep the insert, EDF, and RCS hardware at quantity zero.
+    1. Add the fused provisions, the thrust tube among them, through the hull mesh. Add the spider, adapter, and fan as rows with stations. Keep the insert, EDF, and RCS hardware at quantity zero. Retire the separate `PRINT-THRUST-TUBE` row.
     2. Replace the legacy CF-PETG masses of the Phase 11 printed rows with mesh-derived SLS masses.
     3. Report the CG for three states: before this work, the fan configuration, and the EDF configuration.
-    4. Fail the gate when the fan-configuration CG moves aft by more than the G2 limit the owner sets (OQ4).
+    4. Fail the gate when the fan-configuration CG moves aft by more than the limit the owner set at G1 (KD11).
 - **Test scenarios:**
     - Covers AE5. A ledger with CG growth over the limit exits non-zero.
     - Every new BOM row is classified; an unclassified row with quantity above zero fails the run.
@@ -487,9 +498,10 @@ These are computed here from stated inputs. They size the problem. They are not 
 - **Dependencies:** U4.
 - **Files:** `tools/assembly_integrity_check.py`, `tools/tests/test_assembly_integrity_cooling.py`, `airframe/fuselage-mid/WBS.md`.
 - **Approach:**
-    1. Give the integrity check an aperture allowlist per configuration.
-    2. Probe each cover and cap closed in the `fan` configuration and open in the `edf` configuration.
-    3. Specify the cargo door hinge-edge seal (HULL-LEAK-04) and the adapter seal. State the allowed leak area from the U7 flow-split sensitivity.
+    1. Extend the integrity check: load the merged aft hull for the named configuration, add fore-and-aft ray sets so the nozzle exit and the bow inlets are seen, and exempt allowlisted apertures from the small-hole filter.
+    2. Give the check an aperture allowlist per configuration.
+    3. Probe each cover and cap closed in the `fan` configuration and open in the `edf` configuration.
+    4. Specify the cargo door hinge-edge seal (HULL-LEAK-04) and the adapter seal. State the allowed leak area from the U7 flow-split sensitivity.
 - **Patterns to follow:** `docs/solutions/logic-errors/mating-face-aperture-allowlist.md`; `tools/open_mating_faces.py`.
 - **Test scenarios:**
     - Covers AE1. Fan configuration: the only openings found are the bow inlets and the nozzle exit.
@@ -508,7 +520,7 @@ These are computed here from stated inputs. They size the problem. They are not 
 - **Approach:**
     1. Write the fan installation steps and the upgrade steps: cut covers, cut caps, fit insert, fit EDF. Mark hazards to personnel as WARNING and hazards to equipment as CAUTION.
     2. Rewrite the Phase 11 items that this work completes or changes. Convert their stations to R2.
-    3. Add the cooling fan check to the pre-flight text.
+    3. Add the cooling fan check to the pre-flight text, with the tach fault indication (R20).
     4. Index every new citation location in `REFERENCES.md`. Update the project and archive indexes.
     5. Close the COOL-01 sub-items and regenerate `TODO.md`.
     6. Capture the internal-flow CFD learning under `docs/solutions/`.
@@ -545,7 +557,7 @@ pytest is not part of CI today. The executor runs it by hand and states the resu
 
 **Global**
 
-- Every requirement R1 to R19 is met or is the subject of a written owner decision.
+- Every requirement R1 to R21 is met or is the subject of a written owner decision.
 - Gates G1 and G2 are closed in writing.
 - Every Verification Contract gate passes, or its failure is recorded with the rule and the reason.
 - Every analysis result carries its inputs, its citations, its margin, and its PROVISIONAL mark where an input is ASSUMED.
