@@ -4,14 +4,14 @@ type: feat
 date: 2026-11-15
 topic: ramp-intake-edf-cooling
 artifact_contract: ce-unified-plan/v1
-artifact_readiness: requirements-only
+artifact_readiness: implementation-ready
 product_contract_source: ce-brainstorm
 execution: code
 ---
 
 # Cargo-Ramp Intake, Tail EDF Cooling and Forward Relocation - Plan
 
-**Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (owner; every product decision below is his). Requirements drafted by Claude (Anthropic) under the author's direction, using the `ce-brainstorm` skill, per `AGENTS.md` §3. AI-generated and not yet reviewed.
+**Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (owner; every product decision below is his). Requirements and plan drafted by Claude (Anthropic) under the author's direction, using the `ce-brainstorm` and `ce-plan` skills, per `AGENTS.md` §3. AI-generated and not yet reviewed.
 **License:** CC BY-SA 4.0 — see LICENSES/CC-BY-SA-4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Target repo:** `Serenity-UAV`. All paths are relative to that repo.
 **Source issue:** GitHub issue #290, "fuselage cooling", and the owner's direction of 2026-11-15.
@@ -25,7 +25,14 @@ execution: code
 - **Objective.** Make the tail EDF the fuselage's air mover from the first build. It draws all its air through the fuselage interior, by way of a louvred cargo ramp and the bow inlets. Move mass forward into the freed cargo bay so that the trim closes.
 - **Product authority.** The owner (Stab-Rabbit-coding). His decisions of 2026-11-15, recorded under Key Decisions, override anything else here.
 - **Supersedes.** The fan stage, fan adapter, intake covers, rear-bell intakes and baffled insert of `docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md`.
-- **Open blockers.** None blocks planning. Three questions are deferred to planning with a stated default.
+- **Authority order for an executor.** Product Contract requirements, then Key Technical Decisions, then unit text. Root `AGENTS.md` and `airframe/AGENTS.md` bind all of it.
+- **Execution profile.** Records, analysis and layout tools with tests, hull geometry, separate parts, a CFD case, an analysis document and specification updates. No flight hardware is built, and no flight-control firmware is written.
+- **Stop conditions.**
+    - Gate G1 (U8) is open: no hull geometry or separate part starts.
+    - Gate G2 (U14) fails: stop and write an Owner Decision Brief (`docs/DOC_TEMPLATES.md`).
+    - The stern thermal check is open: the thermal chain stops at U2. Do not substitute an assumed stern load.
+    - Evidence shows that a settled decision cannot work: stop and report.
+- **Tail ownership.** The executor closes the WBS items, regenerates `TODO.md`, and opens the pull request.
 
 ---
 
@@ -221,20 +228,20 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 
 ### Outstanding Questions
 
-**Deferred to Planning**
+**Deferred to Planning.** Each question names the unit or gate that settles it.
 
-- OQ1. **Thrust target.** Default: report installed thrust against free-air thrust, with no fixed share. Planning estimate for the QX 64 mm behind a low-loss ramp: about 2.9 lbf (13 N) at full throttle with the jets closed, and about 1.9 lbf (8.4 N) at the 80 % hover throttle, against 5.2 lbf (23.2 N) free air.
-- OQ5. **Hover endurance.** The tail EDF runs at about 80 % throttle in hover. Planning states the power this adds and the endurance it costs.
-- OQ6. **Holding the CG window.** The estimate puts the CG 0.09 in (2.3 mm) aft of the pivot, inside the window. Planning reconciles the remaining ledger gaps, then sizes the bow ballast pocket for the bench balance.
-- OQ8. **Bench balance allowance.** Planning sizes the ballast pocket and states the CG travel it gives, from the spread between estimated and as-built mass.
-- OQ9. **GNSS antenna beside the Observer.** Planning selects a patch that fits the 0.48 to 0.62 in (12 to 16 mm) gap, and checks reception against noise from the Observer board directly below it.
-- OQ2. **Response to an EDF fault in flight.** Default for planning: shed radio transmit power, report the fault, and land. The owner confirms or changes it.
-- OQ3. **RCS jet pattern and size.** The estimate supports four jets of 0.71 in (18 mm) equivalent bore at station Y 634: two ventral at 255° and 285°, two upper at 45° and 135°. Planning confirms the size with the measured jet path loss and gives each exhaust its trapezoidal outline at the same flow area, 0.39 in² (254 mm²).
-- OQ4. **What the Cargo Observer watches** now that there is no internal cargo. Default: the sling load and the ground below, through the belly.
+- OQ1. **Thrust target.** Default: report installed thrust against free-air thrust, with no fixed share. Planning estimate for the QX 64 mm behind a low-loss ramp: about 2.9 lbf (13 N) at full throttle with the jets closed, and about 1.9 lbf (8.4 N) at the 80 % hover throttle, against 5.2 lbf (23.2 N) free air. Settled in U3 and U13.
+- OQ5. **Hover endurance.** The tail EDF runs at about 80 % throttle in hover. Planning states the power this adds and the endurance it costs. Settled in U13; shown as an estimate at G1.
+- OQ6. **Holding the CG window.** The estimate puts the CG 0.09 in (2.3 mm) aft of the pivot, inside the window. Planning reconciles the remaining ledger gaps, then sizes the bow ballast pocket for the bench balance. Settled in U4 and U14.
+- OQ8. **Bench balance allowance.** Planning sizes the ballast pocket and states the CG travel it gives, from the spread between estimated and as-built mass. Settled in U7 and U14.
+- OQ9. **GNSS antenna beside the Observer.** Planning selects a patch that fits the 0.48 to 0.62 in (12 to 16 mm) gap, and checks reception against noise from the Observer board directly below it. Settled in U7 and U16.
+- OQ2. **Response to an EDF fault in flight.** Default for planning: shed radio transmit power, report the fault, and land. The owner confirms or changes it. Decided at G1.
+- OQ3. **RCS jet pattern and size.** The estimate supports four jets of 0.71 in (18 mm) equivalent bore at station Y 634: two ventral at 255° and 285°, two upper at 45° and 135°. Planning confirms the size with the measured jet path loss and gives each exhaust its trapezoidal outline at the same flow area, 0.39 in² (254 mm²). Settled in U4 and U5; outlines decided at G1.
+- OQ4. **What the Cargo Observer watches** now that there is no internal cargo. Default: the sling load and the ground below, through the belly. Decided at G1.
 
 ### Relationship to the Earlier Plan
 
-`docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md` stays the record of the measured baseline and of the decisions carried in KD13. Its fan-stage units no longer apply. Planning this document decides whether to revise that plan in place or replace it.
+`docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md` stays the record of the measured baseline and of the decisions carried in KD13. Its fan-stage units no longer apply, and it is retired under KTD3.
 
 The draft gate G1 tools, `tools/rear_cone_layout_fit.py` and `tools/cooling_g1_figures.py`, measure the rear cone and check RCS jet paths. Their intake, fan and baffle content is superseded.
 
@@ -246,3 +253,556 @@ The draft gate G1 tools, `tools/rear_cone_layout_fit.py` and `tools/cooling_g1_f
 - `tools/rear_cone_layout_fit.py` for rear-cone stations and RCS jet paths.
 - [REF-EDF-003] for the QX 64 mm unit; [REF-EDF-001], [REF-EDF-002] for the X5 unit compared against it.
 - `docs/CG_RELOCATION_STUDY.md` §1 for the 50 % control-reserve criterion.
+
+---
+
+## Planning Contract
+
+**Product Contract preservation:** Product Contract unchanged. The Goal Capsule gained stop conditions, and each Outstanding Question now names the unit or gate that settles it.
+
+### Key Technical Decisions
+
+- KTD1. **Two phases, with owner gate G1 between them.** Phase A is the record, the analysis tools and the layout, and it ends in the G1 Owner Decision Brief. Phase B is hull geometry, separate parts, CFD and records. (session-settled: user-approved, 2026-11-15 — chosen over planning Phase A alone: one plan, but no hull geometry before the owner signs G1.) Implements the design-shift gate in `AGENTS.md` §10.
+- KTD2. **The planning estimates become repo tools with tests.** The installed-thrust model, the RCS jet model and the hover trim model were run from scratch scripts. Each becomes a tool with one limits list that drives its printout and its exit code. (session-settled: user-approved, 2026-11-15 — chosen over leaving the figures in this document only.) Governs R10, R23, R27, R30, R33.
+- KTD3. **`docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md` is retired, not revised.** It stays as the record of the measured baseline. (session-settled: user-approved, 2026-11-15 — chosen over revising it in place: its fan-stage units no longer apply.)
+- KTD4. **Flight-control firmware is out of this plan.** The plan produces the tail throttle schedule, the tilt trim angle and the RCS mixer gains as figures, and updates the specifications that own them. (session-settled: user-approved, 2026-11-15.)
+- KTD5. **One provision module per hull half supplies every solid and cut.** The hull build, the CFD geometry, the seal check and the layout fit all read it, so they cannot drift apart. Published STLs are never patched.
+- KTD6. **The pusher shroud and stator reuse the nacelle 64 mm geometry.** `airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad` and `edf_motor_mount_64mm.scad` already hold the QX rotor in a printed shroud. The tail unit is a third instance with the motor ahead of the rotor. Implements KD10 and KD14; governs R18, R38.
+- KTD7. **The fan model is constant flow power, calibrated to the maker's free-air static thrust.** It is a planning model. The CFD case of U12 checks its loss coefficients, and a bench run replaces it. Every result that rests on it is PROVISIONAL.
+- KTD8. **RCS jets are fed by scoops at duct total pressure.** A wall tap sees only static pressure, which is too low to drive a useful jet. Jet speed is the nozzle speed divided by √(1 + K). The trapezoidal exhaust keeps the flow area the tool sizes; its hydraulic diameter sets K. Implements KD19; governs R33, R37.
+- KTD9. **The hover CG target is the point where the thrust couple alone trims at the hover throttle.** The jets are then left for control, with equal reserve in both directions. The owner sets the window at G1. Implements KD13; governs R8, R23, R30.
+- KTD10. **The CFD case is `buoyantSimpleFoam`, k-ω SST, OpenFOAM v1912, meshed from the real surfaces with `snappyHexMesh`.** The tail EDF is a fixed-flow sink swept over throttle. The ramp and the bow inlets are total-pressure inlets, swept from still air to cruise. RCS jets are closed in the cooling runs. Node envelopes are heat-flux walls. Follow `docs/solutions/runtime-errors/openfoam-v1912-ubuntu-build-and-steady-rans-pitfalls.md`.
+- KTD11. **The node tool stays the temperature authority.** `tools/node_thermal_forced_air.py` takes station speeds and air temperatures from the CFD results. Its fan curve is removed with the fan.
+- KTD12. **`hover_twin_2200` is this plan's mass baseline.** The tools that read `hover_4000` are not switched until the owner decides at G1.
+- KTD13. **The stern stack heat load waits for the stern thermal check.** The thermal chain does not start on an assumed value. (session-settled: user-directed, 2026-11-15, on the earlier plan's review — chosen over carrying the old CN4 and FC4 figures as an assumption.)
+- KTD14. **The safety response to a tail EDF or RCS fault is specified apart from the control function.** U8 brings the owner the fault cases with figures. The GW-RCS rule that closes all valves on a lost heartbeat was written when RCS was low-authority, and is re-examined there. Governs R24, R29.
+
+### High-Level Technical Design
+
+**Air path**
+
+```mermaid
+flowchart TB
+  OUT[Outside air] --> RAMP[Louvred cargo ramp + screen]
+  OUT --> BOW[Bow inlets]
+  BOW --> BAYA[Bay A nodes]
+  RAMP --> CHIN[Chin nodes]
+  BAYA --> CARGO[Sealed cargo bay: Flight Engineer box, aft nodes, flow guides]
+  CHIN --> CARGO
+  CARGO --> NECK[Neck: stern stack]
+  NECK --> MOTOR[QF2822 motor, ahead of the rotor]
+  MOTOR --> ROTOR[QX 64 mm rotor in printed shroud]
+  ROTOR --> TUBE[Fused thrust tube]
+  TUBE -->|scoops, total pressure| RCS[4 trapezoidal RCS exhausts, station Y 634]
+  TUBE --> NOZ[Fixed elliptical nozzle]
+```
+
+**How the tools feed each other**
+
+```mermaid
+flowchart TB
+  LEDGER[Mass ledger, hover_twin_2200] --> TRIM[Hover trim and RCS tool]
+  FLOW[Tail EDF flow tool: thrust, stall margin, flow split] --> TRIM
+  FLOW --> NODE[Node thermal budget]
+  PROV[Provision modules, both hull halves] --> HULL[Hull builds]
+  PROV --> CFD[CFD case]
+  PROV --> SEAL[Seal and aperture gate]
+  CFD --> NODE
+  CFD -->|checks loss coefficients| FLOW
+  TRIM --> BRIEF[G1 brief, then analysis document]
+  NODE --> BRIEF
+  LAYOUT[Layout fit gates: rear cone, cargo duct, head] --> BRIEF
+  LAYOUT --> PROV
+```
+
+**Unit order**
+
+```mermaid
+flowchart TB
+  U1 --> U2
+  U1 --> U3
+  U1 --> U5
+  U1 --> U6
+  U1 --> U7
+  U3 --> U4
+  U2 --> U8
+  U4 --> U8
+  U5 --> U8
+  U6 --> U8
+  U7 --> U8
+  U8 -->|G1| U9
+  U8 -->|G1| U10
+  U8 -->|G1| U11
+  U9 --> U12
+  U10 --> U12
+  U11 --> U12
+  U12 --> U13
+  U9 --> U14
+  U10 --> U14
+  U11 --> U14
+  U9 --> U15
+  U10 --> U15
+  U13 --> U16
+  U14 -->|G2| U16
+  U15 --> U16
+```
+
+### Assumptions
+
+- The QX rotor exists in both hands, and the tail unit takes either [REF-EDF-003].
+- A short pusher shaft, or the rotor mounted directly on the motor shaft with the motor reversed, is workable. U5 decides which, from the motor drawing.
+- The Flight Engineer box fits forward in the cargo bay once the payload envelope is gone. `tools/cg_relocation_study.py` found no forward placement while the payload was there.
+- Blender is needed for `airframe/blender-scripts/merge_cargo_interior.py`. It is not in the cloud container used for planning. OpenFOAM v1912 and the Python libraries are installed per session.
+- Design ambient is 104 °F (40 °C), ASSUMED, pending BAYA-FWD-T2.
+
+### Risks and Mitigations
+
+| Risk | Effect | Mitigation |
+| --- | --- | --- |
+| Tail EDF, speed controller or RCS fault in hover | Pitch control lost | KTD14; U8 fault cases; CG target of KTD9 keeps the unopposed moment small |
+| As-built CG outside the window | Trim uses RCS reserve, or runs out | Bench balance and ballast pocket (R34, R36); U14 gate G2 |
+| Louvre and screen loss higher than assumed | Less thrust, less RCS authority, fan near stall | U3 states the margin (R27); U12 checks it; U8 shows the louvre options |
+| Jet path loss higher than assumed | RCS undersized | U4 sizes with a range of K; scoop and valve drawn for low loss in U11 |
+| Avionics exposed to ramp air | Rain, dust and debris on the boards | Screen (R6); U6 places drip and debris guards; U16 states the wet-weather limit |
+| Winch line near the stream | Line reaches the rotor | U6 keep-out and line guard (R26) |
+| Stern thermal check still open | Thermal chain cannot finish | KTD13; the flow, trim and layout units do not wait for it |
+| Hover endurance cost of the tail EDF | Shorter hover | U13 states it (OQ5); owner sees it at G1 as an estimate |
+| Flight Engineer box does not fit forward | CG aft of the window | U6 fit gate; fallback is the winch and Cargo Observer moves of KD7 |
+| GNSS reception beside the Observer board | Position loss | U7 patch selection and a bench reception check in U16's build steps (OQ9) |
+| Hull builds exceed the 100 MB limit | Push fails | Tarball rule, `tools/check_hull_tarballs.py` |
+
+### Sources and Research
+
+- This session's measurements and estimates, recorded under Dependencies and Assumptions above.
+- Fit-gate pattern: `tools/middle_layout_fit.py`, `tools/nonfo_simon_fit.py`. Case-writer pattern: `tools/od17_junction_cfd/`.
+- Hull builds: `tools/merge_head_cargo_shell.py`, `airframe/blender-scripts/merge_cargo_interior.py`, `tools/build_head_shell.py`, `tools/merge_middle_rear_shell.py`.
+- Winch: `tools/winch_packaging_fit.py`, `docs/CARGO_WINCH_SPECIFICATION.md`. RCS gateway: `docs/CARGO_DOOR_GATEWAY_SPEC.md` §9.
+- Learnings applied: `docs/solutions/design-patterns/fuse-canonical-styling-as-skin-over-functional-hardware.md`, `docs/solutions/design-patterns/fair-a-forced-exterior-deviation-into-the-measured-canonical-skin.md`, `docs/solutions/design-patterns/cut-the-local-solid-with-a-true-offset-and-gate-the-joint.md`, `docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md`, `docs/solutions/logic-errors/mating-face-aperture-allowlist.md`, `docs/solutions/logic-errors/mesh-boolean-layout-proofs-silent-zero-volumes-and-shared-profiles.md`, `docs/solutions/conventions/one-limits-list-drives-the-printout-and-the-exit-code.md`, `docs/solutions/workflow-issues/generate-open-item-views-never-hand-patch-them.md`.
+- Known citation faults to repair in U1: `REF-HT-001` is cited in `tools/node_thermal_forced_air.py` but absent from `REFERENCES.md`; the brass citation there points at `REF-MAT-008`, which is music wire, where `REF-MAT-009` is C26000 brass.
+- External research was not run. No fresh research pass was dispatched for this plan; it rests on the two passes run earlier in the session and on inline lookups.
+
+---
+
+## Implementation Units
+
+| U-ID | Title | Key files | Depends on |
+| --- | --- | --- | --- |
+| U1 | Design-shift record and reference repair | `airframe/fuselage-mid/WBS.md`, `deferred/WBS.md`, `AGENTS.md`, `REFERENCES.md` | — |
+| U2 | Thermal model refresh | `tools/node_thermal_forced_air.py` | U1, stern thermal check |
+| U3 | Tail EDF flow tool | `tools/tail_edf_flow.py` | U1 |
+| U4 | Hover trim and RCS tool | `tools/hover_trim_rcs.py` | U3 |
+| U5 | Rear-cone layout | `tools/rear_cone_layout_fit.py` | U1 |
+| U6 | Cargo duct layout | `tools/cargo_duct_layout_fit.py` | U1 |
+| U7 | Head layout: GNSS, ballast pocket, bow inlets | `tools/head_layout_fit.py` | U1 |
+| U8 | G1 brief and figures | `docs/FUSELAGE_COOLING_LAYOUT_BRIEF.md`, `tools/cooling_g1_figures.py` | U2 to U7 |
+| U9 | Aft hull provisions | `tools/aft_edf_provisions.py`, `tools/merge_middle_rear_shell.py` | U8 (G1) |
+| U10 | Forward hull provisions | `tools/fwd_duct_provisions.py`, `airframe/blender-scripts/merge_cargo_interior.py` | U8 (G1) |
+| U11 | Separate parts | `airframe/openscad/fuselage/tail-edf/` | U8 (G1) |
+| U12 | CFD case | `tools/cfd_cooling_case.py` | U9, U10, U11 |
+| U13 | Coupled analysis | `docs/FUSELAGE_COOLING_ANALYSIS.md` | U12, U2 |
+| U14 | Mass, CG, bench balance and gate G2 | `tools/auw_ledger.py`, `current-specification/bom_revU.json` | U9, U10, U11 |
+| U15 | Seal and aperture gate | `tools/assembly_integrity_check.py` | U9, U10 |
+| U16 | Specifications, build guide and closeout | `docs/CARGO_WINCH_SPECIFICATION.md`, `docs/PHASED_BUILD_GUIDE.md` | U13, U14, U15 |
+
+### U1. Design-shift record and reference repair
+
+- **Goal:** Record the design shift in the owning WBS files before any geometry changes, and make the citations resolve.
+- **Requirements:** KD3, KD5, KD8, KD14; `AGENTS.md` §10 design-shift gate.
+- **Dependencies:** none.
+- **Files:** `airframe/fuselage-mid/WBS.md`, `deferred/WBS.md`, `avionics/WBS.md`, `WBS.md`, `AGENTS.md`, `deferred/AGENTS.md`, `deferred/README.md`, `REFERENCES.md`, `requirements-dev.txt`, `tools/node_thermal_forced_air.py`, `docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md`, generated `TODO.md` files.
+- **Approach:**
+    1. Rewrite COOL-01 as this plan's sub-items. State what changes, why, what was rejected, and which parts and files are affected.
+    2. Move the tail EDF, its speed controller and the RCS from Phase 11 into the first build in `deferred/WBS.md` and `deferred/AGENTS.md`. Retire the door actuation items.
+    3. Change the propulsion paragraph in `AGENTS.md` §1: the tail EDF is part of the first build. Keep the rule that it is not counted toward hover lift.
+    4. Add a superseded note at the head of the earlier plan (KTD3).
+    5. Repair `REF-HT-001` and the brass citation. Remove the fan citation with the fan. Mark any section that cannot be verified "requires verification" and open a TODO §0.x item.
+    6. Add the missing Python libraries to `requirements-dev.txt`. Record the three tests that fail before this work.
+    7. Regenerate `TODO.md` with `tools/gen_todo_from_wbs.py`.
+- **Patterns to follow:** `docs/AGENTS.md` reference lifecycle; `docs/WBS_FEDERATION.md`.
+- **Test scenarios:** Test expectation: none -- records and citations only. The generator and index checks are the proof.
+- **Verification:** The WBS states the design shift. Every REF-ID in the thermal tool resolves. `tools/gen_todo_from_wbs.py --check` and `tools/precommit_index.py --check` pass.
+
+### U2. Thermal model refresh
+
+- **Goal:** Make the node tool correct for the Rev U hull and ready for EDF flow.
+- **Requirements:** R4, R7. Implements KTD11, KTD13.
+- **Dependencies:** U1. The stern stack step waits for the stern thermal check.
+- **Files:** `tools/node_thermal_forced_air.py`, `tools/tests/test_node_thermal_forced_air.py`.
+- **Approach:**
+    1. Fix the cavity measurement: close each section with the parts that close the hull in the built aircraft. Fail the run on an implausibly small cavity.
+    2. Load the merged aft hull. Replace the fan curve with a flow input from U3, and accept CFD station speeds and air temperatures.
+    3. Add the ramp and bow branches, and the Flight Engineer box at its forward station.
+    4. Replace the two stern pouches with the single stern stack, with its heat load from the closed stern thermal check.
+    5. Put the limits in one list.
+- **Execution note:** The present outputs are invalid through the cargo bay. Write the tests against the closed-cavity figures in the earlier plan's Measured Baseline, not against today's output.
+- **Test scenarios:**
+    - Free area at the chin and aft stations is within tolerance of the measured closed-cavity figures.
+    - A section that is not a closed ring fails with the station named.
+    - Air temperature rises monotonically along each branch, by upstream power over ṁ·c_p.
+    - Ramp air reaches the chin nodes and not the Bay A nodes; bow air reaches the Bay A nodes.
+    - Raising the flow lowers every node temperature.
+    - A node over its limit makes the run exit non-zero and names the node.
+    - A missing mesh or flow input fails with a clear message.
+- **Verification:** The tool runs on the merged hull with the EDF flow input. All tests pass under `/usr/bin/python3`.
+
+### U3. Tail EDF flow tool
+
+- **Goal:** Give the installed thrust, flow, flow split and stall margin of the tail EDF behind the ramp and bow inlets.
+- **Requirements:** R2, R10, R27. Implements KTD2, KTD7. Settles OQ1.
+- **Dependencies:** U1.
+- **Files:** `tools/tail_edf_flow.py`, `tools/tests/test_tail_edf_flow.py`, `REFERENCES.md`.
+- **Approach:**
+    1. Model the fan at constant flow power, calibrated to the QX free-air static thrust [REF-EDF-003].
+    2. Sum the path loss: ramp and bow branches in parallel, then the interior stations in series, with free areas from the meshes.
+    3. Report thrust, flow, ramp share, path loss and pressure margin at each throttle, for a list of louvre loss cases.
+    4. State the flow regime and the validity envelope: incompressible, every Mach number below 0.3.
+- **Patterns to follow:** `tools/node_thermal_forced_air.py` for station areas; `docs/solutions/conventions/one-limits-list-drives-the-printout-and-the-exit-code.md`.
+- **Test scenarios:**
+    - Covers AE3. Each throttle reports installed thrust beside free-air thrust.
+    - With no upstream loss, thrust equals the momentum-theory value for the nozzle area.
+    - More louvre loss gives less thrust and less flow, monotonically.
+    - Flow in at the ramp and the bow equals flow out at the nozzle.
+    - A pressure margin below the stated minimum fails the run.
+    - Half throttle gives one eighth of the flow power.
+    - An exit Mach number above the validity limit fails with the limit named.
+- **Verification:** The tool reproduces the planning figures in this document within tolerance, and its tests pass.
+
+### U4. Hover trim and RCS tool
+
+- **Goal:** Compute hover pitch trim, RCS jet size, control reserve and the CG window from the ledger.
+- **Requirements:** R8, R23, R29, R30, R31, R33. Implements KTD2, KTD8, KTD9. Settles OQ3 and OQ6.
+- **Dependencies:** U3.
+- **Files:** `tools/hover_trim_rcs.py`, `tools/tests/test_hover_trim_rcs.py`, `current-specification/auw_ledger.json`.
+- **Approach:**
+    1. Take mass and CG from the `hover_twin_2200` configuration, plus the parts this plan adds and moves.
+    2. Solve the free-body moment balance about the CG: weight offset, the tail thrust and tilt couple, and the jets.
+    3. Model each jet at duct total pressure with path loss K. Open jets add exit area and change the nozzle speed.
+    4. Report trim use, reserve in each direction, yaw moment, nacelle tilt and tail thrust at each throttle.
+    5. Find the CG window that holds trim use to R30 over a stated throttle range.
+    6. Add the slung-load case at the fairlead station.
+- **Technical design:** Directional only. Moment about the CG, pitch-up positive: `W·d − F_tail·(z_tail − z_pivot) − ΣF_ventral·cos(splay)·arm + ΣF_upper·sin(azimuth)·arm`.
+- **Test scenarios:**
+    - Covers AE7. At the hover throttle, trim use is at or below 50 %.
+    - Covers AE4. A CG outside the window makes the run exit non-zero.
+    - Covers AE6. A slung load at the pivot station leaves the pitching moment unchanged, and moves the CG toward the pivot.
+    - With the CG at the couple-trim point, the untrimmed moment is zero within tolerance.
+    - Jet force scales with the square of throttle.
+    - A larger jet gives more reserve and less tail thrust.
+    - The trim couple arm does not change when the CG height changes.
+    - Zero tail thrust gives zero couple, and the tool reports that it cannot trim an aft CG without jets.
+    - Jet Mach number above the validity limit fails with the limit named.
+- **Verification:** The tool reproduces the RCS and CG window figures in this document within tolerance. Its tests pass.
+
+### U5. Rear-cone layout
+
+- **Goal:** Place the QX pusher unit, the fused tube, the nozzle and the four RCS exhausts on the Rev U aft hull.
+- **Requirements:** R16, R17, R18, R22, R32, R37, R38. Implements KTD6, KTD8.
+- **Dependencies:** U1.
+- **Files:** `tools/rear_cone_layout_fit.py`, `tools/tests/test_rear_cone_layout_fit.py`.
+- **Approach:**
+    1. Remove the fan, adapter, rear-bell intake and baffle content from the draft tool.
+    2. Place the QX rotor forward of the station where the shroud lip fits, the motor ahead of it, and the stator and mount from the nacelle geometry.
+    3. Decide the drive: rotor on the motor shaft, or a short shaft. Check the first critical speed against the motor's top speed.
+    4. Put the RCS station at Y 634. Keep the spreading-jet check for the four azimuths.
+    5. Map the canon plate joints of the rear cone from the mesh. Fit a trapezoidal exhaust of the required flow area to each jet, moving joints radially as little as possible.
+    6. Place the scoops, valve bodies and pushrod runs, with the air path as a keep-out.
+- **Patterns to follow:** `tools/nonfo_simon_fit.py`; `docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md`.
+- **Test scenarios:**
+    - Covers AE5. All four jets have a clear path at the chosen stations.
+    - The ventral jets are at station Y 628 or further aft.
+    - The shroud clears the hull by the static gap along its length.
+    - The motor and rotor stay inside the hull and forward of the nozzle exit.
+    - Each trapezoidal exhaust has the required flow area within tolerance.
+    - Each exhaust edge lies on a plate joint, or the joint shift is reported.
+    - A jet aimed at the skid crossbar, a skid or the dorsal pod fails.
+    - Port and starboard placements mirror.
+    - A shaft longer than the critical-speed limit fails with the margin stated.
+- **Verification:** The fit tool passes, and its printout gives every station and gap for the brief.
+
+### U6. Cargo duct layout
+
+- **Goal:** Lay out the sealed cargo bay as a duct with its equipment.
+- **Requirements:** R4, R6, R11, R12, R13, R14, R15, R19, R20, R25, R26.
+- **Dependencies:** U1.
+- **Files:** `tools/cargo_duct_layout_fit.py`, `tools/tests/test_cargo_duct_layout_fit.py`, `tools/cargo_layout_fit.py`, `tools/winch_packaging_fit.py`, `tools/hull_datums.py`.
+- **Approach:**
+    1. Remove the payload, cradle, door actuation and door gateway envelopes.
+    2. Place the Flight Engineer box, the tail EDF speed controller, the RCS servos and the RCS gateway forward, as far as fit and function allow.
+    3. Keep the winch and the Cargo Observer at their stations. Move the fairlead to the pivot station, and place the hook recess and the Observer orifices in the belly.
+    4. Place the belly service hatch so that every serviceable item is reachable through it.
+    5. Place the louvre panel, the screen and its frame at the ramp, and the flow guides at the nodes U2 names.
+    6. Model the air stream and the winch line sweep as keep-outs. Add a line guard between the line and the stream.
+    7. Route the motor leads, the pushrods and the power runs from the new Flight Engineer station.
+- **Patterns to follow:** `tools/cargo_layout_fit.py`; `tools/middle_layout_fit.py`.
+- **Test scenarios:**
+    - Every envelope clears the hull and its neighbours by the stated gap.
+    - The fairlead is at the pivot station within tolerance.
+    - The winch line, at any payout angle, does not enter the stream keep-out.
+    - No envelope blocks the stream below a stated free area.
+    - Every serviceable item is reachable through the hatch opening.
+    - The Flight Engineer box at its forward station clears the twin tray loading path, or the path is restated.
+    - Moving an envelope into the stream keep-out fails the gate.
+    - The screen covers the whole ramp opening.
+- **Verification:** The fit tool passes. The aft limit of the middle layout gate still holds.
+
+### U7. Head layout: GNSS, ballast pocket, bow inlets
+
+- **Goal:** Place the GNSS antenna, the bow ballast pocket and the bow inlets in the head.
+- **Requirements:** R3, R34, R35. Settles OQ8 in part and OQ9 in part.
+- **Dependencies:** U1.
+- **Files:** `tools/head_layout_fit.py`, `tools/tests/test_head_layout_gnss_ballast.py`.
+- **Approach:**
+    1. Place a thin patch antenna in the gap above the nose Observer board, forward of the window-aft frame. Name the candidate parts and their thickness.
+    2. Outline the cover on the canon bridge window. Confirm the window station against the canon references in their authority order.
+    3. Place the ballast pocket at the bow, with its range of mass and the CG travel that gives.
+    4. Place the bow inlets beside the sensor bay, clear of the pitot hose turn and the Observer trunk.
+- **Test scenarios:**
+    - The antenna envelope clears the Observer board and the roof by the stated gap.
+    - The cover outline lies on the bridge window outline within tolerance.
+    - The ballast pocket clears the sensor pods, the laser and the pitot.
+    - The pocket's stated CG travel equals mass times arm over hover mass.
+    - Each bow inlet has the stated free area.
+    - An antenna thicker than the gap fails the gate.
+- **Verification:** `tools/head_layout_fit.py` passes with the new envelopes.
+
+### U8. G1 brief and figures
+
+- **Goal:** Give the owner one decision brief with every check and figure, and close gate G1.
+- **Requirements:** R23, R24, R29, R36. Implements KTD1, KTD12, KTD14. Settles OQ2, OQ4 and OQ5 as owner decisions.
+- **Dependencies:** U2, U3, U4, U5, U6, U7. The thermal figures are marked pending if the stern thermal check is still open.
+- **Files:** `docs/FUSELAGE_COOLING_LAYOUT_BRIEF.md`, `tools/cooling_g1_figures.py`, `docs/figures/cooling_g1_*.png`, `tools/tests/test_cooling_g1_figures.py`.
+- **Approach:**
+    1. Rewrite the figure script for the new concept. Every figure comes from the layout tools and the live meshes.
+    2. Apply both check sets in `docs/DOC_TEMPLATES.md`, each with a picture and with load and motion vectors.
+    3. Put each decision with its options side by side, a recommendation, and what is unverified.
+    4. Do not copy the canon references into any figure; name the sheet to compare.
+- **G1 package.**
+
+| Check | What the brief shows |
+| --- | --- |
+| Statics and dynamics | Hover free body with weight, nacelle thrust, tail thrust, tilt couple and jet forces; loads on the mounting ring and the fused tube; winch line load at the fairlead |
+| Function | Air path; RCS operation; upgrade-free first build; service access through the belly hatch; ground restraint |
+| Structural integrity | Wall map against `docs/SLS_MIN_WALL_THICKNESS.md`; load path of the ring, hatch frame and fairlead; print orientation |
+| Mechanism and component interactions | Rear cone, cargo duct and head sections with nearest gaps, port and starboard; winch line sweep; pushrod runs |
+| Weight and balance | Mass per part; CG for each configuration and with a slung load; the CG window; ballast range |
+| Canonical shape | Ramp louvres, fused doors, hatch, RCS exhausts on the plate pattern, nozzle, bow inlets and the bridge window cover against the references |
+| Flow sizing | Installed thrust, flow split, stall margin, jet sizing, each with its Reynolds and Mach number |
+| Electrical | Tail EDF current and its speed controller rating; the power run from the forward Flight Engineer station; RCS servo supply |
+| Harness and mounting fit | Motor leads, RCS pushrods, GNSS coax, bend radii and connector clearance |
+| Thermal load | Node temperatures with EDF flow in still air and at cruise; flow guide positions |
+
+- **G1 decisions:** the aft CG window; the RCS exhaust outlines; the drive arrangement; the louvre form among low-loss options; the response to a tail EDF or RCS fault, and the GW-RCS failsafe state; whether `hover_twin_2200` becomes the headline ledger configuration; what the Cargo Observer watches; the hover endurance cost.
+- **Test scenarios:**
+    - The figure script writes every figure the package names; a missing figure fails the run.
+    - Every check row in the brief has a figure or a one-line not-applicable statement.
+    - Each decision carries at least two options and a recommendation.
+- **Verification:** The brief is in the repo with its figures, and each figure has been viewed. **Gate G1:** the owner has decided every G1 decision in writing.
+
+### U9. Aft hull provisions
+
+- **Goal:** Build the mounting ring, the fused thrust tube, the nozzle, the RCS exhausts, scoops and valve seats into the one-piece aft hull.
+- **Requirements:** R16, R17, R22, R32, R37. Implements KTD5.
+- **Dependencies:** U8 with G1 passed.
+- **Files:** `tools/aft_edf_provisions.py`, `tools/merge_middle_rear_shell.py`, `tools/tests/test_aft_edf_provisions.py`, `airframe/stls/fuselage/middle_rear_shell24_2mm_merged.stl.tar.gz`.
+- **Approach:**
+    1. Write the provision module from the U5 stations.
+    2. Open the tail at the nozzle. Fair the nozzle into the measured skin.
+    3. Cut each RCS exhaust on the plate pattern, with its scoop and valve seat inside.
+    4. Call the module from the hull build. Gate each boolean in mm³. Mirror starboard from port.
+    5. Regenerate the hull in the R2 frame.
+- **Patterns to follow:** the design-pattern learnings named in Sources.
+- **Test scenarios:**
+    - The nozzle exit measures 2.06 × 1.76 in (52.3 × 44.7 mm) within tolerance.
+    - Each RCS exhaust is open from the scoop to the skin, by a point-containment probe.
+    - Each exhaust has its flow area within tolerance.
+    - Every added wall meets the minimum for its category; a thinned wall fails.
+    - The hull stays one body after each boolean; a zero-volume result fails.
+    - The outer mould line outside the provision regions is unchanged.
+    - Starboard equals port mirrored.
+- **Verification:** The hull tarball rebuilds. `tools/validate_stls.py`, `tools/check_hull_tarballs.py --check` and `tools/check_datum_drift.py` pass. Previews are viewed.
+
+### U10. Forward hull provisions
+
+- **Goal:** Build the ramp intake, the fused doors, the belly hatch, the fairlead, the hook recess, the Observer orifices, the bow inlets, the bridge window cover seat and the ballast pocket into the forward hull.
+- **Requirements:** R2, R3, R5, R6, R11, R12, R14, R15, R20, R25, R34, R35. Implements KTD5.
+- **Dependencies:** U8 with G1 passed.
+- **Files:** `tools/fwd_duct_provisions.py`, `airframe/blender-scripts/merge_cargo_interior.py`, `tools/merge_head_cargo_shell.py`, `tools/build_head_shell.py`, `tools/tests/test_fwd_duct_provisions.py`, `airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl.tar.gz`.
+- **Approach:**
+    1. Replace the sealed ramp fairing with the louvre panel on the canon outline, and a seat for the screen frame.
+    2. Fuse the doors into the skin with their canon panel lines. Remove the hinge and latch features.
+    3. Cut the hatch opening with its frame, gasket land and screw bosses.
+    4. Cut the fairlead, the hook recess and the Observer orifices.
+    5. Cut the bow inlets, the window cover seat and the ballast pocket in the head.
+    6. Rebuild the one-piece forward hull.
+- **Execution note:** Build and measure the louvre panel alone first. Its open area and loss set the thrust and the RCS authority.
+- **Test scenarios:**
+    - The ramp opening keeps the canon outline within tolerance.
+    - The louvre open area equals the design value.
+    - The door seams are closed: a probe cannot pass.
+    - The hatch opening passes every serviceable envelope.
+    - The fairlead is at the pivot station.
+    - The hull stays one body, and the mating face to the aft hull stays open.
+    - Every added wall meets the minimum for its category.
+- **Verification:** The forward hull rebuilds and passes the STL, tarball and datum checks. `tools/cargo_duct_layout_fit.py` and `tools/head_layout_fit.py` pass against it.
+
+### U11. Separate parts
+
+- **Goal:** Draw the parts that are not fused into the hull.
+- **Requirements:** R4, R6, R12, R16, R18, R26, R34, R35, R38. Implements KTD6, KTD8.
+- **Dependencies:** U8 with G1 passed.
+- **Files:** `airframe/openscad/fuselage/tail-edf/`, `airframe/openscad/fuselage/cargo-duct/`, `airframe/stls/fuselage/`, `tools/tests/test_tail_edf_parts.py`.
+- **Approach:**
+    1. Tail EDF: pusher shroud, stator and motor mount from the nacelle geometry; the drive that U5 chose.
+    2. RCS: four valve bodies, the pushrod guides, and the servo and gateway mounts.
+    3. Cargo duct: ramp screen frame, flow guides, winch line guard, Flight Engineer mount, belly hatch cover and gasket land.
+    4. Head: bridge window cover in a material that passes GNSS signals; ballast pocket cap and ballast slugs.
+    5. Take interface dimensions from the provision modules, not from typed copies.
+- **Patterns to follow:** `airframe/openscad/nacelles/edf_motor_mount_64mm.scad`; the `openscad` skill's validate, preview and export steps.
+- **Test scenarios:**
+    - Each part renders with no warning and exports a manifold mesh.
+    - The shroud seats in the mounting ring with the stated clearance.
+    - Each valve body, closed, blocks its scoop; open, it passes the design area.
+    - The hatch cover seals on its land, and comes off with common hand tools.
+    - Each flow guide gives the free area U2 asks for.
+    - Every wall meets the minimum for its category.
+- **Verification:** All parts export in the R2 frame and pass `tools/validate_stls.py`. Previews from six angles are viewed.
+
+### U12. CFD case
+
+- **Goal:** Compute the interior flow, driven by the tail EDF, in still air and at cruise.
+- **Requirements:** R1, R2, R3, R7, R10, R27. Implements KTD10.
+- **Dependencies:** U9, U10, U11.
+- **Files:** `tools/cfd_internal_air_domain.py`, `tools/cfd_cooling_case.py`, `tools/cfd_cooling_post.py`, `tools/tests/test_cfd_cooling_case.py`, `reports/cfd_cooling/`.
+- **Approach:**
+    1. Use the voxel flood fill for leak detection and patch location only.
+    2. Mesh the hull and provision surfaces, with refinement at the louvres, screen, bow inlets, flow guides and the EDF face. Gate a minimum cell count across each aperture.
+    3. Run the throttle points and the outside pressure sweep.
+    4. Post-process outside the solver: flow at each inlet, station speeds and air temperatures, path loss, each with mean and standard deviation.
+    5. Compare the path loss with U3's coefficients, and write the results for U2.
+- **Execution note:** Prove the case writer on a straight duct with a known answer first.
+- **Test scenarios:**
+    - Straight duct: outlet flow equals inlet flow, and temperature rise equals power over ṁ·c_p.
+    - Ramp flow plus bow flow equals EDF flow within the stated imbalance.
+    - Each aperture has at least the minimum cell count.
+    - An undesigned opening stops the domain build with its location.
+    - A run that has not converged writes no results.
+    - The post step reports a standard deviation with every mean.
+- **Verification:** The cases converge. Results are under `reports/cfd_cooling/`. One finer-mesh run is compared and the change stated.
+
+### U13. Coupled analysis
+
+- **Goal:** Produce the cooling, thrust, trim and endurance results, and size the flow guides.
+- **Requirements:** R4, R7, R8, R9, R10, R24, R27, R30. Settles OQ1 and OQ5.
+- **Dependencies:** U12, U2.
+- **Files:** `docs/FUSELAGE_COOLING_ANALYSIS.md`, `docs/BAY_A_FWD_THERMAL.md`, `REFERENCES.md`.
+- **Approach:**
+    1. Run the node tool with the CFD inputs for hover, cruise and the restrained ground case.
+    2. Size the flow guides, and re-run U12 until R7 passes or the limit is reached.
+    3. Re-run U3 and U4 with the measured path loss. State installed thrust, stall margin, trim use and the CG window.
+    4. State the hover power of the tail EDF and the endurance it costs.
+    5. State the fault cases: time to a temperature limit with no forced air, and pitch acceleration with no tail EDF.
+    6. Write the document to the `docs/DOC_TEMPLATES.md` analysis template, imperial units first.
+- **Test scenarios:**
+    - Covers AE2. On the ground at the minimum cooling throttle, every node passes the average-power case.
+    - Every node passes in still air and at cruise, or the document names the node and the margin.
+    - Each result carries its inputs, its citation or its ASSUMED label, and its margin.
+- **Verification:** The document carries every result with margin, limit and PROVISIONAL mark where due. It records that it has gone for qualified engineering review.
+
+### U14. Mass, CG, bench balance and gate G2
+
+- **Goal:** Enter every part in the ledger, close the remaining ledger gaps, and plan the bench balance.
+- **Requirements:** R19, R21, R23, R34, R36. Implements KTD12. Settles OQ6 and OQ8.
+- **Dependencies:** U9, U10, U11.
+- **Files:** `tools/auw_ledger.py`, `current-specification/bom_revU.json`, `current-specification/bom_revU.csv`, `current-specification/auw_ledger.json`, `tools/tests/test_auw_ledger_tail_edf.py`, `docs/OPERATORS_MANUAL.md`.
+- **Approach:**
+    1. Add the tail EDF, its speed controller, the RCS hardware, the hatch, the screen, the flow guides, the GNSS antenna and the ballast pocket. Remove the door hardware.
+    2. Move the Flight Engineer box, the speed controller and the RCS servos to their U6 stations.
+    3. Close the gaps: the nose pods, the pitot parts, the Bay A drawer, shelf and hatch, and a BOM row for the cells.
+    4. Apply the owner's G1 decision on the headline configuration.
+    5. State the ballast range, the CG travel it gives, and the spread between estimate and as-built mass that it has to cover.
+    6. Fail the gate when the hover CG is outside the owner's window.
+- **Test scenarios:**
+    - Covers AE4. A CG outside the window exits non-zero.
+    - Every new BOM row is classified.
+    - BOM mass and mesh mass agree within the sync tolerance.
+    - The ballast range moves the CG across the stated travel.
+    - The slung-load configuration reports its CG.
+- **Verification:** `tools/auw_ledger.py --check` and `tools/check_bom_mesh_sync.py` pass. **Gate G2:** the CG is inside the window, or the owner has decided on a brief.
+
+### U15. Seal and aperture gate
+
+- **Goal:** Prove the hull is closed except at the designed apertures.
+- **Requirements:** R1, R25.
+- **Dependencies:** U9, U10.
+- **Files:** `tools/assembly_integrity_check.py`, `tools/tests/test_assembly_integrity_duct.py`.
+- **Approach:**
+    1. Load the merged hulls. Add fore-and-aft ray sets, so that the nozzle, the ramp and the bow inlets are seen.
+    2. Give the check an aperture allowlist, and exempt allowlisted apertures from the small-hole filter.
+    3. Specify the hatch gasket, the fairlead seal and the Observer orifice windows, with the leak area the flow split allows.
+- **Patterns to follow:** `docs/solutions/logic-errors/mating-face-aperture-allowlist.md`.
+- **Test scenarios:**
+    - Covers AE1. The only openings are the ramp, the bow inlets, the nozzle, the RCS exhausts, the fairlead, the Observer orifices and the hatch seal.
+    - An opening that is not on the allowlist fails and is located.
+    - An allowlisted aperture found closed fails.
+    - A repair pass that caps an aperture is detected.
+- **Verification:** The check passes on the built hulls.
+
+### U16. Specifications, build guide and closeout
+
+- **Goal:** Bring the specifications and the build guide into line, and close the tracking.
+- **Requirements:** R9, R13, R16, R24, R29, R36. Implements KTD4, KTD14.
+- **Dependencies:** U13, U14, U15.
+- **Files:** `docs/CARGO_WINCH_SPECIFICATION.md`, `docs/CARGO_DOOR_GATEWAY_SPEC.md`, `docs/CARGO_SECTION_LAYOUT.md`, `docs/POWER_DISTRIBUTION.md`, `docs/TILT_DRIVE_CONTROL_SPEC.md`, `docs/PHASED_BUILD_GUIDE.md`, `docs/OPERATORS_MANUAL.md`, `docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md`, `deferred/aft-edf/README.md`, `airframe/fuselage-mid/WBS.md`, `REFERENCES.md`, `PROJECT_INDEX.md`, `ARCHIVE_INDEX.md`, generated `TODO.md` files.
+- **Approach:**
+    1. Winch specification: the fairlead under the pivot, the hook recess, the line guard, no internal cargo.
+    2. Gateway specification: retire the door gateway; move GW-RCS into the first build with the owner's failsafe decision.
+    3. Record the tail throttle schedule, the tilt trim angle and the RCS mixer gains as figures for the flight controller.
+    4. Build guide: the tail EDF installation, the bench balance step with its ballast allowance, the GNSS reception check.
+    5. Operators manual: the tail EDF runs whenever the avionics are powered; restrain the aircraft on the ground; the response to a tail EDF or RCS fault. Mark hazards to people as WARNING and hazards to equipment as CAUTION.
+    6. Archive the superseded 120 mm files. Index every new citation. Close the WBS items and regenerate `TODO.md`.
+    7. Capture the learnings under `docs/solutions/`.
+- **Test scenarios:** Test expectation: none -- documentation and tracking. The sync and index checks are the proof.
+- **Verification:** `tools/sync_operators_manual.py --check`, `tools/precommit_index.py --check` and `tools/gen_todo_from_wbs.py --check` pass.
+
+---
+
+## Verification Contract
+
+Run every command with `/usr/bin/python3`.
+
+| Gate | Command or check | Applies to |
+| --- | --- | --- |
+| Unit tests | `/usr/bin/python3 -m pytest tools/tests/` | U2 to U15 |
+| Lint | `flake8` with the repo configuration | every Python change |
+| Layout fit | `tools/rear_cone_layout_fit.py`, `tools/cargo_duct_layout_fit.py`, `tools/head_layout_fit.py`, `tools/middle_layout_fit.py` | U5 to U7, U9 to U11 |
+| Flow and trim | `tools/tail_edf_flow.py`, `tools/hover_trim_rcs.py` | U3, U4, U13 |
+| Thermal limits | `tools/node_thermal_forced_air.py` | U2, U13 |
+| STL validity | `tools/validate_stls.py` | U9 to U11 |
+| Hull tarballs | `tools/check_hull_tarballs.py --check` | U9, U10 |
+| Datum drift | `tools/check_datum_drift.py` | U5 to U7, U9, U10 |
+| Ledger | `tools/auw_ledger.py --check`, `tools/check_bom_mesh_sync.py` | U14 |
+| Enclosure | `tools/assembly_integrity_check.py` | U15 |
+| Tracking | `tools/gen_todo_from_wbs.py --check`, `tools/precommit_index.py --check`, `tools/sync_operators_manual.py --check` | U1, U14, U16 |
+| Visual | Multi-angle previews, each image viewed | U8 to U11 |
+| CFD quality | `checkMesh` clean; minimum cells across each aperture; residual and imbalance limits; standard deviation reported | U12 |
+
+pytest is not part of CI today. The executor runs it by hand and states the result. Three tests fail before this work: two in `tools/tests/test_nacelle_esc_service.py` and one in `tools/tests/test_tail_strike_requirement.py`. The executor reports them and does not count them against the plan.
+
+---
+
+## Definition of Done
+
+**Global**
+
+- Every requirement is met, or is the subject of a written owner decision.
+- Gates G1 and G2 are closed in writing.
+- Every Verification Contract gate passes, or its failure is recorded with the rule and the reason.
+- Every analysis result carries its inputs, its citations, its margin, and its PROVISIONAL mark where an input is ASSUMED.
+- No citation is unverified without a "requires verification" mark and a TODO §0.x item.
+- The WBS items are closed in the owning files, and `TODO.md` is regenerated.
+- Abandoned attempts, scratch cases and unused scripts are removed from the diff. CFD run directories are not committed.
+- The analysis has gone for qualified engineering review, and the analysis document records it.
+
+**Per unit**
+
+Each unit is done when its Verification line is true and its tests pass.
