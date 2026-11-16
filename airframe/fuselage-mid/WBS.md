@@ -813,7 +813,7 @@ Record: `docs/CARGO_SECTION_LAYOUT.md`, `docs/TILT_ACTUATOR_SELECTION.md`,
 - [ ] **20D VERIFY — mounting-hole spacing (15 mm assumed) and Ø7 boss** against the Pololu 20D dimension diagram before printing the face plate; output-shaft axial rating unpublished (27 N worm thrust at stall — thrust washer fallback).
 - [x] **TACCO-60 — VOID 2026-10-07.** TACCO returned to 55 x 35 mm (avionics/kicad/TACCO/TACCO.md §13b); the Rev T5g / T6a envelope changes and the nose-tray widening were reverted to their pre-2026-10-06 text, so no re-export is owed for them. `tools/check_tacco_envelope_sync.py` stays in the pre-commit hook and CI; the PENDING lines it still prints come from earlier non-geometric edits (licence headers, gateway constants) to those sources, not from this change.
 - [ ] **CHIN-STRAPS — add 4 × BATT-STRAP-CAM** to the order for the chin node shelf (BOM note on PRINT-CHIN-SHELF).
-- [ ] **Cargo door re-fit (U1)** still open — see 1.1.1.2.1 "Clamshell door halves"; the T5 shell moved no aperture geometry.
+- [x] (superseded 2026-11-16 by TEDF-10: the cargo doors are fused into the hull skin, plan 002 KD5) **Cargo door re-fit (U1)** still open — see 1.1.1.2.1 "Clamshell door halves"; the T5 shell moved no aperture geometry.
 - [x] **Rev T5f — cargo-door servo gateway mount points (2026-09-21, Claude Opus 5).**
     `GW-CARGO-DOOR` (`docs/CARGO_DOOR_GATEWAY_SPEC.md`) placed standing transverse on the
     solid 6.2 mm belly slab at the forward aperture rim: board X_CL ± 24.5 / Y −14.5..−12.9 /
@@ -842,12 +842,12 @@ Record: `docs/CARGO_SECTION_LAYOUT.md`, `docs/TILT_ACTUATOR_SELECTION.md`,
         (0.92 g ea). FOS_bearing 10.4, FOS_shear ≈3.0 (order-of-magnitude, FDM
         anisotropic — bench pull-test open, DOOR-LATCH-1). BOM: `PRINT-DOOR-LATCH-BRACKET`,
         `PRINT-DOOR-HORN`, `PIN-3X10` (`tools/bom_edit_door_latch.py`).
-        - [ ] DOOR-LATCH-1..6 (`docs/CARGO_DOOR_LATCH_SPEC.md` §6): bench pull-test the
+        - [x] (superseded 2026-11-16 by TEDF-10: the cargo doors are fused into the hull skin, plan 002 KD5) DOOR-LATCH-1..6 (`docs/CARGO_DOOR_LATCH_SPEC.md` §6): bench pull-test the
             hook, source/cite the pushrod wire spec, pushrod buckling check, print a real
             ≥1.5mm hook-root fillet (OpenSCAD CSG attempt was non-manifold), dry-fit against
             the door + shell once SERVO-PLACE resolves, soft-approach CLOSE sequencing in
             firmware.
-        - [ ] **DOOR-SEAM-1 — tongue-and-groove interlock at the door-to-door mating edges**
+        - [x] (superseded 2026-11-16 by TEDF-10: the cargo doors are fused into the hull skin, plan 002 KD5) **DOOR-SEAM-1 — tongue-and-groove interlock at the door-to-door mating edges**
             (`docs/CARGO_DOOR_LATCH_SPEC.md` §4.2b): the structural half of the cross-link
             (the software half — one `DOOR_COMMAND` frame drives both doors — already
             exists). Needs a `generate_cargo_doors.py` edit + both door STLs regenerated;
@@ -1111,7 +1111,9 @@ It is **ONE printed piece** comprising two distinct structural elements:
     Canonically this is a pressurised passage within the ship; in the UAV context it provides
     structural continuity and a wiring/keel routing path through the narrowest hull section.
 
-**Phase 5–10 print state:** inner neck is a closed, uncut tube.
+> **Superseded 2026-11-16 (design shift, §1.1.1.4.0 and `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`):** the inner neck is now the open air passage from the sealed cargo bay to the tail EDF, which flies from the first build. The Phase 11 intake scoops and the 55 mm sizing are retired, and the Flight Engineer box moves forward into the cargo duct (TEDF-06). Do not seal the neck bore. The text below is the pre-shift record.
+
+**Phase 5–10 print state (pre-shift):** inner neck is a closed, uncut tube.
 Aft EDF intake scoops (reduced-area radial openings into the inner neck for the 55 mm EDF airflow)
 are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phase 11.
 
@@ -1121,12 +1123,12 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 - [ ] **Slicer verification** — open baked `middle_shell24_2mm_repaired.stl` in slicer and confirm:
     - Both the outer horseshoe ring and inner neck are present as connected geometry
     - No thin-wall violations at neck-to-horseshoe web transitions (min 1.6 mm wall at all points)
-    - Inner neck bore is closed (no EDF intake openings)
+    - Inner neck bore is open as the air passage to the tail EDF (changed 2026-11-16, §1.1.1.4.0; was "closed, no EDF intake openings")
     - Skid arm geometry at the lower horseshoe legs correctly transitions into the rear section
     - Z-range +1.3..+166.1 mm in hull frame; total height ≈ 165 mm — fits build-volume vertical
     **BLOCKS middle section printing.**
 
-- [ ] **Flight Engineer's room — PDB mounting in inner neck** — the Flight Engineer Power Distribution Board
+- [ ] **Flight Engineer's room — PDB mounting in inner neck** *(superseded in part 2026-11-16: the Flight Engineer box moves forward into the cargo duct under TEDF-06, and the neck is the tail EDF's air passage; close this item with TEDF-06.)* — the Flight Engineer Power Distribution Board
     (Flight Engineer Rev A1; 75 g) is housed inside the inner neck of the middle section, accessible
     through the open ventral face of the horseshoe ring.  The inner neck central location
     minimises power run lengths to all four nacelles, all four avionics stacks, and the battery.
@@ -1164,7 +1166,7 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     on a flat boss pad, or smooth the bay wall first). Mechanism is watertight and stays inside the 2 mm
     skin. Scripts: `make_bay_text.py`, `engrave_plaques.py`.
 
-- [ ] **Phase 11 — aft EDF intake scoop cuts** — at Phase 11, cut the reduced-area radial scoop
+- [x] (superseded 2026-11-16 by TEDF-01/TEDF-09: the tail EDF draws through the open neck from the sealed cargo duct; no neck scoops, and the 55 mm sizing is retired, §1.1.1.4.0) **Phase 11 — aft EDF intake scoop cuts** — at Phase 11, cut the reduced-area radial scoop
     openings (sized for the 55 mm EDF, ~3,090 mm² total capture at 1.3× duct match) into the inner
     neck to match the resized EDF plenum geometry (`deferred/aft-edf/openscad/neck_intake_frame.scad`).
     These cuts are Phase 11 ONLY — the Phase 5–10 mesh is the closed-neck version.  **Scoop geometry
@@ -1244,8 +1246,10 @@ Plan `docs/plans/2026-11-01-001-feat-bay-a-forward-adoption-plan.md`; spec
     one-piece merge.
 - [x] **HULL-FUSE-01** — Wing-root flanges fused into the one-piece head+cargo print
     (separate only for mesh-processing reasons; bond line removed).
-- [ ] **HULL-LEAK-04** — Cargo door hinge-edge seam (X ±47–52, Y 317–378): specify the
-    door seal/gasket (cooling stream is suction; any opening becomes an inlet).
+- [ ] **HULL-LEAK-04** — Belly service hatch gasket (retitled 2026-11-16; was the cargo door
+    hinge-edge seam, X ±47–52, Y 317–378, retired with the fused doors under TEDF-10): specify the
+    hatch gasket and its leak area (the cooling stream is suction; any opening becomes an inlet).
+    Plan 002 U15. (S52)
 - [ ] **LG-AFT-BOLT-01** — Aft-port gear bay upper-fwd bolt (R2 47.2, 417.8, 134.4):
     driver-access keep-out clashes the port wing (979 mm³) after the wing shift; no
     seat within 30 mm. Aft bays NOT regenerated (last valid STLs kept). Re-site the
@@ -1286,18 +1290,21 @@ forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
 - [ ] **TEDF-01** — [STD] Record and reference repair: `deferred/` Phase 11 items into the
     first build, reference faults, `requirements-dev.txt`. Plan U1. (S42)
 - [ ] **TEDF-02** — [STD] Thermal model refresh: closed-cavity fix, ramp and bow branches,
-    EDF flow input. Needs NFP-THERM. Plan U2. (S46)
+    EDF flow input, tail speed controller and motor as limited nodes, minimum cooling throttle.
+    The stern stack step needs NFP-THERM. Plan U2. (S45; swapped with S46 on 2026-11-16)
 - [ ] **TEDF-03** — [ADV] Tail EDF flow tool: installed thrust, flow split, stall margin.
     Plan U3. (S43)
 - [ ] **TEDF-04** — [ADV] Hover trim and RCS tool: trim use, jet sizing, CG window.
     Plan U4. (S43)
-- [ ] **TEDF-05** — [ADV] Rear-cone layout: QX pusher unit, RCS at Y 634, trapezoidal
-    exhausts on the canon plate pattern. Plan U5. (S44)
+- [ ] **TEDF-05** — [ADV] Rear-cone layout: QX pusher unit, RCS at Y 634 (ventral pair canted
+    25° aft), trapezoidal exhausts on the canon plate pattern, 3D jet check, the three RCS valve
+    concepts for G1. Plan U5. (S44)
 - [ ] **TEDF-06** — [STD] Cargo duct layout: Flight Engineer box forward, hatch, fairlead
     under the pivot, screen, flow guides, line guard. Plan U6. (S44)
-- [ ] **TEDF-07** — [STD] Head layout: GNSS patch under the bridge window, ballast pocket,
-    bow inlets. Plan U7. (S44)
-- [ ] **TEDF-08** — [ADV] Gate G1 Owner Decision Brief and figures (OD-22). Plan U8. (S45)
+- [ ] **TEDF-07** — [STD] Head layout: GNSS antenna placement trade for G1, ballast pocket and
+    aft balance allowance, bow inlets. Plan U7. (S44)
+- [ ] **TEDF-08** — [ADV] Gate G1 Owner Decision Brief and figures (OD-22), after the owner's
+    pre-G1 bench run. Plan U8. (S46; swapped with S45 on 2026-11-16)
 - [ ] **TEDF-09** — [STD] Aft hull provisions: ring, fused tube, nozzle, RCS exhausts.
     Needs OD-22. Plan U9. (S47)
 - [ ] **TEDF-10** — [STD] Forward hull provisions: ramp louvres, fused doors, hatch,
@@ -1310,7 +1317,10 @@ forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
 - [ ] **TEDF-14** — [STD] Mass, CG, bench balance allowance and gate G2 (OD-23).
     Plan U14. (S52)
 - [ ] **TEDF-15** — [STD] Seal and aperture gate. Plan U15. (S52)
-- [ ] **TEDF-16** — [STD] Specifications, build guide and closeout. Plan U16. (S53)
+- [ ] **TEDF-16** — [STD] Specifications, build guide and closeout, including the Phase 5 build
+    guide (`graphical-build-guide/AGENTS.md`, `graphical-build-guide/WBS.md`,
+    `graphical-build-guide/flight-phases/WBS.md`): tail EDF, speed controller and RCS installation
+    and ledger-derived mass. Plan U16. (S53)
 - [ ] **OSESC-TAIL-1** — [STD] Fifth Open-Secure-ESC controller (OSESC-NAC) for the tail
     EDF: forward mount in the cargo duct, lead length and its EMI check, and bench
     qualification at about 80 % continuous duty for hover. Cross-repo:

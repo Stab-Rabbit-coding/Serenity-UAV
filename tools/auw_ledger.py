@@ -620,6 +620,43 @@ def twin_pack_items() -> list[Item]:
             for side, sgn in (("port", 1.0), ("stbd", -1.0))]
 
 
+# ---------------------------------------------------------------------------
+# Cooling airflow budget -- PROVISIONAL planning estimate (2026-11-16 document
+# review of docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md,
+# finding 30; owner direction to carry it in this ledger).  Not computed here:
+# the node heat path is tools/node_thermal_forced_air.py's, the flow split and
+# throttle-to-flow relation are the constant-flow-power tail EDF model of plan
+# U3.  Plan U2 replaces these figures when the node tool takes the EDF flow.
+# Ambient 104 F (40 C) and node limit 185 F (85 C); restrained ground, still air.
+CFM_PER_LPS = 2.11888
+COOLING_AIRFLOW: dict[str, Any] = {
+    "status": "PROVISIONAL -- ASSUMED heat loads, film coefficients and fan model",
+    "basis": "plan 002 finding 30, 2026-11-16; replaced by plan U2/U13",
+    "heat_sources_w": {
+        "CN node avg / peak": [3.0, 8.3],  # docs/AVIONICS_PB2_REDESIGN.md Power
+        "FC node": 1.25,
+        "Flight Engineer box": 3.0,  # ASSUMED
+        "tail speed controller": "21.7 W at 50 A, x (I/50)^2 (tools/nacelle_esc_thermal.py)",
+    },
+    "governing_node": "CN2/CN3 chin (0.31 in / 8 mm spreader room per side)",
+    # minimum flow at which every node passes, L/s: (plain screened ramp, louvred ramp K 2.3)
+    "need_lps": {
+        "avg_no_guides": [18.8, 24.8],
+        "avg_chin_3000mm2": [4.9, 6.4],
+        "peak_chin_3000mm2": [37.3, 49.3],
+    },
+    "full_throttle_lps": [140.0, 116.0],
+    "esc_min_stable_throttle": 0.10,  # ASSUMED
+}
+
+
+def cooling_idle_throttle(need_lps: float, full_lps: float,
+                          esc_min: float = COOLING_AIRFLOW["esc_min_stable_throttle"]) -> float:
+    """Minimum cooling throttle (plan 002 R7): the larger of the controller's lowest
+    stable throttle and the throttle that delivers the needed flow (Q ~ throttle)."""
+    return max(esc_min, need_lps / full_lps)
+
+
 def build() -> dict:
     bom = bom_rows()
     missing = classify(bom)
@@ -636,7 +673,11 @@ def build() -> dict:
         "hover_twin_2200": base + twin_pack_items(),
     }
     thrust = THRUST_PER_FAN_GF * N_FANS
-    result: dict[str, Any] = {"unclassified": missing, "thrust_gf": thrust, "configs": {}}
+    result: dict[str, Any] = {"unclassified": missing, "thrust_gf": thrust, "configs": {},
+                              "cooling_airflow": dict(COOLING_AIRFLOW)}
+    ca = result["cooling_airflow"]
+    pairs = zip(ca["need_lps"]["avg_chin_3000mm2"], ca["full_throttle_lps"])
+    ca["idle_throttle"] = [round(cooling_idle_throttle(n, f), 3) for n, f in pairs]
     for name, items in configs.items():
         p = properties(items)
         p["T_W"] = thrust / p["mass_g"]
@@ -676,6 +717,13 @@ def report(r: dict) -> None:
           f"(hover_4000: retired single cargo pack)")
     print(f"  CG offset {r['configs']['hover_twin_2200']['cg'][1] - PIVOT['port'][1]:+.1f} mm "
           f"(hover_twin_2200: two cells in the published twin tray)")
+    ca = r["cooling_airflow"]
+    print(f"\nCooling airflow ({ca['status']}):")
+    for case, (plain, louv) in ca["need_lps"].items():
+        print(f"  {case:20} {plain * CFM_PER_LPS:6.1f} cfm ({plain:5.1f} L/s) plain ramp; "
+              f"{louv * CFM_PER_LPS:6.1f} cfm ({louv:5.1f} L/s) louvred")
+    print(f"  governing node {ca['governing_node']}; idle throttle "
+          f"{ca['idle_throttle'][0]:.0%} plain / {ca['idle_throttle'][1]:.0%} louvred")
     if r["unclassified"]:
         print("\nUNCLASSIFIED airborne BOM rows (Qty > 0):")
         for ref in r["unclassified"]:

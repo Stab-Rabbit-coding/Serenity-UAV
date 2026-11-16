@@ -28,10 +28,10 @@
 | Hull   | 609.6 mm CF-PETG / PU foam / CF skeleton | SCAD sources complete; all four fuselage SCAD shells at Rev S baseline, carried forward unchanged into Rev T; STLs pending regeneration where noted |
 | Wings | Fixed CF spar (20x16.3mm tube, 35% root chord), S1223-derived section, gear-linked nacelle tilt drive | Rev S1g: spar bonded wing member (not rotating shaft), root joint splits shear(socket)/moment(80x60 flange); 14T/50T reduction drive; SPAR-20-2 station 45.15→28.0mm |
 | Nacelles | Radially enlarged, QMx-proportioned shell around 2x64mm tandem EDFs, interstage stator, servo variable nozzle; axial length held | Rev U: the 64 mm nacelle is current and the 50 mm Rev S4c/S4d geometry is archived; NAC-64-SERVO-01: servo nozzle drive designed and fit-closed 2026-10-04, uniform x1.06 enlargement wired through a single source 2026-10-05 (pivot, CFD, mass/CG and bench gates open) |
-| Nacelle EDFs | 2x QX-Motor 64mm EDF per nacelle, QF2822-2300KV (83.60 ozf / 2,370 gf at 24 V, 57.0 A; 80 A ESC, owner 2026-11-02); nominal 64mm thrust tube; QX 4xM3/16mm spider mounts | Existing 50mm XFly configuration remains current until 64mm fit, power, mass and thrust verification passes |
+| Nacelle EDFs | 2x QX-Motor 64mm EDF per nacelle, QF2822-2300KV (83.60 ozf / 2,370 gf at 24 V, 57.0 A; 80 A ESC, owner 2026-11-02); nominal 64mm thrust tube; QX 4xM3/16mm spider mounts | Rev U: the 64 mm QX configuration is current. Open item: complete the 64 mm fit, power, mass and thrust verification (the 50 mm XFly configuration is archived) |
 | Landing gear | Sponson-mounted bays, canonical 1.5in leg (extended 3.0in variant retained) | Rev T (component design generation "R6" retained as its own permanent name): sponson wells CLOSED, leg length derived from nozzle clearance not belly height |
-| Rear propulsion | 55mm 6S EDF, reduced-area neck intake, fixed canonical elliptical tail nozzle (2.06x1.76 in / 52.3x44.7 mm) + 4 RCS bleed-air thrusters | DEFERRED — Phase 11. Adds ~1275g forward thrust; not counted in hover T/W; Phase 11 hover T/W ~1.43 |
-| Cargo bay | Clamshell doors + SG90 servos (OpenServoCore) + DRV8833 + SPT5425LV/LibreServo v2 winch + Dyneema + auto-latch + GPS ring + FPV bezel | N20 winch train retired Rev S; STS3215 winch servo superseded 2026-08-02 by SPT5425LV+LibreServo v2 (envelope gate resolved, 6 winch STLs still unimplemented — see WBS §1.1.1.2.1); other cargo STLs generated; gondola shell open |
+| Rear propulsion | 55mm 6S EDF, reduced-area neck intake, fixed canonical elliptical tail nozzle (2.06x1.76 in / 52.3x44.7 mm) + 4 RCS bleed-air thrusters | *2026-11-16 design shift (`airframe/fuselage-mid/WBS.md` §1.1.1.4.0, `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`):* the QX 64 mm tail EDF (QF2822 2300 KV, fifth Open-Secure-ESC) flies from the first build as a pusher, drawing all its air through the fuselage interior; flight-critical in hover (pitch trim couple and the four RCS jets); not counted in hover T/W. Pre-shift: 55 mm, DEFERRED to Phase 11 |
+| Cargo bay | *2026-11-16 design shift (`airframe/fuselage-mid/WBS.md` §1.1.1.4.0, `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`):* a sealed duct for the tail EDF: doors fused into the skin, one bolted belly service hatch, louvred and screened forward ramp intake, floor winch with the fairlead under the tilt pivot, external sling only. Pre-shift: clamshell doors + SG90 servos (OpenServoCore) + DRV8833 + SPT5425LV/LibreServo v2 winch + Dyneema + auto-latch + GPS ring + FPV bezel | N20 winch train retired Rev S; STS3215 winch servo superseded 2026-08-02 by SPT5425LV+LibreServo v2 (envelope gate resolved, 6 winch STLs still unimplemented — see WBS §1.1.1.2.1); other cargo STLs generated; gondola shell open |
 | PCBs | 8 nodes each carry a Pilot + TACCO cape pair; Flight Engineer is the PDB; one standalone Commo node (Rev T) at the antennas; Observer is a standalone vision/ToF/laser board | Rev T 2026-10-07: Pilot (120/120 placed) and TACCO (163 placed, 60 x 35 mm) are ERC 0 / DRC 0 / parity 0 before routing on corrected 4.80 mm PB2 rails; routing and Gerbers open on both. Flight Engineer DRC items open; Observer PCB resync not started; Commo Rev T in design; Bus-Gateway ~84% routed |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 done; serenity-fc Phase 6 stub only; all Phase 7 items open |
 | Physical build | Airborne, autonomous, cargo-capable | Not started — awaiting STL exports, PCB fabrication |
@@ -473,18 +473,18 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] BAYA-FWD-11 Place TACCO antennas; cut MMCX coax to length
 - [x] HULL-LEAK-01..03 Spar stale/roof holes/head crack sealed (rebuild)
 - [x] HULL-FUSE-01 Wing-root flanges fused into head+cargo print
-- [ ] HULL-LEAK-04 Cargo door hinge-edge seam seal
+- [ ] HULL-LEAK-04 Belly service hatch gasket (was the cargo door seam; doors fused, TEDF-10) (S52)
 - [ ] LG-AFT-BOLT-01 Aft-port gear bolt driver access vs wing
 - [ ] HULL-FUSE-02 Fuse other bonded mounts into one-piece print
 - [x] COOL-01 Rear-fan cooling: superseded by TEDF-01..16
 - [ ] TEDF-01 Tail EDF: record and reference repair (S42)
-- [ ] TEDF-02 Tail EDF: thermal model refresh (S46)
+- [ ] TEDF-02 Tail EDF: thermal model refresh (S45)
 - [ ] TEDF-03 Tail EDF flow tool: thrust, stall margin (S43)
 - [ ] TEDF-04 Hover trim and RCS tool, CG window (S43)
 - [ ] TEDF-05 Rear-cone layout: QX pusher, RCS exhausts (S44)
 - [ ] TEDF-06 Cargo duct layout: FE box forward, hatch (S44)
 - [ ] TEDF-07 Head layout: GNSS, ballast pocket, inlets (S44)
-- [ ] ★ TEDF-08 Gate G1 Owner Decision Brief (OD-22) (S45)
+- [ ] ★ TEDF-08 Gate G1 Owner Decision Brief (OD-22) (S46)
 - [ ] TEDF-09 Aft hull provisions: ring, tube, RCS (S47)
 - [ ] TEDF-10 Forward hull: ramp louvres, fused doors (S48)
 - [ ] TEDF-11 Separate parts: shroud, valves, covers (S49)
@@ -857,7 +857,7 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] ★ BAYA-FWD-T1 BLOCKER: CN1 sustained TX peak vs thermal cap
 - [ ] BAYA-FWD-T2 Confirm design ambient (104 °F assumed)
 - [ ] BAYA-FWD-T3 Cite/bench-measure Bay A thermal inputs
-- [ ] BAYA-FWD-T4 Bay A vent + fan geometry (after T1)
+- [ ] BAYA-FWD-T4 Bay A bow-inlet geometry (no fan) (S44)
 - [ ] BAYA-FWD-B1 Cite CAN-FD/RS-485 stub limits
 - [ ] BAYA-FWD-B2 Airspeed sensor footprint at pitot hose turn
 - [ ] BAYA-FWD-B3 Re-check bus lengths with routed Bay A runs
@@ -1147,6 +1147,8 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 
 ### Phase11 — Aft EDF Integration (Deferred)
 → detail: `deferred/WBS.md` §Phase11
+
+> **2026-11-16:** the tail EDF, its speed controller and the RCS moved into the first build (TEDF-01..16, `airframe/fuselage-mid/WBS.md` §1.1.1.4.0). The items below are the pre-shift record; TEDF-01 closes or rewrites them.
 
 - [ ] Scoop windows must be re-sized for the 55 mm EDF (reduced area).
 - [ ] Remove temporary window covers from existing neck shell, or swa…

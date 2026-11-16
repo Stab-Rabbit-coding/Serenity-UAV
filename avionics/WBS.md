@@ -1077,11 +1077,14 @@ Spec `docs/BAY_A_FWD_LAYOUT.md`; thermal `docs/BAY_A_FWD_THERMAL.md`.
 - [ ] **BAYA-FWD-T1** — ★ BLOCKER (owner decision): no thermal tier sustains CN1's 8.3 W
     all-radio peak; the fan tier caps it at 5.49 W (PROVISIONAL). Choose a TACCO TX
     duty / thermal-throttle cap, or a better heat path.
+    *(2026-11-16: the fan tier and its decision OD-6 are overtaken by the tail EDF cooling design.
+    The sustained transmit limit is restated from S51 (TEDF-13, plan 002 U13) on the EDF airflow;
+    on the ground the tail throttle follows radio power above this duty limit, plan 002 R9.)*
 - [ ] **BAYA-FWD-T2** — Confirm the design ambient (104 °F / 40 °C ASSUMED).
 - [ ] **BAYA-FWD-T3** — Cite or bench-measure the thermal inputs (pouch conductance, PA12-CF
     k, gap pad, film coefficients); re-run `tools/bay_a_thermal_budget.py`.
-- [ ] **BAYA-FWD-T4** — Vent-slot and fan geometry, gated in `head_layout_fit.py`
-    (after T1).
+- [ ] **BAYA-FWD-T4** — Bow-inlet geometry (no fan), gated in `head_layout_fit.py`
+    (plan 002 U7, S44; retitled 2026-11-16, was "vent-slot and fan geometry").
 - [ ] **BAYA-FWD-B1** — Cite the CAN-FD and RS-485 stub limits from the fitted
     transceivers' datasheets into `STUB_LIMIT_MM` (check is PROVISIONAL until then).
 - [ ] **BAYA-FWD-B2** — Airspeed sensor footprint at the pitot hose turn (X −3.6, Y 50.5,
@@ -1176,10 +1179,10 @@ customer. Plan and sprints S34–S41:
 - [ ] **NFP-POLICY** — Update root `AGENTS.md` §1 and §9 to seven nodes (S41).
 - [ ] **NFP-TEDF-1** — [STD] Tail EDF cooling design shift (2026-11-15, `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`): the
     stern stack sits in the tail EDF's intake stream. NFP-THERM shall use that airflow, and
-    its result gates TEDF-02 (S46). Do it in S40.
+    its result gates TEDF-02 (S45, after the 2026-11-16 S45/S46 swap). Do it in S40.
 - [ ] **NFP-TEDF-2** — [ADV] Confirm which node commands the tail EDF throttle and the four
     RCS valves (GW-RCS), now flight-critical in hover, and whether the PACE assignment of
-    OD-19 still holds. Brought to the owner in OD-22 (S45).
+    OD-19 still holds. Brought to the owner in OD-22 (S46, after the 2026-11-16 S45/S46 swap).
 - [ ] **NFP-TEDF-3** — [STD] The cooling-fan drive output on the stern board has no fan to
     drive. Remove it or repurpose it, and record which (S36 or S41).
 - [ ] **NFP-FW-IF** — Hand Theme F the host-link and device-tree interface (S41).
@@ -1453,26 +1456,26 @@ REFERENCES.md Removed/Superseded Citations).
     (`airframe/fuselage-mid/WBS.md` §1.1.1.2.2). BOM: `CAN-PERIPH-GW-DOOR`,
     `PRINT-GW-DOOR-TRAY`, `SERVO-CARGO` 2→3, `DRV8833-CARGO` + tray retired
     (`tools/bom_edit_door_gateway.py`). `CAN-PERIPH-GW-1.md` Deployment 4/5.
-    - [ ] **GW-DOOR-1 — build the `N_STACKS=1` instance.** Confirm the layout to
+    - [ ] **GW-DOOR-1 — build the `N_STACKS=1` instance.** *(2026-11-16: no door servos remain; this board instance now serves GW-RCS, the first-build RCS valve gateway, under TEDF-10/U11.)* Confirm the layout to
         build from (the DRC-clean N=1 backup vs a repack of the live 2-lane board);
         keep parts ≥ 2.5 mm from the two short edges and the bottom long edge (card-edge
         rails); if the outline changes, update `GW_PCB_L/W` in `tools/cargo_layout_fit.py`.
         ERC/DRC/gerbers close under U7.
-    - [ ] **GW-DOOR-2 — OpenServoCore physical layer + logic level.** The upstream README
+    - [ ] **GW-DOOR-2 — OpenServoCore physical layer + logic level.** *(2026-11-16: kept for GW-RCS, which uses the same osc-native chain.)* The upstream README
         (re-read 2026-09-21) does not state whether osc-native is single-wire half-duplex
         (→ `FLEX_TTL_GPIO` = direction line) or full-duplex, nor the swap board's I/O
         voltage; the swap board is "designed but not spun yet". Read the hardware docs,
         decide the `FLEX_TTL_GPIO` role, re-check the shippable gate literally (REF-SENSOR-015
         row in `REFERENCES.md` Open Standards Verification Items).
-    - [ ] **GW-DOOR-3 — PWM-fallback bench items.** SG90 input threshold at 3.3 V (else a
+    - [x] (superseded 2026-11-16 by TEDF-10: no cargo doors; the SG90 door servos are gone, plan 002 KD5) **GW-DOOR-3 — PWM-fallback bench items.** SG90 input threshold at 3.3 V (else a
         harness level shifter); PA24 timer function per SLASFA6B Table 6-2 (bit-bang the
         release otherwise); measured three-servo stall current → size `F_DOOR` (3 A
         placeholder; REF-ACT-003 states 0.5–2 A "operation current" only).
-    - [ ] **GW-DOOR-5 — SG90 at 6 V.** REF-ACT-003 lists 4.8 V only; `POWER_DISTRIBUTION.md`
+    - [x] (superseded 2026-11-16 by TEDF-10: no cargo doors; the SG90 door servos are gone, plan 002 KD5) **GW-DOOR-5 — SG90 at 6 V.** REF-ACT-003 lists 4.8 V only; `POWER_DISTRIBUTION.md`
         §3.3 feeds the class from the 6 V rail. Confirm the sourced part's rating or feed
         `F_DOOR` from 5 V.
-    - [ ] **GW-DOOR-6 — weigh the populated board** (6 g estimate) and feed A0.
-    - [ ] **GW-DOOR-7 — firmware:** osc-native master / PWM fallback, the three frame
+    - [ ] **GW-DOOR-6 — weigh the populated board** *(2026-11-16: now the GW-RCS board.)* (6 g estimate) and feed A0.
+    - [x] (superseded 2026-11-16 by TEDF-10: no cargo doors; the SG90 door servos are gone, plan 002 KD5) **GW-DOOR-7 — firmware:** the door frames and interlocks are retired; the osc-native master and the release frame move to GW-RCS and the winch. Original: osc-native master / PWM fallback, the three frame
         classes, door/release interlocks (release only with both doors OPEN; CLOSE refused
         while `WINCH_STATUS` reports tension), U6 assurance mapping for the SG90 endpoint
         class. Cross-ref `avionics/firmware/WBS.md`.

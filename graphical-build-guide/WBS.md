@@ -95,7 +95,7 @@
 | head_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
 | middle_canonical_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
 | cargo_sect_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
-| rear_neck_intake_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | Print now; cover reduced-area scoop windows (sized for 55mm EDF) with removable 3mm PETG blanks until Phase 11 |
+| rear_neck_intake_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | Superseded 2026-11-16: no scoop windows; the neck is the open air passage to the tail EDF, and the hulls are rebuilt under TEDF-09/10. Pre-shift: print now; cover reduced-area scoop windows (sized for 55mm EDF) with removable 3mm PETG blanks until Phase 11 |
 | wings_s1223_revo.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
 | eng_left_stator_shell24_revo.stl | CF-PETG | 0.15mm | 25% gyroid, 4 walls | 1 | |
 | eng_right_stator_shell24_revo.stl | CF-PETG | 0.15mm | 25% gyroid, 4 walls | 1 | |

@@ -219,17 +219,17 @@
 - [ ] BAYA-FWD-09 Assembly/build guide: hatch hull + new parts
 - [ ] BAYA-FWD-10 Hatch seal + cover PGND bond decision
 - [ ] BAYA-FWD-11 Place TACCO antennas; cut MMCX coax to length
-- [ ] HULL-LEAK-04 Cargo door hinge-edge seam seal
+- [ ] HULL-LEAK-04 Belly service hatch gasket (was the cargo door seam
 - [ ] LG-AFT-BOLT-01 Aft-port gear bolt driver access vs wing
 - [ ] HULL-FUSE-02 Fuse other bonded mounts into one-piece print
 - [ ] TEDF-01 Tail EDF: record and reference repair (S42)
-- [ ] TEDF-02 Tail EDF: thermal model refresh (S46)
+- [ ] TEDF-02 Tail EDF: thermal model refresh (S45)
 - [ ] TEDF-03 Tail EDF flow tool: thrust, stall margin (S43)
 - [ ] TEDF-04 Hover trim and RCS tool, CG window (S43)
 - [ ] TEDF-05 Rear-cone layout: QX pusher, RCS exhausts (S44)
 - [ ] TEDF-06 Cargo duct layout: FE box forward, hatch (S44)
 - [ ] TEDF-07 Head layout: GNSS, ballast pocket, inlets (S44)
-- [ ] ★ TEDF-08 Gate G1 Owner Decision Brief (OD-22) (S45)
+- [ ] ★ TEDF-08 Gate G1 Owner Decision Brief (OD-22) (S46)
 - [ ] TEDF-09 Aft hull provisions: ring, tube, RCS (S47)
 - [ ] TEDF-10 Forward hull: ramp louvres, fused doors (S48)
 - [ ] TEDF-11 Separate parts: shroud, valves, covers (S49)
@@ -431,7 +431,7 @@
 - [ ] ★ BAYA-FWD-T1 BLOCKER: CN1 sustained TX peak vs thermal cap
 - [ ] BAYA-FWD-T2 Confirm design ambient (104 °F assumed)
 - [ ] BAYA-FWD-T3 Cite/bench-measure Bay A thermal inputs
-- [ ] BAYA-FWD-T4 Bay A vent + fan geometry (after T1)
+- [ ] BAYA-FWD-T4 Bay A bow-inlet geometry (no fan) (S44)
 - [ ] BAYA-FWD-B1 Cite CAN-FD/RS-485 stub limits
 - [ ] BAYA-FWD-B2 Airspeed sensor footprint at pitot hose turn
 - [ ] BAYA-FWD-B3 Re-check bus lengths with routed Bay A runs

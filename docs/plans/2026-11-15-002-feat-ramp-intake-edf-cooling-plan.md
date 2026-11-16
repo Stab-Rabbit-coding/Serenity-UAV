@@ -31,7 +31,8 @@ execution: code
 - **Stop conditions.**
     - Gate G1 (U8) is open: no hull geometry or separate part starts.
     - Gate G2 (U14) fails: stop and write an Owner Decision Brief (`docs/DOC_TEMPLATES.md`).
-    - The stern thermal check is open: the thermal chain stops at U2. Do not substitute an assumed stern load.
+    - The stern thermal check is open: the thermal chain stops at U2 for the stern stack only. Do not substitute an assumed stern load. The check is an external dependency owned by the stern-stack (Pilot-NoNFO) plan, due before sprint S45; every other node proceeds.
+    - R7 still fails after the flow-guide iteration limit of U13: stop and write an Owner Decision Brief.
     - Evidence shows that a settled decision cannot work: stop and report.
 - **Tail ownership.** The executor closes the WBS items, regenerates `TODO.md`, and opens the pull request.
 
@@ -41,7 +42,7 @@ execution: code
 
 ### Summary
 
-The tail EDF flies from the first build and is the only air mover in the fuselage. All its air passes through the interior: most enters at a louvred, screened forward cargo ramp, and the rest enters at the bow inlets that feed Bay A. The cargo bay becomes a sealed duct with one belly service hatch. Cargo moves to an external sling on a floor-mounted winch, with the line leaving the belly under the tilt pivot. The Flight Engineer box, winch, tail EDF speed controller, battery, RCS servos and Cargo Observer move forward to recover trim.
+The tail EDF flies from the first build and is the only air mover in the fuselage. All its air passes through the interior: most enters at a louvred, screened forward cargo ramp, and the rest enters at the bow inlets that feed Bay A. The cargo bay becomes a sealed duct with one belly service hatch. Cargo moves to an external sling on a floor-mounted winch, with the line leaving the belly under the tilt pivot. The Flight Engineer box, the tail EDF speed controller and the RCS servos move forward to recover trim. The battery is already forward in the twin tray, and the winch and Cargo Observer stay at their present stations unless bench balance needs them moved.
 
 ### Problem Frame
 
@@ -85,21 +86,21 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 - R4. Printed flow guides shall direct the stream past each node that needs more local air speed.
 - R5. The ramp intake shall keep the canon outline of the cargo ramp.
 - R6. A screen behind the ramp louvres shall stop debris that could damage the avionics or the rotor.
-- R27. The intake path, louvres and screen included, shall leave the tail EDF a stated pressure margin below the fan's stall point at full throttle.
+- R27. The intake path, louvres and screen included, shall leave the tail EDF a pressure margin below the fan's stall point at full throttle. The minimum margin, in psi (kPa), is an owner decision at G1; U3 states the largest louvre loss coefficient at which this margin and R30 still hold at the hover throttle.
 
 **Cooling, RCS and thrust**
 
-- R7. Every node shall stay under its temperature limit in the average-power case, at the minimum cooling throttle, in still air and at cruise airspeed.
+- R7. Every node shall stay under its temperature limit in the average-power case, at the minimum cooling throttle, in still air and at cruise airspeed. The minimum cooling throttle is the larger of the tail speed controller's lowest stable throttle (ASSUMED 10 %) and the lowest throttle at which U13 shows every node passing; it is the ground idle of KD4.
 - R8. In hover the tail EDF shall run at the throttle that pitch trim and RCS authority need. The estimate is about 80 %, where the thrust couple alone trims the aircraft. A lower "minimum cooling throttle" applies only where the RCS is not needed.
-- R9. On the ground, the EDF shall run at the minimum cooling throttle with the aircraft restrained against its thrust.
+- R9. On the ground, the EDF shall run at the minimum cooling throttle with the aircraft restrained against its thrust. Above the sustained-transmit duty limit (BAYA-FWD-T1) the ground throttle shall follow radio power, up to the throttle U13 states for peak transmit.
 - R10. The analysis shall state the tail EDF thrust that the intake and interior path leave, at each analysed throttle, against the EDF's free-air thrust.
-- R24. The requirements shall state the aircraft's response to a tail EDF, speed-controller or RCS fault in hover, which removes pitch control, and in forward flight, which removes forced cooling.
+- R24. The requirements shall state the aircraft's response to a tail EDF, speed-controller, RCS or intake-blockage fault in hover, and in forward flight, which removes forced cooling. In hover, loss of the tail EDF or its speed controller removes the thrust couple and the jets; pitch is then held by nacelle tilt alone (the tilt-vectoring degraded mode of the Risks table). A blocked ramp screen lowers cooling, the couple and jet authority together.
 
 **Sealed cargo bay**
 
 - R11. The cargo doors shall be part of the printed hull skin, with canon panel lines.
 - R12. One bolted, gasketed belly hatch shall give service access to the cargo bay.
-- R25. The cargo bay shall have no opening to outside air other than the ramp, the service hatch seal, the winch fairlead and the Cargo Observer orifices.
+- R25. The cargo bay and the air path shall have no opening to outside air other than the ramp, the bow inlets, the nozzle, the RCS exhausts, the service hatch seal, the winch fairlead and the Cargo Observer orifices.
 
 **Winch and sling load**
 
@@ -111,8 +112,8 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 **RCS**
 
 - R16. Four RCS jets shall be fitted and working in the first build, with their valves, servos and gateway.
-- R17. Each RCS jet shall have a clear discharge path past the dorsal pod, the skids and the skid crossbar.
-- R32. The ventral RCS jet shall be at station Y 628 or further aft, clear of the skid crossbar.
+- R17. Each RCS jet shall have a clear discharge path past the dorsal pod, the skids and the skid crossbar, checked in 3D for the spreading jet at its stated aft cant.
+- R32. The ventral RCS jets shall be at station Y 628 or further aft and canted 25° aft, clear of the skid crossbar. (Owner direction, 2026-11-16: a radial ventral jet at Y 634 strikes the crossbar at Y 626 to 627; from 20° aft cant the jet is clear. The upper jets stay radial.)
 
 **Tail EDF installation**
 
@@ -131,17 +132,17 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 - R20. The Cargo Observer shall stay at its present station, and shall view its subject through orifices in the belly.
 - R21. The stern stack shall be the single Pilot-NoNFO stack, aft of the pivot.
 - R23. The hover CG shall lie inside the limit that the owner sets, with and without a slung load. The estimated window is 0.04 to 0.15 in (1.0 to 3.9 mm) aft of the pivot.
-- R34. The bow shall have an adjustable ballast pocket, used after real equipment has been placed forward.
-- R35. The GNSS antenna shall sit under the bridge window, in the gap above the nose Observer board, behind a cover that passes GNSS signals and matches the canon window.
+- R34. The bow shall have an adjustable ballast pocket, used after real equipment has been placed forward. Because the pocket moves the CG forward only, the build shall also keep a stated aft balance allowance (an aft ballast provision or a movable-equipment allowance) with CG travel equal to the pocket's.
+- R35. The GNSS antenna placement shall be chosen at G1 from a trade of the bow position (under the bridge window, above the nose Observer board, behind a cover that passes GNSS signals and matches the canon window) against its alternatives, on CG, wiring run, emissions and reception. (Owner direction, 2026-11-16: placement is still open.)
 - R36. The build plan shall include a bench balance step, with a stated allowance of ballast mass and CG travel to cover the difference between the estimate and the as-built aircraft.
 
 ### Acceptance Examples
 
-- AE1. **Covers R1, R25.** Given the built configuration, when the enclosure check runs, then every path from outside air to the EDF passes through the fuselage interior, and the only openings are those R25 names.
+- AE1. **Covers R1, R25.** Given the built configuration, when the enclosure check runs, then every path from outside air to the EDF passes through the fuselage interior, and the only openings are the seven R25 names.
 - AE2. **Covers R7, R9.** Given the aircraft restrained on the ground at the minimum cooling throttle, when the coupled analysis runs, then every node passes the average-power case.
 - AE7. **Covers R8, R30.** Given hover at the stated tail throttle, when the trim analysis runs, then pitch trim uses no more than 50 % of the pitch control moment.
 - AE3. **Covers R10.** Given each analysed throttle, when the analysis runs, then it reports installed thrust beside free-air thrust.
-- AE4. **Covers R23.** Given the ledger with every moved and added part, when the hover CG is aft of the owner's limit, then the run fails and an Owner Decision Brief is written.
+- AE4. **Covers R23.** Given the ledger with every moved and added part, when the hover CG is outside the owner's window, forward or aft, then the run fails and an Owner Decision Brief is written.
 - AE5. **Covers R17.** Given the chosen RCS stations, when the jet-path check runs, then all four jets are clear.
 - AE6. **Covers R14, R23.** Given a slung load on the line, when the ledger runs, then the loaded CG is no further from the pivot than the empty CG.
 
@@ -168,13 +169,14 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 
 - Bench measurement of the ASSUMED thermal inputs, and a transient thermal model.
 - Drawing and bench-testing the custom rotor and its shroud.
-- Flight-control firmware for the tail throttle schedule, the tilt trim and the RCS mixer.
+- Flight-control firmware for the tail throttle schedule, the tilt trim, the RCS mixer and the tilt-vectoring degraded mode.
+- GNSS reception beside the nose Observer board, if the bow placement is chosen at G1: a bench step with acceptance criteria in the U16 build guide.
 
 ### Dependencies and Assumptions
 
 - **Corrected mass baseline, 2026-11-15.** `tools/auw_ledger.py` carried a retired single battery in the cargo bay, the Bay A nodes at a stale station, and no nose Observer. Corrected, with the two cells in the published twin tray, the hover CG is 0.03 in (0.8 mm) aft of the pivot. The earlier figure of 0.46 in (11.8 mm) was wrong. The battery is already forward, so the battery move in KD11 has no further travel to give.
 
-| Tail EDF | Forward moves applied | CG from the pivot | CG the thrust couple alone trims |
+| Tail EDF | Forward moves applied | CG from the pivot | CG the thrust couple alone trims (full throttle) |
 | --- | --- | --- | --- |
 | X5 50 mm | speed controller and RCS servos only | 0.17 in (4.4 mm) aft | 0.09 in (2.3 mm) aft |
 | X5 50 mm | plus winch and Cargo Observer | 0.06 in (1.5 mm) aft | 0.09 in (2.3 mm) aft |
@@ -187,7 +189,8 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
     - All six forward moves together now overshoot: the aircraft would be nose-heavy, where pitch authority is weakest.
     - The X5 would need the Flight Engineer box left where it is; the QX needs it forward.
     - The QX 64 mm is inside the controllable envelope with the Flight Engineer box forward, and the owner chose it (KD14).
-- **RCS sizing and CG window for the chosen case, planning estimate.** QX 64 mm, Flight Engineer box, speed controller and RCS servos forward, GNSS antenna in the nose: hover mass 15.08 lbm (6,840 g), CG 0.09 in (2.3 mm) aft of the pivot. Low-loss ramp, jet path loss 1.0, four jets of 0.71 in (18 mm) bore at station Y 634.
+    - The last column is the full-throttle case. At the 80 % hover throttle the couple alone trims at 0.09 in (2.3 mm) aft, which is the KTD9 target.
+- **RCS sizing and CG window for the chosen case, planning estimate.** QX 64 mm, Flight Engineer box, speed controller and RCS servos forward, GNSS antenna in the nose: hover mass 15.08 lbm (6,840 g), CG 0.09 in (2.3 mm) aft of the pivot. Low-loss ramp, jet path loss 1.0, four jets of 0.71 in (18 mm) bore at station Y 634. **The table is the plain screened ramp case: it takes no louvre loss.** U3 and U4 report the same figures across the louvre loss cases (R27), and at full, nominal and end-of-hover pack voltage (U4). The table uses radial jets; with the ventral pair canted 25° aft (R32) the ventral moment falls to about 86 % unless the bore grows to about 0.77 in (19.4 mm), which U4 decides.
 
 | Tail throttle | Untrimmed moment | Trim use | Nose-down reserve | Nose-up reserve | Tail thrust, jets closed |
 | --- | --- | --- | --- | --- | --- |
@@ -200,18 +203,19 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
     - Jet path loss from 0.5 to 1.5 moves the trim use at full throttle from 20 % to 30 %.
     - One upper jet gives a yaw moment of about 1.28 lbf·in (0.145 N·m) at full throttle.
     - With the winch and Cargo Observer also moved forward the CG would be 0.02 in (0.5 mm) forward of the pivot, outside the window. They stay near their present stations.
-    - Pitch inertia is ASSUMED at 0.066 kg·m².
+    - Pitch inertia is ASSUMED at 225 lbm·in² (0.066 kg·m²) in this table. U4 replaces it with the single value computed from the mass ledger and uses that value everywhere.
 
 - **Measured baseline.** The fan operating point, node temperatures, rear-cone stations and the CG arm are in `docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md`, "Measured Baseline". Every thermal input is ASSUMED.
-- **Ramp opening.** The sealed ramp fairing measures about 2.0 × 1.4 in (52 × 36 mm), or 2.9 in² (1,870 mm²), in `tools/cargo_layout_fit.py`. The rotor's swept area is about 2.7 in² (1,760 mm²), with an ASSUMED 1.1 in (28 mm) hub. Louvres and a screen reduce the open area.
-- **Hover trim and control limits, planning estimate.** Free-body model in hover: nacelle thrust acts at the tilt pivot (Y 339.4, Z 146.9); the tail EDF thrust acts on the tail axis (Z 165.2); weight acts at the CG. A CG aft of the pivot gives a nose-up moment W·d. Two things oppose it. The tail thrust and the nacelle tilt that cancels it form a nose-down couple on a 0.72 in (18.4 mm) arm. Downward RCS jets at the tail give a nose-down moment on an arm of about 11.5 in (291 mm). Nacelle tilt alone cannot trim pitch, because the pivot is 0.41 in (10.3 mm) below the CG. CG is recomputed from `current-specification/auw_ledger.json` with every change in this document applied; added masses and destination stations are ASSUMED.
+- **Ramp opening.** The sealed ramp fairing measures about 2.0 × 1.4 in (52 × 36 mm), or 2.9 in² (1,870 mm²), in `tools/cargo_layout_fit.py`. The QX 64 mm rotor's swept area is about 4.0 in² (2,600 mm²), with an ASSUMED 1.1 in (28 mm) hub. The ramp opening is about 70 % of the fan face before louvres and screen, so the bow inlets carry a real share of the flow; U3 takes the ratio as an input. (The 2.7 in² figure given earlier was the retired 55 mm rotor's.)
+- **Hover trim and control limits, planning estimate.** Free-body model in hover: nacelle thrust acts at the tilt pivot (Y 339.4, Z 146.9); the tail EDF thrust acts on the tail axis (Z 165.2); weight acts at the CG. A CG aft of the pivot gives a nose-up moment W·d. Two things oppose it. The tail thrust and the nacelle tilt that cancels it form a nose-down couple on a 0.72 in (18.4 mm) arm. Downward RCS jets at the tail give a nose-down moment on an arm of about 11.5 in (291 mm). At a level attitude nacelle tilt alone cannot trim pitch, because the pivot is 0.41 in (10.3 mm) below the CG. At a nose-down attitude it can: tilting the nacelles aft until the thrust line passes through the CG trims the aircraft, which is the basis of the tilt-vectoring degraded mode (Risks and Mitigations). CG is recomputed from `current-specification/auw_ledger.json` with every change in this document applied; added masses and destination stations are ASSUMED.
+- **RCS plumbing, measured 2026-11-16 on the Rev U aft hull.** At Y 634 the thrust tube's outer wall is only 0.28 in (7 mm) from the inside of the skin at the upper jets and 0.32 in (8 mm) at the ventral jets. Each jet is therefore an aperture through the tube wall and the skin, not a duct, and there is no room for an outward scoop or a conventional valve body. An inward scoop would block the nozzle flow. Four 0.71 in (18 mm) holes take about 36 % of the tube's girth at one station. Past the fan mounting ring (OD 3.25 in, 82.6 mm) the room is 0.49 in (12.4 mm) at Y 600, 0.31 in (8.0 mm) at Y 610, 0.15 in (3.9 mm) at Y 620 and none aft of about Y 627, so the ring ends forward of Y 625 and the four control runs (about 11.5 in, 290 mm, from the forward servos) are cables, not pushrods. The valve concept is a G1 trade (U5, U8).
 - **RCS jet model.** Each jet is fed by the duct's total pressure through a scoop, so its speed is the nozzle speed divided by √(1 + K), with a path loss K ASSUMED at 1.0. Jet force is ρ·A·v². Open jets add exit area and lower the nozzle speed; the fan is held at constant flow power.
 - **Bow trim, checked 2026-11-15.** Mass at the bow moves the CG about 0.002 in per gram (0.05 mm per gram). The nose has free room: a pocket of about 0.4 to 1.4 in² (240 to 890 mm²) in section from station Y 8 to Y 22, and 2.2 to 3.7 in² (1,430 to 2,410 mm²) from Y 30 to Y 50, measured on the head hull less the head layout envelopes.
-    - **Ledger.** Corrected on 2026-11-15; see the corrected mass baseline above. The nose camera, ToF and laser pods and the pitot parts still have no mass in the ledger.
-    - **GNSS antenna.** Moves to the nose under KD17. An ASSUMED 0.5 oz (15 g) patch gives about 0.03 in (0.85 mm), and is already in the CG estimate above. Checked against `tools/head_layout_fit.py` on 2026-11-15: the forward camera is not behind the bridge window; it is in the bow sensor bay under the brow, Y 9 to 32, Z 198 to 220. The nose Observer board lies under the bridge roof from Y 27 to Y 86. The gap between the board envelope and the roof is 0.62 in (15.7 mm) at Y 30, 0.55 in (13.9 mm) at Y 40, 0.48 in (12.3 mm) at Y 50 and 0.41 in (10.3 mm) at Y 60. A thin patch antenna fits in that gap forward of the window-aft frame at Y 60; a housed puck does not. The roof skin there is 0.09 in (2.4 mm) of carbon-filled nylon, which the cover replaces. Interference from the Observer board 0.5 in (12 mm) below the antenna is not assessed.
+    - **Ledger.** Corrected on 2026-11-15; see the corrected mass baseline above. The nose camera, ToF and laser pods and the pitot parts still have no mass in the ledger. They are all at the bow, where about 0.9 oz (26 g) reaches the forward edge of the window; U14's gap closure therefore runs in Phase A, before U4.
+    - **GNSS antenna.** KD17 places it in the nose; on 2026-11-16 the owner reopened the placement (R35, OQ9), so the bow figures below are provisional until G1. An ASSUMED 0.5 oz (15 g) patch gives about 0.03 in (0.85 mm), and is already in the CG estimate above. Checked against `tools/head_layout_fit.py` on 2026-11-15: the forward camera is not behind the bridge window; it is in the bow sensor bay under the brow, Y 9 to 32, Z 198 to 220. The nose Observer board lies under the bridge roof from Y 27 to Y 86. The gap between the board envelope and the roof is 0.62 in (15.7 mm) at Y 30, 0.55 in (13.9 mm) at Y 40, 0.48 in (12.3 mm) at Y 50 and 0.41 in (10.3 mm) at Y 60. A thin patch antenna fits in that gap forward of the window-aft frame at Y 60; a housed puck does not. The roof skin there is 0.09 in (2.4 mm) of carbon-filled nylon, which the cover replaces. Interference from the Observer board 0.5 in (12 mm) below the antenna is not assessed.
     - **49 MHz loading coil.** The forward post and coil are 0.14 oz (4 g) at Y 155.7. Moved to the bow they give 0.003 in (0.08 mm), which is not worth it for trim. The move would lengthen the end-fed wire by about 5 in (125 mm).
     - **Ballast.** 1.2 oz (35 g) at Y 15 gives 0.07 in (1.7 mm). It is the last resort, sized on the bench after the as-built CG is weighed.
-- **Not assessed.** Gust and ground-effect moments, RCS valve and EDF spool dynamics, and the transition from hover to forward flight. The pitch plant is a double integrator with a point-mass inertia of about 0.055 kg·m²; no loop has been tuned and no stability margin is claimed.
+- **Not assessed.** The transition from hover to forward flight. Gust and ground-effect moments and RCS valve and EDF spool lag enter U4's disturbance budget as ASSUMED allowances. The pitch plant is a double integrator on the U4 ledger inertia; no loop has been tuned and no stability margin is claimed, except the degraded-mode estimate in Risks and Mitigations.
 - **Installed thrust, planning estimate.** Constant shaft power, calibrated to each unit's free-air static thrust; louvre and screen losses ASSUMED. All units keep about 40 to 47 % of free-air thrust behind louvred ramp intake; a plain screened ramp keeps about 56 to 66 %.
 
 | Unit | Free air | Louvred ramp | Plain screened ramp |
@@ -220,10 +224,10 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 | X5 motor, custom 55 mm rotor | 2.90 lbf (12.9 N) | 1.29 lbf (5.7 N) | 1.84 lbf (8.2 N) |
 | QX 64 mm, 2300 KV (chosen) | 5.22 lbf (23.2 N) | 2.03 lbf (9.0 N) | 2.93 lbf (13.0 N) |
 
-- **Stall margin.** Behind a plain screened ramp the QX 64 mm needs about 0.54 psi (3.8 kPa) of about 1.25 psi (8.6 kPa) available at full power. Behind louvres with an ASSUMED loss coefficient of 2.3 on 55 % open area it would need all of it, which is why KD15 and R27 require low-loss louvres.
+- **Stall margin.** Behind a plain screened ramp the QX 64 mm needs about 0.54 psi (3.8 kPa) of about 1.25 psi (8.6 kPa) available at full power. The 1.25 psi figure is ASSUMED: it is the duct total pressure of the constant-flow-power model at zero flow, not a maker fan curve; no stall curve has been published for the unit. U3 prints this provenance with every margin. Behind louvres with an ASSUMED loss coefficient of 2.3 on 55 % open area it would need all of it, which is why KD15 and R27 require low-loss louvres.
 - **QX 64 mm data.** 1,368 W and 57 A at full throttle [REF-EDF-003]. Shroud lip OD 3.03 in (77 mm), so the rotor fits forward of about station Y 627, and the RCS station at Y 634 is downstream of it.
-- **Shaft critical speed.** The QF2822 2300 KV motor turns up to about 51,000 rpm unloaded on 6S. A 0.16 in (4 mm) steel shaft runs clear of its first critical speed at 2 in (50 mm) unsupported, and close to its running range at 4 in (100 mm). Simply supported, ASSUMED properties, rotor overhang not counted.
-- **RCS stations.** On the Rev U aft hull, the skid crossbar runs from about station Y 612 to Y 627. A ventral jet is clear from Y 628 to Y 640, with a stub of about 0.6 in (16 mm). A straight dorsal jet is blocked by the dorsal pod neck. The draft tool still places the RCS station at Y 621 and needs this change. Source: `tools/rear_cone_layout_fit.py`.
+- **Shaft critical speed.** The QF2822 2300 KV motor turns up to about 51,000 rpm unloaded on 6S. A 0.16 in (4 mm) steel shaft runs clear of its first critical speed at 2 in (50 mm) unsupported, and close to its running range at 4 in (100 mm). Simply supported, ASSUMED properties, rotor overhang not counted. U5 recomputes it with the rotor mass and overhang included (R18).
+- **RCS stations.** On the Rev U aft hull, the skid crossbar runs from about station Y 612 to Y 627. A ventral jet is clear from Y 628 to Y 640 in a flat-section check; a 3D check of the spreading jet (2026-11-16) shows a radial ventral jet at Y 634 still strikes the crossbar at Y 626 to 627, and a 25° aft cant clears it (R32). The stub is about 0.3 in (8 mm), not the 0.6 in (16 mm) of the retired 55 mm rotor. A straight dorsal jet is blocked by the dorsal pod neck. The draft tool still places the RCS station at Y 621 and needs this change. Source: `tools/rear_cone_layout_fit.py`.
 - **Repo rules that change.** Root `AGENTS.md` §1 calls the tail EDF optional and deferred to Phase 11. This plan makes it part of the first build. The design-shift gate in `AGENTS.md` §10 requires the WBS record before any geometry change.
 - **Affected documents.** `docs/CARGO_WINCH_SPECIFICATION.md`, `docs/CARGO_DOOR_GATEWAY_SPEC.md`, `docs/CARGO_SECTION_LAYOUT.md`, `docs/POWER_DISTRIBUTION.md`, `deferred/WBS.md`, and the stern stack plan `docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md`.
 
@@ -232,12 +236,12 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 **Deferred to Planning.** Each question names the unit or gate that settles it.
 
 - OQ1. **Thrust target.** Default: report installed thrust against free-air thrust, with no fixed share. Planning estimate for the QX 64 mm behind a low-loss ramp: about 2.9 lbf (13 N) at full throttle with the jets closed, and about 1.9 lbf (8.4 N) at the 80 % hover throttle, against 5.2 lbf (23.2 N) free air. Settled in U3 and U13.
-- OQ5. **Hover endurance.** The tail EDF runs at about 80 % throttle in hover. Planning states the power this adds and the endurance it costs. Settled in U13; shown as an estimate at G1.
+- OQ5. **Hover endurance.** The tail EDF runs at about 80 % throttle in hover. U3 states the power this adds and the endurance it costs. Settled in U13; shown as an estimate at G1.
 - OQ6. **Holding the CG window.** The estimate puts the CG 0.09 in (2.3 mm) aft of the pivot, inside the window. Planning reconciles the remaining ledger gaps, then sizes the bow ballast pocket for the bench balance. Settled in U4 and U14.
 - OQ8. **Bench balance allowance.** Planning sizes the ballast pocket and states the CG travel it gives, from the spread between estimated and as-built mass. Settled in U7 and U14.
-- OQ9. **GNSS antenna beside the Observer.** Planning selects a patch that fits the 0.48 to 0.62 in (12 to 16 mm) gap, and checks reception against noise from the Observer board directly below it. Settled in U7 and U16.
-- OQ2. **Response to an EDF fault in flight.** Default for planning: shed radio transmit power, report the fault, and land. The owner confirms or changes it. Decided at G1.
-- OQ3. **RCS jet pattern and size.** The estimate supports four jets of 0.71 in (18 mm) equivalent bore at station Y 634: two ventral at 255° and 285°, two upper at 45° and 135°. Planning confirms the size with the measured jet path loss and gives each exhaust its trapezoidal outline at the same flow area, 0.39 in² (254 mm²). Settled in U4 and U5; outlines decided at G1.
+- OQ9. **GNSS antenna placement.** Open (owner, 2026-11-16). U7 compares the bow position, a patch in the 0.48 to 0.62 in (12 to 16 mm) gap above the nose Observer board, with its alternatives on CG, wiring run, emissions near the Observer board and the 49 MHz antenna, and sky view. Decided at G1; the reception bench step for the chosen place is in U16.
+- OQ2. **Response to an EDF fault in flight.** Default for planning, in hover: switch to the tilt-vectoring degraded mode, hold attitude nose-down, hold position slowly and land now. In forward flight: shed radio transmit power, report the fault, and land. The owner confirms or changes both. Decided at G1.
+- OQ3. **RCS jet pattern and size.** The estimate supports four jets of 0.71 in (18 mm) equivalent bore at station Y 634: two ventral at 255° and 285° canted 25° aft, two upper at 45° and 135° radial. Planning confirms the size with the measured jet path loss and gives each exhaust its trapezoidal outline at the same flow area, 0.39 in² (254 mm²). Settled in U4 and U5; outlines decided at G1.
 - OQ4. **What the Cargo Observer watches** now that there is no internal cargo. Default: the sling load and the ground below, through the belly. Decided at G1.
 
 ### Relationship to the Earlier Plan
@@ -326,6 +330,8 @@ flowchart TB
   U1 --> U6
   U1 --> U7
   U3 --> U4
+  U3 --> U2
+  BENCH[Owner bench run and louvre coupon] --> U8
   U2 --> U8
   U4 --> U8
   U5 --> U8
@@ -334,6 +340,8 @@ flowchart TB
   U8 -->|G1| U9
   U8 -->|G1| U10
   U8 -->|G1| U11
+  U9 --> U11
+  U10 --> U11
   U9 --> U12
   U10 --> U12
   U11 --> U12
@@ -351,25 +359,29 @@ flowchart TB
 ### Assumptions
 
 - The QX rotor exists in both hands, and the tail unit takes either [REF-EDF-003].
-- A short pusher shaft, or the rotor mounted directly on the motor shaft with the motor reversed, is workable. U5 decides which, from the motor drawing.
+- A short pusher shaft, or the rotor mounted directly on the motor shaft with the motor reversed, is workable. U5 recommends one, with its critical-speed check from the motor drawing; the owner decides at G1; U11 builds the drive the owner chose.
 - The Flight Engineer box fits forward in the cargo bay once the payload envelope is gone. `tools/cg_relocation_study.py` found no forward placement while the payload was there.
-- Blender is needed for `airframe/blender-scripts/merge_cargo_interior.py`. It is not in the cloud container used for planning. OpenFOAM v1912 and the Python libraries are installed per session.
+- **Build route for hull geometry.** OpenSCAD is the CAD tool, run with `--backend=manifold`, and the `.scad` sources are the record. Python mesh booleans with `manifold3d` are the fallback, gated by the existing mesh-proof checks. The owner's Build cloud environment installs OpenSCAD (a pinned snapshot), `manifold3d` and KiCad 9.0.x at every new session (set 2026-11-16). Each hull unit starts by checking `openscad --version` and `kicad-cli --version`, and stops with a clear message if either is missing. Blender is still needed for `airframe/blender-scripts/merge_cargo_interior.py` and is not in the cloud environment; U10 ports that merge to OpenSCAD or `manifold3d`, or runs it on the owner's PC. OpenFOAM v1912 and the other Python libraries are installed per session.
 - Design ambient is 104 °F (40 °C), ASSUMED, pending BAYA-FWD-T2.
 
 ### Risks and Mitigations
 
 | Risk | Effect | Mitigation |
 | --- | --- | --- |
-| Tail EDF, speed controller or RCS fault in hover | Pitch control lost | KTD14; U8 fault cases; CG target of KTD9 keeps the unopposed moment small |
+| Tail EDF or speed-controller loss in hover | The thrust couple and all four jets are lost together. At the KTD9 CG target the unopposed moment at the instant of loss is about 0.60 lbf·in (0.068 N·m), about 1.0 rad/s² nose-up, because the nacelles are still tilted aft; the aircraft also drifts aft at about 0.13 g | Tilt-vectoring degraded mode: the flight controller swings the nacelles aft to about 12.6° past vertical (102.6° tilt) so the thrust line passes through the CG, hovers about 12.6° nose-down, holds position slowly and lands now. Planning estimate: 0.112 lbf·in (0.0127 N·m) per degree of tilt; a PD loop at 4 rad/s crossover gives about 58° phase margin and 28 dB gain margin with an ASSUMED 0.05 s servo lag and 10 ms delay. Position hold has a right-half-plane zero near 3.3 rad/s and must stay below about 1.5 rad/s. U4 checks the tilt range and servo rate; U8 shows the CG-target trade below; landing-gear check for a nose-down touchdown. Reconcile the -10°/+90° tilt command limit in `gcs/WBS.md` |
+| RCS fault in hover, tail EDF running | Pitch reserve lost, or an uncommanded moment from a stuck jet | Nacelle tilt gives about 0.19 rad/s² per degree, so about ±17° of tilt matches the full jet reserve; KTD14 and the GW-RCS failsafe state at G1 |
+| Ramp screen blocked by debris in hover | Cooling, the thrust couple and jet authority fall together | U3 and U4 sweep blocked screen area to fully blocked (bow inlets only) and state where R27 or R30 fails; duct-pressure or motor-current monitoring is the detection signal handed to the flight controller under KTD4; pitch falls back to the tilt-vectoring mode |
 | As-built CG outside the window | Trim uses RCS reserve, or runs out | Bench balance and ballast pocket (R34, R36); U14 gate G2 |
 | Louvre and screen loss higher than assumed | Less thrust, less RCS authority, fan near stall | U3 states the margin (R27); U12 checks it; U8 shows the louvre options |
 | Jet path loss higher than assumed | RCS undersized | U4 sizes with a range of K; scoop and valve drawn for low loss in U11 |
 | Avionics exposed to ramp air | Rain, dust and debris on the boards | Screen (R6); U6 places drip and debris guards; U16 states the wet-weather limit |
 | Winch line near the stream | Line reaches the rotor | U6 keep-out and line guard (R26) |
-| Stern thermal check still open | Thermal chain cannot finish | KTD13; the flow, trim and layout units do not wait for it |
+| Stern thermal check still open | Thermal chain cannot finish for the stern stack | External dependency owned by the stern-stack (Pilot-NoNFO) plan, due before S45; G1 shows the stern load as a bracketed range; the Definition of Done records the stern stack as the one exception until it closes |
 | Hover endurance cost of the tail EDF | Shorter hover | U13 states it (OQ5); owner sees it at G1 as an estimate |
 | Flight Engineer box does not fit forward | CG aft of the window | U6 fit gate; fallback is the winch and Cargo Observer moves of KD7 |
-| GNSS reception beside the Observer board | Position loss | U7 patch selection and a bench reception check in U16's build steps (OQ9) |
+| GNSS antenna placement | Trim, wiring, emissions or reception compromised | U7 placement trade, decided at G1 (OQ9); bench reception check for the chosen place in U16 |
+| RCS plumbing in a 0.28 to 0.32 in (7 to 8 mm) annulus | No room for valve bodies or outward scoops; control runs cannot pass the fan ring | Valve-concept trade at G1: A, thin sliding shutters in a track between tube and skin, cable-driven; B, hinged skin-plate flaps that open aft (KD19 look); C, RCS servos aft at Y 590 to 600, which reverses part of KD11 and costs trim. U5 records the measured limits; U11 builds the chosen concept |
+| Reserve too small for real disturbances | Control shortfall in flight | U4 disturbance budget: sling swing at the fairlead, ASSUMED gust and ground-effect allowance, valve and spool lag |
 | Hull builds exceed the 100 MB limit | Push fails | Tarball rule, `tools/check_hull_tarballs.py` |
 
 ### Sources and Research
@@ -389,16 +401,16 @@ flowchart TB
 | U-ID | Title | Key files | Depends on | Sprint | Model |
 | --- | --- | --- | --- | --- | --- |
 | U1 | Design-shift record and reference repair | `airframe/fuselage-mid/WBS.md`, `deferred/WBS.md`, `AGENTS.md`, `REFERENCES.md` | — | S42 | STD |
-| U2 | Thermal model refresh | `tools/node_thermal_forced_air.py` | U1, stern thermal check | S46 | STD |
+| U2 | Thermal model refresh | `tools/node_thermal_forced_air.py` | U1, U3 | S45 | STD |
 | U3 | Tail EDF flow tool | `tools/tail_edf_flow.py` | U1 | S43 | ADV |
 | U4 | Hover trim and RCS tool | `tools/hover_trim_rcs.py` | U3 | S43 | ADV |
 | U5 | Rear-cone layout | `tools/rear_cone_layout_fit.py` | U1 | S44 | ADV |
 | U6 | Cargo duct layout | `tools/cargo_duct_layout_fit.py` | U1 | S44 | STD |
 | U7 | Head layout: GNSS, ballast pocket, bow inlets | `tools/head_layout_fit.py` | U1 | S44 | STD |
-| U8 | G1 brief and figures | `docs/FUSELAGE_COOLING_LAYOUT_BRIEF.md`, `tools/cooling_g1_figures.py` | U2 to U7 | S45 | ADV |
+| U8 | G1 brief and figures | `docs/FUSELAGE_COOLING_LAYOUT_BRIEF.md`, `tools/cooling_g1_figures.py` | U2 to U7, owner bench run | S46 | ADV |
 | U9 | Aft hull provisions | `tools/aft_edf_provisions.py`, `tools/merge_middle_rear_shell.py` | U8 (G1) | S47 | STD |
 | U10 | Forward hull provisions | `tools/fwd_duct_provisions.py`, `airframe/blender-scripts/merge_cargo_interior.py` | U8 (G1) | S48 | STD |
-| U11 | Separate parts | `airframe/openscad/fuselage/tail-edf/` | U8 (G1) | S49 | STD |
+| U11 | Separate parts | `airframe/openscad/fuselage/tail-edf/` | U8 (G1), U9, U10 | S49 | STD |
 | U12 | CFD case | `tools/cfd_cooling_case.py` | U9, U10, U11 | S50 | ADV |
 | U13 | Coupled analysis | `docs/FUSELAGE_COOLING_ANALYSIS.md` | U12, U2 | S51 | ADV |
 | U14 | Mass, CG, bench balance and gate G2 | `tools/auw_ledger.py`, `current-specification/bom_revU.json` | U9, U10, U11 | S52 | STD |
@@ -406,6 +418,8 @@ flowchart TB
 | U16 | Specifications, build guide and closeout | `docs/CARGO_WINCH_SPECIFICATION.md`, `docs/PHASED_BUILD_GUIDE.md` | U13, U14, U15 | S53 | STD |
 
 **Sprints and model tier.** The units run as sprints S42 to S53 of `docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md`, Theme C. Each sprint fits one session under the 5-hour token cap and ends with that plan's close-out ritual. **STD** means a standard model can do the unit from its text and patterns. **ADV** means the unit needs an advanced model: it derives or validates a physics model, diagnoses CFD, makes a cross-domain trade, or writes an owner brief. Any unit escalates to ADV when one of its gates fails twice. The WBS items are TEDF-01 to TEDF-16 in `airframe/fuselage-mid/WBS.md` §1.1.1.4.0, one per unit.
+
+**WBS and decision cross-reference.** TEDF-01 to TEDF-16 map one to one to U1 to U16. OSESC-TAIL-1 (the fifth Open-Secure-ESC's mount, cooling and bench test) is built in U11; OSESC-TAIL-2 (its specification at the tail EDF's duty) is written in U16. The stern stack items in `avionics/WBS.md` §1.11 feed this plan: NFP-TEDF-1 (the stern stack's heat load, the stern thermal check) feeds U2; NFP-TEDF-2 (which node commands the tail EDF throttle and the RCS valves) is decided at G1 in U8; NFP-TEDF-3 (the stern board's now-unused fan output) is closed in the stern-stack plan. Gate G1 is owner decision OD-22 and gate G2 is OD-23 in `docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md`. Sprints S45 and S46 were swapped on 2026-11-16 (owner direction): the thermal refresh (U2) runs in S45 and the G1 brief (U8) in S46, so that G1 sees thermal figures.
 
 ### U1. Design-shift record and reference repair
 
@@ -415,7 +429,7 @@ flowchart TB
 - **Files:** `airframe/fuselage-mid/WBS.md`, `deferred/WBS.md`, `avionics/WBS.md`, `WBS.md`, `AGENTS.md`, `deferred/AGENTS.md`, `deferred/README.md`, `REFERENCES.md`, `requirements-dev.txt`, `tools/node_thermal_forced_air.py`, `docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md`, generated `TODO.md` files.
 - **Approach:**
     1. Rewrite COOL-01 as this plan's sub-items. State what changes, why, what was rejected, and which parts and files are affected.
-    2. Move the tail EDF, its speed controller and the RCS from Phase 11 into the first build in `deferred/WBS.md` and `deferred/AGENTS.md`. Retire the door actuation items.
+    2. Move the tail EDF, its speed controller and the RCS from Phase 11 into the first build in `deferred/WBS.md` and `deferred/AGENTS.md`. Retire the door actuation items. (Done by the 2026-11-16 document review: design-shift notes in the `deferred/` files, the root and middle-section WBS, the door and latch items, the build guide and the AGENTS files. U1 checks they are complete.)
     3. Change the propulsion paragraph in `AGENTS.md` §1: the tail EDF is part of the first build. Keep the rule that it is not counted toward hover lift.
     4. Add a superseded note at the head of the earlier plan (KTD3).
     5. Repair `REF-HT-001` and the brass citation. Remove the fan citation with the fan. Mark any section that cannot be verified "requires verification" and open a TODO §0.x item.
@@ -429,12 +443,13 @@ flowchart TB
 
 - **Goal:** Make the node tool correct for the Rev U hull and ready for EDF flow.
 - **Requirements:** R4, R7. Implements KTD11, KTD13.
-- **Dependencies:** U1. The stern stack step waits for the stern thermal check.
+- **Dependencies:** U1, U3 (flow input). The stern stack step waits for the stern thermal check, an external dependency owned by the stern-stack (Pilot-NoNFO) plan and due before S45.
 - **Files:** `tools/node_thermal_forced_air.py`, `tools/tests/test_node_thermal_forced_air.py`.
 - **Approach:**
     1. Fix the cavity measurement: close each section with the parts that close the hull in the built aircraft. Fail the run on an implausibly small cavity.
     2. Load the merged aft hull. Replace the fan curve with a flow input from U3, and accept CFD station speeds and air temperatures.
-    3. Add the ramp and bow branches, and the Flight Engineer box at its forward station.
+    3. Add the ramp and bow branches, and the Flight Engineer box at its forward station. Add the tail EDF speed controller at its forward station and the QF2822 motor at its station, both as heat sources and as temperature-limited nodes. Take the controller's dissipation from the Open-Secure-ESC loss model in `tools/nacelle_esc_thermal.py` (about 21.7 W at 50 A, scaling with current squared) and the motor's from the QX efficiency [REF-EDF-003], at the hover and ground-idle throttles; mark ASSUMED where no figure exists.
+    3a. Report the minimum flow at which each node passes, the governing node, and the minimum cooling throttle (R7), for the average and peak radio cases, with and without the chin flow guides. Planning estimate (2026-11-16): the chin nodes CN2/CN3 govern; with no guides the average case needs about 40 cfm (18.8 L/s), 13 % throttle, and the sustained peak case exceeds full throttle; with guides narrowing the chin to about 4.65 in² (3,000 mm²) the average case needs about 10 to 14 cfm (3.5 to 5.5 %), so idle is set by the controller's lowest stable throttle, and sustained peak needs 27 to 42 %. Write the result into the cooling-airflow block of the mass ledger.
     4. Replace the two stern pouches with the single stern stack, with its heat load from the closed stern thermal check.
     5. Put the limits in one list.
 - **Execution note:** The present outputs are invalid through the cargo bay. Write the tests against the closed-cavity figures in the earlier plan's Measured Baseline, not against today's output.
@@ -446,6 +461,8 @@ flowchart TB
     - Raising the flow lowers every node temperature.
     - A node over its limit makes the run exit non-zero and names the node.
     - A missing mesh or flow input fails with a clear message.
+    - The tail speed controller and the motor appear in the limits list.
+    - Narrowing the chin passage lowers the flow the chin nodes need.
 - **Verification:** The tool runs on the merged hull with the EDF flow input. All tests pass under `/usr/bin/python3`.
 
 ### U3. Tail EDF flow tool
@@ -459,6 +476,10 @@ flowchart TB
     2. Sum the path loss: ramp and bow branches in parallel, then the interior stations in series, with free areas from the meshes.
     3. Report thrust, flow, ramp share, path loss and pressure margin at each throttle, for a list of louvre loss cases.
     4. State the flow regime and the validity envelope: incompressible, every Mach number below 0.3.
+    5. State the largest louvre loss coefficient at which the R27 margin and the R30 trim criterion still hold at the hover throttle, and print the provenance of the stall figure with every margin.
+    6. Sweep blocked ramp-screen area from clear to fully blocked (bow inlets only), and report the blockage at which R27 or R30 fails at the hover throttle.
+    7. State the tail EDF power at each throttle and, with the ledger's cell capacity, the nacelle hover power and the minimum cooling throttle, the hover endurance cost (OQ5).
+    8. Recalibrate to the owner's pre-G1 bench run when it exists (U8).
 - **Patterns to follow:** `tools/node_thermal_forced_air.py` for station areas; `docs/solutions/conventions/one-limits-list-drives-the-printout-and-the-exit-code.md`.
 - **Test scenarios:**
     - Covers AE3. Each throttle reports installed thrust beside free-air thrust.
@@ -468,7 +489,8 @@ flowchart TB
     - A pressure margin below the stated minimum fails the run.
     - Half throttle gives one eighth of the flow power.
     - An exit Mach number above the validity limit fails with the limit named.
-- **Verification:** The tool reproduces the planning figures in this document within tolerance, and its tests pass.
+    - A fully blocked ramp leaves only the bow-inlet flow.
+- **Verification:** The tool passes against independent references: momentum theory for the free-air case, and the maker's free-air thrust, current and power for the QX unit [REF-EDF-003]. Agreement with the planning figures in this document is reported as a regression note, not a pass criterion. Its tests pass.
 
 ### U4. Hover trim and RCS tool
 
@@ -477,13 +499,16 @@ flowchart TB
 - **Dependencies:** U3.
 - **Files:** `tools/hover_trim_rcs.py`, `tools/tests/test_hover_trim_rcs.py`, `current-specification/auw_ledger.json`.
 - **Approach:**
+    0. First close the ledger gaps (moved here from U14 on 2026-11-16, because they sit at the bow): the nose pods, the pitot parts, the Bay A drawer, shelf and hatch, and a BOM row for the cells. Take one pitch inertia from the ledger and use it everywhere.
     1. Take mass and CG from the `hover_twin_2200` configuration, plus the parts this plan adds and moves.
     2. Solve the free-body moment balance about the CG: weight offset, the tail thrust and tilt couple, and the jets.
     3. Model each jet at duct total pressure with path loss K. Open jets add exit area and change the nozzle speed.
-    4. Report trim use, reserve in each direction, yaw moment, nacelle tilt and tail thrust at each throttle.
+    4. Report trim use, reserve in each direction, yaw moment, nacelle tilt and tail thrust at each throttle, across the louvre loss cases and the blocked-screen sweep of U3. Express the trim point as required tail thrust, and report it at full, nominal and end-of-hover pack voltage under hover load.
+    4a. Report a disturbance budget beside the reserves: sling swing at a stated angle acting at the fairlead's height below the CG, an ASSUMED gust and ground-effect allowance, and the reserve lost to valve and spool lag at a stated delay.
+    4b. Check the tilt-vectoring degraded mode: degraded-trim tilt and attitude, tilt per unit moment, the required tilt range against the -5°/140° mechanical range and the commanded limit, and the servo rate needed for the pitch loop.
     5. Find the CG window that holds trim use to R30 over a stated throttle range.
     6. Add the slung-load case at the fairlead station.
-- **Technical design:** Directional only. Moment about the CG, pitch-up positive: `W·d − F_tail·(z_tail − z_pivot) − ΣF_ventral·cos(splay)·arm + ΣF_upper·sin(azimuth)·arm`.
+- **Technical design:** Directional only. Moment about the CG, pitch-up positive: `W·d − F_tail·(z_tail − z_pivot) − ΣF_ventral·cos(cant)·cos(splay)·arm + ΣF_ventral·sin(cant)·h_v + ΣF_upper·sin(azimuth)·arm`, where `cant` is the ventral jets' aft cant (25°, R32) and `h_v` their exit height below the CG (about 1.28 in, 32 mm); a canted jet's forward thrust acting below the CG opposes its own pitch moment.
 - **Test scenarios:**
     - Covers AE7. At the hover throttle, trim use is at or below 50 %.
     - Covers AE4. A CG outside the window makes the run exit non-zero.
@@ -494,7 +519,10 @@ flowchart TB
     - The trim couple arm does not change when the CG height changes.
     - Zero tail thrust gives zero couple, and the tool reports that it cannot trim an aft CG without jets.
     - Jet Mach number above the validity limit fails with the limit named.
-- **Verification:** The tool reproduces the RCS and CG window figures in this document within tolerance. Its tests pass.
+    - A swinging slung load gives a moment equal to its horizontal force times the fairlead-to-CG height.
+    - The end-of-hover voltage case fails the run if it breaks R30 or needs more than 100 % throttle.
+    - A 25° aft cant gives about 86 % of the radial ventral moment.
+- **Verification:** The tool passes against a hand-worked moment balance about the CG and about the pivot. Agreement with the RCS and CG window figures in this document is reported as a regression note, not a pass criterion. Its tests pass.
 
 ### U5. Rear-cone layout
 
@@ -505,10 +533,10 @@ flowchart TB
 - **Approach:**
     1. Remove the fan, adapter, rear-bell intake and baffle content from the draft tool.
     2. Place the QX rotor forward of the station where the shroud lip fits, the motor ahead of it, and the stator and mount from the nacelle geometry.
-    3. Decide the drive: rotor on the motor shaft, or a short shaft. Check the first critical speed against the motor's top speed.
-    4. Put the RCS station at Y 634. Keep the spreading-jet check for the four azimuths.
+    3. Recommend the drive: rotor on the motor shaft, or a short shaft. Compute the first critical speed with the rotor mass and its overhang beyond the last bearing included (Rayleigh or Dunkerley, bearing positions from the motor drawing), and state the margin to about 51,000 rpm. The rotor on the motor shaft is the default unless a separate shaft meets a stated minimum margin. The owner decides at G1.
+    4. Put the RCS station at Y 634, the ventral jets canted 25° aft and the upper jets radial (R32). Replace the flat-section jet check with a 3D check of the spreading jet (bore at the skin, ASSUMED 12° half-angle, out to 5.9 in (150 mm)) at each jet's cant. Check the web between the two ventral exhausts (about 0.15 in, 3.9 mm, at 18 mm bore) against the minimum printed wall.
     5. Map the canon plate joints of the rear cone from the mesh. Fit a trapezoidal exhaust of the required flow area to each jet, moving joints radially as little as possible.
-    6. Place the scoops, valve bodies and pushrod runs, with the air path as a keep-out.
+    6. Record the measured plumbing limits: the 0.28 to 0.32 in (7 to 8 mm) annulus between tube and skin at the RCS station, the room past the fan mounting ring (none aft of about Y 627, so the ring ends forward of Y 625), and the tube girth taken by the jet apertures. Lay out each of the three valve concepts for the G1 trade (sliding shutter, hinged skin-plate flap, servos aft at Y 590 to 600), with cable runs, not pushrods, from the forward servos, and the air path as a keep-out.
 - **Patterns to follow:** `tools/nonfo_simon_fit.py`; `docs/solutions/design-patterns/build-every-joint-in-context-through-its-full-motion.md`.
 - **Test scenarios:**
     - Covers AE5. All four jets have a clear path at the chosen stations.
@@ -517,9 +545,12 @@ flowchart TB
     - The motor and rotor stay inside the hull and forward of the nozzle exit.
     - Each trapezoidal exhaust has the required flow area within tolerance.
     - Each exhaust edge lies on a plate joint, or the joint shift is reported.
-    - A jet aimed at the skid crossbar, a skid or the dorsal pod fails.
+    - A jet aimed at the skid crossbar, a skid or the dorsal pod fails, in the 3D spreading-jet check.
+    - A radial ventral jet at Y 634 fails against the crossbar, and the 25° aft-canted jet passes.
+    - A ventral web thinner than the minimum printed wall fails.
     - Port and starboard placements mirror.
-    - A shaft longer than the critical-speed limit fails with the margin stated.
+    - A shaft longer than the critical-speed limit fails with the margin stated, with the rotor overhang included.
+    - Adding the overhung rotor lowers the computed critical speed.
 - **Verification:** The fit tool passes, and its printout gives every station and gap for the brief.
 
 ### U6. Cargo duct layout
@@ -533,9 +564,9 @@ flowchart TB
     2. Place the Flight Engineer box, the tail EDF speed controller, the RCS servos and the RCS gateway forward, as far as fit and function allow.
     3. Keep the winch and the Cargo Observer at their stations. Move the fairlead to the pivot station, and place the hook recess and the Observer orifices in the belly.
     4. Place the belly service hatch so that every serviceable item is reachable through it.
-    5. Place the louvre panel, the screen and its frame at the ramp, and the flow guides at the nodes U2 names.
+    5. Place the louvre panel, the screen and its frame at the ramp, and the flow guides at the nodes U2 names. Size the chin flow guides first: the chin nodes govern the cooling flow, and narrowing the chin passage to about 4.65 in² (3,000 mm²) cuts the flow they need roughly in proportion (U2).
     6. Model the air stream and the winch line sweep as keep-outs. Add a line guard between the line and the stream.
-    7. Route the motor leads, the pushrods and the power runs from the new Flight Engineer station.
+    7. Route the motor leads, the RCS control cables and the power runs from the new Flight Engineer station. Report the electrical row for G1: the forward-controller-to-motor lead length and gauge, its voltage drop and the current at hover throttle.
 - **Patterns to follow:** `tools/cargo_layout_fit.py`; `tools/middle_layout_fit.py`.
 - **Test scenarios:**
     - Every envelope clears the hull and its neighbours by the stated gap.
@@ -555,9 +586,9 @@ flowchart TB
 - **Dependencies:** U1.
 - **Files:** `tools/head_layout_fit.py`, `tools/tests/test_head_layout_gnss_ballast.py`.
 - **Approach:**
-    1. Place a thin patch antenna in the gap above the nose Observer board, forward of the window-aft frame. Name the candidate parts and their thickness.
+    1. Compare GNSS antenna placements for G1 (OQ9, R35): the bow position, a thin patch in the gap above the nose Observer board forward of the window-aft frame, against the alternatives. Score each on CG effect, wiring run, emissions near the Observer board and the 49 MHz antenna, and sky view. Name the candidate parts and their thickness.
     2. Outline the cover on the canon bridge window. Confirm the window station against the canon references in their authority order.
-    3. Place the ballast pocket at the bow, with its range of mass and the CG travel that gives.
+    3. Place the ballast pocket at the bow, with its range of mass and the CG travel that gives. Place the aft balance allowance of R34 (an aft ballast provision, or a stated movable-equipment allowance) with equal CG travel aft.
     4. Place the bow inlets beside the sensor bay, clear of the pitot hose turn and the Observer trunk.
 - **Test scenarios:**
     - The antenna envelope clears the Observer board and the roof by the stated gap.
@@ -566,35 +597,39 @@ flowchart TB
     - The pocket's stated CG travel equals mass times arm over hover mass.
     - Each bow inlet has the stated free area.
     - An antenna thicker than the gap fails the gate.
+    - The aft balance allowance gives CG travel at least equal to the bow pocket's.
 - **Verification:** `tools/head_layout_fit.py` passes with the new envelopes.
 
 ### U8. G1 brief and figures
 
 - **Goal:** Give the owner one decision brief with every check and figure, and close gate G1.
-- **Requirements:** R23, R24, R29, R36. Implements KTD1, KTD12, KTD14. Settles OQ2, OQ4 and OQ5 as owner decisions.
-- **Dependencies:** U2, U3, U4, U5, U6, U7. The thermal figures are marked pending if the stern thermal check is still open.
+- **Requirements:** R23, R24, R29, R36. Implements KTD1, KTD12, KTD14. Settles OQ2, OQ4 and OQ9 as owner decisions and shows the OQ5 estimate.
+- **Dependencies:** U2, U3, U4, U5, U6, U7. **Entry criteria:** the node tool (U2) has run on the U3 flow for hover, cruise and the restrained ground case, with the stern load shown as a bracketed range for owner information until the stern thermal check closes; the owner has run the pre-G1 bench test below and U3 has been recalibrated to it.
 - **Files:** `docs/FUSELAGE_COOLING_LAYOUT_BRIEF.md`, `tools/cooling_g1_figures.py`, `docs/figures/cooling_g1_*.png`, `tools/tests/test_cooling_g1_figures.py`.
 - **Approach:**
     1. Write the figure script for the new concept. Every figure comes from the layout tools and the live meshes.
     2. Apply both check sets in `docs/DOC_TEMPLATES.md`, each with a picture and with load and motion vectors.
     3. Put each decision with its options side by side, a recommendation, and what is unverified.
     4. Do not copy the canon references into any figure; name the sheet to compare.
+    5. List every G1 figure that no independent source has checked.
+    6. Show the CG-target trade for the tail EDF loss in hover: at 0.04 in (1.0 mm) aft of the pivot the unopposed moment at loss is about 0.26 lbf·in with about 1.2° of pitch before a 0.3 s detection and a 5.5° nose-down degraded hover; at 0.09 in (2.3 mm), 0.60 lbf·in, 2.6° and 12.6°; at 0.15 in (3.9 mm), 1.02 lbf·in, 4.5° and 20.7°.
+- **Owner bench run before G1.** A static run of one QX 64 mm unit behind a printed ramp-panel coupon with its screen, recording thrust, current and duct total pressure at three throttles. Build and measure the louvre panel coupon alone first (moved ahead of G1 from U10), so the louvre loss is measured before the CG window and the jet size are decided.
 - **G1 package.**
 
 | Check | What the brief shows |
 | --- | --- |
-| Statics and dynamics | Hover free body with weight, nacelle thrust, tail thrust, tilt couple and jet forces; loads on the mounting ring and the fused tube; winch line load at the fairlead |
+| Statics and dynamics | Hover free body with weight, nacelle thrust, tail thrust, tilt couple and jet forces; the disturbance budget beside the reserves; the tilt-vectoring degraded mode; loads on the mounting ring and the fused tube; winch line load at the fairlead |
 | Function | Air path; RCS operation; upgrade-free first build; service access through the belly hatch; ground restraint |
 | Structural integrity | Wall map against `docs/SLS_MIN_WALL_THICKNESS.md`; load path of the ring, hatch frame and fairlead; print orientation |
-| Mechanism and component interactions | Rear cone, cargo duct and head sections with nearest gaps, port and starboard; winch line sweep; pushrod runs |
+| Mechanism and component interactions | Rear cone, cargo duct and head sections with nearest gaps, port and starboard; winch line sweep; RCS control cable runs and the three valve concepts |
 | Weight and balance | Mass per part; CG for each configuration and with a slung load; the CG window; ballast range |
 | Canonical shape | Ramp louvres, fused doors, hatch, RCS exhausts on the plate pattern, nozzle, bow inlets and the bridge window cover against the references |
 | Flow sizing | Installed thrust, flow split, stall margin, jet sizing, each with its Reynolds and Mach number |
-| Electrical | Tail EDF current and its speed controller rating; the power run from the forward Flight Engineer station; RCS servo supply |
+| Electrical | Tail EDF current and its speed controller rating; the power run from the forward Flight Engineer station (from U6); RCS servo supply |
 | Harness and mounting fit | Motor leads, RCS pushrods, GNSS coax, bend radii and connector clearance |
-| Thermal load | Node temperatures with EDF flow in still air and at cruise; flow guide positions |
+| Thermal load | Node temperatures with EDF flow in still air, at cruise and in the restrained ground case; the minimum cooling throttle and the governing node; flow guide positions; the stern load as a bracketed range |
 
-- **G1 decisions:** the aft CG window; the RCS exhaust outlines; the drive arrangement; the louvre form among low-loss options; the response to a tail EDF or RCS fault, and the GW-RCS failsafe state; whether `hover_twin_2200` becomes the headline ledger configuration; what the Cargo Observer watches; the hover endurance cost.
+- **G1 decisions:** the aft CG window; the RCS exhaust outlines; the RCS valve concept (sliding shutter, hinged plate flap, or servos aft); the drive arrangement; the louvre form among low-loss options and the minimum R27 pressure margin; the GNSS antenna placement; the response to a tail EDF, RCS or intake-blockage fault in hover and in forward flight, and the GW-RCS failsafe state; whether `hover_twin_2200` becomes the headline ledger configuration (if yes, the build guide, the EMI WBS and the Phase 5 hover-endurance criterion move to the twin cells, with the tail EDF load, in U16); what the Cargo Observer watches. The hover endurance cost is shown as an estimate.
 - **Test scenarios:**
     - The figure script writes every figure the package names; a missing figure fails the run.
     - Every check row in the brief has a figure or a one-line not-applicable statement.
@@ -608,9 +643,10 @@ flowchart TB
 - **Dependencies:** U8 with G1 passed.
 - **Files:** `tools/aft_edf_provisions.py`, `tools/merge_middle_rear_shell.py`, `tools/tests/test_aft_edf_provisions.py`, `airframe/stls/fuselage/middle_rear_shell24_2mm_merged.stl.tar.gz`.
 - **Approach:**
+    0. Check `openscad --version` and `kicad-cli --version`; stop with a clear message if either is missing (Build environment).
     1. Write the provision module from the U5 stations.
     2. Open the tail at the nozzle. Fair the nozzle into the measured skin.
-    3. Cut each RCS exhaust on the plate pattern, with its scoop and valve seat inside.
+    3. Cut each RCS exhaust on the plate pattern at its cant, as an aperture through the tube wall and the skin, with the seat for the valve concept chosen at G1.
     4. Call the module from the hull build. Gate each boolean in mm³. Mirror starboard from port.
     5. Regenerate the hull in the R2 frame.
 - **Patterns to follow:** the design-pattern learnings named in Sources.
@@ -631,13 +667,14 @@ flowchart TB
 - **Dependencies:** U8 with G1 passed.
 - **Files:** `tools/fwd_duct_provisions.py`, `airframe/blender-scripts/merge_cargo_interior.py`, `tools/merge_head_cargo_shell.py`, `tools/build_head_shell.py`, `tools/tests/test_fwd_duct_provisions.py`, `airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl.tar.gz`.
 - **Approach:**
+    0. Check `openscad --version`; stop with a clear message if it is missing. `airframe/blender-scripts/merge_cargo_interior.py` needs Blender, which the cloud environment lacks: port the merge to OpenSCAD or `manifold3d`, or run it on the owner's PC.
     1. Replace the sealed ramp fairing with the louvre panel on the canon outline, and a seat for the screen frame.
     2. Fuse the doors into the skin with their canon panel lines. Remove the hinge and latch features.
     3. Cut the hatch opening with its frame, gasket land and screw bosses.
     4. Cut the fairlead, the hook recess and the Observer orifices.
     5. Cut the bow inlets, the window cover seat and the ballast pocket in the head.
     6. Rebuild the one-piece forward hull.
-- **Execution note:** Build and measure the louvre panel alone first. Its open area and loss set the thrust and the RCS authority.
+- **Execution note:** The louvre panel coupon was built and measured before G1 (U8); build the panel to the measured design.
 - **Test scenarios:**
     - The ramp opening keeps the canon outline within tolerance.
     - The louvre open area equals the design value.
@@ -655,8 +692,9 @@ flowchart TB
 - **Dependencies:** U8 with G1 passed.
 - **Files:** `airframe/openscad/fuselage/tail-edf/`, `airframe/openscad/fuselage/cargo-duct/`, `airframe/stls/fuselage/`, `tools/tests/test_tail_edf_parts.py`.
 - **Approach:**
-    1. Tail EDF: pusher shroud, stator and motor mount from the nacelle geometry; the drive that U5 chose.
-    2. RCS: four valve bodies, the pushrod guides, and the servo and gateway mounts.
+    0. Check `openscad --version`; stop with a clear message if it is missing.
+    1. Tail EDF: pusher shroud, stator and motor mount from the nacelle geometry; the drive the owner chose at G1. The fifth Open-Secure-ESC speed controller (OSESC-NAC, OSESC-TAIL-1): its mount at the forward station, its cooling air and its lead run to the motor.
+    2. RCS: the valve concept the owner chose at G1, its cable guides, and the servo and gateway mounts.
     3. Cargo duct: ramp screen frame, flow guides, winch line guard, Flight Engineer mount, belly hatch cover and gasket land.
     4. Head: bridge window cover in a material that passes GNSS signals; ballast pocket cap and ballast slugs.
     5. Take interface dimensions from the provision modules, not from typed copies.
@@ -700,10 +738,11 @@ flowchart TB
 - **Files:** `docs/FUSELAGE_COOLING_ANALYSIS.md`, `docs/BAY_A_FWD_THERMAL.md`, `REFERENCES.md`.
 - **Approach:**
     1. Run the node tool with the CFD inputs for hover, cruise and the restrained ground case.
-    2. Size the flow guides, and re-run U12 until R7 passes or the limit is reached.
+    2. Size the flow guides, starting at the chin, and re-run U12 until R7 passes, for at most three flow-guide iterations. If R7 still fails at the third, stop and write an Owner Decision Brief (Goal Capsule stop conditions).
+    2a. State the minimum cooling throttle (R7): the larger of the speed controller's lowest stable throttle and the lowest throttle at which every node passes, and the ground throttle needed for sustained peak transmit (R9).
     3. Re-run U3 and U4 with the measured path loss. State installed thrust, stall margin, trim use and the CG window.
-    4. State the hover power of the tail EDF and the endurance it costs.
-    5. State the fault cases: time to a temperature limit with no forced air, and pitch acceleration with no tail EDF.
+    4. State the hover power of the tail EDF and the endurance it costs. State the ground-idle power and the pack energy used per ten minutes of pre-flight at the minimum cooling throttle.
+    5. State the fault cases: time to a temperature limit with no forced air, including a tail EDF that fails to start on the ground; pitch acceleration at the instant of a tail EDF loss and the tilt-vectoring recovery; and a blocked ramp screen.
     6. Write the document to the `docs/DOC_TEMPLATES.md` analysis template, imperial units first.
 - **Test scenarios:**
     - Covers AE2. On the ground at the minimum cooling throttle, every node passes the average-power case.
@@ -720,7 +759,7 @@ flowchart TB
 - **Approach:**
     1. Add the tail EDF, its speed controller, the RCS hardware, the hatch, the screen, the flow guides, the GNSS antenna and the ballast pocket. Remove the door hardware.
     2. Move the Flight Engineer box, the speed controller and the RCS servos to their U6 stations.
-    3. Close the gaps: the nose pods, the pitot parts, the Bay A drawer, shelf and hatch, and a BOM row for the cells.
+    3. Confirm the ledger gaps closed in U4 are still closed with the built parts.
     4. Apply the owner's G1 decision on the headline configuration.
     5. State the ballast range, the CG travel it gives, and the spread between estimate and as-built mass that it has to cover.
     6. Fail the gate when the hover CG is outside the owner's window.
@@ -755,13 +794,14 @@ flowchart TB
 - **Goal:** Bring the specifications and the build guide into line, and close the tracking.
 - **Requirements:** R9, R13, R16, R24, R29, R36. Implements KTD4, KTD14.
 - **Dependencies:** U13, U14, U15.
-- **Files:** `docs/CARGO_WINCH_SPECIFICATION.md`, `docs/CARGO_DOOR_GATEWAY_SPEC.md`, `docs/CARGO_SECTION_LAYOUT.md`, `docs/POWER_DISTRIBUTION.md`, `docs/TILT_DRIVE_CONTROL_SPEC.md`, `docs/PHASED_BUILD_GUIDE.md`, `docs/OPERATORS_MANUAL.md`, `docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md`, `deferred/aft-edf/README.md`, `airframe/fuselage-mid/WBS.md`, `REFERENCES.md`, `PROJECT_INDEX.md`, `ARCHIVE_INDEX.md`, generated `TODO.md` files.
+- **Files:** `docs/CARGO_WINCH_SPECIFICATION.md`, `docs/CARGO_DOOR_GATEWAY_SPEC.md`, `docs/CARGO_SECTION_LAYOUT.md`, `docs/POWER_DISTRIBUTION.md`, `docs/TILT_DRIVE_CONTROL_SPEC.md`, `docs/PHASED_BUILD_GUIDE.md`, `graphical-build-guide/AGENTS.md`, `graphical-build-guide/WBS.md`, `graphical-build-guide/flight-phases/WBS.md`, `avionics/emi-hardening/WBS.md`, `docs/OPERATORS_MANUAL.md`, `docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md`, `deferred/aft-edf/README.md`, `airframe/fuselage-mid/WBS.md`, `REFERENCES.md`, `PROJECT_INDEX.md`, `ARCHIVE_INDEX.md`, generated `TODO.md` files.
 - **Approach:**
     1. Winch specification: the fairlead under the pivot, the hook recess, the line guard, no internal cargo.
     2. Gateway specification: retire the door gateway; move GW-RCS into the first build with the owner's failsafe decision.
     3. Record the tail throttle schedule, the tilt trim angle and the RCS mixer gains as figures for the flight controller.
-    4. Build guide: the tail EDF installation, the bench balance step with its ballast allowance, the GNSS reception check.
-    5. Operators manual: the tail EDF runs whenever the avionics are powered; restrain the aircraft on the ground; the response to a tail EDF or RCS fault. Mark hazards to people as WARNING and hazards to equipment as CAUTION.
+    4. Build guide: the tail EDF, its speed controller and RCS installation in Phase 5 (`graphical-build-guide/`), the bench balance step with its ballast and aft balance allowances, and the GNSS reception bench check, with acceptance criteria, for the placement chosen at G1. If G1 adopts `hover_twin_2200`, move the build guide, `avionics/emi-hardening/WBS.md` and the Phase 5 hover-endurance criterion to the twin cells, with the tail EDF load from U13.
+    4a. Speed controller specification (OSESC-TAIL-2): the fifth Open-Secure-ESC, OSESC-NAC, at the tail EDF's continuous hover duty.
+    5. Operators manual: the tail EDF runs whenever the avionics are powered, so the rotor starts when the battery is connected (a WARNING, with the restraint and the intake-clear check ordered before battery connection); restrain the aircraft on the ground; the ground throttle rises with radio power; the response to a tail EDF, RCS or intake-blockage fault in hover (tilt-vectoring degraded mode, land now) and in forward flight. Mark hazards to people as WARNING and hazards to equipment as CAUTION.
     6. Archive the superseded 120 mm files. Index every new citation. Close the WBS items and regenerate `TODO.md`.
     7. Capture the learnings under `docs/solutions/`.
 - **Test scenarios:** Test expectation: none -- documentation and tracking. The sync and index checks are the proof.
@@ -797,7 +837,7 @@ pytest is not part of CI today. The executor runs it by hand and states the resu
 
 **Global**
 
-- Every requirement is met, or is the subject of a written owner decision.
+- Every requirement is met, or is the subject of a written owner decision. One recorded exception: R7 and AE2 are met for every node except the stern stack until the stern thermal check closes.
 - Gates G1 and G2 are closed in writing.
 - Every Verification Contract gate passes, or its failure is recorded with the rule and the reason.
 - Every analysis result carries its inputs, its citations, its margin, and its PROVISIONAL mark where an input is ASSUMED.

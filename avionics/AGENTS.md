@@ -117,7 +117,7 @@ Status and history: `avionics/kicad/FlightEngineer/FlightEngineer.md`.
 ### Bus-Gateway (CAN-PERIPH-GW-1) - Secure CAN-FD and RS-485 edge node
 
 Provides secure bus connection for sensors and actuators lacking native capability, specifically
-the nacelle tilt Hall effect sensors and SG90 microservos (winch, cargo door), plus per-EDF ESC
+the nacelle tilt Hall effect sensors and microservos (winch, and from 2026-11-16 the four RCS valves; the cargo-door servos are retired with the fused doors, TEDF-10), plus per-EDF ESC
 telemetry gateways. Folder/file/BOM designator is `CAN-PERIPH-GW-1`
 (`avionics/kicad/Bus-Gateway/`); "Bus-Gateway" is the board-class name used here. Status/history:
 `avionics/kicad/Bus-Gateway/CAN-PERIPH-GW-1.md`, TODO.md §1.2.

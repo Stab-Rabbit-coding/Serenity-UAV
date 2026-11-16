@@ -10,9 +10,15 @@
 > WBS item TEDF-01 rewrites them. Authority: `airframe/fuselage-mid/WBS.md` §1.1.1.4.0 and
 > `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
 
-> **STALE DESIGN — requires regeneration before Phase 11.** The files in this folder describe a
-> superseded 120 mm EDF + 8-petal iris nozzle design. The current canonical fuselage EDF
-> (per AGENTS.md) is a **55 mm 6S unit** feeding a **fixed** elliptical exit nozzle
+> **Superseded 2026-11-16 (design shift).** The tail EDF is no longer deferred: it is the QX-Motor
+> 64 mm nacelle unit (QF2822 2300 KV), a pusher in the first build, drawing all its air through the
+> fuselage interior. Authority: `airframe/fuselage-mid/WBS.md` §1.1.1.4.0 and
+> `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`. The 55 mm unit and the neck
+> scoops described below are retired; the files here are a historical record only.
+>
+> **STALE DESIGN (pre-shift record).** The files in this folder describe a
+> superseded 120 mm EDF + 8-petal iris nozzle design. The fuselage EDF of the pre-shift baseline
+> was a **55 mm 6S unit** feeding a **fixed** elliptical exit nozzle
 > (2.06 in × 1.76 in / 52.3 mm × 44.7 mm — explicitly NOT an iris) plus 4 RCS bleed-air thrusters
 > tapping ~15% of EDF mass flow. The OpenSCAD/STL files below have not yet been regenerated for
 > this spec; see TODO.md §Phase 11 (`rear_nozzle_canonical.stl`, `rcs_thruster_nozzle.stl`,

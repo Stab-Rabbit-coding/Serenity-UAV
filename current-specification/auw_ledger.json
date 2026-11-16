@@ -45,6 +45,43 @@
    "mass_g": 6572.332371497091
   }
  },
+ "cooling_airflow": {
+  "basis": "plan 002 finding 30, 2026-11-16; replaced by plan U2/U13",
+  "esc_min_stable_throttle": 0.1,
+  "full_throttle_lps": [
+   140.0,
+   116.0
+  ],
+  "governing_node": "CN2/CN3 chin (0.31 in / 8 mm spreader room per side)",
+  "heat_sources_w": {
+   "CN node avg / peak": [
+    3.0,
+    8.3
+   ],
+   "FC node": 1.25,
+   "Flight Engineer box": 3.0,
+   "tail speed controller": "21.7 W at 50 A, x (I/50)^2 (tools/nacelle_esc_thermal.py)"
+  },
+  "idle_throttle": [
+   0.1,
+   0.1
+  ],
+  "need_lps": {
+   "avg_chin_3000mm2": [
+    4.9,
+    6.4
+   ],
+   "avg_no_guides": [
+    18.8,
+    24.8
+   ],
+   "peak_chin_3000mm2": [
+    37.3,
+    49.3
+   ]
+  },
+  "status": "PROVISIONAL -- ASSUMED heat loads, film coefficients and fan model"
+ },
  "nacelle_printed_unit_g": {
   "PRINT-NAC64-CARTRIDGE": 65.12,
   "PRINT-NAC64-POD": 275.65,

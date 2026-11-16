@@ -6,7 +6,8 @@
 
 > **Status note, 2026-11-16 (design shift).** The tail EDF, its speed controller and the RCS are
 > no longer deferred: they are part of the first build (owner, 2026-11-15). The tail EDF is the
-> QX-Motor 64 mm nacelle unit, not a 55 mm unit. The Phase 11 items below are kept as written until
+> QX-Motor 64 mm nacelle unit, not a 55 mm unit. The neck-scoop, plenum and bleed-tap items below are closed as
+> superseded (2026-11-16 document review); the remaining Phase 11 items stay as written until
 > WBS item TEDF-01 rewrites them. Authority: `airframe/fuselage-mid/WBS.md` §1.1.1.4.0 and
 > `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
 
@@ -25,9 +26,9 @@
 
 | Master § | Branch | Open | First flight |
 |----------|--------|-----:|:------------:|
-| §Phase11 | Phase 11 — Aft EDF Integration (Deferred) | 42 | — |
-| §Phase12 | Phase 12 — Cargo-bay Range-Extender Battery Module (Deferred) | 6 | — |
-| | **Total open (this subsystem)** | **48** | |
+| §Phase11 | Phase 11 — Aft EDF Integration (Deferred) | 35 | — |
+| §Phase12 | Phase 12 — Cargo-bay Range-Extender Battery Module (promoted 2026-10-26) | 0 | — |
+| | **Total open (this subsystem)** | **35** | |
 
 ---
 
@@ -42,21 +43,21 @@
 - [ ] Print `rear_neck_intake_shell24.stl` from `deferred/aft-edf/openscad/rear_neck_intake_shell24.scad`. Verify NECK_X ≈ 310mm alignment in slicer. **Scoop windows must be re-sized for the 55 mm EDF (reduced area).**
 - [ ] Remove temporary window covers from existing neck shell, or swap in the new windowed shell if a plain shell was used for Phases 0–10.
 - [ ] **Regenerate** `neck_intake_frame.scad` for the 55 mm intake area; print `neck_intake_frame.stl` (CF-PETG, 0.15mm, 40% gyroid, 4 walls).
-- [ ] **Regenerate** `aft_edf_plenum.scad`: 55 mm circular EDF inlet + 4 RCS bleed taps (~15% flow); print `aft_edf_plenum.stl` (CF-PETG, 0.20mm, 20% gyroid) — EDF housing, treated as structural per CLAUDE.md Fabrication Standards.
+- [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct and the RCS jets are apertures in the thrust tube, plan 002) **Regenerate** `aft_edf_plenum.scad`: 55 mm circular EDF inlet + 4 RCS bleed taps (~15% flow); print `aft_edf_plenum.stl` (CF-PETG, 0.20mm, 20% gyroid) — EDF housing, treated as structural per CLAUDE.md Fabrication Standards.
 - [ ] **Generate** `rear_nozzle_canonical.scad`: fixed canonical elliptical tail nozzle, exit 2.06×1.76 in (52.3×44.7 mm, ~1,836 mm²), hull-matched outer surface; print `rear_nozzle_canonical.stl` (CF-PETG, 0.15mm, 30%, 4 walls). **No iris, no servo.**
 - [ ] **Generate** `rcs_distribution_manifold.scad` + `rcs_thruster_nozzle.scad` + `rcs_valve_bracket.scad`; print `rcs_distribution_manifold.stl` (×1, PETG), `rcs_thruster_nozzle.stl` (×4, CF-PETG), `rcs_valve_bracket.stl` (×4, CF-PETG).
 - [ ] Run mesh watertightness verification on all regenerated STLs; report findings here and resolve.
-- [ ] Dry-fit `neck_intake_frame.stl` into the resized scoop windows; registration tongues insert with ~0.2mm clearance (sand if tight).
+- [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct and the RCS jets are apertures in the thrust tube, plan 002) Dry-fit `neck_intake_frame.stl` into the resized scoop windows; registration tongues insert with ~0.2mm clearance (sand if tight).
 - [ ] Verify aerodynamic orientation: intake lips face forward (−Y / nose-ward).
 - [ ] Apply structural epoxy to tongues + shoulder flanges; press frame into position; clamp; cure 24h.
 - [ ] Fillet all gaps between flange and hull; cure 2h.
-- [ ] Dry-fit `aft_edf_plenum.stl`; verify intake arm alignment and 55mm EDF inlet centered.
-- [ ] Bond plenum forward arms to intake frame exits; fillet joints; cure 2h.
-- [ ] Bond `rcs_distribution_manifold.stl` to the 4 plenum bleed taps; route 4 bleed ducts to the RCS jet locations.
-- [ ] Pressure-test: seal EDF face with tape; cover all but one scoop; shop-vac — confirm draft at EDF inlet and at all 4 RCS jets, no joint leakage.
+- [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct and the RCS jets are apertures in the thrust tube, plan 002) Dry-fit `aft_edf_plenum.stl`; verify intake arm alignment and 55mm EDF inlet centered.
+- [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct and the RCS jets are apertures in the thrust tube, plan 002) Bond plenum forward arms to intake frame exits; fillet joints; cure 2h.
+- [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct and the RCS jets are apertures in the thrust tube, plan 002) Bond `rcs_distribution_manifold.stl` to the 4 plenum bleed taps; route 4 bleed ducts to the RCS jet locations.
+- [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct and the RCS jets are apertures in the thrust tube, plan 002) Pressure-test: seal EDF face with tape; cover all but one scoop; shop-vac — confirm draft at EDF inlet and at all 4 RCS jets, no joint leakage.
 - [ ] Bench-test 55mm EDF (correct rotation, no vibration).
 - [ ] Install EDF retaining ring at station ~430mm inside Panel F; bond; cure 1h.
-- [ ] Seat EDF in plenum 55mm inlet; press forward to retaining lip; bond with 4 dabs slow-cure epoxy.
+- [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct and the RCS jets are apertures in the thrust tube, plan 002) Seat EDF in plenum 55mm inlet; press forward to retaining lip; bond with 4 dabs slow-cure epoxy.
 - [ ] Route motor leads through Panel F to 50A ESC; route signal lead forward via MAIN-PWR conduit to Inara's shuttle (Bay B, FC2 PRU Ch.2).
 - [ ] Install 50A ESC in Panel F bay; foam tape + cable tie. Cure 2h before applying thrust.
 - [ ] Bond `rear_nozzle_canonical.stl` to the tail-cone exit (Panel F aft end), blending into the canonical hull outer mold line. **Fixed — no moving petals.**
@@ -73,7 +74,7 @@
 - [ ] Verify all 5 ESC heartbeats on CAN FD; confirm FC2 cross-drive capability for ESC5.
 - [ ] Bench-test RCS attitude authority; then forward-flight thrust test with the rear EDF at 60% throttle.
 - [ ] All regenerated rear-EDF STLs pass mesh watertightness verification
-- [ ] Intake frame tongues fully seated in the resized scoop windows
+- [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct and the RCS jets are apertures in the thrust tube, plan 002) Intake frame tongues fully seated in the resized scoop windows
 - [ ] Plenum + RCS manifold pressure-test passed (draft at EDF inlet and all 4 RCS jets; no leakage)
 - [ ] EDF seated at station ~430mm, centerline ±2mm; rotation verified before sealing
 - [ ] 50A ESC installed; ESC5 signal routed to FC2 PRU Ch.2

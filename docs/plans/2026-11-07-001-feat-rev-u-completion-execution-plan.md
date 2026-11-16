@@ -46,8 +46,10 @@ gate (§5) needs the owner's word, and nothing here closes one.
 | **L4** | Full system | Phases 6–8 checked (8-node architecture + ToF OA, cargo system, finishing). |
 | **L5** | Envelope + autonomy | Phases 9–10 checked; Operator's Manual filled from flight data (OM-5). |
 
-**Explicitly out of scope ("Won't" for Rev U):** Phase 11 aft EDF integration (`deferred/TODO.md`,
-43 items). It stays in `deferred/` and is reported, not burned down.
+**Explicitly out of scope ("Won't" for Rev U):** the Phase 11 aft EDF items (`deferred/TODO.md`,
+43 items) that TEDF-01 does not bring into the first build. On 2026-11-16 the tail EDF, its speed
+controller and the RCS moved into the first build (Theme C, S42–S53); the items left in `deferred/`
+are reported, not burned down.
 
 ## 2. Baseline (measured 2026-11-07, commit after 92dbfb45)
 
@@ -235,11 +237,12 @@ inserts, open mouth.)
 
 **S8 — Cargo doors.** *Retired in part 2026-11-16 (Theme C): the doors are fused into the hull skin in S48, with one belly service hatch. Close the door actuation, latch and door gateway items with that reason. HULL-LEAK-04 becomes the hatch gasket in S52.* Original scope: U1 re-fit, DOOR-LATCH-1..6, DOOR-SEAM-1, SERVO-PLACE, SG90 bell-crank boss,
 HULL-LEAK-04, PRINT-GW-DOOR-TRAY hardware.
-- Exit: door pair assembles in the hull with 0 in³ (0 mm³) clash through its full swing (re-run the door
-  check); latch spec items each closed with a mesh feature or a recorded reason. −8.
+- Exit (rewritten 2026-11-16): every door actuation, latch, seam and door gateway item is closed as
+  superseded by TEDF-10, with the reason recorded in its owning WBS file. The fused doors are built
+  in S48 and the belly hatch gasket in S52; no door swing check remains. −8.
 - Est. 1 / 1 / 2.
 
-**S9 — Bay A forward and cargo-bay furniture.** *Changed 2026-11-16 (Theme C): GPS-ANT moves under the bridge window (S44, S48); the cargo bay furniture follows the cargo duct layout of S44; the Bay A fan is not built.* BAYA-FWD-05..11, NODE-SADDLE, OBS-CARGO, HARN-CLIP/BHD,
+**S9 — Bay A forward and cargo-bay furniture.** *Changed 2026-11-16 (Theme C): GPS-ANT placement is a G1 trade, the bow under the bridge window against its alternatives (S44, S46, S48); the cargo bay furniture follows the cargo duct layout of S44; the Bay A fan is not built.* BAYA-FWD-05..11, NODE-SADDLE, OBS-CARGO, HARN-CLIP/BHD,
 GPS-ANT, TC-BOARD, ENC-DAUGHTER, 20D VERIFY.
 - Exit: each part placed in the hull frame with 0 in³ (0 mm³) clash in `assembly_integrity_check.py`; BOM NOT
   COVERED −1 (node saddle). −12.
@@ -295,7 +298,7 @@ Measured by `tools/validate_kicad.py` counts per board.
   B1..B3, PCB mass roll-up into `airframe/README.md`, branch reconciliation. Exit: avionics `TODO.md`
   A-items 0. −20. Est. 2/2/3.
 
-- *Changed 2026-11-16 (Theme C): the stern stack sits in the tail EDF's intake stream. NFP-THERM (S40) uses that airflow and gates S46. NFP-TEDF-2 asks which node commands the tail EDF and the RCS valves, now flight-critical in hover. NFP-TEDF-3 removes or repurposes the cooling-fan drive output.*
+- *Changed 2026-11-16 (Theme C): the stern stack sits in the tail EDF's intake stream. NFP-THERM (S40) uses that airflow and gates S45. NFP-TEDF-2 asks which node commands the tail EDF and the RCS valves, now flight-critical in hover. NFP-TEDF-3 removes or repurposes the cooling-fan drive output.*
 - **S34–S41 — NoNFO-Pilot-PB2 stern stack** (added 2026-11-14, owner decision 2026-11-12; needs OD-18,
   OD-19, OD-20, OD-21). The stern (Simon) stack becomes one merged Pilot + TACCO board on one PB2-I; three full
   stacks stay. Eight sprints, each with its own exit, in
@@ -316,7 +319,8 @@ detail; each sprint below names its WBS items and plan units.
 - **Scope added:** 18 WBS items (TEDF-01..16, OSESC-TAIL-1..2) and 3 stern stack items
   (NFP-TEDF-1..3). 12 sprints, S42–S53.
 - **Scope retired:** COOL-01; the cargo door actuation work of S8; the Delta fan and its vent
-  geometry (BAYA-FWD-T4 changes to bow inlets only); the 43 deferred Phase 11 items are rewritten
+  geometry (BAYA-FWD-T4 changes to bow inlets only); of the 43 deferred Phase 11 items, 8 (neck
+  scoops, plenum, bleed taps) were closed as superseded on 2026-11-16 and the other 35 are rewritten
   by TEDF-01, because the tail EDF and RCS are no longer deferred.
 - **Sprints changed:** S7, S8, S9, S10 and S34–S41, as noted in each.
 - **Decisions changed:** OD-2 and OD-15 narrow; OD-6 is overtaken; OD-22 and OD-23 are new.
@@ -341,11 +345,13 @@ carries the engineering-review notice of the skill that produced it.
 - **S44 — Layout gates. [STD; TEDF-05 is ADV]** TEDF-05, TEDF-06, TEDF-07. Plan U5, U6, U7.
   Rear cone, cargo duct and head. Exit: the three fit tools exit 0; `middle_layout_fit.py` still
   PASS. −3. Est. 2/3/4.
-- **S45 — Gate G1 brief. [ADV]** TEDF-08, NFP-TEDF-2. Plan U8. Needs S43 and S44. Thermal figures
-  are marked pending if S46 has not run. Exit: brief and figures in the repo, every figure viewed;
-  OD-22 put to the owner. −1. Est. 1/2/3.
-- **S46 — Thermal model refresh. [STD]** TEDF-02. Plan U2. Needs NFP-THERM (S40) and S43. Exit:
-  the node tool runs on the merged hull with the EDF flow input; tests pass. −1. Est. 1/1/2.
+- **S45 — Thermal model refresh. [STD]** TEDF-02. Plan U2. Needs S43; the stern stack step needs
+  NFP-THERM (S40), and every other node proceeds without it. Exit: the node tool runs on the merged
+  hull with the EDF flow input and reports the minimum cooling throttle; tests pass. −1. Est. 1/1/2.
+  *(Swapped with S46 on 2026-11-16, owner direction, so that G1 sees thermal figures.)*
+- **S46 — Gate G1 brief. [ADV]** TEDF-08, NFP-TEDF-2. Plan U8. Needs S43, S44, S45 and the owner's
+  pre-G1 bench run (a QX 64 mm unit behind a printed ramp-panel coupon and screen). Exit: brief and
+  figures in the repo, every figure viewed; OD-22 put to the owner. −1. Est. 1/2/3.
 - **S47 — Aft hull provisions. [STD]** TEDF-09. Plan U9. Needs OD-22. Exit: aft hull tarball
   rebuilt; `validate_stls.py`, `check_hull_tarballs.py --check`, `check_datum_drift.py` exit 0;
   previews viewed. −1. Est. 1/2/3.
@@ -358,7 +364,7 @@ carries the engineering-review notice of the skill that produced it.
 - **S50 — CFD case. [ADV]** TEDF-12. Plan U12. Needs S47–S49. Exit: cases converge; ramp plus bow
   flow equals EDF flow within the stated imbalance; one finer-mesh comparison stated. −1.
   Est. 2/3/5.
-- **S51 — Coupled analysis. [ADV]** TEDF-13. Plan U13. Needs S50 and S46. Exit:
+- **S51 — Coupled analysis. [ADV]** TEDF-13. Plan U13. Needs S50 and S45. Exit:
   `docs/FUSELAGE_COOLING_ANALYSIS.md` with every result, margin and PROVISIONAL mark; sent for
   qualified engineering review. −1. Est. 1/2/3.
 - **S52 — Mass, CG, bench balance and seal. [STD]** TEDF-14, TEDF-15. Plan U14, U15. Exit:
@@ -369,7 +375,7 @@ carries the engineering-review notice of the skill that produced it.
   bench balance step and ground-restraint WARNING in the build guide and Operator's Manual; the three
   sync checks exit 0. −2. Est. 1/2/3.
 
-**Order.** S42, S43 and S44 may start now. S45 follows S43 and S44. S46 waits for S40. S47–S49 wait
+**Order.** S42, S43 and S44 may start now. S45 follows S43. S46 follows S44, S45 and the owner's bench run. S47–S49 wait
 for OD-22. S50–S53 follow in order.
 
 **Cross-repo.** The tail EDF uses a fifth Open-Secure-ESC controller. Its firmware changes belong to

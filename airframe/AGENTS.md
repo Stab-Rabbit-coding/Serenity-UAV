@@ -61,8 +61,8 @@ is re-issued in R2 by the migration.
 The fuselage has four canonical sections, each with specific spatial properties:
 
 - **Head** — forwardmost; tapers to a narrow nose (most negative Y extent)
-- **Cargo** — immediately aft of head; largest cross-section; wing attachment flanges on upper outer edges; bay door opens toward −Z (ventral)
-- **Middle** — narrow horseshoe-ring neck between cargo and rear; open at −Z (ventral); houses the inner-neck tube and Flight Engineer's room (power distribution); aft EDF intake scoops belong to Phase 11 (`deferred/AGENTS.md`)
+- **Cargo** — immediately aft of head; largest cross-section; wing attachment flanges on upper outer edges; since 2026-11-16 a sealed duct for the tail EDF: doors fused into the skin, one belly service hatch, louvred forward ramp intake (pre-shift: bay door opens toward −Z, ventral)
+- **Middle** — narrow horseshoe-ring neck between cargo and rear; open at −Z (ventral); the inner-neck tube is the open air passage from the cargo duct to the tail EDF (2026-11-16, `airframe/fuselage-mid/WBS.md` §1.1.1.4.0); the Flight Engineer box moves forward into the cargo duct and the Phase 11 intake scoops are retired
 - **Rear** — aftmost; houses engine room, dorsal pod, and two landing skids extending aft
 
 **Wings and nacelles:**

@@ -4,6 +4,12 @@
 
 ## Scope
 
+> **Design shift, 2026-11-16.** The tail EDF, its speed controller and the RCS are no longer
+> deferred: they are part of the first build (`airframe/fuselage-mid/WBS.md` §1.1.1.4.0,
+> `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`). The Phase 11 records in this
+> folder are pre-shift history until TEDF-01 rewrites them, and "Nothing here is part of the active
+> build baseline" below no longer applies to them.
+
 This folder holds design specifications, analysis, and artifacts for work that is
 **intentionally deferred** beyond the current build baseline (Phases 5–10): planned upgrades to
 current components, future system additions (Phase 11 — rear EDF + RCS, aft intake scoop

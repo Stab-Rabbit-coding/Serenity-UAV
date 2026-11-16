@@ -2173,7 +2173,7 @@ WBS.md — Serenity UAV — Avionics Rev S1 Redesign (Commo / XO / Flight Engine
 ```text
 AGENTS.md — Current Specification — Agent Instructions [documentation, specification]
 allowables.json — JSON data (4 top-level keys) [specification]
-auw_ledger.json — JSON data (6 top-level keys) [specification]
+auw_ledger.json — JSON data (7 top-level keys) [specification]
 bom_revU.csv — Bill of materials, CSV (237 items) [bom, specification]
 bom_revU.json — Bill of materials, JSON (237 items) [bom, specification]
 flight_limits.json — JSON data (6 top-level keys) [specification]
