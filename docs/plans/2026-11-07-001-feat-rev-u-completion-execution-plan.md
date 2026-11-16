@@ -32,7 +32,7 @@ requires.
 **Product authority.** Owner (Stab-Rabbit-coding). Sprint order is a recommendation. Each owner-decision
 gate (§5) needs the owner's word, and nothing here closes one.
 
-**Status of this plan.** **Approved by the owner 2026-11-08.** S0 and S1 are closed. **OD-17 decided 2026-11-11** (option D, rounded end plate with fillets, 22.8° taper kept); **S2 implements it** from `docs/plans/2026-11-11-001-sprint-2-handoff.md`.
+**Status of this plan.** **Approved by the owner 2026-11-08.** **Theme C (tail EDF cooling, S42–S53) added 2026-11-16 on the owner's direction.** S0 and S1 are closed. **OD-17 decided 2026-11-11** (option D, rounded end plate with fillets, 22.8° taper kept); **S2 implements it** from `docs/plans/2026-11-11-001-sprint-2-handoff.md`.
 
 ## 1. Definition of "complete"
 
@@ -143,11 +143,11 @@ shape, each with a picture and vectors where loads or motion are involved (owner
 | ID | Decision | Item | Needed before |
 |---|---|---|---|
 | OD-1 | Nozzle spigot vs cartridge: shorten cartridge 0.12 in (3 mm) or drop the spigot — **DECIDED 2026-11-07: option A; implemented, NAC-64-ASM-01 closed** | NAC-64-ASM-01 | S1 |
-| OD-2 | Winch layout: (a) aft/low spool + bridle, (b) right-angle/belt servo, (c) move tilt hardware, (d) two spools | WINCH-PKG-01 | S7 |
+| OD-2 | Winch layout: (a) aft/low spool + bridle, (b) right-angle/belt servo, (c) move tilt hardware, (d) two spools — **narrowed 2026-11-16: floor winch at its present station, fairlead under the tilt pivot (Theme C)** | WINCH-PKG-01 | S7 |
 | OD-3 | ESC part and rating (70 A vs 80 A) — **decided 2026-11-12: 70 A Open-Secure-ESC** | NAC-64-ESC-80A, NAC-64-ESC70-QUAL | S4 |
 | OD-4 | Release the NAC-64-REBAKE hold — **RELEASED by the owner 2026-11-12** | NAC-64-REBAKE | S3 |
 | OD-5 | Hover ground-clearance margin / mandatory gear height | LG-HOVER-01 | S12 |
-| OD-6 | Bay A forward thermal tier | BAYA-FWD-T1 | S21 |
+| OD-6 | Bay A forward thermal tier — **overtaken 2026-11-16: the tail EDF supplies the airflow (Theme C); the sustained transmit limit is re-stated from S51** | BAYA-FWD-T1 | S21 |
 | OD-7 | Nozzle strike during a full ductile-fuse arrest | LG-28 | S12 |
 | OD-8 | Nozzle-servo gateway variant | D-NZ-1 | S5 |
 | OD-9 | Wing SPAR-25-5 decision (§1.1.3.1) | SPAR-25-5 | S6 |
@@ -157,7 +157,13 @@ shape, each with a picture and vectors where loads or motion are involved (owner
 | OD-13 | SLS vendor + quotes; source for part prices | BOM, §6.5 | S27 |
 | OD-14 | PE review of the Operator's Manual v0.1 | docs §0.10.3 | S28 |
 | OD-15 | Winch shed threshold vs maneuver envelope | fuselage-mid ★ | S7 |
+| OD-18 | NoNFO-Pilot-PB2 bus architecture — **DECIDED 2026-11-14: B+** | avionics §1.11 NFP-OD18 | S34 |
+| OD-19 | PACE re-balance from node capability and loading (owner direction 2026-11-14) — **DECIDED 2026-11-14: option B** (`docs/PACE_REBALANCE_BRIEF.md`) | avionics §1.11 NFP-OD19 | S34 |
+| OD-20 | USB Wi-Fi module part (TACCO and NoNFO-Pilot-PB2) — **DECIDED 2026-11-14: Ezurio Sterling-LWB5+ solder-down, USB mode** | avionics §1.11 NFP-OD20 | S35 |
+| OD-21 | Mass floor for the merged stern board — **DECIDED 2026-11-14: no floor; minimise, BBE-Black outline kept** | avionics §1.11 NFP-OD21 | S34 |
 | OD-17 | WA-R10 power crossing: A clock-spring / B enclosed loop / C slip ring / D joint 0.91 in (23 mm) outboard — brief `docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md` — **DECIDED 2026-11-11: D + aft fairing + rounded end plate with fillets; 22.8° taper kept** | WA-R10 | S2 |
+| OD-22 | Tail EDF cooling gate G1: aft CG window, RCS exhaust outlines, drive arrangement, louvre form, response to a tail EDF or RCS fault and the GW-RCS failsafe state, headline ledger configuration, Cargo Observer subject, hover endurance cost — brief `docs/FUSELAGE_COOLING_LAYOUT_BRIEF.md` | TEDF-08 | S47 |
+| OD-23 | Tail EDF cooling gate G2: hover CG outside the OD-22 window on mesh-derived masses | TEDF-14 | S53 |
 | OD-16 | First-flight decisions D1–D4 and D6 (scope, nozzle datum, 3.0 in gear, hover T/W floor, XO board area; D5 decided) — D2 overlaps OD-9, D3 closes OD-5 | `docs/plans/2026-09-15-001-first-flight-readiness-plan.md` | S3 (D4 sets the T/W target), P4 |
 
 ## 6. Agent sprints
@@ -221,25 +227,25 @@ inserts, open mouth.)
 
 ### Theme H — Hull and cargo (`airframe/fuselage-mid`, `fuselage-joints`, `airframe/`)
 
-**S7 — Winch, as decided.** Needs OD-2 and OD-15.
+**S7 — Winch, as decided.** Needs OD-2 and OD-15. *Changed 2026-11-16 (Theme C): there is no internal cargo; the winch stays on the cargo floor at its present station, with the fairlead under the tilt pivot and a hook recess in the belly. OD-2 narrows to the spool arrangement that suits a belly fairlead. Run S7 after S44.*
 - Implement the chosen option; six Rev C STLs in `generate_cargo_mounts.py`; pedestal stations;
   containment checks (spec §3.10) on the assembly; refresh `cargo_layout_fit.py` to the one-piece hull.
 - Exit: `winch_packaging_fit.py` exit 0; `cargo_layout_fit.py` PASS; BOM NOT COVERED −6. −8.
 - Est. 1 / 2 / 3.
 
-**S8 — Cargo doors.** U1 re-fit, DOOR-LATCH-1..6, DOOR-SEAM-1, SERVO-PLACE, SG90 bell-crank boss,
+**S8 — Cargo doors.** *Retired in part 2026-11-16 (Theme C): the doors are fused into the hull skin in S48, with one belly service hatch. Close the door actuation, latch and door gateway items with that reason. HULL-LEAK-04 becomes the hatch gasket in S52.* Original scope: U1 re-fit, DOOR-LATCH-1..6, DOOR-SEAM-1, SERVO-PLACE, SG90 bell-crank boss,
 HULL-LEAK-04, PRINT-GW-DOOR-TRAY hardware.
 - Exit: door pair assembles in the hull with 0 in³ (0 mm³) clash through its full swing (re-run the door
   check); latch spec items each closed with a mesh feature or a recorded reason. −8.
 - Est. 1 / 1 / 2.
 
-**S9 — Bay A forward and cargo-bay furniture.** BAYA-FWD-05..11, NODE-SADDLE, OBS-CARGO, HARN-CLIP/BHD,
+**S9 — Bay A forward and cargo-bay furniture.** *Changed 2026-11-16 (Theme C): GPS-ANT moves under the bridge window (S44, S48); the cargo bay furniture follows the cargo duct layout of S44; the Bay A fan is not built.* BAYA-FWD-05..11, NODE-SADDLE, OBS-CARGO, HARN-CLIP/BHD,
 GPS-ANT, TC-BOARD, ENC-DAUGHTER, 20D VERIFY.
 - Exit: each part placed in the hull frame with 0 in³ (0 mm³) clash in `assembly_integrity_check.py`; BOM NOT
   COVERED −1 (node saddle). −12.
 - Est. 1 / 2 / 2.
 
-**S10 — Middle/rear bays.** FE room PDB mount, Simon bay, CF skid channels, COOL-01, HULL-FUSE-02,
+**S10 — Middle/rear bays.** *Changed 2026-11-16 (Theme C): COOL-01 is superseded by S42–S53; the Flight Engineer box moves forward into the cargo duct (S44), so its room mount is re-scoped there.* FE room PDB mount, Simon bay, CF skid channels, COOL-01, HULL-FUSE-02,
 LG-AFT-BOLT-01, light mounts, `flight_engineer_{battery,pdb}_tray.scad`, battery boss pattern +
 swap hatch (emi-hardening items), retire or regenerate the legacy `head_shell24`/`cargo_sect_shell24`
 STL items now that the one-piece hulls supersede them (close with a reason).
@@ -288,6 +294,87 @@ Measured by `tools/validate_kicad.py` counts per board.
 - **S21 — Avionics close-out** (needs OD-6, OD-12). U1–U9 of plan 2026-08-25-001, BAYA-FWD-T2..T4,
   B1..B3, PCB mass roll-up into `airframe/README.md`, branch reconciliation. Exit: avionics `TODO.md`
   A-items 0. −20. Est. 2/2/3.
+
+- *Changed 2026-11-16 (Theme C): the stern stack sits in the tail EDF's intake stream. NFP-THERM (S40) uses that airflow and gates S46. NFP-TEDF-2 asks which node commands the tail EDF and the RCS valves, now flight-critical in hover. NFP-TEDF-3 removes or repurposes the cooling-fan drive output.*
+- **S34–S41 — NoNFO-Pilot-PB2 stern stack** (added 2026-11-14, owner decision 2026-11-12; needs OD-18,
+  OD-19, OD-20, OD-21). The stern (Simon) stack becomes one merged Pilot + TACCO board on one PB2-I; three full
+  stacks stay. Eight sprints, each with its own exit, in
+  `docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md`: S34 ledgers and fit/mass gates,
+  S35 parts and footprints, S36 schematic (ERC 0), S37 isolation cells, S38 placement, S39 routing
+  (DRC 0, unconnected 0), S40 fab outputs, S41 airframe integration record. They may run any time from
+  S13 on. Exit: ERC 0, DRC 0, parity 0, Gerbers; stern stack below the 107 g pair it replaces, mass minimised; `avionics/WBS.md`
+  §1.11 items closed. −20. Est. 9/14/22. S15 (TACCO) and S13/S14 (Pilot) still build the three full
+  stacks' boards; their Simon copies are not built.
+
+### Theme C — Tail EDF cooling, ramp intake and RCS (`airframe/fuselage-mid/WBS.md` §1.1.1.4.0)
+
+Added 2026-11-16 on the owner's direction (PR #291): the tail EDF cooling design of
+`docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md` is the path forward. That plan holds the requirements, the decisions and the unit
+detail; each sprint below names its WBS items and plan units.
+
+**Impact assessment (change management, §9).**
+- **Scope added:** 18 WBS items (TEDF-01..16, OSESC-TAIL-1..2) and 3 stern stack items
+  (NFP-TEDF-1..3). 12 sprints, S42–S53.
+- **Scope retired:** COOL-01; the cargo door actuation work of S8; the Delta fan and its vent
+  geometry (BAYA-FWD-T4 changes to bow inlets only); the 43 deferred Phase 11 items are rewritten
+  by TEDF-01, because the tail EDF and RCS are no longer deferred.
+- **Sprints changed:** S7, S8, S9, S10 and S34–S41, as noted in each.
+- **Decisions changed:** OD-2 and OD-15 narrow; OD-6 is overtaken; OD-22 and OD-23 are new.
+- **Risk added:** the tail EDF is flight-critical in hover. See `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`, Risks.
+
+**Model tier.** Each sprint is marked **[STD]** or **[ADV]**. A standard model can run an STD sprint
+from the plan unit and its patterns. An ADV sprint needs an advanced model: it derives or validates a
+physics model, diagnoses CFD, makes a cross-domain trade, or writes an owner brief. Any sprint
+escalates to ADV when one of its gates fails twice. A mixed sprint names its ADV step.
+
+**QA at every close-out.** The §4 ritual, plus the plan's Verification Contract gates for the units
+in the sprint, plus the `openscad` skill's visual check on any new geometry. Every analysis result
+carries the engineering-review notice of the skill that produced it.
+
+- **S42 — Record and reference repair. [STD]** TEDF-01. Plan U1. Rewrite the `deferred/` Phase 11
+  items for the first build; repair `REF-HT-001` and the brass citation; `requirements-dev.txt`.
+  Exit: every REF-ID in the thermal tool resolves; `gen_todo_from_wbs.py --check` exit 0. −1.
+  Est. 1/1/2.
+- **S43 — Flow and trim tools. [ADV]** TEDF-03, TEDF-04. Plan U3, U4. Promote the session's
+  installed-thrust, RCS and hover-trim models to tested tools. Exit: both tools reproduce the plan's
+  figures within tolerance; their tests pass; each has one limits list. −2. Est. 1/2/3.
+- **S44 — Layout gates. [STD; TEDF-05 is ADV]** TEDF-05, TEDF-06, TEDF-07. Plan U5, U6, U7.
+  Rear cone, cargo duct and head. Exit: the three fit tools exit 0; `middle_layout_fit.py` still
+  PASS. −3. Est. 2/3/4.
+- **S45 — Gate G1 brief. [ADV]** TEDF-08, NFP-TEDF-2. Plan U8. Needs S43 and S44. Thermal figures
+  are marked pending if S46 has not run. Exit: brief and figures in the repo, every figure viewed;
+  OD-22 put to the owner. −1. Est. 1/2/3.
+- **S46 — Thermal model refresh. [STD]** TEDF-02. Plan U2. Needs NFP-THERM (S40) and S43. Exit:
+  the node tool runs on the merged hull with the EDF flow input; tests pass. −1. Est. 1/1/2.
+- **S47 — Aft hull provisions. [STD]** TEDF-09. Plan U9. Needs OD-22. Exit: aft hull tarball
+  rebuilt; `validate_stls.py`, `check_hull_tarballs.py --check`, `check_datum_drift.py` exit 0;
+  previews viewed. −1. Est. 1/2/3.
+- **S48 — Forward hull provisions. [STD]** TEDF-10. Plan U10. Needs OD-22 and Blender. Build and
+  measure the louvre panel first. Exit: forward hull tarball rebuilt and the same three checks exit
+  0; `cargo_duct_layout_fit.py` and `head_layout_fit.py` PASS against it. −1. Est. 2/3/4.
+- **S49 — Separate parts and the fifth controller. [STD]** TEDF-11, OSESC-TAIL-1. Plan U11. Needs
+  OD-22. Exit: every part exports manifold in the R2 frame; previews viewed; BOM rows added. −2.
+  Est. 1/2/3.
+- **S50 — CFD case. [ADV]** TEDF-12. Plan U12. Needs S47–S49. Exit: cases converge; ramp plus bow
+  flow equals EDF flow within the stated imbalance; one finer-mesh comparison stated. −1.
+  Est. 2/3/5.
+- **S51 — Coupled analysis. [ADV]** TEDF-13. Plan U13. Needs S50 and S46. Exit:
+  `docs/FUSELAGE_COOLING_ANALYSIS.md` with every result, margin and PROVISIONAL mark; sent for
+  qualified engineering review. −1. Est. 1/2/3.
+- **S52 — Mass, CG, bench balance and seal. [STD]** TEDF-14, TEDF-15. Plan U14, U15. Exit:
+  `auw_ledger.py --check` and `check_bom_mesh_sync.py` exit 0; hover CG inside the OD-22 window, or
+  OD-23 put to the owner; `assembly_integrity_check.py` exit 0 on the built hulls. −2. Est. 1/2/2.
+- **S53 — Specifications, build guide and closeout. [STD; OSESC-TAIL-2 is ADV]** TEDF-16,
+  OSESC-TAIL-2. Plan U16. Exit: winch, gateway, power distribution and tilt specifications updated;
+  bench balance step and ground-restraint WARNING in the build guide and Operator's Manual; the three
+  sync checks exit 0. −2. Est. 1/2/3.
+
+**Order.** S42, S43 and S44 may start now. S45 follows S43 and S44. S46 waits for S40. S47–S49 wait
+for OD-22. S50–S53 follow in order.
+
+**Cross-repo.** The tail EDF uses a fifth Open-Secure-ESC controller. Its firmware changes belong to
+`Stab-Rabbit-coding/Open-Secure-ESC`; this repo carries the specification items (OSESC-TAIL-1..2)
+and the mount.
 
 ### Theme F — Firmware (`avionics/firmware`, Observer firmware, `gcs/`)
 
@@ -338,8 +425,9 @@ Each item lands with host-side unit tests; bench verification becomes a P item.
 
 **Agent-sprint total:** 34 sprints (S0–S33) — optimistic 43, most likely **63**, pessimistic 93 sessions
 (PERT expected ≈ 65 sessions; sum of the per-sprint estimates above). Planned burndown through S33: at
-least 345 items closed or superseded (sum of the −n targets). The remainder are P items, closed in §7,
-plus the 43 deferred Phase 11 items.
+least 345 items closed or superseded (sum of the −n targets). S34–S41 (added 2026-11-14) add 9 / **14** / 22
+sessions and at least 20 closures: 42 sprints, 52 / **77** / 115 sessions. S42–S53 (added 2026-11-16, Theme C) add 15 / **25** / 37 sessions and at least 18 closures: 54 sprints, 67 / **102** / 152 sessions. The remainder are P items, closed in §7,
+plus the deferred Phase 11 items that TEDF-01 does not bring into the first build.
 
 ## 7. Physical build blocks (owner-executed; agent record sprint after each)
 

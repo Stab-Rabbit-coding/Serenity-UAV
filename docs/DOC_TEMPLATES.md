@@ -49,6 +49,27 @@ that does not apply says so in one line and why; none is silently skipped. Units
 Each brief ends with the options side by side, a recommendation and its reason, and what is still
 unverified.
 
+### Avionics and power-electrical check set
+
+Owner direction, 2026-11-14 (PR #289): a brief or design review for an avionics board, a power
+electrical system, a motor or a sensor uses the six checks below. Two of the airframe checks are
+swapped and a thermal check is added; Function, Structural integrity and Mechanism and component
+interactions carry over from the table above. The rule that no check is silently skipped still
+applies.
+
+| Check | What it must show |
+|---|---|
+| **Electrical engineering** (replaces Statics and dynamics) | Electrical load: each rail's typical and peak current against its source, regulator, connector and wire rating, with margin. Emissions: switching and clock frequencies, radio transmit bands and powers, the nearest victim (GNSS, magnetometer, receivers) and the isolation or filtering between them, against the board's stated EMC targets. |
+| **Function** | As above. |
+| **Structural integrity** | As above, for the board, its mounts and its connectors. |
+| **Mechanism and component interactions** | As above, plus every bus, harness and neighbouring board the change touches. |
+| **Weight and balance** | As above. In addition, the mass and CG of the board's **fasteners, connectors and wire harness** are tracked as their own ledger lines for each PCB, not folded into the board mass. |
+| **Wire harness, fastener and mounting fit** (replaces Canonical shape) | Harness route and bend radius, connector mating and unmating clearance, fastener type, length and engagement, mount and saddle fit, and service access, checked on the real meshes. |
+| **Thermal load** (added) | Heat dissipated at typical and peak electrical load, the heat path to ambient, the design ambient, and each part's computed or measured temperature against its datasheet limit. Applies to all avionics and power electrical systems, motors and sensors included. |
+
+A change to the outer mould line caused by an avionics item (an antenna, a vent, a sensor window)
+still gets the Canonical shape check from the airframe table.
+
 ## Compliance Records
 ## Compliance Records
 

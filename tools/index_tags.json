@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-12",
+  "generated": "2026-11-16",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -3881,6 +3881,27 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/ezurio/ezurio-datasheet-sterling-lwb5plus-usb-adapter.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ezurio/ezurio-datasheet-sterling-lwb5plus-v5.2.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ezurio/ezurio-guide-dvk-lwb5plus-v2.1.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/feetech/6391731564544371956530548.pdf": {
       "description": "PDF document",
       "tags": [
@@ -3951,10 +3972,25 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/infineon/infineon-connectivity-technical-brief-for-linux-en.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/infineon/infineon-optiga-trust-m-datasheet-en.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/infineon/infineon-wifi-cyw4373-productbrief-en.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware",
+        "comms-protocol"
       ],
       "archived": false
     },
@@ -7075,6 +7111,23 @@
       "tags": [
         "avionics-hardware",
         "documentation",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/NoNFO-Pilot-PB2/README.md": {
+      "description": "NoNFO-Pilot-PB2 (Serenity integration copy)",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "pcb-design"
+      ],
+      "archived": false
+    },
+    "avionics/kicad/NoNFO-Pilot-PB2/zone_contract.json": {
+      "description": "JSON data (10 top-level keys)",
+      "tags": [
+        "avionics-hardware",
         "pcb-design"
       ],
       "archived": false
@@ -10283,6 +10336,14 @@
       ],
       "archived": false
     },
+    "docs/PACE_REBALANCE_BRIEF.md": {
+      "description": "PACE Re-balance for the Merged Stern Stack \u2014 Owner Decision Brief (OD-19)",
+      "tags": [
+        "documentation",
+        "redundancy-failover"
+      ],
+      "archived": false
+    },
     "docs/PHASED_BUILD_GUIDE.md": {
       "description": "Serenity-Class Tiltrotor UAV \u2014 Phased Build Guide (Rev M \u2014 SUPERSEDED)",
       "tags": [
@@ -10461,6 +10522,15 @@
         "documentation",
         "emi-hardening",
         "project-tracking"
+      ],
+      "archived": false
+    },
+    "docs/WIFI_MODULE_OD20_BRIEF.md": {
+      "description": "USB Wi-Fi Module for TACCO and NoNFO-Pilot-PB2 \u2014 Owner Decision Brief (OD-20)",
+      "tags": [
+        "comms-protocol",
+        "documentation",
+        "emi-hardening"
       ],
       "archived": false
     },
@@ -11871,6 +11941,7 @@
       "tags": [
         "documentation",
         "emi-hardening",
+        "redundancy-failover",
         "security"
       ],
       "archived": false
@@ -11880,6 +11951,30 @@
       "tags": [
         "documentation",
         "security"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md": {
+      "description": "NoNFO-Pilot-PB2 Stern Control Stack - Plan",
+      "tags": [
+        "documentation",
+        "redundancy-failover",
+        "security"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md": {
+      "description": "Fuselage Cooling and Tail EDF Provisions - Plan",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md": {
+      "description": "Cargo-Ramp Intake, Tail EDF Cooling and Forward Relocation - Plan",
+      "tags": [
+        "documentation",
+        "propulsion"
       ],
       "archived": false
     },
@@ -15529,7 +15624,7 @@
       "archived": false
     },
     "tools/auw_ledger.py": {
-      "description": "Python script",
+      "description": "Serenity UAV -- bottom-up all-up-weight, CG, pitch inertia and hover T/W.",
       "tags": [
         "build-tooling"
       ],
@@ -16264,6 +16359,13 @@
       ],
       "archived": false
     },
+    "tools/nonfo_simon_fit.py": {
+      "description": "nonfo_simon_fit.py -- S34 gates for the NoNFO-Pilot-PB2 stern stack at Simon's med bay.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/nozzle_servo_linkage.py": {
       "description": "Servo nozzle drive \u2014 schedule, linkage and force-margin tool (plan U2).",
       "tags": [
@@ -16347,6 +16449,14 @@
       ],
       "archived": false
     },
+    "tools/pace_balance.py": {
+      "description": "PACE assignment search for the four Serenity control stacks.",
+      "tags": [
+        "build-tooling",
+        "redundancy-failover"
+      ],
+      "archived": false
+    },
     "tools/placement_audit.py": {
       "description": "Serenity UAV -- verify every placed part sits where it belongs in the hull frame.",
       "tags": [
@@ -16407,6 +16517,13 @@
       "tags": [
         "build-tooling",
         "cad-mesh"
+      ],
+      "archived": false
+    },
+    "tools/rear_cone_layout_fit.py": {
+      "description": "rear_cone_layout_fit.py -- gate G1 layout of the fuselage cooling fan and the tail EDF",
+      "tags": [
+        "build-tooling"
       ],
       "archived": false
     },
@@ -16602,11 +16719,26 @@
       ],
       "archived": false
     },
+    "tools/tests/test_nonfo_simon_fit.py": {
+      "description": "Mesh-free tests for tools/nonfo_simon_fit.py (the hull fit itself runs as a tool).",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/tests/test_nozzle_servo_linkage.py": {
       "description": "Tests for tools/nozzle_servo_linkage.py \u2014 servo nozzle drive (plan U2).",
       "tags": [
         "build-tooling",
         "propulsion"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_pace_balance.py": {
+      "description": "Tests for tools/pace_balance.py.",
+      "tags": [
+        "build-tooling",
+        "redundancy-failover"
       ],
       "archived": false
     },
@@ -16838,6 +16970,7 @@
       "avionics/kicad/FlightEngineer/FlightEngineer.md",
       "avionics/kicad/FlightEngineer/GENERATOR_DRIFT_ANALYSIS.md",
       "avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md",
+      "avionics/kicad/NoNFO-Pilot-PB2/README.md",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/PCBNEW_SWIG_BUG.md",
@@ -16910,6 +17043,7 @@
       "docs/OBSERVER_MANUFACTURING_READINESS.md",
       "docs/OPERATORS_MANUAL.md",
       "docs/OSHW_CERTIFICATION.md",
+      "docs/PACE_REBALANCE_BRIEF.md",
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/POWER_DISTRIBUTION.md",
       "docs/PROTO_PRINT_DAVINCI_JR.md",
@@ -16933,6 +17067,7 @@
       "docs/VERIFY_PLACEMENT_WORKFLOW.md",
       "docs/WBS.md",
       "docs/WBS_FEDERATION.md",
+      "docs/WIFI_MODULE_OD20_BRIEF.md",
       "docs/WING_ATTACH_INTERFACE.md",
       "docs/WING_SECTION_POLAR_COMPARISON.md",
       "docs/attribution_and_licensing.md",
@@ -17124,6 +17259,9 @@
       "docs/plans/2026-11-07-001-burndown-baseline.json",
       "docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md",
       "docs/plans/2026-11-11-001-sprint-2-handoff.md",
+      "docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md",
+      "docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md",
+      "docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/AC_43.13-1B_w-chg1.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
@@ -17447,6 +17585,7 @@
       "docs/TILT_SPAR_ANALYSIS.md",
       "docs/Tilt-Rotor 10AWG Wire Clearance Analysis.md",
       "docs/WBS_FEDERATION.md",
+      "docs/WIFI_MODULE_OD20_BRIEF.md",
       "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
       "docs/electrical_fault_margins.md",
       "docs/ideation/2026-10-31-aft-cg-single-pivot-options-ideation.md",
@@ -17508,6 +17647,7 @@
       "docs/CARGO_DOOR_LATCH_SPEC.md",
       "docs/ETHERNET_PHY_TRADE.md",
       "docs/OPERATORS_MANUAL.md",
+      "docs/PACE_REBALANCE_BRIEF.md",
       "docs/PHASED_BUILD_GUIDE.md",
       "docs/README.md",
       "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
@@ -17517,6 +17657,8 @@
       "docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md",
       "docs/plans/2026-10-26-003-feat-mass-diet-two-sortie-plan.md",
       "docs/plans/2026-10-31-003-feat-forward-trim-room-relocation-plan.md",
+      "docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md",
+      "docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md",
       "gcs/AGENTS.md",
       "gcs/SKIPPER_SPEC.md",
       "gcs/WBS.md",
@@ -17526,7 +17668,9 @@
       "graphical-build-guide/flight-phases/TODO.md",
       "graphical-build-guide/flight-phases/WBS.md",
       "tools/TOOL_REFERENCE.md",
-      "tools/precommit_index.py"
+      "tools/pace_balance.py",
+      "tools/precommit_index.py",
+      "tools/tests/test_pace_balance.py"
     ],
     "security": [
       "AGENTS.md",
@@ -17659,6 +17803,7 @@
       "docs/plans/2026-11-02-001-feat-build-guide-joint-torque-and-sequence-plan.md",
       "docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md",
       "docs/plans/2026-11-11-001-sprint-2-handoff.md",
+      "docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md",
       "docs/solutions/conventions/one-limits-list-drives-the-printout-and-the-exit-code.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
@@ -18778,6 +18923,7 @@
       "docs/plans/2026-10-03-001-feat-nacelle-pour-foam-core-plan.md",
       "docs/plans/2026-10-19-001-baseline-r1/nacelle_esc_bay_fit.py.txt",
       "docs/plans/2026-10-19-001-baseline-r1/nozzle_linkage_check.py.txt",
+      "docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/1.jpg",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/2.jpg",
@@ -19032,6 +19178,7 @@
       "airframe/placeholders/gcs/Antenna_49MHz_whip_940mm.stl",
       "airframe/placeholders/wiring/Post_49MHz_base_load_coil.stl",
       "airframe/placeholders/wiring/Wire_49MHz_antenna_0p3mm_470mm.stl",
+      "avionics/datasheets/infineon/infineon-wifi-cyw4373-productbrief-en.pdf",
       "avionics/firmware/cn/src/xcvr_kiss.c",
       "avionics/firmware/cn/src/xcvr_kiss.h",
       "avionics/firmware/common/include/ax25_types.h",
@@ -19053,6 +19200,7 @@
       "avionics/kicad/complete_xcvr_49mhz2.py",
       "avionics/kicad/fix_xcvr_labels.py",
       "avionics/kicad/tools/swap_1553_hi6138.py",
+      "docs/WIFI_MODULE_OD20_BRIEF.md",
       "docs/brainstorms/2026-09-29-commo-49mhz-single-chip-search.md",
       "docs/plans/2026-09-29-002-feat-commo-revt-49mhz-iq-radio-plan.md",
       "gcs/skipper/software/config/mavlink_router.conf",
@@ -19199,6 +19347,9 @@
       "avionics/datasheets/extracted/AM625_PB2I_header_mux.json",
       "avionics/datasheets/extracted/TPSM828224SILR_c2607d.json",
       "avionics/datasheets/extracted/manifest.json",
+      "avionics/datasheets/ezurio/ezurio-datasheet-sterling-lwb5plus-usb-adapter.pdf",
+      "avionics/datasheets/ezurio/ezurio-datasheet-sterling-lwb5plus-v5.2.pdf",
+      "avionics/datasheets/ezurio/ezurio-guide-dvk-lwb5plus-v2.1.pdf",
       "avionics/datasheets/feetech/6391731564544371956530548.pdf",
       "avionics/datasheets/feetech/feetech-sts3215-c018.pdf",
       "avionics/datasheets/hirose/hiro-s-a0003496442-1.pdf",
@@ -19209,7 +19360,9 @@
       "avionics/datasheets/infineon/SLB_9670VQ20_Infineon.pdf",
       "avionics/datasheets/infineon/SLB_9672XU20_Infineon.pdf",
       "avionics/datasheets/infineon/esd101-b1.pdf",
+      "avionics/datasheets/infineon/infineon-connectivity-technical-brief-for-linux-en.pdf",
       "avionics/datasheets/infineon/infineon-optiga-trust-m-datasheet-en.pdf",
+      "avionics/datasheets/infineon/infineon-wifi-cyw4373-productbrief-en.pdf",
       "avionics/datasheets/infineon/slb9672.pdf",
       "avionics/datasheets/johanson/johanson-0915lp15b026e.pdf",
       "avionics/datasheets/johanson/johanson-2450bp15e0100.pdf",
@@ -19603,6 +19756,8 @@
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
       "avionics/kicad/FlightEngineer/step/FlightEngineer.step",
       "avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md",
+      "avionics/kicad/NoNFO-Pilot-PB2/README.md",
+      "avionics/kicad/NoNFO-Pilot-PB2/zone_contract.json",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
@@ -20069,6 +20224,8 @@
       "avionics/kicad/FlightEngineer/scripts/mod_flight_engineer_pcb_revs1.py",
       "avionics/kicad/FlightEngineer/step/FlightEngineer.step",
       "avionics/kicad/HI6138_FOOTPRINT_VERIFICATION.md",
+      "avionics/kicad/NoNFO-Pilot-PB2/README.md",
+      "avionics/kicad/NoNFO-Pilot-PB2/zone_contract.json",
       "avionics/kicad/Observer/OBSERVER_SOM_NETMAP.md",
       "avionics/kicad/Observer/Observer.md",
       "avionics/kicad/Observer/Observer.pretty/DS_Camera_9P.kicad_mod",
@@ -20792,6 +20949,7 @@
       "tools/nacelle_mass_cg_64.py",
       "tools/nacelle_tilt_dynamics.py",
       "tools/node_thermal_forced_air.py",
+      "tools/nonfo_simon_fit.py",
       "tools/nozzle_servo_linkage.py",
       "tools/nozzle_servo_linkage_64.py",
       "tools/observer_board_envelope.py",
@@ -20803,6 +20961,7 @@
       "tools/od17_junction_cfd/run.sh",
       "tools/od3_esc_figures.py",
       "tools/open_mating_faces.py",
+      "tools/pace_balance.py",
       "tools/placement_audit.py",
       "tools/plot_battery_bay.py",
       "tools/precommit_doc_wording.py",
@@ -20811,6 +20970,7 @@
       "tools/precommit_sanitize.py",
       "tools/prep_nacelle_64_bake.py",
       "tools/purge_stale_fcstd_objects.py",
+      "tools/rear_cone_layout_fit.py",
       "tools/scad_flatten.py",
       "tools/shift_baked_stl.py",
       "tools/skid_failure_mode_study.py",
@@ -20838,7 +20998,9 @@
       "tools/tests/test_joint_register.py",
       "tools/tests/test_nacelle64_assembly_check.py",
       "tools/tests/test_nacelle_esc_service.py",
+      "tools/tests/test_nonfo_simon_fit.py",
       "tools/tests/test_nozzle_servo_linkage.py",
+      "tools/tests/test_pace_balance.py",
       "tools/tests/test_sync_operators_manual.py",
       "tools/tests/test_tail_strike_requirement.py",
       "tools/tests/test_wbs_burndown.py",

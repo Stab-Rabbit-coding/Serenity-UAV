@@ -1089,6 +1089,101 @@ Spec `docs/BAY_A_FWD_LAYOUT.md`; thermal `docs/BAY_A_FWD_THERMAL.md`.
 - [ ] **BAYA-FWD-B3** — Re-check ring / CAN-FD bus length budgets with the routed
     Bay A lengths (`head_layout_fit.py` route report).
 
+### §1.11 — Stern stack: NoNFO-Pilot-PB2 (2026-11-14)
+
+**Design shift, owner decision 2026-11-12.** The stern (Simon) control stack becomes one
+NoNFO-Pilot-PB2 board on one PB2-I. Shepherd, Inara and River stay full stacks (Pilot + PB2-I
+and TACCO + PB2-I). The fleet goes from eight compute nodes to seven. Reason: weight off the
+longest avionics arm (Y 494.7) to move the CG forward; ledger credit −0.128 lbm (−58 g),
+about 0.055 in (1.4 mm) of CG (`tools/min_stretch_relocation.py`).
+
+Considered and rejected: two merged plus two full stacks (mass-diet plan 2026-10-26-003 KD3,
+superseded here); keeping NoNFO as a held fork (2026-10-26 status, superseded here); a
+3-port Ethernet switch on RMII2 (owner chose the Pilot pattern, DP83825I + AX88772E);
+GNSS from the dorsal puck alone (owner chose an on-cape MAX-M10S, first function removed if
+space, mass or routing is short). Grounding: plan 2026-10-31-003 R3; ideation 2026-10-31 row 4.
+
+Affected: Simon FC4 and CN4 nodes, the Simon saddle, `tools/auw_ledger.py`,
+`tools/middle_layout_fit.py`, `current-specification/bom_revU.csv`, root `AGENTS.md` §1 and
+§9. The board's design files and item list live in SecureControllers
+(`kicad/NoNFO-Pilot/PB2/`, `TODO.md` §5.2); it is a fleet product with Serenity as first
+customer. Plan and sprints S34–S41:
+`docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md`.
+
+- [x] **NFP-OD18** — ★ Owner: bus architecture A / A-diet / B / B+ (brief says B+).
+    **DECIDED 2026-11-14 (owner): B+.** The trust-module MCU owns CAN-FD, RS-485, 1553 and the
+    slow lines.
+    Brief: SecureControllers `kicad/NoNFO-Pilot/PB2/ARCHITECTURE_BRIEF.md`. The pin ledger
+    shows only B+ (trust-module MCU owns the buses and the slow lines) fits the PB2-I
+    header with every function aboard. Gates S34.
+- [x] **NFP-OD19** — ★ Owner: PACE re-balance — brief `docs/PACE_REBALANCE_BRIEF.md`.
+    **DECIDED 2026-11-14 (owner): option B** (best balance, 12 cells changed). Applied to
+    root `AGENTS.md` §9 and §1.9 above.
+    Owner direction 2026-11-14: re-compute PACE from node capability and loading, no single
+    point of failure, no stack with a single tasking. Brief recommends option A (keep every
+    Primary; 7 cells change). Earlier note:
+    Root `AGENTS.md` §9 lists Simon as A / C / A / P; plan 2026-10-31-003 R3 calls the merged
+    stack the PACE Emergency path. The two disagree. The role is an input to OD-18. Gates S34.
+- [x] **NFP-OD20** — ★ Owner: USB Wi-Fi module part (also blocks TACCO fab).
+    **DECIDED 2026-11-14 (owner): option 1**, Ezurio Sterling-LWB5+ solder-down module in USB
+    mode. Data sheets catalogued REF-SENSOR-065..069.
+    Brief `docs/WIFI_MODULE_OD20_BRIEF.md` (2026-11-14) recommends the Ezurio Sterling-LWB5+
+    solder-down module in USB mode, once its integration guide confirms USB mode.
+    Open since 2026-09-29 (§1.2a). Gates S35.
+- [x] **NFP-FIT** — Real-mesh fit gate for the stern stack at Simon (S34).
+    Outline 3.402 × 2.098 in (86.4 × 53.3 mm) against the present stack box of
+    2.28 × 3.03 × 0.87 in (58 × 77 × 22 mm): the board is 0.37 in (9.4 mm) longer than the
+    box. New tool `tools/nonfo_simon_fit.py`. A fail goes to the owner as a brief.
+    **DONE 2026-11-14 (S34):** `tools/nonfo_simon_fit.py` PASS standing portrait (3.40 in
+    vertical), 1 mm to starboard, harness zone to port; landscape fails. Margin 1 mm: re-run on
+    the placed board's STEP in S38. Stack 0.777 in (19.74 mm) tall.
+- [x] **NFP-MASS** — Stern stack mass gate: ≤ 0.108 lbm (49 g) holds the credit (S34).
+    Baseline is the pouched pair, 0.236 lbm (107 g) (`tools/middle_layout_fit.py` CN4 58 g +
+    FC4 49 g). The −58 g credit assumed a merged board as light as Pilot (31 g). First
+    estimate: board about 0.14 lbm (63 g), pouched stack about 0.18 lbm (81 g), credit about
+    −26 g [CALC, unverified]. Corrected 2026-11-14: the first entry used a 118 g baseline
+    that no ledger tool carries.
+    **DONE 2026-11-14 (S34):** pouched stack 0.201 lbm (91.0 g) on a 1.6 mm board, 0.189 lbm
+    (85.7 g) on 1.0 mm; PASS below 107 g. Credit −16.0 to −21.3 g [CALC; assumed lines in the
+    zone contract]. The −58 g in `tools/min_stretch_relocation.py` is replaced in S41.
+- [x] **NFP-OD21** — ★ Owner: smallest mass credit worth building the merge for.
+    First estimate is about −26 g against −58 g planned. Gates S34.
+    **DECIDED 2026-11-14 (owner):** the BBE-Black outline stays and the board may weigh more
+    than a Pilot cape. Mass is minimised, not floored. Agent reading, not the owner's words:
+    the stack stays lighter than the 107 g pair it replaces; a heavier result goes back to
+    the owner.
+- [x] **NFP-PD1** — Map the 31 B+ lines onto the MSPM0G3519-Q1 RGZ-48 (first task of S34).
+    OD-18 was decided before this check (2026-11-14); a failure here means the 64-pin package.
+    The package bonds 44 I/O pins, so the count fits; the function assignment is unchecked.
+    Result is appended to the architecture brief.
+    **DONE 2026-11-14 (S34):** 31 lines fit with 12 ports spare; SWD and BSL kept free.
+    SecureControllers `kicad/NoNFO-Pilot/PB2/pin_ledger/mcu_ledger.py`.
+- [ ] **NFP-PB1** — Bench: PB2-I to MSPM0 host link at bus rate (gates the fab order).
+    Owner, physical. CAN-FD frames at bus rate beside IMU traffic on SPI0, on Observer
+    hardware; record worst-case latency.
+- [x] **NFP-WIFI-DS** — Obtain the Sterling-LWB5+ module data sheet (Ezurio login).
+    **DONE 2026-11-14:** owner supplied the module data sheet v5.2, the USB adapter data sheet
+    and the DVK guide (REF-SENSOR-065, 066, 069). USB mode is the `CONFIG_HOST = 000` strap;
+    −40 to +85 °C; 0.7 g; rail at least 0.8 A. Variant 453-00046 (MHF4) approved by the owner 2026-11-14.
+    Needed for the USB order code, strapping, temperature rating and mass (S35). Owner to
+    rule whether a login-gated data sheet passes the sourcing rule.
+- [ ] **NFP-QA** — Track fastener, connector and harness mass and CG per board.
+    Owner direction 2026-11-14 (PR #289). Starts with the stern stack (S34, S41); the same
+    lines are owed for Pilot, TACCO, Commo, Flight Engineer, gateway and Observer.
+- [ ] **NFP-THERM** — Thermal load check for the stern stack at peak electrical load (S40).
+- [ ] **NFP-LEDGER** — Enter the stern stack in the AUW ledger and BOM (S41).
+- [ ] **NFP-SADDLE** — Couple the Simon saddle to the new outline in CI (S41).
+- [ ] **NFP-POLICY** — Update root `AGENTS.md` §1 and §9 to seven nodes (S41).
+- [ ] **NFP-TEDF-1** — [STD] Tail EDF cooling design shift (2026-11-15, `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`): the
+    stern stack sits in the tail EDF's intake stream. NFP-THERM shall use that airflow, and
+    its result gates TEDF-02 (S46). Do it in S40.
+- [ ] **NFP-TEDF-2** — [ADV] Confirm which node commands the tail EDF throttle and the four
+    RCS valves (GW-RCS), now flight-critical in hover, and whether the PACE assignment of
+    OD-19 still holds. Brought to the owner in OD-22 (S45).
+- [ ] **NFP-TEDF-3** — [STD] The cooling-fan drive output on the stern board has no fan to
+    drive. Remove it or repurpose it, and record which (S36 or S41).
+- [ ] **NFP-FW-IF** — Hand Theme F the host-link and device-tree interface (S41).
+
 ## §1.8 — Names
 
 *(root `WBS.md` §1.8)*
@@ -1119,13 +1214,19 @@ Spec `docs/BAY_A_FWD_LAYOUT.md`; thermal `docs/BAY_A_FWD_THERMAL.md`.
 
 - UAV Tasks with PACE prioritization and failover per stack (primary, alternative, contingency, emergency)
 
--- Watchdog: P - Shepherd; A - Inara; C - Simon, E - River
+-- Watchdog: P - Simon; A - Shepherd; C - Inara; E - River
 
--- Comms: P - Inara; A - Shepherd; C - River; E - Simon
+-- Comms: P - Shepherd; A - River; C - Simon; E - Inara
 
--- Flight Control: P - River; A - Simon; C - Shepherd; E - Inara
+-- Flight Control: P - River; A - Inara; C - Shepherd; E - Simon
 
--- Payload Control: P - Simon; A - River; C - Inara; E - Shepherd
+-- Payload Control: P - Inara; A - Simon; C - River; E - Shepherd
+
+- **Re-balanced 2026-11-14 (owner, OD-19, option B)** for the merged stern stack
+  (`docs/PACE_REBALANCE_BRIEF.md`). Replaced: Watchdog P Shepherd / A Inara / C Simon / E River;
+  Comms P Inara / A Shepherd / C River / E Simon; Flight Control P River / A Simon / C Shepherd /
+  E Inara; Payload P Simon / A River / C Inara / E Shepherd. The crew narrative below predates the
+  re-balance; root `AGENTS.md` §9 "Per-stack tasking" is current.
 
 ---
 

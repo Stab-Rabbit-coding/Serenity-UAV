@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Last updated:** 2026-11-12
+**Last updated:** 2026-11-16
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -222,7 +222,24 @@
 - [ ] HULL-LEAK-04 Cargo door hinge-edge seam seal
 - [ ] LG-AFT-BOLT-01 Aft-port gear bolt driver access vs wing
 - [ ] HULL-FUSE-02 Fuse other bonded mounts into one-piece print
-- [ ] COOL-01 Rear-fan cooling: CFD, inlets, tail exhaust, CG
+- [ ] TEDF-01 Tail EDF: record and reference repair (S42)
+- [ ] TEDF-02 Tail EDF: thermal model refresh (S46)
+- [ ] TEDF-03 Tail EDF flow tool: thrust, stall margin (S43)
+- [ ] TEDF-04 Hover trim and RCS tool, CG window (S43)
+- [ ] TEDF-05 Rear-cone layout: QX pusher, RCS exhausts (S44)
+- [ ] TEDF-06 Cargo duct layout: FE box forward, hatch (S44)
+- [ ] TEDF-07 Head layout: GNSS, ballast pocket, inlets (S44)
+- [ ] ★ TEDF-08 Gate G1 Owner Decision Brief (OD-22) (S45)
+- [ ] TEDF-09 Aft hull provisions: ring, tube, RCS (S47)
+- [ ] TEDF-10 Forward hull: ramp louvres, fused doors (S48)
+- [ ] TEDF-11 Separate parts: shroud, valves, covers (S49)
+- [ ] TEDF-12 CFD case, still air and cruise (S50)
+- [ ] TEDF-13 Coupled cooling, thrust and trim analysis (S51)
+- [ ] TEDF-14 Mass, CG, bench balance, gate G2 (OD-23) (S52)
+- [ ] TEDF-15 Seal and aperture gate (S52)
+- [ ] TEDF-16 Specifications, build guide, closeout (S53)
+- [ ] OSESC-TAIL-1 Fifth OSESC controller for the tail EDF (S49)
+- [ ] OSESC-TAIL-2 Tail EDF controller fault behaviour spec (S53)
 
 #### 1.1.2 — Wings
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.2

@@ -3298,6 +3298,61 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 
 **Used in:** `tools/head_layout_fit.py` and `airframe/openscad/fuselage/bow_sensor_pod.scad` (ToF pod, Rev H2), where it is the recommended part pending procurement.
 
+
+### REF-SENSOR-065: Ezurio Sterling-LWB5+ USB Adapter data sheet (450-00137)
+
+| Field | Value |
+|---|---|
+| **Publisher** | Ezurio (formerly Laird Connectivity), Akron, Ohio, *Sterling-LWB5+ USB Adapter* data sheet; revision table ends at v1.4, 22 May 2024 |
+| **Official access** | <https://www.ezurio.com/documentation/datasheet-sterling-lwb5-usb-dongle> (HTTP 200, 2026-11-14) |
+| **Local copy** | `avionics/datasheets/ezurio/ezurio-datasheet-sterling-lwb5plus-usb-adapter.pdf` (owner-supplied PDF 2026-11-14, MD5 19fe5a4828cb5b3eac74fdbffbf8f0f4; replaces an agent print of the web page) |
+| **Section applied** | "Environmental" (−40 to +85 °C); WLAN transmit current tables at USB VBUS (peak 345 mA, 5210 MHz VHT80 MCS0); "Mechanical" (about 7 g) |
+| **Cited in** | `docs/WIFI_MODULE_OD20_BRIEF.md` |
+| **Openness / sourcing** | Public, no NDA. Ezurio is US-domiciled. |
+
+### REF-SENSOR-066: Ezurio Sterling-LWB5+ module data sheet (453-00045 to 453-00049), v5.2
+
+| Field | Value |
+|---|---|
+| **Publisher** | Ezurio, *Sterling LWB5+ Datasheet*, v5.2, 24 Jun 2026 (revision table) |
+| **Official access** | <https://www.ezurio.com/documentation/datasheet-sterling-lwb5-0>; the body opens after a free Ezurio account login |
+| **Local copy** | `avionics/datasheets/ezurio/ezurio-datasheet-sterling-lwb5plus-v5.2.pdf` (owner-supplied 2026-11-14, MD5 999dce4921a6720a1a4f132a67e042e5) |
+| **Section applied** | Specification Summary: host interface and `CONFIG_HOST[2:0]` strap table (000 = USB Wi-Fi and USB Bluetooth); Input Voltage (VBAT 3.2 to 4.8 V; EVM improved at VBAT ≥ 3.6 V); Mechanical (17 × 12 × 2.13 mm, about 0.7 g); Environmental (−40 to +85 °C). Pin definitions: STRAP_0 pin 5, STRAP_2 pin 4; VOUT_3P3 pin 6 feeds VDDIO_RF and USB2_AVDD33 when VBAT ≥ 3.6 V. Current consumption: 5 GHz VHT80 MCS0 441 mA at VBAT 3.6 V; Peak PHY Calibration Current 768 mA (2.4 GHz, unassociated, VBAT 3.3 V). Ordering Information (453-00045 integrated antenna, -00046 MHF4, -00047 trace pin; R reel, C cut tape). |
+| **Cited in** | `docs/WIFI_MODULE_OD20_BRIEF.md` |
+| **Openness / sourcing** | Login-gated, not under NDA; supplied by the owner 2026-11-14. |
+
+### REF-SENSOR-069: Ezurio DVK-LWB5+ development kit user guide, v2.1
+
+| Field | Value |
+|---|---|
+| **Publisher** | Ezurio, *DVK-LWB5+ User Guide*, v2.1 |
+| **Official access** | Ezurio documentation portal (login) |
+| **Local copy** | `avionics/datasheets/ezurio/ezurio-guide-dvk-lwb5plus-v2.1.pdf` (owner-supplied 2026-11-14, MD5 2a5be1a458070ddb0fa6dff664c5896f) |
+| **Section applied** | Configuration modes SDIO/UART and USB/USB; boot-mode strapping switches SW1 to SW3; USB2 bridge for Wi-Fi and Bluetooth (reference for bring-up) |
+| **Cited in** | `docs/WIFI_MODULE_OD20_BRIEF.md` |
+| **Openness / sourcing** | Login-gated, not under NDA; supplied by the owner. |
+
+### REF-SENSOR-067: Infineon AIROC CYW4373 / CYW4373E product brief
+
+| Field | Value |
+|---|---|
+| **Publisher** | Infineon Technologies, *AIROC CYW4373 Wi-Fi 5 + Bluetooth 5.2 Combo* product brief |
+| **Official access** | <https://www.infineon.com/assets/row/public/documents/30/45/infineon-wifi-cyw4373-productbrief-en.pdf?fileId=8ac78c8c8eeb092c018f39765aa9351b> (HTTP 200, 2026-11-14) |
+| **Local copy** | `avionics/datasheets/infineon/infineon-wifi-cyw4373-productbrief-en.pdf` (MD5 23b8e888170d2617eb075f0f5f58bebc) |
+| **Section applied** | Page 1 description: the CYW4373E variant supports −40 to +85 °C; host interfaces SDIO, PCIe and "USB Hub shared with Bluetooth" |
+| **Cited in** | `docs/WIFI_MODULE_OD20_BRIEF.md` |
+| **Openness / sourcing** | Public. Infineon is German-domiciled. The full CYW4373E data sheet is behind an Infineon sign-in ("gated"). |
+
+### REF-SENSOR-068: Infineon Connectivity technical brief for Linux
+
+| Field | Value |
+|---|---|
+| **Publisher** | Infineon Technologies, *Connectivity technical brief for Linux* (additional technical information) |
+| **Official access** | <https://www.infineon.com/assets/row/public/documents/30/57/infineon-connectivity-technical-brief-for-linux-additionaltechnicalinformation-en.pdf> (HTTP 200, 2026-11-14) |
+| **Local copy** | `avionics/datasheets/infineon/infineon-connectivity-technical-brief-for-linux-en.pdf` (MD5 4b21fe7a368bfd3f14061beda9507b01) |
+| **Section applied** | §2.2 Kernel support policy (backports for non-EOL LTS kernels); device status table (CYW4373/4373E: ACTIVE); host interfaces SDIO and USB |
+| **Cited in** | `docs/WIFI_MODULE_OD20_BRIEF.md` |
+| **Openness / sourcing** | Public. |
 ### REF-SENSOR-022: TDK InvenSense ICM-42688-P — 6-axis IMU data sheet DS-000347 v1.6
 
 | Field | Value |
