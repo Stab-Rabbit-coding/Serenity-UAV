@@ -398,7 +398,8 @@ def electrical():
     with open(ZONE) as f:
         z = json.load(f)
     budget = z["power_5v"]["fan"]["a_peak"]
-    return {"fan_a": FAN_W / FAN_V, "budget_a": budget, "budget_basis": z["power_5v"]["fan"]["basis"]}
+    return {"fan_a": FAN_W / FAN_V, "budget_a": budget,
+            "budget_basis": z["power_5v"]["fan"]["basis"]}
 
 
 def evaluate():
@@ -442,7 +443,8 @@ def evaluate():
          el["budget_a"], "A"),
     ]
     return {"meas": meas, "layout": L, "d_min": (d_min, y_min), "tube_min": (tube_min, tube_y),
-            "patterns": pats, "sectors": sectors, "sizing": sz, "parts": pl, "cg": cg, "electrical": el,
+            "patterns": pats, "sectors": sectors, "sizing": sz, "parts": pl, "cg": cg,
+            "electrical": el,
             "limits": limits}
 
 
@@ -501,7 +503,8 @@ def main():
     ok = report(r)
     if args.json:
         dump = {k: v for k, v in r.items()}
-        dump["meas"] = {**r["meas"], "stations": {str(k): v for k, v in r["meas"]["stations"].items()}}
+        stations = {str(k): v for k, v in r["meas"]["stations"].items()}
+        dump["meas"] = {**r["meas"], "stations": stations}
         dump["limits"] = [list(x) + [passed(x)] for x in r["limits"]]
         with open(args.json, "w") as f:
             json.dump(dump, f, indent=1, default=float)

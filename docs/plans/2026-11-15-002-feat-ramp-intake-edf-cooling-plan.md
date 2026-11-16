@@ -244,7 +244,7 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 
 `docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md` stays the record of the measured baseline and of the decisions carried in KD13. Its fan-stage units no longer apply, and it is retired under KTD3.
 
-The draft gate G1 tools, `tools/rear_cone_layout_fit.py` and `tools/cooling_g1_figures.py`, measure the rear cone and check RCS jet paths. Their intake, fan and baffle content is superseded.
+The draft tool `tools/rear_cone_layout_fit.py` measures the rear cone and checks RCS jet paths. Its intake, fan and baffle content is superseded, and U5 rewrites it. The draft figure script and its figures showed the retired fan concept and were removed on 2026-11-16; U8 writes the figure script new.
 
 ### Sources
 
@@ -575,7 +575,7 @@ flowchart TB
 - **Dependencies:** U2, U3, U4, U5, U6, U7. The thermal figures are marked pending if the stern thermal check is still open.
 - **Files:** `docs/FUSELAGE_COOLING_LAYOUT_BRIEF.md`, `tools/cooling_g1_figures.py`, `docs/figures/cooling_g1_*.png`, `tools/tests/test_cooling_g1_figures.py`.
 - **Approach:**
-    1. Rewrite the figure script for the new concept. Every figure comes from the layout tools and the live meshes.
+    1. Write the figure script for the new concept. Every figure comes from the layout tools and the live meshes.
     2. Apply both check sets in `docs/DOC_TEMPLATES.md`, each with a picture and with load and motion vectors.
     3. Put each decision with its options side by side, a recommendation, and what is unverified.
     4. Do not copy the canon references into any figure; name the sheet to compare.
