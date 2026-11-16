@@ -1,6 +1,6 @@
 # Owner Decision Brief OD-17 — How the 4 × 10 AWG feed crosses the tilt joint (WA-R10)
 
-**Revision:** Rev U, 2026-11-08 (Sprint 2, plan `docs/plans/2026-11-07-001-…`)
+**Revision:** Rev U, 2026-11-16 (Sprint 2, plan `docs/plans/2026-11-07-001-…`)
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (owner) — analysis and brief by Claude
 (Anthropic, Claude Opus 5.5) under the author's direction.
 **License:** CC BY-SA 4.0 — see LICENSES/CC-BY-SA-4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
@@ -34,8 +34,9 @@ tilting toward hover, and the wing-tip section is in cyan.*
   that spans the 0.35–0.48 in (8.8–12.3 mm) gap.
 - **C — Through-bore slip ring at the tilt axis.** Four circuits of ≥ 28 A on the Ø0.79 in (Ø20 mm) spar.
 - **D — Move the joint 0.91 in (23 mm) outboard** (first written as 0.71 in (18 mm); corrected 2026-11-08, see below). This opens a 0.96 in (24.3 mm) bend chamber between
-  the spar mouth and the duct. The twist stays inside the spar bore, which is what the 0.06 in (1.5 mm)
-  radial clearance there was sized for. The wires turn radially in the pod and run in the annulus to the
+  the spar mouth and the duct. The twist is intended to stay inside the spar bore, which is what the 0.06 in (1.5 mm)
+  radial clearance there was sized for (twist length, torque and fatigue not yet verified; WBS
+  NAC-64-WIRE-TWIST). The wires turn radially in the pod and run in the annulus to the
   bay.
 
 ## The six checks
@@ -75,8 +76,10 @@ bend, forward in the annulus, fanning out to its stud; channels are cut through 
   pair is 0.090 in (2.27 mm) apart.
 - The wires (which tilt with the pod) never touch the wing or the wing-fixed pinion from −5° to +135°.
 - Channels remove 0.42 in³ (6,907 mm³) of pod material (trunnion plug, collar, one bulkhead web).
-- Inside the spar the bundle takes the tilt as twist. The model spreads it over 2.76 in (70 mm) of spar
-  bore; the real bore is longer, so the twist rate is lower.
+- Inside the spar the bundle is intended to take the tilt as twist. The model spreads it over 2.76 in
+  (70 mm) of spar bore; the real bore is longer, so the twist rate should be lower. Twist length, wire
+  torque at 140°, fatigue life and the wing-side spar exit are not yet verified or drawn (WBS
+  NAC-64-WIRE-TWIST, NAC-64-WIRE-QUAL).
 
 ![Option D, nacelle horizontal: top, bottom, front, back](figures/nacelle64_od17_optD_horizontal.png)
 
@@ -209,7 +212,9 @@ number. If you want to keep the canonical wing, take option 4 with fillets 1 and
 - **Flow:** 40 kt (20.58 m/s) along the chord, ν = 1.46 × 10⁻⁵ m²/s, inlet turbulence 0.5 %; tip
   Re ≈ 131,000.
 - **Domain:** a spanwise strip from the nacelle flank (X 1.89 in (48 mm)) to near the wing root (X 6.50 in
-  (165 mm)), with slip walls at both ends and far field 1.8 in (45 mm) above and below.
+  (165 mm)), with slip walls at both ends and slip far-field walls 4.7 in (120 mm) above and below the tilt axis
+  (`mkcase.py`: Y ±0.12 m). Blockage (body frontal area over the domain cross-section): 15.4 % for the
+  as-built body, 16.1 % capped (measured 2026-11-16 from the CFD bodies); see Limits.
 - **Body:** wing + collar nose + aft fairing + the transition under test.
   - **Glove:** the 1.50 in (38 mm) smoothstep glove.
   - **End plate:** the fairing ends in a 0.24 in (6 mm) convex rounding and a short wall, and a
@@ -249,7 +254,13 @@ number. If you want to keep the canonical wing, take option 4 with fillets 1 and
    reversed). That is the built tip section, not the junction, and it is the same in both cases.
 
 **Limits (read before relying on the numbers):**
-- One mesh; no grid-convergence study.
+- One mesh per body and no grid-convergence study. Each body has its own snappyHexMesh mesh, so the
+  bodies are not compared on an identical grid.
+- The ± figures are the iteration-to-iteration standard deviation of an oscillating steady solution. They
+  measure how much the solution wanders, not the modelling uncertainty, which is larger and not quantified.
+- Blockage is about 15–16 % with slip walls 4.7 in (120 mm) above and below. That is well above the level
+  at which wind-tunnel practice applies blockage corrections, so absolute drag is inflated by an
+  unquantified amount. The bodies have similar blockage, so the comparison between them is less affected.
 - Fully turbulent RANS. There is no transition model, and at Re ≈ 131,000 the real flow has laminar
   separation bubbles that this does not capture. Absolute drag is therefore uncertain; the comparison
   between the two options is the useful result.
@@ -265,53 +276,6 @@ number. If you want to keep the canonical wing, take option 4 with fillets 1 and
 **Conclusion for OD-17:** of the two, the **rounded end plate with fillets** is better: less drag, the
 same or less reversed flow, no added wing mass, and the canonical wing is kept.
 
-
-## As-built fairing CFD (OD17-FAIR-CFD, owner OD-18 item 2; run 2026-11-12)
-
-**Question.** Does the fairing as thickened for printing (2.0 mm wall at the tilt axis, 2.0 mm trailing-edge
-cut, 94 % fillet toe) cost drag against the zero-wall body of the junction CFD above?
-
-**Method.** Same solver, flow, domain, averaging and post-processing as the junction CFD
-(`tools/od17_junction_cfd/`). The end-plate case was re-run in this container and reproduces the earlier
-result. The as-built body is built from the real parts by `geom_asbuilt.py`: the printed fairing with its bore
-cut, the pod collar as a solid r 1.10 in (28 mm) cylinder to X 2.94 in (74.8 mm) (the 0.04 in (1 mm)
-running gap closed, as this mesh cannot resolve it), and the actual trunnion, spar, pinion and wing. The foam
-cavity is not modelled. Mesh 1.51 M cells, y+ median 3.2, 95th percentile 12.1.
-
-| | Zero-wall end plate (idealised) | As-built fairing assembly |
-|---|---|---|
-| Drag of the strip | **0.147 lbf (0.652 N)**, sd 0.003 lbf (0.015 N) | **0.181 lbf (0.806 N)**, sd 0.004 lbf (0.016 N) |
-| of which pressure / viscous | 0.141 / 0.006 lbf (0.626 / 0.027 N) | 0.175 / 0.006 lbf (0.778 / 0.028 N) |
-| Drag area C_D·A | 3.90 in² (2,514 mm²) | 4.81 in² (3,105 mm²) |
-| Reversed-flow share of the junction strip | 30 % | 31 % |
-
-![As-built velocity sections, end plate above, as-built below](figures/nacelle64_od17_asbuilt_cfd_sections.png)
-
-![As-built streamwise wall shear](figures/nacelle64_od17_asbuilt_cfd_wall_shear.png)
-
-**What it shows.**
-1. **The as-built assembly has 23 % more drag than the idealised end plate:** 0.181 vs 0.147 lbf, a
-   difference of about ten times the iteration-to-iteration spread. It is also about 6 % above the 1.50 in
-   glove (0.171 lbf, earlier session). For the two fairings on the aircraft that is about 0.069 lbf (0.31 N)
-   more than the idealised shape at 40 kt; the aircraft's total drag was not computed here.
-2. **The cause is mainly the open bore, not the printing allowances.** Beyond the collar end (X 2.94 in
-   (74.8 mm)) and the trunnion (X 3.11 in (79.0 mm)) the fairing's 2.20 in (56 mm) bore holds only the wing
-   and a spar tube out to the fairing's end at X 3.71 in (94.3 mm). The section at X 3.27 in (83 mm)
-   shows the airflow meeting the wing nose, then a C-shaped wall with an open pocket and a wide separated
-   wake behind it. The idealised body, like the glove, had a solid nose through this zone, so neither earlier
-   case tested the printed surface.
-3. **What is not separated:** the thicker tail, the trailing-edge cut and the fillet toe are mixed in with
-   the open bore and the real collar, trunnion and spar steps; no run isolates them. The two bodies also
-   differ in the collar and trunnion detail, so the 23 % is a bound on the combined effect, not on one feature.
-4. **Reversed-flow share is unchanged** (31 % against 30 %), so the junction itself is not worse; the extra
-   drag is pressure drag from the larger separated wake.
-
-**Limits.** Steady k-ω SST on one 1.5 M-cell mesh, with the wake oscillating (averaged over iterations
-1,500-2,000); the running gap closed; the foam cavity not modelled; the end-plate case is a strip with
-slip walls, not the aircraft.
-
-**Retraction.** A first as-built run on 2026-11-12 gave 0.243 lbf. Its body had been built without the
-bore (a solid flat-faced tail block where the part is open); that number is withdrawn and is not used here.
 
 ## Longer-tail CFD: trailing edge 22.8 deg to 11.9 deg (2026-11-11)
 
@@ -339,8 +303,15 @@ mesh, fully turbulent, 0 deg, slip-wall limits as above.
 
 ## Owner decisions on OD-17 (2026-11-11)
 
+- **Power crossing: DECIDED 2026-11-11. Option D, tilt joint moved 0.91 in (23 mm) outboard**
+  (`P64_JOINT_SHIFT` in `nacelle_64_scale.scad`). Wires routed unbound and qualified by test (OD-18
+  item 3, WBS NAC-64-WIRE-QUAL).
 - **Junction: DECIDED. Rounded end plate with fillets** (0.24 in (6 mm) convex rounding, short wall, 0.24 in
   (6 mm) concave fillet), not the 1.50 in glove. Basis: the junction CFD above (14 % less drag).
+  *Caveat added 2026-11-16 (brief review, finding 3):* that 14 % compares two idealised zero-wall bodies.
+  The as-built fairing (see the as-built CFD at the end of this brief) has an open bore and printing
+  allowances the comparison did not include. The decision stands; WBS OD17-JUNC-RETEST re-runs the glove
+  against the end plate on as-built geometry.
 - **Longer tail: DECIDED 2026-11-11, REJECTED. Keep the 22.8 deg trailing-edge taper** (tip chord 3.66 in (93 mm), spar-bore dihedral unchanged). Owner: the improvement is real but not enough to matter for flight performance. CFD basis: 19 % less strip drag, reversed-flow area within the spread. The note below is kept as history.
 - ~~Longer tail: OPEN, owner decides 2026-11-12.~~ Direction given: keep the trailing edge a straight
   linear taper, and rotate it toward (not all the way to) parallel with the leading edge. Case in
@@ -352,17 +323,13 @@ mesh, fully turbulent, 0 deg, slip-wall limits as above.
 
 ## Recommendation
 
-
-
-
-
 **D**, if the 0.91 in (23 mm) change in the wing–nacelle spacing is acceptable to you against the
-canonical references. It keeps the 28 A conductors inside protected structure, and it takes the tilt as
-twist in the spar bore, which is what that bore was sized for. Nothing then flexes in bending each
-cycle. Otherwise **B**, gated on a bench flex test of 10 AWG fine-strand silicone through the 140° cycle
+canonical references. It keeps the 28 A conductors inside protected structure, and it is intended to take
+the tilt as twist in the spar bore, which is what that bore was sized for, so that nothing flexes in
+bending each cycle (twist length, torque and fatigue unverified: NAC-64-WIRE-TWIST). Otherwise **B**, gated on a bench flex test of 10 AWG fine-strand silicone through the 140° cycle
 before any part is drawn.
 
-**Still unverified:** the conductor OD (SPAR-20-WIREOD; 0.217 in (5.5 mm) is assumed); the NASA-STD-8739.4A
+**Still unverified:** the NASA-STD-8739.4A
 bend-radius clause the repo cites; the 10 AWG loop stiffness and fatigue life; the spar-root allowable;
 and every mass marked ESTIMATE.
 
@@ -375,7 +342,8 @@ Commands: `tools/nacelle64_assembly_check.py --stage all`, `tools/nacelle64_wing
 ![As-built wire paths: section, tilt-axis view and top view](figures/nacelle64_od17_s2_wire_paths.png)
 
 *Red/blue: the forward and aft wires of ESC A; orange/magenta: ESC B. Arrow: the bay's travel as the pod
-tilts. Wire OD 0.217 in (5.5 mm) is ASSUMED (SPAR-20-WIREOD).*
+tilts. Paths are built to a 0.217 in (5.5 mm) wire envelope; the selected Daburn 2617/10 is 0.207 in
+(5.30 mm) nominal OD [REF-PWR-016] (SPAR-20-WIREOD, closed 2026-11-12).*
 
 **What changed in the parts.** `P64_JOINT_SHIFT = 0.91 in (23 mm)` is one number in
 `nacelle_64_scale.scad`. The pod, the trunnion SCAD, the assembly check, the hull-frame bake and the tilt
@@ -387,12 +355,12 @@ fairing and rounded end plate are a new published part, `PRINT-WING-TIP-FAIRING`
 
 | Check | Finding |
 |---|---|
-| **Statics and dynamics** | Tilting rotates the pod about the spanwise axis, so the fairing gap cannot close. The fairing is wing-fixed and carries only its own air load over a 1.39 in (35 mm) span. The wires carry the tilt as twist inside the spar bore; no conductor flexes in bending. Spar-root moment grows 6.4 lbf·in (0.72 N·m) (brief, option D); the spar allowable is still unverified (SPAR-20-ALLOW). |
-| **Function** | Route proven: four wires run from the spar mouth to their own studs, each with a tightest point of at least 0.650 in (16.50 mm), 3 × wire OD, and no two wires interpenetrate. The first drawn paths had 0.08–0.14 in (2.1–3.6 mm) kinks; the check caught them, and the aft pair's bend plane is now tilted 12° so it fans out inside the bend. Wire to duct wall at least 0.088 in (2.24 mm). The 4-wire bundle (0.32 in (8.14 mm) radius) clears the spar mouth and the bend chamber. |
-| **Structural integrity** | Bay inserts keep 0.091 in (2.31 mm) minimum wall to the flow bore (minimum 0.079 in (2.0 mm)). The fairing's outer half-thickness at the tilt axis is bore radius + 0.079 in (2.0 mm) for the same minimum wall, so it is 0.08 in (2 mm) thicker per side than the CFD body (OD17-FAIR-WALL, below). The fairing is a hollow 0.079 in (2.0 mm) shell with a 2 lb/ft³ foam core (owner 2026-11-11, OD17-FAIR-HOLLOW); two Ø0.16 in (4 mm) fill/vent holes in the outboard cap are also the SLS powder-escape holes. Skin 2.0 vs 1.0 mm is OD-18 item 4. |
+| **Statics and dynamics** | Tilting rotates the pod about the spanwise axis, so the fairing gap cannot close. The fairing is wing-fixed and carries only its own air load over a 1.39 in (35 mm) span. The wires are intended to carry the tilt as twist inside the spar bore, so that no conductor flexes in bending; twist length, torque and fatigue are unverified (NAC-64-WIRE-TWIST). Spar-root moment grows 6.4 lbf·in (0.72 N·m) (brief, option D); the spar allowable is still unverified (SPAR-20-ALLOW). |
+| **Function** | Fits geometrically; qualification pending NAC-64-WIRE-QUAL (the bend basis is a declared centreline interpretation, OD-18 item 3). Four wires run from the spar mouth to their own studs, each with a tightest point of at least 0.650 in (16.50 mm), 3 × wire OD, and no two wires interpenetrate. The first drawn paths had 0.08–0.14 in (2.1–3.6 mm) kinks; the check caught them, and the aft pair's bend plane is now tilted 12° so it fans out inside the bend. Wire to duct wall at least 0.088 in (2.24 mm). The 4-wire bundle (0.32 in (8.14 mm) radius) clears the spar mouth and the bend chamber. |
+| **Structural integrity** | Bay inserts keep 0.091 in (2.31 mm) minimum wall to the flow bore (minimum 0.079 in (2.0 mm)). The fairing's outer half-thickness at the tilt axis is bore radius + 0.079 in (2.0 mm) for the same minimum wall, so it is 0.08 in (2 mm) thicker per side than the CFD body (OD17-FAIR-WALL, below). The fairing is a hollow 0.059 in (1.5 mm) shell (first build was 0.079 in (2.0 mm); 1.5 mm decided under OD-19 A, OD-18 item 4) with a 2 lb/ft³ foam core (owner 2026-11-11, OD17-FAIR-HOLLOW); two Ø0.16 in (4 mm) fill/vent holes in the outboard cap are also the SLS powder-escape holes. |
 | **Mechanism and component interactions** | Static overlaps at tilt 0: only the known pod/cartridge rib contact, 0.0007 in³ (12 mm³). Sweep −5…+135°: trunnion ring gear against pinion only (tooth phase, by design); pod material in the pinion sweep 0 in³ (0 mm³); wires and fairing against every wing-fixed part 0 in³ (0 mm³). Nearest gaps: fairing to pod 0.039 in (0.99 mm), to pinion 0.031 in (0.78 mm), to trunnion 0.039 in (1.00 mm). |
-| **Weight and balance** | Fairing 0.051 lbm (23.3 g) PA CF shell [REF-MAT-015] + 0.0008 lbm (0.4 g) foam per side (0.080 lbm (36.4 g) solid before the owner's 2026-11-11 hollow-and-foam direction). Joint extension per nacelle: pod +0.046 lbm (+20.8 g) measured on the renders (369,451 → 388,178 mm³), spar +0.009 lbm (+3.9 g) ESTIMATE. Ledger: hover AUW 6,403 g (14.12 lbm) → 6,500 g (14.33 lbm), T/W 1.48 → 1.46. The pod roll-up still uses the pre-shift published pod until NAC-64-REBAKE (S3); the ledger carries the joint extension as its own row until then. Wing-fixed fairing: the nacelle pivot is unaffected. |
-| **Canonical shape** | The nacelle sits 0.91 in (23 mm) further from the wing tip (accepted 2026-11-11). Wing planform unchanged (22.8° taper kept). The fairing and plate are the shapes decided from the CFD; see OD-18 item 2 for the wall. Owner judgement against REF-CAD-003 stands. |
+| **Weight and balance** | Fairing 0.046 lbm (20.7 g) PA CF shell at 1.5 mm skin [REF-MAT-015] + 0.0008 lbm (0.4 g) foam per side (first 2.0 mm build 0.051 lbm (23.2 g); 0.011 lbm (5.0 g) saved per aircraft) (0.080 lbm (36.4 g) solid before the owner's 2026-11-11 hollow-and-foam direction). Joint extension per nacelle: pod +0.046 lbm (+20.8 g) measured on the renders (369,451 → 388,178 mm³), spar +0.009 lbm (+3.9 g) ESTIMATE. Ledger at the Sprint 2 build (2.0 mm skin): hover AUW 6,403 g (14.12 lbm) → 6,500 g (14.33 lbm), T/W 1.48 → 1.46. Re-run 2026-11-16 at `main` (1.5 mm skin, plus the later Bay A / Observer changes, BAYA-FWD-08): hover_4000 AUW 6,554 g (14.45 lbm), T/W 1.45; heaviest_4000_payload 6,781 g (14.95 lbm), T/W 1.40 (`current-specification/auw_ledger.json`). The pod roll-up still uses the pre-shift published pod until NAC-64-REBAKE (S3); the ledger carries the joint extension as its own row until then. Wing-fixed fairing: the nacelle pivot is unaffected. |
+| **Canonical shape** | The nacelle sits 0.91 in (23 mm) further from the wing tip (accepted 2026-11-11). Wing planform unchanged (22.8° taper kept). The fairing outer shape is **HELD** pending OD17-FAIR-BORE (OD-18 item 2; the as-built CFD at the end of this brief); a combined run on the chosen bore treatment follows that decision. Owner judgement against REF-CAD-003 stands. |
 
 **Harness lengths (pod side, centreline, spar mouth to stud lug).** Forward pair 2.43 in (61.7 mm); aft
 pair 2.78 in (70.7 mm). The wing-side run (spar bore to the wing's connection) is not drawn in this
@@ -415,13 +383,16 @@ sprint; cut length = pod-side run + wing-side run + service loop.
 2. **Fairing wall.** A zero-wall fairing cannot print. I thickened it by 0.08 in (2.0 mm) per side at the
    tilt axis and truncated the trailing edge at 0.08 in (2.0 mm). Drag effect not re-run. **Decision:
    accept, or order a CFD re-run first.** **Decided 2026-11-11: CFD re-run first** (WBS OD17-FAIR-CFD);
-   the outer shape is not released until it is done.
+   the outer shape is not released until it is done. *Outcome 2026-11-12/16:* re-run done (+23 % drag,
+   as-built CFD at the end of this brief); the outer shape stays **HELD** pending OD17-FAIR-BORE, and a
+   combined run on the chosen bore treatment follows that decision.
 3. **Bend-radius clause.** The repo's NASA-STD-8739.4A citation (Table 7-1, §7.2.19, `REFERENCES.md`
    REF-NASA-001) gives 3 × OD for an overall harness. I applied it to each wire. If the four are bound as
    one harness the minimum is 3 × 0.523 in = 1.57 in (39.8 mm), and the shift roughly doubles. I did not
    re-fetch the standard this session. **Decision: confirm wires are routed unbound, or reopen OD-17.**
    *Added 2026-11-11 (wire report review):* the 0.65 in channel passes 3 × OD by 0.7 mm measured on the
-   centreline. Measured to the inside of the bend it fails (about 13.3-13.9 mm against 15.8 mm), and the
+   centreline. Measured to the inside of the bend it fails (about 13.3-13.9 mm against 3 × OD = 15.9 mm
+   (0.626 in) at the Daburn 2617/10 nominal 5.30 mm OD, or 16.5 mm (0.650 in) at the 5.5 mm envelope), and the
    105/30 silicone class carries a 10 × OD maker limit (Alpha 391000). Confirm the Table 7-1 basis; the
    torsion test now includes the installed channel bend (`reports/UAV ESC wire market survey.md`).
    **Decided 2026-11-11: unbound, qualified by test.** Table 7-1 as read defines OD only as "Outside
@@ -440,3 +411,61 @@ sprint; cut length = pod-side run + wing-side run + service loop.
    per side (was 23.2 g), 0.011 lbm (5.0 g) saved per aircraft. Ray-cast check: shell body median
    1.50 mm; readings below 1.4 mm are in the bonded fillet toe (within 6 mm of the wing) or within
    2 mm of a sharp edge (hole lips, bore edge, trailing-edge cut), i.e. ray artefacts.
+
+## As-built fairing CFD (OD17-FAIR-CFD, owner OD-18 item 2; run 2026-11-12)
+
+**Question.** Does the fairing as thickened for printing (2.0 mm wall at the tilt axis, 2.0 mm trailing-edge
+cut, 94 % fillet toe) cost drag against the zero-wall body of the junction CFD above?
+
+**Method.** Same solver, flow, domain, averaging and post-processing as the junction CFD
+(`tools/od17_junction_cfd/`). The end-plate case was re-run in this container and reproduces the earlier
+result. The as-built body is built from the real parts by `geom_asbuilt.py`: the printed fairing with its bore
+cut, the pod collar as a solid r 1.10 in (28 mm) cylinder to X 2.94 in (74.8 mm) (the 0.04 in (1 mm)
+running gap closed, as this mesh cannot resolve it), and the actual trunnion, spar, pinion and wing. The foam
+cavity is not modelled. Mesh 1.51 M cells, y+ median 3.2, 95th percentile 12.1.
+
+| | Zero-wall end plate (idealised) | As-built fairing assembly |
+|---|---|---|
+| Drag of the strip | **0.147 lbf (0.652 N)**, sd 0.003 lbf (0.015 N) | **0.181 lbf (0.806 N)**, sd 0.004 lbf (0.016 N) |
+| of which pressure / viscous | 0.141 / 0.006 lbf (0.626 / 0.027 N) | 0.175 / 0.006 lbf (0.778 / 0.028 N) |
+| Drag area C_D·A | 3.90 in² (2,514 mm²) | 4.81 in² (3,105 mm²) |
+| Reversed-flow share of the junction strip | 30 % | 31 % |
+
+![As-built velocity sections, end plate above, as-built below](figures/nacelle64_od17_asbuilt_cfd_sections.png)
+
+![As-built streamwise wall shear](figures/nacelle64_od17_asbuilt_cfd_wall_shear.png)
+
+**What it shows.**
+1. **The as-built assembly has 23 % more drag than the idealised end plate:** 0.181 vs 0.147 lbf, a
+   difference of about seven times the combined iteration-to-iteration spread. A comparison with the
+   1.50 in glove (0.171 lbf) is not meaningful: the glove was an idealised zero-wall body and no as-built
+   glove exists. For the two fairings on the aircraft that is about 0.069 lbf (0.31 N)
+   more than the idealised shape at 40 kt; the aircraft's total drag was not computed here.
+2. **Hypothesis: the cause is mainly the open bore, not the printing allowances** (not isolated by
+   this run; the capped-bore run below tests it). Beyond the collar end (X 2.94 in
+   (74.8 mm)) and the trunnion (X 3.11 in (79.0 mm)) the fairing's 2.20 in (56 mm) bore holds only the wing
+   and a spar tube out to the fairing's end at X 3.71 in (94.3 mm). The section at X 3.27 in (83 mm)
+   shows the airflow meeting the wing nose, then a C-shaped wall with an open pocket and a wide separated
+   wake behind it. The idealised body, like the glove, had a solid nose through this zone, so neither earlier
+   case tested the printed surface.
+3. **What is not separated:** the thicker tail, the trailing-edge cut and the fillet toe are mixed in with
+   the open bore and the real collar, trunnion and spar steps; no run isolates them. The two bodies also
+   differ in the collar and trunnion detail, so the 23 % is a bound on the combined effect, not on one feature.
+4. **Reversed-flow share:** 31 % against 30 %. The two shares are taken over different wetted areas
+   (the as-built body's junction strip includes the bore pocket), and the difference is inside the
+   spread, so no conclusion about the junction is drawn from them. The extra drag is pressure drag
+   (0.175 vs 0.141 lbf pressure; viscous unchanged at 0.006 lbf).
+
+**Limits.** All the junction-CFD limits apply (one mesh per body, no grid study, fully turbulent with no
+transition model, steady solver on an oscillating wake averaged over iterations 1,500–2,000, spread is
+not uncertainty, cruise only, 15–16 % blockage). In addition: the two bodies here are on different
+meshes (1.23 M and 1.51 M cells); the collar is a static solid with its 0.04 in (1 mm) running gap
+closed, which also closes the leak paths that could change the pressure in the bore; the foam cavity is
+not modelled; the strip has slip walls, not the aircraft.
+
+**Retraction.** A first as-built run on 2026-11-12 gave 0.243 lbf. Its body had been built without the
+bore (a solid flat-faced tail block where the part is open); that number is withdrawn and is not used here.
+
+### Capped-bore isolation run (brief review finding 1, 2026-11-16)
+
+PENDING_CAPPED

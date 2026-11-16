@@ -196,6 +196,11 @@ inserts, open mouth.)
   centreline bend radius ≥ 3 × wire OD (the repo's NASA-STD-8739.4A citation; verify the clause, per
   `REFERENCES.md`) at every bend. Both WA-R10 entries closed. −3.
 - Est. 1 / 2 / 3.
+- **Status 2026-11-16:** route built and WA-R10 closed 2026-11-11; the exit was amended by the owner
+  (OD-18 item 1, fairing series) to the `--stage wires` check, since option D fans the four wires out
+  after the bend. Open in S2: the 2026-11-16 brief review close-out (OD17-FAIR-BORE capped-bore run,
+  OD17-FALLBACK-CLR, NAC-64-WIRE-TWIST, OD17-JUNC-RETEST, OD17-CFD-BLOCKAGE) and the owner bench test
+  NAC-64-WIRE-QUAL. The 2026-11-11 handoff is superseded.
 
 **S3 — Pivot, gates and re-bake.** Needs OD-4.
 - NAC-64-PIVOT-RC, NAC-64-GEOM-05 (port the trunnion/ESC-bay/mass gates to the 64 mm wrapper),
