@@ -1,0 +1,38 @@
+Loading baked head shell: airframe/stls/fuselage/head_shell24_2mm_repaired.stl
+   hull extents  X -234.5..-105.2  Y -305.7..-72.9  Z +61.1..+201.5 mm
+   watertight=True  tris=739288
+
+── Camera (PORT bump) — 10 mm lens ──
+   aperture centre (hull mm): (-162.84, -300.68, +116.01)
+   exterior skin pierced at hull Y = -300.68 mm  (SCAD-placed face Y -300.68 mm) (aperture centre not exactly on skin; see offset)
+   wall thickness along bore = 3.24 mm (OK >=2 mm)
+   aperture-centre offset from exterior skin = +0.00 mm (on skin)
+   interior pocket depth 21.0 mm: cavity clearance 105.7 mm to far wall — OK
+   verdict: PASS
+
+── ToF (STARBOARD bump) — TFmini-S ──
+   aperture centre (hull mm): (-179.31, -300.98, +116.61)
+   exterior skin pierced at hull Y = -300.98 mm  (SCAD-placed face Y -300.98 mm) (aperture centre not exactly on skin; see offset)
+   wall thickness along bore = 2.74 mm (OK >=2 mm)
+   aperture-centre offset from exterior skin = +0.00 mm (on skin)
+   interior pocket depth 22.0 mm: cavity clearance 103.9 mm to far wall — OK
+   verdict: PASS
+
+── Laser (CL) — 6 mm exit, normal to flat ──
+   aperture centre (hull mm): (-172.31, -299.94, +117.14)
+   exterior skin pierced at hull Y = -299.94 mm  (SCAD-placed face Y -299.94 mm)
+   wall thickness along bore = 2.20 mm (OK >=2 mm)
+   aperture-centre offset from exterior skin = -0.00 mm (on skin)
+   interior pocket depth 38.0 mm: cavity clearance 105.2 mm to far wall — OK
+   verdict: PASS
+
+── aperture-row fit on the 40 deg flat (hull X) ──
+      tof [-183.3..-175.3] | laser  [-175.3..-169.3]  gap +0.0 mm  OK
+    laser [-175.3..-169.3] | camera [-167.8..-157.8]  gap +1.5 mm  OK
+   row span hull X [-183.3..-157.8] = 25.5 mm in flat [-180.3..-154.0] (26.4 mm)
+   over-run onto flat roll-off: stbd 3.0 mm / port 0.0 mm (faceplate bridges; fine-tune in FreeCAD)
+
+=== SUMMARY ===
+   bores PASS: 3/3
+
+--- stderr ---

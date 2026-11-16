@@ -1,0 +1,22 @@
+=== cargo_bay_envelope.py ===
+shell: airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl
+  1,075,956 faces  watertight=True  vol=293,080 mm^3
+  X -267.0..-72.7  Y -69.5..129.0  Z -0.0..163.2
+
+Spar-diameter reconciliation (wing SCAD vs cargo shell)
+  wing  wings_s1223_revo.scad SPAR_BORE_OD = 20.40  -> fixed bonded CF spar OD 20.00
+  shell merge_cargo_interior.WING_SPAR_BORE_D = 20.40
+
+Mission payload gate (README.md steps 6, 9) -- CARGO-01, closed 2026-08-24
+  bay floor (closed doors)          Z  +10.86
+  station probed (former spar Y)    Y  +21.00
+  design wall stations (SPAR-01)    X port >= -100.0   X stbd <= -240.0   (design clear span 140.0 mm)
+  measured X interior               X   -240.0..  -100.0   width   140.0 mm
+  measured Z interior               Z     10.9..   152.7   height   141.8 mm
+  clamshell aperture Y span                              width   106.0 mm
+
+  payload 101.6 x 76.2 x 76.2 mm (README.md mission steps 6, 9): FITS (need <= 140.0 mm X, <= 106.0 mm Y, <= 141.8 mm Z)
+
+  RESULT: PASS - the payload fits the measured bay envelope
+
+--- stderr ---

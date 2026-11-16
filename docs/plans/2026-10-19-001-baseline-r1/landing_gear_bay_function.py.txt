@@ -1,0 +1,65 @@
+gear SCAD airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad sha bf60d3b2d55171f7; leg swept 0..26 deg
+
+corner     feature                  target                              mm3  verdict
+aft-port   M3 bolt keep-out         shell                            1225.5  expected M3 through-bolts pass through the hull wall and collar
+aft-port   M3 driver access         shell                            1312.5  expected the driver passes through the bolt's own bore
+aft-port   bay (printed part)       shell                              38.5  expected bay seats in the merged hull pocket
+aft-port   boss carrier             shell                               4.9  CLASH 
+aft-stbd   M3 bolt keep-out         shell                            1241.9  expected M3 through-bolts pass through the hull wall and collar
+aft-stbd   M3 driver access         shell                            1310.2  expected the driver passes through the bolt's own bore
+aft-stbd   bay (printed part)       shell                              45.2  expected bay seats in the merged hull pocket
+aft-stbd   boss carrier             shell                               5.3  CLASH 
+fore-port  M3 bolt keep-out         shell                             900.9  expected M3 through-bolts pass through the hull wall and collar
+fore-port  M3 bolt keep-out         door port swept                    46.2  CLASH [FUNCTIONAL: relieve the other part] 
+fore-port  M3 bolt keep-out         door port (closed)                 22.5  CLASH [FUNCTIONAL: relieve the other part] 
+fore-port  M3 bolt keep-out         hinge retention                     0.9  touch 
+fore-port  M3 driver access         shell                            1213.9  expected the driver passes through the bolt's own bore
+fore-port  M3 driver access         tilt bracket port                  81.1  CLASH [FUNCTIONAL: relieve the other part] 
+fore-port  M3 driver access         door port swept                    46.2  CLASH [FUNCTIONAL: relieve the other part] 
+fore-port  M3 driver access         door port (closed)                 22.5  CLASH [FUNCTIONAL: relieve the other part] 
+fore-port  M3 driver access         door gateway tray                   1.9  CLASH [FUNCTIONAL: relieve the other part] 
+fore-port  M3 driver access         hinge retention                     0.9  touch 
+fore-port  M3 driver access         door gateway PCB                    0.6  touch 
+fore-port  bay (printed part)       shell                             110.3  expected bay seats in the merged hull pocket
+fore-port  bay (printed part)       door port swept                    85.1  CLASH 
+fore-port  bay (printed part)       nav harness exit port              67.2  CLASH 
+fore-port  bay (printed part)       door port (closed)                 57.2  CLASH 
+fore-port  bay (printed part)       hinge retention                    24.5  CLASH 
+fore-port  boss carrier             payload keep-out                  176.6  CLASH 
+fore-port  boss carrier             shell                               7.4  CLASH 
+fore-port  boss carrier             nav harness exit port               6.5  CLASH 
+fore-port  wires                    shell                               3.3  CLASH [FUNCTIONAL: relieve the other part] 
+fore-port  wires deformed           shell                               2.4  CLASH [FUNCTIONAL: relieve the other part] 
+fore-stbd  M3 bolt keep-out         shell                             900.9  expected M3 through-bolts pass through the hull wall and collar
+fore-stbd  M3 bolt keep-out         door stbd swept                    71.6  CLASH [FUNCTIONAL: relieve the other part] 
+fore-stbd  M3 bolt keep-out         door stbd (closed)                 44.2  CLASH [FUNCTIONAL: relieve the other part] 
+fore-stbd  M3 bolt keep-out         hinge retention                     2.8  CLASH [FUNCTIONAL: relieve the other part] 
+fore-stbd  M3 driver access         shell                            1190.7  expected the driver passes through the bolt's own bore
+fore-stbd  M3 driver access         tilt bracket stbd                  80.7  CLASH [FUNCTIONAL: relieve the other part] 
+fore-stbd  M3 driver access         door stbd swept                    71.6  CLASH [FUNCTIONAL: relieve the other part] 
+fore-stbd  M3 driver access         door stbd (closed)                 44.2  CLASH [FUNCTIONAL: relieve the other part] 
+fore-stbd  M3 driver access         hinge retention                     2.8  CLASH [FUNCTIONAL: relieve the other part] 
+fore-stbd  M3 driver access         door gateway PCB                    1.4  CLASH [FUNCTIONAL: relieve the other part] 
+fore-stbd  M3 driver access         door gateway tray                   0.1  touch 
+fore-stbd  bay (printed part)       door stbd swept                    90.7  CLASH 
+fore-stbd  bay (printed part)       door stbd (closed)                 71.4  CLASH 
+fore-stbd  bay (printed part)       shell                              66.7  expected bay seats in the merged hull pocket
+fore-stbd  bay (printed part)       nav harness exit stbd              59.8  CLASH 
+fore-stbd  bay (printed part)       hinge retention                    44.9  CLASH 
+fore-stbd  boss carrier             payload keep-out                  172.4  CLASH 
+fore-stbd  boss carrier             shell                              69.0  CLASH 
+fore-stbd  boss carrier             nav harness exit stbd               6.5  CLASH 
+fore-stbd  wire bosses              shell                              87.1  CLASH 
+fore-stbd  wire seats               shell                              41.0  CLASH [FUNCTIONAL: relieve the other part] 
+fore-stbd  wires                    shell                              43.8  CLASH [FUNCTIONAL: relieve the other part] 
+fore-stbd  wires deformed           shell                              41.5  CLASH [FUNCTIONAL: relieve the other part] 
+
+Function checks:
+  FAIL fore-port  bay bodies 1, leg sweep x own bay 0.0 mm3, wires x stop pin 0.0 / x bay 273.2 / x leg 54.6, stop pin x leg sweep 0.0 mm3
+  FAIL fore-stbd  bay bodies 1, leg sweep x own bay 0.0 mm3, wires x stop pin 0.0 / x bay 273.2 / x leg 54.6, stop pin x leg sweep 0.0 mm3
+  OK   aft-port   bay bodies 1, leg sweep x own bay 0.0 mm3, wires x stop pin 0.0 / x bay 0.0 / x leg 0.0, stop pin x leg sweep 0.0 mm3
+  OK   aft-stbd   bay bodies 1, leg sweep x own bay 0.0 mm3, wires x stop pin 0.0 / x bay 0.0 / x leg 0.0, stop pin x leg sweep 0.0 mm3
+
+RESULT: FAIL
+
+--- stderr ---

@@ -274,7 +274,7 @@ def type2el_lga107() -> None:
                   "W=7.7+/-0.2, T=1.3max) and courtyard is derived from it directly. Pad "
                   "geometry (all 107 positions/sizes below) is transcribed EXACTLY from the "
                   "vendor's own CAD drawing, "
-                  "avionics/datasheets/type2el-2dl-module-footprint-topview.dxf (owner-supplied, "
+                  "avionics/datasheets/murata/type2el-2dl-module-footprint-topview.dxf (owner-supplied, "
                   "AutoCAD R14, 'NC_Work2' layer = 107 pad rectangles [428 LINE entities, 4 per "
                   "pad], 'ProductsBoradOutline' layer = the 8.8x7.7mm body outline — both parsed "
                   "programmatically, not hand-traced). *** ONE THING REMAINS AN INFERENCE, NOT "

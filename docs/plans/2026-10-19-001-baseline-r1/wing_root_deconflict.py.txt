@@ -1,0 +1,133 @@
+=== wing_root_deconflict.py ===
+servo: DS3225 40.0 x 20.0 x 40.5 mm, 60 g, 24.5 kgf.cm @ 6.8 V  [datasheet]
+  flange span 54.5 mm (Y); body depth 40.5 mm inboard (X)
+  bolt pattern 49.5 x 10.0 mm (datasheet; bores gated off)
+
+Protected routes at the wing root (hull frame)
+                           route  chord frac        Y        Z
+        nav-light 3-core conduit       0.062    +1.00   +61.97   D3.2
+            Hall/encoder conduit       0.345   +37.50   +68.69   D6.5
+           tilt drive-shaft bore       0.416   +46.60   +69.09   D4.4
+  spar bore / 4x 10 AWG ESC feeds       0.217   +21.00   +66.85   D20.4
+
+shell: 1,075,956 faces, watertight=True
+
+  SOLIDS vs solids -- port
+               probe                  neighbour  overlap mm^3   gap mm   verdict
+          servo body           spar socket boss           0.0    19.53   clear
+          servo body          wing root mortise           0.0    27.72   clear
+          servo body            wing root tenon           0.0    23.69   clear
+          servo body           LG bay fore-port           0.0    17.39   clear
+          servo body            LG bay aft-port           0.0    27.61   clear
+          servo body         avionics bay Inara           0.0    35.51   clear
+      tilt gear pair           spar socket boss           0.0    11.00   clear
+      tilt gear pair          wing root mortise           0.0    11.00   clear
+      tilt gear pair            wing root tenon           0.0     3.00   clear
+      tilt gear pair           LG bay fore-port           0.0    21.04   clear
+      tilt gear pair            LG bay aft-port           0.0    21.96   clear
+      tilt gear pair         avionics bay Inara           0.0    31.44   clear
+           servo PAD           spar socket boss           0.0     4.09   clear
+           servo PAD          wing root mortise           0.0    17.58   clear
+           servo PAD            wing root tenon           0.0    17.98   clear
+           servo PAD           LG bay fore-port           0.0     7.40   clear
+           servo PAD            LG bay aft-port           0.0     3.60   clear
+           servo PAD         avionics bay Inara           0.0    32.01   clear
+
+  ROUTES vs real material -- port
+                           route                obstruction  blocked mm^3   verdict
+        nav-light 3-core conduit      published cargo shell           0.0   clear
+        nav-light 3-core conduit                 servo body           0.0   clear
+        nav-light 3-core conduit             tilt gear pair           0.0   clear
+        nav-light 3-core conduit         fixed CF spar tube           0.0   clear
+        nav-light 3-core conduit            wing root tenon           0.0   clear
+            Hall/encoder conduit      published cargo shell           0.0   clear
+            Hall/encoder conduit                 servo body           0.0   clear
+            Hall/encoder conduit             tilt gear pair           0.0   clear
+            Hall/encoder conduit         fixed CF spar tube           0.0   clear
+            Hall/encoder conduit            wing root tenon           0.0   clear
+           tilt drive-shaft bore      published cargo shell           0.0   clear
+           tilt drive-shaft bore                 servo body           0.0   clear
+           tilt drive-shaft bore         fixed CF spar tube           0.0   clear
+           tilt drive-shaft bore            wing root tenon           0.0   clear
+  spar bore / 4x 10 AWG ESC feeds      published cargo shell           0.0   clear
+  spar bore / 4x 10 AWG ESC feeds                 servo body           0.0   clear
+  spar bore / 4x 10 AWG ESC feeds             tilt gear pair           0.0   clear
+  spar bore / 4x 10 AWG ESC feeds            wing root tenon           0.0   clear
+  spar bore / 4x 10 AWG ESC feeds (bundle exit)      published cargo shell           0.0   clear
+  spar bore / 4x 10 AWG ESC feeds (bundle exit)                 servo body           0.0   clear
+  spar bore / 4x 10 AWG ESC feeds (bundle exit)             tilt gear pair           0.0   clear
+  spar bore / 4x 10 AWG ESC feeds (bundle exit)            wing root tenon           0.0   clear
+
+  SOLIDS vs solids -- stbd
+               probe                  neighbour  overlap mm^3   gap mm   verdict
+          servo body           spar socket boss           0.0    19.53   clear
+          servo body          wing root mortise           0.0    27.72   clear
+          servo body            wing root tenon           0.0    23.69   clear
+          servo body           LG bay fore-stbd           0.0    17.25   clear
+          servo body            LG bay aft-stbd           0.0    27.44   clear
+          servo body avionics bay River (deferred)           0.0    35.51   clear
+      tilt gear pair           spar socket boss           0.0    11.00   clear
+      tilt gear pair          wing root mortise           0.0    11.00   clear
+      tilt gear pair            wing root tenon           0.0     3.00   clear
+      tilt gear pair           LG bay fore-stbd           0.0    21.01   clear
+      tilt gear pair            LG bay aft-stbd           0.0    21.78   clear
+      tilt gear pair avionics bay River (deferred)           0.0    31.44   clear
+           servo PAD           spar socket boss           0.0     4.09   clear
+           servo PAD          wing root mortise           0.0    17.58   clear
+           servo PAD            wing root tenon           0.0    17.98   clear
+           servo PAD           LG bay fore-stbd           0.0     7.40   clear
+           servo PAD            LG bay aft-stbd           0.0     3.60   clear
+           servo PAD avionics bay River (deferred)           0.0    32.01   clear
+
+  ROUTES vs real material -- stbd
+                           route                obstruction  blocked mm^3   verdict
+        nav-light 3-core conduit      published cargo shell           0.0   clear
+        nav-light 3-core conduit                 servo body           0.0   clear
+        nav-light 3-core conduit             tilt gear pair           0.0   clear
+        nav-light 3-core conduit         fixed CF spar tube           0.0   clear
+        nav-light 3-core conduit            wing root tenon           0.0   clear
+            Hall/encoder conduit      published cargo shell           0.0   clear
+            Hall/encoder conduit                 servo body           0.0   clear
+            Hall/encoder conduit             tilt gear pair           0.0   clear
+            Hall/encoder conduit         fixed CF spar tube           0.0   clear
+            Hall/encoder conduit            wing root tenon           0.0   clear
+           tilt drive-shaft bore      published cargo shell           0.0   clear
+           tilt drive-shaft bore                 servo body           0.0   clear
+           tilt drive-shaft bore         fixed CF spar tube           0.0   clear
+           tilt drive-shaft bore            wing root tenon           0.0   clear
+  spar bore / 4x 10 AWG ESC feeds      published cargo shell           0.0   clear
+  spar bore / 4x 10 AWG ESC feeds                 servo body           0.0   clear
+  spar bore / 4x 10 AWG ESC feeds             tilt gear pair           0.0   clear
+  spar bore / 4x 10 AWG ESC feeds            wing root tenon           0.0   clear
+  spar bore / 4x 10 AWG ESC feeds (bundle exit)      published cargo shell           0.0   clear
+  spar bore / 4x 10 AWG ESC feeds (bundle exit)                 servo body           0.0   clear
+  spar bore / 4x 10 AWG ESC feeds (bundle exit)             tilt gear pair           0.0   clear
+  spar bore / 4x 10 AWG ESC feeds (bundle exit)            wing root tenon           0.0   clear
+
+Bulkhead penetration (does the cut actually go through?)
+                         penetration         cut X span  material in corridor
+             wing root mortise, port    -99.0..  -70.0              0.0 mm^3   THROUGH
+             wing root mortise, stbd   -270.0.. -241.0              0.0 mm^3   THROUGH
+                   spar socket, port   -100.0..  -55.0              0.0 mm^3   THROUGH
+            10 AWG bundle exit, port   -130.0.. -100.0              0.0 mm^3   THROUGH
+                   spar socket, stbd   -285.0.. -240.0              0.0 mm^3   THROUGH
+            10 AWG bundle exit, stbd   -240.0.. -210.0              0.0 mm^3   THROUGH
+
+Wing root tenon vs the mortise it enters
+  tenon  12.0 (Y) x 20.0 (Z) x 8.0 (insertion), centred Y +57.50  Z +58.01  [on the CHORD LINE]
+  mortise 12.8 (Y) x 20.8 (Z), centred Y +57.50  Z +58.01  [on WING_ROOT_Z]
+
+    axis         tenon span       mortise span  clearance each side
+       Y   +51.50..  +63.50   +51.10..  +63.90     +0.40 /    +0.40
+       Z   +48.01..  +68.01   +47.61..  +68.41     +0.40 /    +0.40
+
+  tenon centre is 0.00 mm above the mortise centre (chord line +58.01 vs WING_ROOT_Z +58.01)
+
+Pad fit (servo footprint vs the pad the shell provides)
+    axis  servo needs   pad has    margin
+       Y         54.5      61.5      +7.0
+       Z         20.0      27.0      +7.0
+
+  CLEAR -- servo mounts deconflict and every cableway stays open
+
+--- stderr ---

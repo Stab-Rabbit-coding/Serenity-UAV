@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
+**Current design revision:** Rev U (2026-11-03, see `docs/WBS.md` §6.5 for changelog)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../TODO.md)
 > is a compact index — headings, subheadings, and short (<=70-char) checkbox items
@@ -261,7 +261,7 @@
 - [ ] Mount idler gear on its bracket to the nozzle outer housing; mesh
     Idler-Out with the full-circle nozzle ring gear; set backlash 0.1–0.2mm.
 
-- [ ] **Full sweep test (Rev R1, 2026-06-22):** rotate nacelle -5°→140°;
+- [ ] **Full sweep test (Rev R1, 2026-06-22):** rotate nacelle -5°→135°;
     verify nozzle ring gear rotates from ≈-1.33° to ≈38.45° (≈23.86° at the
     90° hover reference point), and petals swing from ≈18.76 mm to
     ≈34.42 mm tip radius (75%→105% of the 50 mm bore at the 0°/90°
@@ -358,6 +358,34 @@ This section covers the comprehensive rebuild of the graphical build guide's SVG
 
 ### 1.5.6 Rebuild Graphical Build Guide
 
+*(Owner direction 2026-11-02: all construction detail belongs here, not in `docs/OPERATORS_MANUAL.md`.
+The hull is two permanently collar-bonded sections — head+cargo merged, middle+rear merged — so the
+guide, not the operator's manual, carries how it was built.)*
+
+- [ ] **BG-PLAN-2 — Place the board STEP models in the card renders.** `tools/export_pcb_step.py` now writes
+  `avionics/kicad/<Board>/step/*.step` (6 boards verified 2026-11-02; 55 x 35 mm TACCO/Pilot with 125-134 component
+  solids). Remaining: convert/import in `tools/export_assembly_meshes.py`, place each board per the cape stack and node
+  saddle/shelf data, render in `airframe/blender-scripts/build_guide_card_renders.py`; fill the 66 missing 3D models
+  listed in `avionics/kicad/step_export_report.json` (connectors, antennas, inductors).
+- [ ] **BG-SEQ-1 — Per-step assembly spec.** Every step names the part ID, the side (port/starboard), the install
+  order relative to its neighbors (what shall be done before and after), each wire (gauge, color, length, route,
+  connector), each fastener (size, count, thread-locker/adhesive), and the tightening torque with its source.
+- [ ] **BG-SEQ-2 — Torque table with citations.** Every torque value shall come from a cited fastener, insert or
+  material source in `REFERENCES.md`; a value with no source is marked "requires verification" and is never invented.
+- [ ] **BG-SEQ-3 — Wire-before-or-after ordering analysis.** For each wired part, decide whether its wire is installed
+  before or after the mating structure is attached (e.g., a navigation-light lead before or after the wing is
+  bonded) from the real access and bend-radius clearances, and state the decision in the step.
+- [ ] **BG-SEQ-4 — Navigation lights worked example.** Red on the port side, green on the starboard side, white aft
+  [REF-FAA-003]; verify the side, the wire route and the order against the CAD before the card is released.
+- [ ] **BG-SEQ-5 — Two-section hull sequence.** Rewrite the hull steps for the head+cargo and middle+rear merged
+  sections and the one permanent collar bond (cure, clamp and alignment detail); remove four-section language
+  from the guide and cards.
+- [ ] **BG-PLAN-1 — Execute `docs/plans/2026-11-02-001-feat-build-guide-joint-torque-and-sequence-plan.md`** (torque
+  register/calculator/cross-check, sequence optimizer, KiCad board STEP renders); first slice = wing root, one gear bay,
+  nacelle trunnion, one avionics tray.
+- [ ] **BG-SEQ-6 — Connector and harness steps.** Each connector gets its mating part, keying/orientation, crimp or
+  solder method and retention; each harness gets a routing and strain-relief step.
+
 - [ ] **Pipeline: Update silhouette pipeline (`gen_hull_outlines.py`)** — Refactor to source outlines from canonical 24" Rev R1 baked hull-frame STLs in `airframe/stls/` instead of pre-Rev-N 18" geometry.
 - [ ] **Pipeline: Update outline mapping (`update_overview_paths.py`)** — Automate 2D path extraction and injection into 10 overview/silhouette SVG files.
 - [ ] **Pipeline: Coordinate alignment check** — Verify outline-derivation pipeline matches Hull-Frame Coordinate Standard (X=+port, Y=+aft, Z=+dorsal).
@@ -371,8 +399,16 @@ This section covers the comprehensive rebuild of the graphical build guide's SVG
 - [ ] **Phase A (08/10): Rebuild `overview_close_up_head.svg`** — Generate close-up silhouette of 24" nose flat and bow sensor pod.
 - [ ] **Phase A (09/10): Rebuild `overview_close_up_cargo.svg`** — Generate close-up silhouette of clamshell doors and winch mounts.
 - [ ] **Phase A (10/10): Rebuild `overview_close_up_rear.svg`** — Generate close-up silhouette of aft engine-room and tandem EDF bays.
-- [ ] **Phase B (1/2): Rebuild `build_plan.svg`** — Update master construction sequence flow chart to map 26 steps and milestones.
-- [ ] **Phase B (2/2): Rebuild `components_overview.svg`** — Update exploded physical component map with 45 CAD-derived BOM parts.
+- [x] **Phase B (1/2): Rebuild `build_plan.svg`** DONE 2026-10-31 (`tools/gen_build_guide_cards.py`). — Update master construction sequence flow chart to map 26 steps and milestones.
+- [x] **Phase B (2/2): Rebuild `components_overview.svg`** DONE 2026-10-31 (`tools/gen_build_guide_cards.py`). — Update exploded physical component map with 45 CAD-derived BOM parts.
+- [x] **Rev T+ refresh (2026-10-31): assembly + renders + text Phases 0–3** — `serenity_assembly.py` gained the four conforming LG bays and the two wing-root flanges (45 placed objects). `serenity_render_views.py` now renders the exported master assembly instead of its own stale Rev R1 list (R2 camera targets). The 17 `pngs/` were regenerated. `REVN_BUILD_GUIDE_24IN.md` Phases 0–3, configuration table, and Phase 5 tilt/nozzle rows were rewritten and doc-reviewed (coherence + feasibility). The `docs/` stub copy was archived.
+- [x] **Rebuild the 27 numbered cards from the master assembly** — DONE 2026-10-31: `tools/gen_build_guide_cards.py` (card spec) + `airframe/blender-scripts/build_guide_card_renders.py` (highlight renders in `card-renders/`); pre-Rev-N cards archived to `archives/graphical-build-guide-pre-revt/`. Cards 15–23 and 25 carry architecture only until the re-audit below.
+- [ ] **Re-audit `REVN_BUILD_GUIDE_24IN.md` Phases 4–11 for Rev T+** — node counts and names, ESC rating, TPM vs. OPTIGA secure elements in Phase 8, the CG target vs. thrust-line Y 326.7, and the Rev N thrust/T/W figures.
+- [ ] **Sync the tilt range to the owner's 2026-10-31 ruling** — hard stops −5°/140°, commanded −5° to 135°. `docs/TILT_ACTUATOR_SELECTION.md` and `docs/NOZZLE_DRIVE_TRADE.md` still state 145°; extend the 64 mm in-context clearance sweep (`docs/NACELLE_64MM_VERIFICATION.md` §5c) to cover 140°.
+- [ ] **Owner decision: 6704ZZ trunnion pair at 89 % C0 under ultimate load** (`docs/NACELLE_64MM_VERIFICATION.md` §5b) — the guide flags it open.
+- [ ] **Add a BOM row for the machined 14T tilt pinion** (brass/steel, `wing_tilt_pinion.scad`) and update `PRINT-NACELLE-TRUNNION` to the `_64mm` STLs.
+- [ ] **Place the remaining unplaced parts in the master assembly** — dorsal antenna fin (still at the datum origin), winch (no hull-frame STLs), 64 mm stator/spider sleeves, nozzle, EDF rotors/motors, ESCs (the assembly's COVERAGE GAP list).
+- [ ] **Draw the 10 AWG ESC route, disconnect bay → ESC (WA-R10)**, then replace the guide's Phase 2A leg-4 CAUTION with the procedure.
 - [ ] **Phase C (01/10): Rebuild `build_guide_01_parts.svg`** — Physical inventory and STL check card with 24" hull-frame components.
 - [ ] **Phase C (02/10): Rebuild `build_guide_02_keel.svg`** — Carbon fiber keel prep showing datum marks at 91, 165, 251, 320, and 388mm.
 - [ ] **Phase C (03/10): Rebuild `build_guide_03_hull_prep.svg`** — Hull section alignment card (head, cargo, middle, rear).
@@ -380,17 +416,17 @@ This section covers the comprehensive rebuild of the graphical build guide's SVG
 - [ ] **Phase C (05/10): Rebuild `build_guide_05_ring_frames.svg`** — Ring frame placement and 5 station notches.
 - [ ] **Phase C (06/10): Rebuild `build_guide_06_access_panels.svg`** — Access panel frame installation card for all 6 panels.
 - [ ] **Phase C (07/10): Rebuild `build_guide_07_standoffs.svg`** — Avionics bay standoff positioning with correct M2.5 standoff locations.
-- [ ] **Phase C (08/10): Rebuild `build_guide_08_wing_spar.svg`** — Wing spar sleeve mounting.
-- [ ] **Phase C (09/10): Rebuild `build_guide_09_avionics.svg`** — **STALE geometry Pilot/B fix:** Replace archived Cape-A-1/TACCO line art with active Rev R1Pilot and TACCO (XO) baseline layout. Ensure standards citations (`[REF-ID]`) survive.
+- [ ] **Phase C (08/10): Rebuild `build_guide_08_wing_spar.svg`** — Wing spar sleeve mounting. Render the spars and show close-ups of the joints to make assembly clear.
+- [ ] **Phase C (09/10): Rebuild `build_guide_09_avionics.svg`** — **STALE geometry Pilot/B fix:** Replace archived Cape-A-1/TACCO line art with active Rev R1Pilot and TACCO (XO) baseline layout.  render the step files from kicad for each pcb. Ensure standards citations (`[REF-ID]`) survive.
 - [ ] **Phase C (10/10): Rebuild `build_guide_10_servos.svg`** — Nacelle tilt servo bracket and sector gear assembly.
-- [ ] **Phase D (01/10): Rebuild `build_guide_11_inter_board.svg`** — **STALE Pilot/B fix:** Replace archived Pilot/TACCO wiring schematic with activePilot, TACCO (XO), Commo (XCVR-49MHZ-2), Flight Engineer, and Observer inter-board CAN FD, RS-485, and Ethernet wiring.
+- [ ] **Phase D (01/10): Rebuild `build_guide_11_inter_board.svg`** — **STALE Pilot/B fix:** Replace archived Pilot/TACCO wiring schematic with activePilot, TACCO (XO), Commo (XCVR-49MHZ-2), Flight Engineer, and Observer inter-board CAN FD, RS-485, and Ethernet wiring.  use multiple colors to distinguish wires.  
 - [ ] **Phase D (02/10): Rebuild `build_guide_12_security_hw.svg`** — **STALE Pilot/B fix:** Update with activePilot and TACCO (XO) crypto-elements (TPM 2.0 enrollment, key generation, and operator certificates).
 - [ ] **Phase D (03/10): Rebuild `build_guide_13_antennas.svg`** — Antenna SMA bulkheads and coax wire routing.
 - [ ] **Phase D (04/10): Rebuild `build_guide_14_49mhz_post.svg`** — 49 MHz forward and temporary aft posts (temporary post at station ~580mm).
 - [ ] **Phase D (05/10): Rebuild `build_guide_15_49mhz_wire.svg`** — 49 MHz wire tensioning and grounding with keel counterpoise.
 - [ ] **Phase D (06/10): Rebuild `build_guide_16_tof_frames.svg`** — 12× VL53L5CX time-of-flight sensor frame mounting.
-- [ ] **Phase D (07/10): Rebuild `build_guide_17_conduits.svg`** — PTFE wiring conduit threading.
-- [ ] **Phase D (08/10): Rebuild `build_guide_18_void_formers.svg`** — EPS void former dry-fitting and pull string verification.
+- [ ] **Phase D (07/10): Rebuild `build_guide_17_conduits.svg`** — PTFE wiring conduit threading.  add a step to show how the wires will be threaded through the conduit after foam injection.- [  **Phase D (07/11): Add conduit wire-threading procedure** — Post-foam injection wire routing and pull-string extraction.
+- [ ] **Phase D (08/10): Rebuild `build_guide_18_void_formers.svg`** — EPS void former dry-fitting and pull string verification.  
 - [ ] **Phase D (09/10): Rebuild `build_guide_19_foam_pour.svg`** — PU foam zone-controlled injection (3 shots aft->fwd, <=60 mL per batch).
 - [ ] **Phase D (10/10): Rebuild `build_guide_20_node_placement.svg`** — **STALE Pilot/B fix:** Update 8-node arch placement showing all 8 nodes carrying activePilot and TACCO (XO) with uniform 5 kV galvanic isolation. Depict Commo transceivers only in River's Room and Simon's Medbay nodes (per `REF-FCC-003`).
 - [ ] **Phase E (1/6): Rebuild `build_guide_21_node_install.svg`** — **STALE Pilot/B fix:** Rebuild flight control node mounting card showingPilot and TACCO (XO) physical mounting, CAN FD terminal access, and isolated port wiring.

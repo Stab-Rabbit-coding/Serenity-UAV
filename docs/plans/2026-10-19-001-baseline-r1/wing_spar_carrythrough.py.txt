@@ -1,0 +1,113 @@
+=== wing_spar_carrythrough.py ===
+
+Measured geometry (hull frame, port side; X positive = port)
+  fuselage wall skin at spar station   X   -81.04
+  spar bearing seat (boss mid-span)    X   -80.00
+  spar inboard end if it stops there   X  -100.00
+  wing tip face (wingtip bearing)      X     6.70
+  nacelle duct axis (load line)        X    47.00
+
+Load cases (per side; AUW 3.911 kg = 8.62 lbm, README.md)
+  1 g, one nacelle carrying half AUW      19.2 N ( 4.31 lbf)
+  limit  (4 g gust + maneuver)           76.7 N (17.24 lbf)
+  ultimate (x1.5)                       115.1 N (25.87 lbf)
+
+Spar as an overhung shaft (no carry-through)
+  span  L (fuselage bearing -> wingtip)    86.7 mm
+  overhang a (wingtip -> nacelle axis)     40.3 mm
+  arm   d (wall -> nacelle axis)          128.0 mm
+
+  section 20 x 16.3 CF (fixed, Rev T1):  I 4389 mm^4   Z 438.9 mm^3
+    superseded 8 x 1.5 4130 had Z 42.6 mm^3 -- section modulus up 10.3x
+
+      case   R_tip N   R_fus N  M_spar N.m  sigma MPa    FOS
+       1 g      28.1      -8.9        0.77        1.8  170.4
+     limit     112.4     -35.7        3.09        7.0   42.6
+  ultimate     168.5     -53.5        4.64       10.6   28.4
+
+Wing root joint (per side)
+  TENON_LOAD_PATH = "spar_carrythrough"
+  tip bearing to root face    87.7 mm
+
+      case   R_tip N  root M N.m
+     limit     112.4        9.86
+  ultimate     168.5       14.79
+
+Spar carry-through joint (Rev T1) -- the spar IS the root load path
+  fixed CF spar 20 x 16.3, Z 438.9 mm^3
+  spar bending at the ultimate root moment (14.79 N.m):
+    sigma 33.69 MPa   FOS 8.9 vs the 300 MPa stand-in  (UNVERIFIED, DEP-1)
+    this is the CANTILEVER bound -- the whole root moment taken by
+    the spar alone.  The two-support bound (nacelle load reacted
+    between the wingtip clamp and the wall) gives only 4.41 N.m,
+    sigma 10.04 MPa.  The cantilever bound is quoted because it
+    does not depend on the wing skin sharing load, which is not
+    characterised for a bonded printed skin.
+
+  fuselage-side socket, D20 bonded (projected bearing vs 5 MPa):
+    THE BAY BOUNDS THIS, NOT THE DESIGNER.  Owner requirement:
+    the centre of the cargo bay stays clear.  The bay's clear span
+    begins at hull X -100.0 and the wall skin sits at
+    X -81.33, so the socket has 18.67 mm of depth and no more.
+      L mm      F N  area mm2  sigma MPa    FOS
+     18.67   1245.6     124.5     10.008   0.50  <- all the bay allows
+     30.00    796.9     200.0      3.985   1.25  (would enter the bay)
+     55.00    460.8     366.7      1.257   3.98  (would enter the bay)
+    => the socket CANNOT carry the moment.  Stress goes as 1/L^2 and
+       the bay has taken the length away.  Shear, however, is fine:
+       sigma_shear = 115.1 / (20 x 18.5) = 0.311 MPa  -> FOS 16
+
+  bonded ROOT FLANGE on the inner sidewall (moment path):
+    Reacting the moment over wall AREA needs no inboard reach at all
+    -- the flange lies flat against the wall and protrudes only its
+    own thickness (~5 mm, to X ~ -86, against a bay edge at -100).
+    Triangular pressure over height h, couple arm 2h/3:
+      h mm   w mm      F N  area mm2  sigma MPa    FOS
+        40     40    554.5       533      1.040    4.8
+        60     50    369.7      1000      0.370   13.5
+        80     60    277.3      1600      0.173   28.9  <- SPECIFIED
+       100     60    221.8      2000      0.111   45.1
+    80 x 60 is specified: FOS 29.2, and the cargo section is ~150 mm
+    tall inside at this station so 80 mm of height is available.
+    This is BETTER than the 55 mm socket it replaces (FOS 4.0), not a
+    compromise -- a flange trades an unfavourable 1/L^2 depth term
+    for a linear area term.
+
+    LG-11 coupon sensitivity (flange 80 x 60):
+        5.0 MPa -> FOS  28.9   (standing figure, structural_analysis.md SS7.3)
+       15.0 MPa -> FOS  86.6   (the owner's <15 MPa fusion-strength decision rule)
+       47.0 MPa -> FOS 271.2   (REF-MAT-001 ASTM D695 bulk compressive, 20 % CF-PETG)
+      The coupon no longer gates BUILDABILITY here -- it only sets
+      how small the flange could shrink.
+
+  wing torsion about the spar axis (the retired aft rod's only
+  remaining candidate job):
+    Cm 0.25 at 40 kt -> 0.0685 N.m; ultimate (x6) 0.411 N.m
+    bond shear over a 40 mm socket 0.0163 MPa -> FOS 306 vs 5 MPa
+    NOTE thrust contributes no torque here: the duct axis passes
+    through the pivot, which is on the spar axis (plan 003 R12).
+    -> the aft tie rod is not needed for torsion either.  Retired.
+
+Couple delivered to each fuselage wall (what carry-through would close)
+     limit:  V   76.7 N   M   9.82 N.m (  86.9 lbf.in)
+  ultimate:  V  115.1 N   M  14.73 N.m ( 130.4 lbf.in)
+
+Replacement member -- CF thwart 2 x 25 mm (CF-PLATE-2MM stock)
+  section modulus Z = 208 mm^3
+
+                station pair   share   M N.m  sigma MPa    FOS  FOS uni
+  Y  -40.0 / +118.0  fore    0.61    9.04       43.4    6.9     34.6
+  Y  -40.0 / +118.0   aft    0.39    5.69       27.3   11.0     54.9
+  Y  -36.0 / +114.0  fore    0.62    9.13       43.8    6.8     34.2
+  Y  -36.0 / +114.0   aft    0.38    5.60       26.9   11.2     55.8
+
+  FOS column uses the conservative 300 MPa cross-ply stand-in;
+  FOS uni uses structural_analysis.md SS1's 1500 MPa unidirectional
+  figure.  NEITHER is a verified allowable -- obtain ASTM D3039/D695
+  certificates for the actual plate before fabrication -- root work-tracking file SS0.8).
+
+Bay impact if the spar stops at the wall
+  spar inboard end X -100.0; bay clear span X -240.0..-100.0 = 140 mm
+  the spar no longer crosses the bay -> CARGO-01's obstruction is removed
+
+--- stderr ---

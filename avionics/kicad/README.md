@@ -50,7 +50,7 @@ list for every board is in `avionics/TODO.md`; the full record is `avionics/WBS.
 | `Serenity-Custom.pretty/`, `symbols/` | Project footprint and symbol libraries |
 | `tools/swap_1553_hi6138.py` | The fleet 1553C swap script (this folder's `tools/`) |
 | `gerbers/` | Legacy Rev S1 Gerber sets; per-board sets are under each board folder (check its status file for currency) |
-| `TODO-1.2b-*.md` | **Superseded** 2026-07-18 task snapshots; the live record is `avionics/WBS.md` §1.2a |
+| `TODO-1.2b-*.md` | Archived (moved to `archives/rev-T-and-earlier/avionics/kicad/`): superseded 2026-07-18 task snapshots; the live record is `avionics/WBS.md` §1.2a |
 
 ## Design method
 

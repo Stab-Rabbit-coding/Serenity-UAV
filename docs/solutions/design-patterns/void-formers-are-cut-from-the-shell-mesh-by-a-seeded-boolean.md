@@ -38,7 +38,7 @@ fillet exactly where the equipment later goes.
 
 1. **Build the former as one boolean:** `(design box) − shell`, then
    `decompose()` and keep the component that contains a seed point known to
-   be inside the cavity (`gen_cargo_void_formers.py:103-115`,
+   be inside the cavity (`gen_cargo_void_formers.py:106-118`,
    `former_in_box`). The cavity never has to be modelled; the shell defines it.
 2. **Keep the design box inside the closed part of the shell.** The cargo
    rim ring is not closed forward of Y ≈ −67 (open mating face at −69.5), so
@@ -46,11 +46,13 @@ fillet exactly where the equipment later goes.
    becomes the outside world. The formers start at Y −66.
 3. **Shrink for the wax film and print tolerance** by scaling about the
    former's own centroid (`SHRINK_MM = 0.4`), not by offsetting faces.
-4. **Export the manifold3d result with `process=False`.** manifold3d's output
+4. **Build the trimesh from the manifold3d result with `process=False`**
+   (`from_man`) and export it as-is. manifold3d's output
    is already a proper 2-manifold; letting trimesh re-process (merge/weld) it
    on export fragments thin regions and flips normals. Load *inputs* with
    `process=True` (or manifold3d silently returns zero volumes — see the
-   mesh-boolean doc), export *outputs* untouched.
+   [mesh-boolean doc](../logic-errors/mesh-boolean-layout-proofs-silent-zero-volumes-and-shared-profiles.md)),
+   export *outputs* untouched.
 5. **Re-derive after every shell merge.** The formers are cut from the
    published STL; a new boss (Rev T5e added eight) changes the cavity.
    Regenerating is one command; a stale former will not insert.
@@ -73,7 +75,9 @@ alignment plugs for splice collars, potting dams, bonding jigs.
 
 ## Examples
 
-Rev T5e set (`/usr/bin/python3 tools/gen_cargo_void_formers.py`): collar_rim
+Rev T5e set, 2026-09-16 snapshot — the cargo shell has been re-merged since
+(BHD-02, 2026-10), so regenerate before quoting these figures
+(`/usr/bin/python3 tools/gen_cargo_void_formers.py`): collar_rim
 57.8 cm³, batt_chimney 79.9 (Z 90..131), harness_trunk_port/stbd 27.3/27.5,
 node_bay 128.1 (X −214..−126, Z 44..90); chin cavity 955 cm³, foamable
 634 cm³ ≈ 20 g of 2 lb/ft³ PU. All five STLs pass `tools/validate_stls.py`.

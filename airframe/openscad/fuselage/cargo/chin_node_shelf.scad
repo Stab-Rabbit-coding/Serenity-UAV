@@ -6,7 +6,7 @@
 //   into serenity_assembly.py at identity placement.
 // ===========================================================================
 // ============================================================
-// chin_node_shelf.scad -- Rev T5e (2026-09-16)
+// chin_node_shelf.scad -- Rev U (2026-11-07; carried forward from Rev T5e, 2026-09-16)
 // Shelf for the two remaining cargo-section avionics nodes (N1 CN2 Inara,
 // N3 CN3 River: PB2I + cape in a Faraday pouch, 58 x 37 x 22 each) lying
 // FLAT on the chin floor under the battery nose, Y -58..0, Z 66..88, side by

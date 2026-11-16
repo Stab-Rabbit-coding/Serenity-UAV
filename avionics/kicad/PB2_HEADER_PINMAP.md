@@ -1,8 +1,8 @@
 # PocketBeagle 2 Industrial — P1/P2 expansion header pin map (verified) and TACCO allocation
 
 **Author:** Claude Fable 5.1, 2026-09-29, from the owner-supplied BeagleBoard.org PocketBeagle 2
-schematic (`avionics/datasheets/pocketbeagle2_sch.pdf`, sheet "016_BP P1 & P2", v1.0) and the
-board SysConfig (`avionics/datasheets/pocketbeagle-2.syscfg`, AM62x ALW package). Source
+schematic (`avionics/datasheets/beagleboard/pocketbeagle2_sch.pdf`, sheet "016_BP P1 & P2", v1.0) and the
+board SysConfig (`avionics/datasheets/beagleboard/pocketbeagle-2.syscfg`, AM62x ALW package). Source
 repository: <https://github.com/beagleboard/pocketbeagle> (BeagleBoard.org design files; the
 schematic sheet itself carries no licence line — confirm the repository licence before
 redistribution). **Owner:** S. Griffing. **License (this file):** CC BY-SA 4.0.
@@ -133,7 +133,7 @@ only and provide Wi-Fi from a USB module elsewhere; (c) move Wi-Fi to another no
 
 ## 4. Firmware notes
 
-`avionics/datasheets/pocketbeagle-2.syscfg` is BeagleBoard's TI SysConfig for the base board
+`avionics/datasheets/beagleboard/pocketbeagle-2.syscfg` is BeagleBoard's TI SysConfig for the base board
 (UART0 = console on P1-30/32, SPI0 = "SPI0", MCAN0, PRU0/PRU1, RGMII2 unused). The TACCO DTS
 overlay must mux: MCAN0 (C15/E15), UART2 (A15/B15/AC25), UART1 (E19/A20/B19/A19), SPI0
 (B14/B13/A14/C13), RMII2 + MDIO0, EHRPWM2_A (B17), and the GPIOs above (mux mode 7). The PB2's

@@ -28,7 +28,7 @@ tags: [worm-gear, self-locking, lead-angle, bandwidth, tilt-rotor, brake, holdin
 The Rev T5 nacelle-tilt drive was first cut as a single-start m1 worm (lead 3.2°)
 on a Pololu 20D 25:1 gearmotor because it closed WA-R16 — "the train is not
 self-locking" — by geometry, and packaged the motor along the sidewall. The
-kinematics were sized to a *sweep* (145° in ~6 s). The owner then pointed out
+kinematics were sized to a *sweep* (140° in ~6 s). The owner then pointed out
 that on a lateral tandem pair the nacelles "sweep back and forth for
 manoeuvring": the tilt actuator is the hover pitch actuator and, differentially,
 the yaw actuator. At 24 °/s the drive could not do that job at all
@@ -101,7 +101,7 @@ Opt 4 is the built Rev T5e configuration):
 | | 1-start worm 40:1 | 4-start worm 10:1 + brake (25D) | spur 1:1 + DS3225 + brake | **6-start worm 6.67:1 + brake (20D, built)** |
 |---|---|---|---|---|
 | nacelle rate (no-load) | 24 °/s | 168 °/s | 129 °/s | **144 °/s** |
-| ±5° / 145° | 0.24 / 6.1 s | 0.06 / 0.89 s | 0.07 / 1.15 s | **0.06 / 1.04 s** |
+| ±5° / 140° | 0.24 / 5.9 s | 0.06 / 0.86 s | 0.07 / 1.11 s | **0.06 / 1.00 s** |
 | ±5° rate-limit bandwidth | 0.8 Hz | 5.3 Hz | 4.1 Hz | **4.6 Hz** |
 | unpowered hold | geometry | brake (lock conditional, μ ≥ 0.17) | brake | **brake (lock conditional, μ ≥ 0.23)** |
 | packaging | fits | motor 1.5 mm into the wheel (T5d-1) | fouls the battery cradle | **fits, 2.0 mm to the wheel** |

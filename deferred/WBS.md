@@ -2,7 +2,13 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
+**Current design revision:** Rev U (2026-11-03, see `docs/WBS.md` §6.5 for changelog)
+
+> **Status note, 2026-11-16 (design shift).** The tail EDF, its speed controller and the RCS are
+> no longer deferred: they are part of the first build (owner, 2026-11-15). The tail EDF is the
+> QX-Motor 64 mm nacelle unit, not a 55 mm unit. The Phase 11 items below are kept as written until
+> WBS item TEDF-01 rewrites them. Authority: `airframe/fuselage-mid/WBS.md` §1.1.1.4.0 and
+> `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../TODO.md)
 > is a compact index — headings, subheadings, and short (<=70-char) checkbox items
@@ -78,23 +84,28 @@
 - [ ] All 5 ESC telemetry visible on CAN FD; ESC temps ≤70°C at cruise power
 
 
-## §Phase12 — Cargo-bay Range-Extender Battery Module (Deferred)
+## §Phase12 — Cargo-bay Range-Extender Battery Module (PROMOTED 2026-10-26)
 
 *(root `WBS.md` §Phase12)*
 
-- [ ] **RBM module:** 6S LiPo (matched 4000 mAh recommended) + BQ76930-class BMS + ideal-diode
+> **Superseded 2026-10-26 (owner):** no longer deferred. The work moved into the active build as
+> `docs/plans/2026-10-26-001-feat-split-battery-head-rail-plan.md` and
+> `docs/plans/2026-10-26-002-feat-fe-multi-battery-pdb-plan.md`. The items below are kept as
+> the original concept record only.
+
+- [x] (superseded 2026-10-26 by plans 001/002) **RBM module:** 6S LiPo (matched 4000 mAh recommended) + BQ76930-class BMS + ideal-diode
     ORing output, in a tray retained by the same Observer cargo hooks/release (jettisonable),
     with a keyed XT60 pigtail.
-- [ ] **Flight Engineer input:** add `J_BATT2` (XT60) + `F_BATT2` + an ideal-diode / current-share
+- [x] (superseded 2026-10-26 by plans 001/002) **Flight Engineer input:** add `J_BATT2` (XT60) + `F_BATT2` + an ideal-diode / current-share
     combiner (LTC4359- or LTC4370-class — a NEW part family) OR-combining `J_BATT`/`J_BATT2`
     into VBAT: hot-swap-safe across SoC mismatch, reverse-blocking so a faulted/absent RBM
     can't drain or back-feed the main pack. (Flight Engineer board revision — not yet in KiCad.)
-- [ ] **Current sharing:** same pack model + matched-SoC at takeoff (or LTC4370 to force
+- [x] (superseded 2026-10-26 by plans 001/002) **Current sharing:** same pack model + matched-SoC at takeoff (or LTC4370 to force
     balanced sharing); simple diode-ORing alone lets the higher-SoC pack hog.
-- [ ] **Firmware (`pwr_fault`):** add a second-pack context (V/I/SoC over the existing
+- [x] (superseded 2026-10-26 by plans 001/002) **Firmware (`pwr_fault`):** add a second-pack context (V/I/SoC over the existing
     telemetry) + combiner PGOOD/fault logging; on RBM fault, isolate and continue on the main
     pack (RTH).
-- [ ] **W&B:** add the RBM to the §14 moment table; re-balance on the keel rail and verify on
+- [x] (superseded 2026-10-26 by plans 001/002) **W&B:** add the RBM to the §14 moment table; re-balance on the keel rail and verify on
     the physical CG rig before flight (a second ~750 g mass in the cargo bay shifts CG).
-- [ ] **CAD:** RBM tray + retention on the cargo-bay payload envelope; verify cargo-door and
+- [x] (superseded 2026-10-26 by plans 001/002) **CAD:** RBM tray + retention on the cargo-bay payload envelope; verify cargo-door and
     Observer clearances.

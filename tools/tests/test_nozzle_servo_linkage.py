@@ -25,16 +25,16 @@ class ScheduleTest(unittest.TestCase):
         psi = nsl.ring_angle_for_tilt(90.0)
         self.assertAlmostEqual(nsl.exit_radius_for_ring(psi), 26.25, delta=0.1)
 
-    def test_hold_flat_from_90_to_145(self) -> None:
-        # Edge: the requirement holds 105 % over the whole 90-145 deg band.
+    def test_hold_flat_from_90_to_135(self) -> None:
+        # Edge: the requirement holds 105 % over the whole 90-135 deg band.
         ref = nsl.ring_angle_for_tilt(90.0)
-        for tilt in (90.0, 105.0, 120.0, 145.0):
+        for tilt in (90.0, 105.0, 120.0, 135.0):
             self.assertEqual(nsl.ring_angle_for_tilt(tilt), ref)
 
     def test_beyond_limit_clamps_with_warning(self) -> None:
-        # Edge: 150 deg is past the 145 deg tilt limit -> clamp, and warn.
+        # Edge: 140 deg is past the 135 deg tilt limit -> clamp, and warn.
         with self.assertWarns(UserWarning):
-            psi = nsl.ring_angle_for_tilt(150.0)
+            psi = nsl.ring_angle_for_tilt(140.0)
         self.assertEqual(psi, nsl.ring_angle_for_tilt(90.0))
 
     def test_invalid_tilt_commands_open(self) -> None:

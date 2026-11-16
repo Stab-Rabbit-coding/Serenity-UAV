@@ -1,0 +1,90 @@
+==============================================================================
+Serenity UAV landing gear Rev R6 sizing -- hip-pivot canonical leg
+==============================================================================
+DESIGN AUW 5.897 kg (13.00 lbm, owner target), weight 57.8 N (13.00 lbf); measured ledger 6.276 kg (13.84 lbm, heaviest_4000_payload)
+Feet Y: fore -46 / aft +135 mm; CG Y +43.2 mm; wheelbase 182 mm
+Static share per leg: aft 24.7%  fore 25.3%
+Variant 1.5in: R_h 80.0 mm, bellcrank r 6.0 mm (ratio 13.33:1), belly clearance 38.1 mm (1.50 in)
+Variant 3.0in: R_h 80.0 mm, bellcrank r 6.0 mm (ratio 13.33:1), belly clearance 80.0 mm (3.15 in)
+
+--- Energy cases (KE = m*g*h, free drop) -----------------------------------
+6 ft  level 4-pt      KE 105.76 J   worst leg  26.14 J   (24.7% share)
+6 ft  tail-down 2-pt  KE 105.76 J   worst leg  52.88 J   (50.0% share)
+4 ft  level 4-pt      KE  70.51 J   worst leg  17.43 J   (24.7% share)
+4 ft  tail-down 2-pt  KE  70.51 J   worst leg  35.25 J   (50.0% share)
+
+--- Two-point drops, rigid-body effective mass (4 ft, ledger heaviest_4000_payload) --------------
+  NOSE-DOWN on the fore pair: CG 89.7 mm from the contact feet, 156.6 mm above them, k_pitch 102.5 mm
+    attitude  0.0 deg  arm  89.7 mm  m_eff/m 0.57  per leg  20.0 J (full-mass convention  35.3 J)
+    attitude  5.0 deg  arm  75.7 mm  m_eff/m 0.65  per leg  22.8 J (full-mass convention  35.3 J)
+    attitude 10.0 deg  arm  61.2 mm  m_eff/m 0.74  per leg  26.0 J (full-mass convention  35.3 J)
+    attitude 15.0 deg  arm  46.2 mm  m_eff/m 0.83  per leg  29.3 J (full-mass convention  35.3 J)
+    attitude 20.0 deg  arm  30.8 mm  m_eff/m 0.92  per leg  32.3 J (full-mass convention  35.3 J)
+    attitude 25.0 deg  arm  15.2 mm  m_eff/m 0.98  per leg  34.5 J (full-mass convention  35.3 J)
+  TAIL-DOWN on the aft pair: CG 91.8 mm from the contact feet, 156.6 mm above them, k_pitch 102.5 mm
+    attitude  0.0 deg  arm  91.8 mm  m_eff/m 0.56  per leg  19.6 J (full-mass convention  35.3 J)
+    attitude  5.0 deg  arm  77.8 mm  m_eff/m 0.63  per leg  22.4 J (full-mass convention  35.3 J)
+    attitude 10.0 deg  arm  63.2 mm  m_eff/m 0.72  per leg  25.5 J (full-mass convention  35.3 J)
+    attitude 15.0 deg  arm  48.1 mm  m_eff/m 0.82  per leg  28.9 J (full-mass convention  35.3 J)
+    attitude 20.0 deg  arm  32.7 mm  m_eff/m 0.91  per leg  32.0 J (full-mass convention  35.3 J)
+    attitude 25.0 deg  arm  17.0 mm  m_eff/m 0.97  per leg  34.3 J (full-mass convention  35.3 J)
+  worst per-leg energy, 0..25 deg: fore 34.5 J, aft 34.3 J -> the pairs are within 1 %; one schedule serves all four corners
+
+--- Settle budget (what the arrest may consume) -----------------------------
+  1.5in belly clearance - residual (RETIRED variant)    30.7 mm -> F_leg   1148 N (  258 lbf), wire P   7655 N, hip M  91.9 N*m
+  3.0in belly clearance - residual (flight article)     72.6 mm -> F_leg    486 N (  109 lbf), wire P   3237 N, hip M  38.8 N*m
+  3.0in hover nozzle-tip clearance                      13.7 mm -> F_leg   2573 N (  579 lbf), wire P  17155 N, hip M 205.9 N*m
+
+--- DUCTILE schedule solved for 6 ft tail-down at 1.5in (R_h 80.0 mm, shared) --------
+  design target  1722.4 N/leg (387.2 lbf) -> wire P 11482.9 N   [settle <= 30.7 mm of 38.1 mm clearance]
+  wire: d  6.03 mm, bow span   20 mm, stock L   40 mm (straight seat ends), h0 3.5 mm
+  stroke 2.30 mm required, 3.67 mm available (1.60x); fired bow rise 5.70 mm from h0 3.5 mm
+  wire mass 8.97 g x8 = 71.7 g/aircraft
+  bay boss station: exposed span 24 mm from the thigh socket mouth along CHORD_AZ (sets BAY_PLATE_L; was 59 mm)
+  This wire (P=11483 N) on the shared R_h 80 mm lever -- variants differ only in clearance:
+    1.5in  R_h  80.0 mm: F_leg 1722.4 N (387.2 lbf), settle  30.7 mm of  38.1 mm (residual   7.4 mm), rotation 22.0 deg, decel tail-down/level  59.6 / 119.1 g  ** TIGHT **
+    3.0in  R_h  80.0 mm: F_leg 1722.4 N (387.2 lbf), settle  30.7 mm of  80.0 mm (residual  49.3 mm), rotation 22.0 deg, decel tail-down/level  59.6 / 119.1 g
+
+--- DUCTILE schedule solved for 4 ft tail-down at 1.5in (R_h 80.0 mm, shared) --------
+  design target  1148.3 N/leg (258.2 lbf) -> wire P  7655.3 N   [settle <= 30.7 mm of 38.1 mm clearance]
+  wire: d  5.27 mm, bow span   20 mm, stock L   40 mm (straight seat ends), h0 3.5 mm
+  stroke 2.30 mm required, 3.67 mm available (1.60x); fired bow rise 5.70 mm from h0 3.5 mm
+  wire mass 6.84 g x8 = 54.7 g/aircraft
+  bay boss station: exposed span 24 mm from the thigh socket mouth along CHORD_AZ (sets BAY_PLATE_L; was 59 mm)
+  This wire (P=7655 N) on the shared R_h 80 mm lever -- variants differ only in clearance:
+    1.5in  R_h  80.0 mm: F_leg 1148.3 N (258.2 lbf), settle  30.7 mm of  38.1 mm (residual   7.4 mm), rotation 22.0 deg, decel tail-down/level  39.7 /  79.4 g  ** TIGHT **
+    3.0in  R_h  80.0 mm: F_leg 1148.3 N (258.2 lbf), settle  30.7 mm of  80.0 mm (residual  49.3 mm), rotation 22.0 deg, decel tail-down/level  39.7 /  79.4 g
+
+--- SPRING schedule (elastic phase, solved at 1.5in) ------------
+  per-leg elastic energy 6.68 J -> per wire 3.342 J
+  elastic-limit target 488 N/leg -> wire P 3252.5 N
+  wire: d 4.01 mm, bow span 20 mm, stock L 34 mm (straight seat ends), h0 3.5 mm, stroke 1.03 mm (avail 3.67, 3.58x)
+  bow rise at the elastic-limit stroke 4.65 mm  (H_DEF_SPRING in the SCAD)
+  wire mass 3.37 g x8 = 26.9 g/aircraft
+  bay boss station: exposed span 24 mm along CHORD_AZ (was 27 mm)
+  Reusing this wire in every variant:
+    1.5in  R_h  80.0 mm: elastic-limit force  487.9 N/leg, settle at limit 13.7 mm, onset decel (level)  33.7 g
+    3.0in  R_h  80.0 mm: elastic-limit force  487.9 N/leg, settle at limit 13.7 mm, onset decel (level)  33.7 g
+
+--- Structure checks (4 ft adopted schedule, both variants) --------
+  thigh @hip: M 91.9 N*m (= 2*P*r, R_h-INDEPENDENT -- same for every variant), section 2x14 mm cyl @ 18 mm ctrs (bore 6) + web -> Z 1925 mm^3, sigma 47.7 MPa (allow 27.5 MPa, margin 0.58x)
+  1.5in: hip pin M3 SS double-shear 4241 N vs F_leg 1148 N -> margin 3.7x; bay boss bearing 6300 N vs wire P 7655 N -> margin 0.82x; static stance 47.7 N/wire; lateral +/-15deg 308 N/leg
+  3.0in: hip pin M3 SS double-shear 4241 N vs F_leg 1148 N -> margin 3.7x; bay boss bearing 6300 N vs wire P 7655 N -> margin 0.82x; static stance 47.7 N/wire; lateral +/-15deg 308 N/leg
+
+--- LG-02: bay -> shell attachment ----------------------------------------
+  worst F_leg 1148 N; hip moment 91.9 N*m over a 68 mm bolt pattern
+  per bolt: tension 675 N, shear 287 N, resultant 734 N
+  M3 A2-70 tension 3521 N -> FOS 5.2;  shear 2113 N -> FOS 7.4
+
+  bolt-hole BEARING in CF-PETG (impact FOS target 4.0):
+    bare 2 mm wall                     t=  2.0 mm  cap    420 N  FOS 0.57  FAILS impact criterion
+    wall + 5 mm internal boss          t=  7.0 mm  cap   1470 N  FOS 2.00  FAILS impact criterion
+    wall + boss + 3 mm backing plate   t= 10.0 mm  cap   2100 N  FOS 2.86  FAILS impact criterion
+
+  net-section tension at the hole (K_t = 3.0): 7.5 MPa vs 27.5 MPa allowable -> FOS 3.7
+  head pull-through (M3 washer face Ø5.5, t=7 mm): 3629 N vs 675 N -> FOS 5.4
+
+  => backing plate REQUIRED: the 5 mm boss alone reaches FOS 2.00 on bearing
+     (short of the 4.0 impact criterion); 3 mm of backing plate takes it to 2.86.
+
+--- stderr ---

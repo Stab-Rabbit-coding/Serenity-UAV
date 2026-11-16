@@ -39,7 +39,7 @@ OEM datasheet in avionics/datasheets/.
 
 Remix additions over the VimDrones concept (the 3 datasheets in this task):
     U2  Infineon SLB9672   TPM 2.0 (avionics/datasheets/SLB_9672XU20_Infineon.pdf)
-    U3  TI ISOW1044BDFMR   isolated CAN-FD xcvr (avionics/datasheets/isow1044.pdf)
+    U3  TI ISOW1044BDFMR   isolated CAN-FD xcvr (avionics/datasheets/ti/isow1044.pdf)
     U4  ADI ADM2795E       isolated RS-485 xcvr (avionics/datasheets/adm2795e.pdf)
         -- NEW clean-room symbol authored here from the real 16-lead SOIC_W
            (RW-16) pinout (ADM2795E datasheet Table 10). NOTE: the
@@ -496,7 +496,7 @@ def place_real(key, ref, value, unit_pos, netmap, pins):
 # ===========================================================================
 # ISOW1412 -- NEW clean-room symbol, 20-pin DFM (SOIC-20W compatible), pin
 # table from TI ISOW1412/ISOW1432 datasheet (SLLSF86C) Table 7-1 "Pin
-# Functions" (avionics/datasheets/isow1412.pdf), read directly for this
+# Functions" (avionics/datasheets/ti/isow1412.pdf), read directly for this
 # design. Unlike ADM2795E (signal-only isolator, needs an external isolated
 # DC-DC for its bus-side supply -- see the superseded note below), ISOW1412
 # has an INTEGRATED isolated DC-DC converter, exactly like ISOW1044 does for

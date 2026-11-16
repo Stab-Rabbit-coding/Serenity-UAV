@@ -33,6 +33,7 @@ ENV/
 # FreeCAD large binary outputs (exceed GitHub 100 MB limit — use LFS if needed)
 *.FCBak
 *.FCStd
+*.FCStd.bak
 
 # VS Code Local History plugin (handled as submodule — do not commit raw files)
 avionics/kicad/.history/
@@ -60,4 +61,14 @@ docs/references/POCKETBEAGLE2 V10_241220.DSN
 code-scanning-files-extracted.csv
 denominations.odg
 *.rpt
-avionics/datasheets/spruiv7c.pdf
+avionics/datasheets/ti/spruiv7c.pdf
+
+# Pilot placement/routing trial runs (refloorplan_keep_copper.sh <in> <workdir>), 2026-10-19
+/avionics/kicad/Pilot/work/
+
+# Fused forward hull exceeds GitHub 100 MB; committed as .stl.tar.gz (owner 2026-11-02).
+# Regenerate: tools/merge_head_cargo_shell.py, or unpack the tarball.
+airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl
+# Aft hull (104 MB) is within 1 % of the limit too; committed as .stl.tar.gz (owner 2026-11-02).
+# Regenerate: tools/merge_middle_rear_shell.py, or unpack the tarball.
+airframe/stls/fuselage/middle_rear_shell24_2mm_merged.stl

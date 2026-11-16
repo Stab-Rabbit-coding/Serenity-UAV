@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Current design revision:** Rev T (2026-09-06)
+**Current design revision:** Rev U (2026-11-03)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../TODO.md)
 > is a compact index — headings, subheadings, and short (<=70-char) checkbox items
@@ -24,7 +24,7 @@
 | §0.7 | 0.7 — CI Lint Scope and Repo-Wide Lint Debt | 0 | — |
 | §0.8 | 0.8 — Tilt-Spar Material Allowables + Hall Encoder | 4 | — |
 | §0.9 | 0.9 — Licensing Updates | 1 | — |
-| §0.10 | 0.10 — Update and Correct Documentation Touching Every Non-Archived File | 8 | — |
+| §0.10 | 0.10 — Update and Correct Documentation Touching Every Non-Archived File | 15 | — |
 | §1.5 | 1.5 — Documentation | 4 | — |
 | §1.6 | 1.6 — Rev Q: Repo-Wide Architecture Propagation | 0 | — |
 | §1.7 | 1.7 — Rev R: Component Rev Sync + s_ Prefix Removal | 0 | — |
@@ -35,7 +35,8 @@
 | §6.2 | 6.2 — STL Mesh Repair | 0 | — |
 | §6.3 | 6.3 — Rev S Checkpoint | 0 | — |
 | §6.4 | 6.4 — Rev T Checkpoint | 0 | — |
-| | **Total open (this subsystem)** | **31** | |
+| §6.5 | 6.5 — Rev U Checkpoint | 0 | — |
+| | **Total open (this subsystem)** | **38** | |
 
 ---
 
@@ -51,7 +52,7 @@
     - [ ] `build_guide_18_first_flight.svg`'s Part 107/VLOS warning callouts (lines ~59–60)
     need citations but their fixed-width boxes are already near-full; requires either a
     layout change or rendering verification (see `/verify` skill) before editing text length.
-    - [ ] Seven additional SVGs (`build_guide_09_avionics.svg`, `build_guide_11_inter_board.svg`,
+    - [x] **Resolved 2026-10-31** — all cards regenerated from the Rev T+ assembly (`tools/gen_build_guide_cards.py`); old cards archived to `archives/graphical-build-guide-pre-revt/`. Seven additional SVGs (`build_guide_09_avionics.svg`, `build_guide_11_inter_board.svg`,
     `build_guide_12_security_hw.svg`, `build_guide_20_node_placement.svg`,
     `build_guide_21_node_install.svg`, `build_plan.svg`, `components_overview.svg`) are
     built entirely or partly around the **archived** Pilot/TACCO hardware instead of
@@ -61,7 +62,7 @@
     **Superseded by, and folded into, the "Rebuild `graphical-build-guide/`..." item in
     §1.5 Documentation** — that item replaces these cards' art wholesale rather than
     patching the hardware depiction in place.
-    - [ ] The remaining ~30 non-priority SVGs were not individually swept for citations in
+    - [x] **Superseded 2026-10-31** — the swept cards are archived; every regenerated card carries a SOURCE line. The remaining ~30 non-priority SVGs were not individually swept for citations in
     this pass (only spot-checked); a full sweep with rendering verification is still open.
     **Partial progress 2026-06-29:** `build_guide_17_ground_test.svg` line 45 updated —
     appended `[REF-FCC-003]` to the "49MHz Part 15 §15.235 ground transmitter" text (text
@@ -819,13 +820,87 @@ is solid at the row level but a category-level check suggests the true number co
 meaningfully higher, and that bears on the aircraft's actual hover margin.
 
 
+### §0.10.3 Operator's Manual
+
+*(root `WBS.md` §0.10.3; opened 2026-11-02 by the owner — "there isn't a user's manual yet.")*
+
+**Requirement.** The project shall have an operator's manual for the Serenity UAV, written in
+the organization and wording style of a Navy NATOPS flight manual [REF-MIL-003 §1.5, §1.6],
+in accordance with the FAA small-UAS rules [REF-FAA-001, REF-FAA-002], and carrying the
+Allied Spacecraft Corporation and Firefly Coach Works / Firefly Ship Works branding drawn
+from the QMx *Serenity* blueprint reference pack (`docs/references/qmx-bp-exports/`, sheets 11
+and 12; `docs/images/EngineerByFF.png`).
+
+**Derived requirements** (each is a testable statement; "shall" per [REF-MIL-003 §1.6]):
+
+| ID | Requirement | Verified by |
+| --- | --- | --- |
+| OM-1 | Callouts shall use WARNING / CAUTION / NOTE with the severity meanings of [REF-MIL-003 §1.5]; a WARNING shall never be written as a CAUTION, nor a CAUTION as a NOTE. Requirement verbs shall follow [REF-MIL-003 §1.6]. | `tools/precommit_doc_wording.py` + owner read |
+| OM-2 | Every regulatory statement shall cite a `REFERENCES.md` REF-ID and a section already catalogued there; the manual shall add no new section number it cannot verify. | grep of `[REF-…]` cites against `REFERENCES.md` |
+| OM-3 | Every operating limit, threshold or procedure value shall trace to a repo source (`docs/flight_envelope.md`, `docs/failsafe_thresholds.md`, `docs/POWER_DISTRIBUTION.md`, `docs/CARGO_WINCH_SPECIFICATION.md`, the Phase 5 flight-phase WBS). Where no source exists the manual shall say "not established" — never an invented figure. | Per-value source column |
+| OM-4 | The manual shall state its release status on the title page and in each chapter that depends on an open gate. It shall not be released for flight while `docs/FIRST_FLIGHT_READINESS.md` blockers remain. | Title page + §0.10.3 tracking items |
+| OM-5 | Values that exist only as design estimates (crosswind, transition floor, CL_max-dependent speeds, thermal margins) shall be replaced by Phase 5/9 flight-test data as it is produced. | Revision history |
+| OM-6 | The manual shall cover, at minimum: aircraft and systems description; limitations; indoctrination and currency; mission planning; normal procedures (preflight → postflight); flight characteristics; emergency procedures; communications; cargo operations; maintenance-for-operators; performance data. | Table of contents |
+| OM-7 | Branding shall use only the extracted blueprint-sheet artwork already in the repo, shall be cited and acknowledged as fan art with its own copyright notice, and shall not be described as licensed under CC BY-SA (see the licensing note below). | Title-page notice |
+| OM-9 | Flight-envelope and limit figures in the manual shall be generated, not typed: `tools/sync_operators_manual.py` runs in the pre-commit chain and in CI (`--check`), polls the source documents, refuses a commit when `current-specification/flight_limits.json` disagrees with the tools/docs that restate it, and rewrites the manual's AUTO/V regions and sync stamp on every commit (owner, 2026-11-02). | `tools/tests/test_sync_operators_manual.py`; `.githooks/pre-commit`; `.github/workflows/ci.yml` |
+| OM-10 | The manual shall describe the aircraft as the operator receives it and shall omit construction detail (hull sections, collar bonds, internal fastening, wire routing). The hull is two permanently collar-bonded sections and is never disassembled after construction; that detail lives in the graphical build guide (`graphical-build-guide/WBS.md` BG-SEQ-1..6). | Manual read; grep for section/joint language |
+| OM-8 | The manual shall pass the repo's markdownlint configuration and the wording check, and the documents it cites shall be listed in `REFERENCES.md` "Used in". | CI / pre-commit |
+
+**Owner corrections 2026-11-02 and single source.** Zero tilt datum is horizontal; nacelle tilt is −5° to +135° (a 140° span); the EDF is the QF2822-2300KV, 83.60 ozf (2,370 gf) at 24 VDC / 57.0 A, with 80 A ESCs. These live in `current-specification/flight_limits.json`; `docs/flight_envelope.md`, `tools/flight_envelope_endurance.py`, `tools/nozzle_servo_linkage.py`, `tools/tilt_actuator_options.py`, the tilt-drive/spar/nozzle docs, README and the manual were corrected to match. Recomputes that need design work (vane swirl/torque, inlet CFD, ESC bay fit for 80 A vs the 70 A design, PWR-CONN-01) are tracked in `airframe/wings-nacelles/WBS.md` NAC-64-EDF-2300KV and were **not** redone here.
+
+**NATOPS conformance note.** `REFERENCES.md` REF-MIL-003 records that only the §1.5 callout
+definitions and §1.6 requirement verbs are adopted from CNAF M-3710.7; the project claims no
+compliance with the manual as a whole. This manual follows the same line: its *part/chapter
+organization* is patterned on the NATOPS Flight Manual layout (aircraft → indoctrination →
+normal procedures → flight characteristics → emergency procedures → communications →
+performance) as a presentation choice, not a conformance claim, and no NATOPS section number
+beyond §1.5 and §1.6 is cited.
+
+**Licensing note (owner decision, 2026-11-02).** The blueprint sheets and the Firefly Coach Works
+plate artwork are QMx / Fox / Universal property. They are published as fan art, cited and
+acknowledged where used, and carry their own copyright notices. Their inclusion in an otherwise
+CC BY-SA 4.0 document does not remove their prior copyright and does not bring the rest of the
+document under it. The manual therefore (a) keeps the artwork in `docs/references/` and
+`docs/images/` unmodified except for cropping, (b) states the fan-art status and owners'
+copyrights on the title page and in Appendix A.3, and (c) tracks a per-item citation in
+`REFERENCES.md` as an open item. Root `AGENTS.md` §3 "third-party material keeps its own
+licence" governs.
+
+**As drafted (2026-11-02).** `docs/OPERATORS_MANUAL.md`, v0.1 DRAFT, written by Claude Sonnet
+5.5 (Anthropic) under the owner's direction from the sources named in OM-3. Content gaps the
+draft deliberately leaves visible rather than papering over:
+
+- No crosswind limit, no verified transition floor, no verified stall speed (CL_max unknown
+  for the built wing section) — `docs/flight_envelope.md` banner.
+- No 64 mm EDF RPM redline — `docs/flight_envelope.md` §2.2.
+- Wi-Fi/Zigbee link-loss timers unassigned — `docs/failsafe_thresholds.md` §2.2.
+- The ESC thermal threshold in `governor_config.h` (100 °C) disagrees with the failsafe
+  document (95 °C) — `docs/failsafe_thresholds.md` §4.
+- AUW/T-W are provisional pending mass truth (`docs/FIRST_FLIGHT_READINESS.md` blocker 1).
+- Landing gear is not flight-cleared; nozzle drive, tilt actuator and flight-controller
+  firmware are open first-flight blockers (same document, blockers 2–4, 8).
+- `docs/POWER_DISTRIBUTION.md` §8.3 still quotes a stale T/W of 1.61; the manual uses
+  `docs/flight_envelope.md` and flags the conflict.
+
+Open items (mirrored to root `TODO.md` §0.10.3 by `tools/gen_todo_from_wbs.py`):
+
+- [x] Auto-sync script in the commit chain (`tools/sync_operators_manual.py`, OM-9) — done 2026-11-02
+- [ ] Owner (PE) review of v0.1 — limits, WARNINGs, emergency procedures
+- [ ] Add per-item fan-art citations (QMx sheets 11/12, Firefly plate) to `REFERENCES.md`
+- [ ] Fill flight-test values from Phase 5/9 data (OM-5)
+- [ ] Reconcile with first-flight gates D1–D5 and blockers (OM-6)
+- [ ] Render to PDF (no pandoc/weasyprint on this system)
+- [ ] Add to `REFERENCES.md` "Used in" and `PROJECT_INDEX.md`
+- [ ] Catalogue the extra Part 107 sections the manual needs (certificate, preflight, reports) in `REFERENCES.md`, verified against eCFR
+
+
 ## §1.5 — Documentation
 
 *(root `WBS.md` §1.5)*
 
 - [ ] **Update PHASED_BUILD_GUIDE.md** from Rev M 18-inch to Rev S 24-inch specifications
     (hull 609.6 mm, 50mm EDFs, v2·v2·v2·v2 node placement, Rev S power system, cargo system).
-- [ ] **Rebuild `graphical-build-guide/` (38 SVGs) from Blender/FreeCAD-derived platform
+- [x] **DONE 2026-10-31 for the 27 cards + `build_plan` + `components_overview`** (`tools/gen_build_guide_cards.py`, `airframe/blender-scripts/build_guide_card_renders.py`); the `overview_*`/`hull_*` silhouettes remain under graphical-build-guide WBS 1.5.6. **Rebuild `graphical-build-guide/` (38 SVGs) from Blender/FreeCAD-derived platform
     graphics, replacing the pre-Rev-N hand-drawn line art.** Two stale-geometry problems,
     not one:
     - The 26 numbered `build_guide_XX_*.svg` step cards (antenna placement, node install,
@@ -1010,5 +1085,146 @@ Not yet part of a Rev T checkpoint (still Rev S or earlier, tracked open in thei
 WBS/TODO): avionics PCB placement/routing (`avionics/WBS.md`), firmware Phase 7
 (`avionics/WBS.md` firmware branches), cargo winch STLs (`WBS.md` §1.1.1.2.1), rear/Phase 11
 EDF (`deferred/AGENTS.md`).
+
+*No open items — baseline complete; retained for traceability.*
+
+
+## §6.5 — Rev U Checkpoint
+
+*(root `WBS.md` §6.5)*
+
+**2026-11-03.** Comprehensive checkpoint per root `AGENTS.md` §8: every component is current,
+integrated, tested, and documented as of this letter — components not listed below carry
+forward from Rev T unchanged. Rev U pins the project-wide letter, republishes the BOM, and records the SLS print process and the
+hull-section mergers in the baseline. It changes no geometry, firmware, or PCB data.
+
+**Numbering:** work done between the Rev T pin (2026-09-06) and this pin continued the Rev T
+numbered sequence (T1, T2, …, per `AGENTS.md` §8) and is superseded by this checkpoint. Numbered
+modifications reset at U (U1, U2, …); the next change after this pin is a U-number. Component
+design-generation names (a PCB's own "Rev T", the landing gear's "R6", the head's "H2/H3", the
+wing's "S1g", the nacelle's "S4c") are permanent and were not renamed; only the project-wide
+letter pointer moved. Historical records are untouched: git history, `CLAUDE-MEMORY.md`,
+`docs/plans/*.md`, `archives/`, and the `bom_revS.*` / `bom_revT.*` snapshots.
+
+**Versioning applied at this pin:** the "Current design revision" line of every subsystem
+README/WBS/TODO; the root `README.md` status badge, status table, and BOM pointer; the
+`AGENTS.md` BOM source-of-truth pointer; `tools/README.md` and `tools/gen_build_guide_cards.py`
+BOM pointers; and `current-specification/bom_revU.json` / `.csv`, a carry-forward of `bom_revT` plus the section
+changes below. The known BOM lag items are recorded in `current-specification/README.md` and remain open.
+
+Work carried into Rev U since the Rev T pin (summarised from the commit record; owner review
+requested before treating this list as the signed checkpoint scope):
+
+- **Nacelle** — 64 mm tandem-EDF redesign with a servo-driven nozzle replacing the passive drive
+  (NAC-64-* items, `airframe/wings-nacelles/WBS.md`); pivot, CFD, mass, and bench gates open.
+- **Avionics** — Commo becomes one standalone node (approved 2026-09-29); TACCO 60 x 35 mm with
+  HI-6138 / MIL-STD-1553C; Pilot PB2-I re-map and keep-copper re-floorplan; routing and Gerbers open.
+- **Airframe** — hull R2 datum migration; cargo shell rebuilt as the mirror of its port half;
+  head R2 (nose sensor bay); middle/rear layout and joint audits; Bay A forward adoption.
+- **Landing gear** — A1B balanced-couple load path, co-strike skid specification, 13.0 lbm weight pass.
+- **Build guide and verification** — Rev T+ assembly refresh and regenerated cards; joint register
+  with BOM coverage gate; cited allowables database and 1.5 fastener factor of safety.
+
+**SLS and hull-section verification (2026-11-03).** The 2026-11-01 "shift to sls printing" commit
+added only two datasheets; the baseline documents on `main` (README, AGENTS §7, REVN build guide,
+BOM) still described a four-section FDM CF-PETG hull. PR 276 (`feat/canonical-gear-box`) carries the
+actual SLS migration and both merged hull sections, and is merged into the Rev U branch. Rev U records,
+with status:
+
+| Item | Status in Rev U |
+|---|---|
+| SLS DuraForm PA CF hull and nacelle printed parts; PA11 at gear feet | Decided (owner, 2026-10-31); recorded in `AGENTS.md` §7 and the BOM. Vendor not selected; no quote or coupon data. |
+| Head + cargo as one part | Built (`head_cargo_shell24_2mm_merged.stl`, watertight, 653 g at the PA CF datasheet density 1.11 g/cc, with the canonical gear box fused in). BOM `PRINT-HEAD-CARGO-ONEPIECE`; `PRINT-HEAD-SHELL`, `PRINT-CARGO-SECT`, `PRINT-HEAD-CARGO-COLLAR`, `PRINT-BATT-CRADLE` retired at Qty 0. |
+| Middle + rear as one part | Built (`middle_rear_shell24_2mm_merged.stl`, watertight, 431 g at 1.11 g/cc; blended loft Y 501–530.5). BOM `PRINT-MIDDLE-REAR-ONEPIECE`; middle, rear, and middle/rear collar rows retired at Qty 0. **Misses the 333 g plan target** (set on the FDM basis); gates G1–G3 open. |
+| Twin pack tray, sleds, gate | In the BOM (`PRINT-TWIN-PACK-*`, 88.5 + 2 × 5.9 + 3.3 g). The ledger's battery pack model still uses the pre-twin-pack position, so CG and AUW are provisional. |
+| Hull scale 24 in vs up to 27 in | Rev U is 24 in: both built hull sections are 24 in (`*_shell24_*`) and the build guide is the 24 in guide. The 27 in uniform scale (plan 2026-10-31-003) is not in the baseline. Inferred from the PR 276 geometry, not an explicit owner statement. |
+| Ring + skids as a separate PA11 crash member (Option B) | Owner preference recorded; not yet a separate part. |
+| SLS density basis | **Applied 2026-11-07.** Datasheet solid densities verified against the 3D Systems sheets: PA CF 1.11 g/cm³ (3DS-30108A, 10-23), PA11 1.03 g/cm³ (3DS-30109A, 02-25), PA12 1.00 g/cm³ (3DS-30112A, 02-25), all ASTM D792. The ledger and the 64 mm nacelle roll-up read them from `tools/sls_materials.py`; the old FDM 1.05 g/cc survives only as the conversion constant. |
+| Ledger, SLS basis | Hover AUW 14.12 lbm (6,405 g), hover CG offset +11.8 mm, T/W 1.48; cargo 2,800 g payload 14.40 lbm; heaviest 4,000 payload 14.62 lbm. On the old FDM 1.05 basis the same aircraft is 13.80 lbm. Density added +99 g to the printed hull parts and +49 g to the nacelles (`tools/sls_auw_reconcile.py`). Provisional until the twin-pack battery model lands. |
+| BOM vs mesh | **Synced 2026-11-07** (owner: the BOM is the procurement output). 16 rows moved to the mesh mass (largest: `PRINT-WINGS-S1223` 131 → 101 g, `PRINT-LG-BAY-PLATE` 34 → 16 g, `PRINT-LG-LEG-FRAME-3.0IN` 56 → 44 g). `tools/check_bom_mesh_sync.py` now fails CI on drift. 22 printed rows with no ledger mesh are reported as NOT COVERED: they need the 50 mm → 64 mm BOM swap, winch meshes, or are tooling. |
+
+**Archive pass (2026-11-03).** Frozen at Rev T and earlier in `archives/rev-T-and-earlier.tar.gz`
+(see `archives/README.md` and `archives/MANIFEST.md`): `bom_revS.*`, `bom_revT.*`, `serenity-rev-s.jsx`, `docs/bom_revR.json`, the
+one-shot `tools/bom_edit_*.py` scripts, dated status snapshots, stale 30 in / 36 in studies, and one
+superseded plan. Not archived, with the reason: `docs/structural_analysis.md`,
+`docs/TILT_SPAR_ANALYSIS.md`, `docs/AVIONICS_PB2_REDESIGN.md`, and `avionics/rev-s1/WBS.md` (read by live
+tools), and the remaining `docs/plans/` files (no completion status to judge by).
+
+**Rev T freeze, Rev U relabel, and the 64 mm nacelle (2026-11-07).**
+
+- *Frozen Rev T.* `archives/rev-T-frozen.tar.gz` (168 files) holds the pre-change copy of every live
+  file that mentioned Rev T plus the whole 50 mm nacelle. It was built from the committed blobs and
+  verified byte for byte. Live files continue as Rev U.
+- *Relabel.* Sixteen live component declarations now read "Rev U (2026-11-07; carried forward from
+  Rev T…)". Prose history is left as written. Parts retired but not archived (the battery cradle and
+  the tilt-actuator trade view) keep the label they held, per `AGENTS.md` §8, and board design
+  generations (a PCB's own "Rev T") are not renamed. The build-guide card SVGs still read "Rev T+" until
+  the cards are next regenerated.
+- *64 mm independence.* `nacelle_pod_64mm_tandem.scad`, `nacelle_nozzle_iris_64mm.scad` and
+  `nacelle_trunnion_64mm.scad` are flattened with `tools/scad_flatten.py` (OpenSCAD's last-assignment
+  rules applied once) and no longer include any 50 mm source. Iris and trunnion renders are identical to
+  the originals (symmetric difference 0.0000 mm³). The pod matches in volume, bounds and face count, and in
+  124,862 of 124,866 triangles; the other 4 are one flat patch triangulated differently.
+- *50 mm archived:* pod, iris, trunnion, fixed nozzle, sleeves, servo bracket, housing profile and two
+  cache-export SCADs; their STLs (pods, sleeves, trunnion, nozzles, ESC covers); three tools
+  (`nozzle_linkage_check`, `nacelle_trunnion_fit`, `nacelle_housing_profile`) and the axial-fit study with
+  its test. The canonical engine shells `eng_*_shell24_50mm_repaired.stl` stay: they are the canon mesh the
+  64 mm pod is scaled from, not a 50 mm design.
+- *Dependency audit.* `tools/check_nacelle_deps.py` (in CI) walks the 64 mm SCAD closure (17 files) and
+  fails on a missing, archived or 50 mm file. It found and this change fixed: the 64 mm nozzle parts
+  were never published (six STLs added: throat and ring per side, flap, flap seal); the port stage-2
+  cartridge did not exist and the starboard one was stale (it predated the ×1.06 enlargement; 60.9 g
+  vs 66.9 g), so both were regenerated; the BOM carried no 64 mm propulsion hardware (motors, rotors,
+  ESCs, nozzle servos, 6804 bearings), now added.
+- *Still open for the 64 mm nacelle:* the four ESC bay covers have no 64 mm mesh (blocked on the ESC
+  part and rating, WBS NAC-64-ESC-80A); the ESC current rating (70 A in the roll-up, 80 A recommended by
+  the motor sheet); prices for the purchased parts are not recorded (rows carry 0.00); rotor mass is
+  assumed (20 g); the published pod STLs predate the intake-cowl change and need the pending re-bake
+  (their 248,000 mm³ against 367,000 mm³ from the current source); and the pivot is not converged
+  (residual +9.6 mm, unchanged by this work).
+
+**Cargo winch and cargo-bay components (2026-11-07).** The Rev C1 winch cannot be built as specified:
+its stack does not fit the one-piece hull at the layout reservation, and no hull-clear placement near the
+payload line also clears the tilt-actuator hardware (`docs/CARGO_WINCH_SPECIFICATION.md` §3.11; owner
+decision needed). The six winch printed parts therefore have no meshes. Other cargo-bay checks:
+`assembly_integrity_check.py` PASS (hull enclosed, 0 openings); `twin_head_pack_fit.py` PASS;
+`cargo_layout_fit.py` FAIL, identical on `main` and stale (old shell, retired cradle).
+
+**64 mm nacelle assembly, tilt sweep and cable check (2026-11-07).** `tools/nacelle64_assembly_check.py`
+assembles the live pod, cartridge, nozzle, trunnion, motor cans, spar, wing and wing pinion in the
+nacelle-local frame, on both pod renders (`docs/NACELLE_64MM_VERIFICATION.md` §5d). Results: the static fit
+is clear except the nozzle throat spigot vs the stage-2 cartridge, 0.095 in³ (1,562 mm³) (NAC-64-ASM-01). The pod
+is clear of the wing-pinion sweep over −5…135° tilt on both sides (a first reading of 0.137 in³ (2,237 mm³) was a
+sign error in the tool and is retracted, NAC-64-ASM-02). No route exists for the
+4 × 10 AWG bundle from the spar-bore mouth, and the disconnect bay has no floor and is skinned over
+(NAC-64-ASM-03; WA-R10 "route exists" superseded). Coverage gaps are NAC-64-ASM-04.
+
+**OD-1 closed (2026-11-07, owner: option A).** The stage-2 cartridge now ends 0.12 in (3 mm) short of the nozzle station
+(`edf_motor_mount_64mm.scad` Z_AFT = P64_Z_NOZ − 0.12 in (3 mm)), as the nozzle source already assumed; spigot overlap 0 in³ (0 mm³) on both
+sides; cartridge 0.144 lbm (65.1 g), was 0.147 lbm (66.9 g); hover AUW 14.12 lbm (6,403 g); pivot residual +0.372 in (+9.45 mm).
+
+**NAC-64-ASM-03 closed (2026-11-08, owner: 0.138 in (3.5 mm) bay stud insert).** Bay floor kept out of the cavity, pocket
+mouth cut through the pylon skin, SCAD assert on the 0.079 in (2.0 mm) minimum wall. Both pods re-rendered: floor 91 % solid,
+mouth clear, insert-to-bore wall 0.091 in (2.31 mm) minimum. Pod +0.0055 lbm (+2.5 g); studs now counted at the bay: nacelle
+CG 4.67 in (118.74 mm), pivot residual +0.356 in (+9.04 mm).
+
+**Execution plan to completion (2026-11-07).** `docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md`
+puts the 712 open subsystem items (baseline `docs/plans/2026-11-07-001-burndown-baseline.json`,
+counted by `tools/wbs_burndown.py`) in order. It defines completion as levels L1–L5 and plans 34 sprints
+sized to one 5-hour session, each with numeric exit criteria and a close-out ritual. A queue of 16 owner
+decisions gates the sprints. Owner review is required before S1.
+
+**Archive compaction (2026-11-07).** All of `archives/` is now 13 deterministic tarballs (118 MB, was
+290 MB in the working tree): one per former subfolder, plus `loose-zips` and `loose-files`. All 590
+files were extracted and compared byte for byte before the originals were removed. `archives/MANIFEST.md`
+lists every tarball, its SHA-256, and every file in it; `archives/README.md` gives the unpack command and the
+rule for adding to the archive. Git history still holds the old blobs, so the repository's `.git` size does not shrink
+without a history rewrite. Dependabot's `archives/serenity` lockfile alerts end because that folder is no longer
+unpacked.
+
+Not yet part of a Rev U checkpoint (tracked open in their own WBS/TODO): avionics PCB routing and
+Gerbers, firmware Phase 7, STL re-exports after the TACCO change, cargo-shell mesh defect, cargo
+winch STLs, rear/Phase 11 EDF (`deferred/AGENTS.md`), the `serenity-rev-s.jsx` viewer, and the
+BOM lag items above.
 
 *No open items — baseline complete; retained for traceability.*

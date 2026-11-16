@@ -524,7 +524,7 @@ NAV_BORE_STATION =   8.0;  // [mm] chordwise station aft of LE — CONSTANT over
 // multi-turn output means the drive is NO LONGER a limited-rotation servo.  It
 // is a continuous-rotation gearmotor or a stepper, closed on the AK7455's
 // absolute nacelle angle rather than on the actuator's own travel.  That
-// removes the 145°-of-travel constraint which plan 004 KTD5 found was the
+// removes the 140°-of-travel constraint which plan 004 KTD5 found was the
 // BINDING one (torque never was — the reduction now delivers 3.571 × whatever
 // the actuator gives, against a 0.177 N·m grounded requirement), and it retires
 // the 180°-vs-270° question entirely.  Shaft torque is 0.050 N·m; wind-up over

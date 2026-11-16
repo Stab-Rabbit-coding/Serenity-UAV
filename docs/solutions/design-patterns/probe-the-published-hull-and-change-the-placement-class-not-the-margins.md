@@ -53,7 +53,8 @@ lesson at least five times, each time paid for in a failed placement:
 > original note follows.  The chin-floor result below was for the 55 mm cape (58 mm
 > pouch). TACCO grew to 60 x 35 mm, so the chin pouches are now 63 mm. They pass
 > `cargo_layout_fit.py` only with these owner-accepted changes:
-> - a **1.5 mm** static gap on the chin nodes (`CHIN_GAP`);
+> - a **1.5 mm** static gap on the chin nodes (the `CHIN_GAP` constant,
+>   removed in the 2026-10-07 revert);
 > - a 9 mm cable channel;
 > - the pair moved 2.7 mm aft.
 >

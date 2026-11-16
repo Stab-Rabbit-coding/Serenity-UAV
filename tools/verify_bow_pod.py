@@ -41,7 +41,9 @@ except ImportError:  # pragma: no cover - dependency guard
 
 # Head_Shell bake translation (identity rotation) — must match
 # tools/bake_hull_frame.py COMPONENTS["Head_Shell"].  Hull = local + BAKE_T.
-BAKE_T = np.array([-331.9993360, -17.9999640, 60.9998780])
+sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent))
+import hull_datums as hd  # noqa: E402  single source (2026-10-19)
+BAKE_T = np.array(hd.bake_translation("Head_Shell"))
 
 HEAD_STL = "airframe/stls/fuselage/head_shell24_2mm_repaired.stl"
 
@@ -67,7 +69,7 @@ LASER_BORE_L = 38.0
 
 # Flat extents (hull), for the aperture-row fit check.
 FLAT_W = 26.4  # mm — flat width spec (1.04 in)
-FLAT_CENTER_X = -167.15
+FLAT_CENTER_X = 2.70  # hull X, aircraft datum R2 (R1 -167.15)
 
 # Bore axis unit vectors in hull frame (exterior-facing, i.e. toward bow tip).
 # BOW_ROT cylinders fire toward -Y; LASER_ROT fires 30 deg below the -Y horizon.
@@ -179,6 +181,14 @@ def report_bore(name, mesh, centre_hull, axis, pocket_depth):
 
 
 def main():
+    # SUPERSEDED 2026-10-27 (Rev H2): the three Rev R1c bow-flat bores this tool
+    # checks were replaced by the twin-pod nose sensor bay (bow_sensor_pod.scad
+    # Rev H2, merge_head_sensor_bay.py).  The bay, pods, laser, board and their
+    # lines of sight are gated by tools/head_layout_fit.py.  Run it with
+    # --legacy to re-run the old bore checks for history.
+    if "--legacy" not in sys.argv:
+        print("verify_bow_pod.py: SUPERSEDED by tools/head_layout_fit.py (Rev H2 sensor bay)")
+        return 0
     print("Loading baked head shell:", HEAD_STL)
     mesh = trimesh.load(HEAD_STL, process=False)
     # Binary STL stores each triangle with its own unwelded vertex copies;

@@ -4,7 +4,7 @@ add_structural_features.py  —  add structural features to the four baked fusel
 
 Implements the structural engineering design from docs/structural_analysis.md (Rev R1,
 2026-06-14).  All geometry is in the hull frame (X = +port, Y = +aft, Z = +dorsal).
-All four input STLs must already be baked (header carries "SerenityUAV HULL-FRAME R1").
+All four input STLs must already be baked (header carries "SerenityUAV AIRCRAFT-FRAME R2").
 
 Features added per shell:
 
@@ -29,7 +29,7 @@ Features added per shell:
     dowels previously provided (they had already been re-roled from
     load-bearing pins to alignment dowels when the collars were added —
     docs/structural_analysis.md §7.3), so the Ø3.2 mm boss-pin bores are
-    no longer cut into any shell.  The BOSS_PIN_BORES dict below is retained
+    no longer cut into any shell.  The BOSS_PIN_BORES record was retained
     only as a historical record of the (now-removed) dowel positions.
 
 MESH-01 root-cause fix (2026-06-30): _subtract_all now unions all cutters and
@@ -105,7 +105,12 @@ SHELLS = {
     "rear": os.path.join(STL_DIR, "fuselage", "rear_shell24_2mm_repaired.stl"),
 }
 
-MARKER = b"SerenityUAV HULL-FRAME R1"
+import sys as _sys  # noqa: E402
+import os as _os  # noqa: E402
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)),
+                                  '..', '..', 'tools'))
+import hull_datums as hd  # noqa: E402
+MARKER = hd.FRAME_MARKER  # single source (aircraft datum R2, 2026-10-19)
 
 # ---------------------------------------------------------------------------
 # Structural feature geometry (all dimensions in mm, hull frame)
@@ -137,17 +142,17 @@ MARKER = b"SerenityUAV HULL-FRAME R1"
 # reaches) is still a hand-picked constant; X/Z shape is always measured.
 FACE_BORE_Y_RANGES = {
     # Head aft face (Y = -70.7 mm): bore from 14 mm inside head to 2.7 mm past face
-    "head_aft": (-85.0, -68.0),
+    "head_aft": (220.70, 237.70),   # R2; R1 (-85, -68)
     # Cargo fwd face (Y = -71.5 mm): from 2 mm before face to 13.5 mm inside cargo
-    "cargo_fwd": (-75.0, -58.0),
+    "cargo_fwd": (230.70, 247.70),  # R2; R1 (-75, -58)
     # Cargo aft face (Y = +132.0 mm): 10 mm inside cargo to 2 mm past face
-    "cargo_aft": (+122.0, +134.0),
+    "cargo_aft": (427.70, 439.70),  # R2; R1 (122, 134)
     # Middle fwd face (Y = +130.4 mm): 2 mm before face to 14.6 mm inside middle
-    "middle_fwd": (+128.0, +145.0),
+    "middle_fwd": (433.70, 450.70),  # R2; R1 (128, 145)
     # Middle aft face (Y = +203.6 mm): 10 mm inside middle to 3.4 mm past face
-    "middle_aft": (+193.0, +207.0),
+    "middle_aft": (498.70, 512.70),  # R2; R1 (193, 207)
     # Rear fwd face (Y = +203.2 mm): 2 mm before face to 13.8 mm inside rear
-    "rear_fwd": (+201.0, +217.0),
+    "rear_fwd": (506.70, 522.70),   # R2; R1 (201, 217)
 }
 FACE_BORE_MARGIN = 1.5  # mm — inset from the measured inner-cavity wall
 FACE_BORE_SAMPLES = 7  # Y stations sampled across each joint's span
@@ -160,32 +165,9 @@ FACE_BORE_SAMPLES = 7  # Y stations sampled across each joint's span
 # Positions on r = 35 mm circle at 0° / 120° / 240° from cross-section centroid.
 # Y range spans both mating sections (≈ 8–10 mm depth each).
 # Basis: structural_analysis.md §7.2
-BOSS_PIN_BORES = {
-    "joint1": {  # Head / Cargo, hull Y ≈ -71 mm
-        "y_range": (-79.0, -62.0),
-        "pins": [
-            (-168.3, +143.9),  # Pin A — top
-            (-138.0, +91.4),  # Pin B — lower stbd
-            (-198.6, +91.4),  # Pin C — lower port
-        ],
-    },
-    "joint2": {  # Cargo / Middle, hull Y ≈ +131 mm
-        "y_range": (+121.0, +141.0),
-        "pins": [
-            (-170.1, +115.0),  # Pin A — top
-            (-139.8, +62.5),  # Pin B — lower stbd
-            (-200.4, +62.5),  # Pin C — lower port
-        ],
-    },
-    "joint3": {  # Middle / Rear, hull Y ≈ +203 mm
-        "y_range": (+193.0, +213.0),
-        "pins": [
-            (-170.1, +109.6),  # Pin A — top
-            (-139.8, +57.1),  # Pin B — lower stbd
-            (-200.4, +57.1),  # Pin C — lower port
-        ],
-    },
-}
+# BOSS_PIN_BORES (the retired 2026-07-06 joint dowel positions, R1 frame)
+# removed 2026-10-19 in the aircraft-datum migration: nothing read it; the
+# record is in git history.
 BOSS_PIN_RADIUS = 1.6  # mm — Ø 3.2 mm bore (CF rod 3.0 mm OD + 0.1 mm clearance/side)
 
 # ---------- keel locating channel (3.5 mm wide × 1.0 mm deep, inner belly surface) ----------
@@ -207,14 +189,14 @@ CUT_OVERLAP = 0.5  # mm — clearance past an existing mesh surface for any cutt
 
 KEEL_CHANNEL = {
     "cargo": {
-        "x_range": (-171.75, -168.25),
-        "z_range": (1.0, 2.0 + CUT_OVERLAP),
-        "y_range": (-71.5, +132.0),
+        "x_range": (-1.90, 1.60),     # R2; R1 (-171.75, -168.25)
+        "z_range": (81.0, 82.0 + CUT_OVERLAP),
+        "y_range": (234.20, 437.70),
     },
     "rear": {
-        "x_range": (-171.75, -168.25),
-        "z_range": (4.7, 5.7 + CUT_OVERLAP),
-        "y_range": (+203.2, +384.3),
+        "x_range": (-1.90, 1.60),     # R2; R1 (-171.75, -168.25)
+        "z_range": (84.7, 85.7 + CUT_OVERLAP),
+        "y_range": (508.90, 690.00),
     },
 }
 
@@ -299,10 +281,13 @@ RING_POCKETS = {
     # (`merge_cargo_interior.py` RING_Y30_ENABLED), per this repo's "keep
     # documented, not deleted" convention — not recut, not procured.
     # Outer bounds at Y=30: X[-257.6..-81.1]  Z[+0.5..+158.6]
-    "cargo_Y30": _ring_pocket_slabs((-257.6, -81.1), (0.5, 158.6), 30.0),
+    "cargo_Y30": _ring_pocket_slabs((-87.75, 88.75), (80.5, 238.6), 335.7),  # R2
     # Rear anti-ovalisation zone, Y = +290 mm
     # Outer bounds at Y=290: X[-235.5..-116.0]  Z[+11.9..+152.4]
-    "rear_Y290": _ring_pocket_slabs((-235.5, -116.0), (11.9, 152.4), 290.0),
+    # R2.  The X range moves WITH the rear section: it was measured on the rear
+    # before its 2026-10-19 re-centre (+5.914 mm), so R1 (-235.5, -116.0) +
+    # 5.914 + 169.85 -> symmetric about the centreline.
+    "rear_Y290": _ring_pocket_slabs((-59.736, 59.764), (91.9, 232.4), 595.7),
     # SPAR-01 CF thwart pair (U4) -- replaces cargo_Y30 as the couple closure.
     # Sited on measured-intact structure straddling the wing-spar station
     # (WBS.md SPAR-01 point 4): fore Y-40 is a true closed ring (1 poly, 1
@@ -311,9 +296,9 @@ RING_POCKETS = {
     # below is a no-op wherever a chord is absent, same as it always has been
     # for cargo_Y30/rear_Y290, so this is safe at both stations.
     # Outer bounds at Y=-40 (measured, published shell): X[-234.4..-102.8]  Z[43.4..142.7]
-    "cargo_Yn40": _ring_pocket_slabs((-234.4, -102.8), (43.4, 142.7), -40.0),
+    "cargo_Yn40": _ring_pocket_slabs((-64.55, 67.05), (123.4, 222.7), 265.7),  # R2
     # Outer bounds at Y=+118 (measured, published shell): X[-256.1..-83.8]  Z[-0.0..155.0]
-    "cargo_Y118": _ring_pocket_slabs((-256.1, -83.8), (-0.0, 155.0), 118.0),
+    "cargo_Y118": _ring_pocket_slabs((-86.25, 86.05), (80.0, 235.0), 423.7),  # R2
 }
 
 # ---------- CF skid-rod bores (Ø 4.2 mm cylinders, Y-axis, 60 mm total) ----------
@@ -352,8 +337,11 @@ RING_POCKETS = {
 # compromise proves inadequate in practice.
 SKID_ROD_BORES = [
     # (x_centre, z_centre, y_start, y_end)
-    (-223.7, 18.5, +173.0, +233.0),  # port arm
-    (-122.0, 19.0, +173.0, +233.0),  # stbd arm (compromise center, see above)
+    # R2; R1 (-223.7/-122.0, 18.5/19.0, 173..233).  RE-MEASURE after the rear
+    # re-centre (WBS SKID-ROD-RECENTRE): the "10 mm discontinuity" was mostly
+    # the rear's 5.9 mm offset, now removed.
+    (-53.85, 98.5, 478.70, 538.70),  # port arm
+    (47.85, 99.0, 478.70, 538.70),  # stbd arm (compromise center, see above)
 ]
 SKID_ROD_RADIUS = 2.1  # mm — Ø 4.2 mm bore (CF rod 4.0 mm OD + 0.1 mm clearance/side)
 
@@ -402,12 +390,12 @@ MATING_PLANES = {
     # (cargo aft, rear fwd) the plane is pulled toward the tip so the gap stays
     # ~2 mm — the face is then a slightly-reduced (still open) section, which the
     # conforming collar bonds to regardless.
-    "head_aft": (-71.2, -1),
-    "cargo_fwd": (-69.5, +1),
-    "cargo_aft": (129.0, -1),
-    "middle_fwd": (131.0, +1),
-    "middle_aft": (202.3, -1),
-    "rear_fwd": (204.3, +1),
+    "head_aft": (234.5, -1),     # R2; R1 -71.2
+    "cargo_fwd": (236.2, +1),    # R2; R1 -69.5
+    "cargo_aft": (434.7, -1),    # R2; R1 129.0
+    "middle_fwd": (436.7, +1),   # R2; R1 131.0
+    "middle_aft": (508.0, -1),   # R2; R1 202.3
+    "rear_fwd": (510.0, +1),     # R2; R1 204.3
 }
 
 
@@ -650,7 +638,7 @@ def _subtract_all(shell, cutters):
 
 def _stamp_header_export(mesh, out_path, shell_name):
     """
-    Write the mesh as binary STL with the HULL-FRAME R1 marker in the 80-byte header.
+    Write the mesh as binary STL with the aircraft-frame R2 marker in the 80-byte header.
 
     Stamping the marker on the output means bake_hull_frame.py --check will see the
     file as already baked (the geometry is already in hull frame; we are only adding
@@ -931,12 +919,12 @@ def main():
     rear_mesh_raw = trimesh.load(SHELLS["rear"], process=True)
     _export_ring_profile(
         cargo_mesh_raw,
-        30.0,
+        335.7,  # R2; R1 Y 30
         os.path.join(RING_CSV_DIR, "ring_cargo_Y30_inner.csv"),
     )
     _export_ring_profile(
         rear_mesh_raw,
-        290.0,
+        595.7,  # R2; R1 Y 290
         os.path.join(RING_CSV_DIR, "ring_rear_Y290_inner.csv"),
     )
 
@@ -982,7 +970,7 @@ def main():
 
         passed = verify(modified, name)
 
-        # Write output with HULL-FRAME R1 header (geometry already in hull frame;
+        # Write output with R2 frame header (geometry already in the aircraft frame;
         # no placement transform applied — only boolean subtractions).
         _stamp_header_export(modified, path, name.capitalize() + "_Shell")
         print(f"  written → {path}")
@@ -1001,7 +989,7 @@ def main():
     else:
         print("\nAll shells PASS manufacturing-watertight gate.")
         print(
-            "Run: python3 tools/bake_hull_frame.py --check  (to confirm HULL-FRAME R1 marker)"
+            "Run: python3 tools/bake_hull_frame.py --check  (to confirm R2 frame marker)"
         )
         print(
             "Slicer verification of feature positions is required before first print."

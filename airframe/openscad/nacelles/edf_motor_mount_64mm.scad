@@ -42,7 +42,7 @@
 //   Euler turbomachinery relation Q = mdot · r · V_theta for axial inflow, with
 //   mdot = sqrt(T rho A) = 0.385 kg/s (tandem 37.6 N, the tilt tool's thrust
 //   row), annulus axial velocity 120.4 m/s (hub r 13.9 .. tip 32.0), shaft
-//   torque 0.227 N·m from 1265.4 W (REF-EDF-003 2400 KV row) x 0.85 motor
+//   torque 0.227 N·m from 1265.4 W (REF-EDF-003 2400 KV row — SUPERSEDED 2026-11-02 by the 2300 KV row, 1368 W / 2370 gf at 24 V; vane swirl/torque below NOT yet recomputed, WBS NAC-64-EDF-2300KV) x 0.85 motor
 //   efficiency ASSUMED at 45 288 rpm (the tilt tool's 0.85 x KV x V rule,
 //   ASSUMED): V_theta = 25.7 m/s at r_m = 22.95 mm -> 12.0 deg swirl at r_m.
 //   Free vortex (V_theta ∝ 1/r): 18.2 deg at the hub, 8.7 deg at the tip.  The
@@ -51,8 +51,8 @@
 //   with parabolic camber from the inlet angle at the LE to axial at the TE.
 //
 // RETENTION: the cartridge sits against the pod's bore step at Z 103.7 and is
-// locked aft by the nozzle (nacelle_nozzle_iris_64mm.scad), whose throat bears
-// on its aft face.  M3 heat-set inserts at r 34.9 in the key-rib aft faces are
+// locked aft by the nozzle (nacelle_nozzle_iris_64mm.scad), whose throat spigot
+// bears on its aft face at Z = P64_Z_NOZ - 3 (196.1; OD-1, 2026-11-07).  M3 heat-set inserts at r 34.9 in the key-rib aft faces are
 // kept as the attachment for that aft lock (the 50 mm pod bosses, r 33.88, left
 // 0.18 mm of wall to the bore and sat inside the throat; deleted at 64 mm).
 // NOZZLE-TO-POD RETENTION IS AN OPEN JOINT ITEM (WBS): the pod skin ends at
@@ -81,7 +81,12 @@ include <nacelle_64_scale.scad>   // P64_Z_NOZ (2026-10-05 x1.06)
 KEY_ANGLES = [30, 150];          // SLEEVE_KEY_ANGLES (64 mm: 270 freed for the servo)
 Z_FWD      = 42.2;               // STATOR_SLV_Z_START (bore step)
 Z_JOINT    = 103.7;              // STATOR_SLV_Z_END = AFT_SLV_Z_START
-Z_AFT      = P64_Z_NOZ;          // AFT_SLV_Z_END = NOZZLE_RING_Z (single source)
+NZ_SPIGOT_L = 3.0;               // nozzle throat spigot length (nacelle_nozzle_iris_64mm.scad
+                                 // NZ64_SPIGOT_L): the spigot locates in the pod sleeve bore here
+Z_AFT      = P64_Z_NOZ - NZ_SPIGOT_L;  // aft face, 3 mm short of the nozzle ring station so the
+                                 // throat spigot has its seat.  OD-1 (owner 2026-11-07, option A,
+                                 // NAC-64-ASM-01): was P64_Z_NOZ, which put the spigot inside the
+                                 // cartridge wall (1,562 mm3 overlap).  The throat bears on this face.
 Z0         = Z_JOINT;   // cartridge (stage 2)
 Z1         = Z_AFT;
 L          = Z1 - Z0;

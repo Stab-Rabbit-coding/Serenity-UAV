@@ -1,0 +1,46 @@
+==============================================================================
+Serenity UAV -- minimum safe landing-gear leg length (hover nozzle clearance)
+==============================================================================
+Nacelles VERTICAL (90 deg, worst tilt).  Flap length 40 mm, PIVOT_Z 106.27 mm
+Pivot-to-tip arm 115.0 mm; spar at hull Z +66.85
+Nozzle tip hull Z -48.18 -> hangs 48.18 mm below the belly datum
+Nozzle ground projections: port (47.0, 42.3), stbd (-385.1, 36.3)
+Stance: track 288 mm, wheelbase 170 mm; nozzles lie INSIDE the wheelbase and ~73 mm OUTBOARD of the track
+
+--- Reserve budget (what the tip must still hold at first contact) ---
+  hull settle, spring elastic limit (3.51 J/leg at 350 N/leg)    10.03 mm
+  PIVOT_Z drift reserve (observed 111.5/105.8/113.8/107.5)        8.00 mm
+  build + TPU tread compression tolerance                         3.00 mm
+                                                                ---------
+  reserve required                                               21.03 mm
+  touchdown attitude / uneven ground                              5.00 deg
+
+=> MINIMUM SAFE BELLY CLEARANCE  75.59 mm (2.98 in)
+   Static-only (attitude 0, no reserve) would read 48.18 mm -- 27.41 mm optimistic.
+
+--- Leg catalogue ---
+  1.5 in           C  38.1 mm: static  -10.08, at 5 deg  -16.44 (worst az 357.0 deg, port, first contact fore-port)
+                          surplus over reserve  -37.47 mm  *** BELOW MINIMUM ***
+  3.0 in   ACTIVE  C  80.0 mm: static  +31.82, at 5 deg  +25.30 (worst az 357.0 deg, port, first contact fore-port)
+                          surplus over reserve   +4.27 mm  MEETS MINIMUM
+
+--- Attitude sensitivity (cost of roll, at each catalogue leg) ---
+  theta deg        1.5 in      3.0 in
+        0.0        -31.11       10.79
+        2.0        -33.67        8.21
+        5.0        -37.47        4.27
+        8.0        -41.23        0.26
+       10.0        -43.71       -2.44
+       15.0        -49.77       -9.30
+  (surplus over the reserve budget, mm.  15 deg is the gear's STRUCTURAL lateral case,
+   not a nozzle-clearance case -- see ATTITUDE_DEG in this file.)
+
+--- Survival case (NOT a sizing case) ---
+  A full ductile-fuse arrest settles the hull 30.7 mm (4 ft schedule, both variants).
+  Clearing the nozzle through that stroke as well would need 96.34 mm (3.79 in).
+  This is a crash case: the fuse has fired and the wires are scrap.  Sizing the leg to it
+  is an owner decision (LG-28); the flaps are sacrificial and cheaper than the leg.
+
+PASS: the ACTIVE gear variant (3.0 in) meets the minimum safe length.
+
+--- stderr ---

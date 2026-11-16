@@ -39,7 +39,7 @@ the three components requested for this task:
 | Addition | Part | Datasheet in repo |
 | --- | --- | --- |
 | Trusted platform module | Infineon OPTIGA™ TPM SLB 9672 TPM2.0 | `avionics/datasheets/SLB_9672XU20_Infineon.pdf` |
-| Isolated CAN-FD transceiver | TI ISOW1044BDFMR | `avionics/datasheets/isow1044.pdf` |
+| Isolated CAN-FD transceiver | TI ISOW1044BDFMR | `avionics/datasheets/ti/isow1044.pdf` |
 | Isolated RS-485 transceiver | ADI ADM2795E | `avionics/datasheets/adm2795e.pdf` |
 
 **Not a PocketBeagle 2 Industrial cape** — standalone board, own 5 V power input,

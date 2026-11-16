@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
+**Current design revision:** Rev U (2026-11-03, see `docs/WBS.md` §6.5 for changelog)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../TODO.md)
 > is a compact index — headings, subheadings, and short (<=70-char) checkbox items
@@ -327,12 +327,64 @@ GND2_CANB to GND) break the 5 kV galvanic isolation requirement. They must be fi
 - [x] **Owner:** footprint repositioning for the courtyard overlaps and placement-driven shorts
       (`avionics/AGENTS.md`: repositioning is referred to the owner). *(Superseded 2026-10-05:
       generator placement is DRC-clean; owner approved the placement rules.)*
-- [ ] Clear the isolation-domain shorts (PGND, GND2_*, VCC2_* and RADIO_ANT_F crossings) and
-      the keepout intrusion.
-- [ ] Clear the remaining shorts, clearance and solder-mask-bridge findings (routing, via and
-      mask edits).
-- [ ] Re-run `tools/validate_kicad.py` until it reports 0 hard violations on TACCO, and document
-      any accepted residuals with rule and reason.
+- [x] Clear the isolation-domain shorts (PGND, GND2_*, VCC2_* and RADIO_ANT_F crossings) and
+      the keepout intrusion. *(Closed 2026-10-26: `tools/validate_kicad.py` on
+      `avionics/kicad/TACCO/kicads/TACCO.kicad_pcb` at branch `pilot-refloorplan` @ 13a5a119
+      reports 0 hard, 5 soft. No `shorting_items` or `items_not_allowed` finding remains on the
+      canonical board. The hand-edited `TACCO-2.kicad_pcb` is not this item; see §1.2a.6.)*
+- [x] Clear the remaining shorts, clearance and solder-mask-bridge findings. *(Closed 2026-10-26
+      with the same measurement: 0 hard on the canonical TACCO board.)*
+- [x] Re-run `tools/validate_kicad.py` until it reports 0 hard violations on TACCO, and document
+      any accepted residuals with rule and reason. *(Met 2026-10-26 on `TACCO.kicad_pcb`; the
+      5 soft findings remain accepted-class under the validator's severity policy.)*
+
+##### 1.2a.5 *Pilot DRC backlog — 250 hard violations (measured 2026-10-26)*
+
+**Measurement.** `tools/validate_kicad.py --changed-since origin/main --verbose` (KiCad 9.0.9
+`kicad-cli pcb drc --severity-error`) on `avionics/kicad/Pilot/kicads/Pilot.kicad_pcb` at branch
+`pilot-refloorplan` @ 13a5a119 (PR #258) reports **250 hard / 55 soft**. The same board
+measured 79 hard on 2026-10-18, so the count grew during the Pilot re-route. The ERC on
+`Pilot.kicad_sch` is 0 hard. The gate in CI "KiCad Validation" fails on this board.
+
+| DRC rule | Count | Notes |
+| --- | --- | --- |
+| `clearance` | 109 | Requires track, pad, or via relocation; not a netclass edit |
+| `hole_clearance` | 96 | Via-to-pad and via-to-hole spacing |
+| `track_width` | 44 | Track width below the active netclass minimum |
+| `items_not_allowed` | 1 | Keepout intrusion |
+
+`kicad-cli` also reports 212 unconnected items. The validator gate does not count them, but the
+Pilot routing is open (§1.2a "Finish Pilot PCB"), so the unconnected nets remain part of this
+backlog.
+
+- [ ] Clear the 109 `clearance` findings. Re-route or move the offending tracks, pads, or vias.
+      Do not widen the netclass to pass the check.
+- [ ] Clear the 96 `hole_clearance` findings. Move the vias or pads, or resize the drill where the
+      design permits.
+- [ ] Clear the 44 `track_width` findings by widening the affected tracks to the netclass minimum.
+- [ ] Clear the `items_not_allowed` keepout intrusion.
+- [ ] Route the 212 unconnected items and record any that stay open as accepted, with reason.
+- [ ] Re-run `tools/validate_kicad.py` until `Pilot.kicad_pcb` reports 0 hard. Document any
+      accepted residuals with rule and reason.
+
+##### 1.2a.6 *TACCO-2 hand-edited board — 93 hard violations (measured 2026-10-26); owner decision required*
+
+**Finding.** `avionics/kicad/TACCO/kicads/TACCO-2.kicad_pcb` has no matching schematic. It is a
+hand-edited layout copy, not a generator output. The validator scans it because it is a
+`.kicad_pcb` in the repository. Measured at the same ref as §1.2a.5: **93 hard / 36 soft**, of
+which 48 are `solder_mask_bridge`, 34 are `shorting_items`, 7 are `clearance`, 3 are
+`hole_clearance`, and 1 is `courtyards_overlap`. The shorting items match the PB2 socket-rail
+pattern in `docs/solutions/design-patterns/pb2-socket-rails-bind-connector-overhang-not-connector-family.md`,
+which records these findings as caused by hand-edited what-if copies.
+
+The canonical TACCO board (§1.2a.4) is `TACCO.kicad_pcb` and reports 0 hard. This item does not
+reopen §1.2a.4.
+
+- [x] **Owner decision:** delete `TACCO-2.kicad_pcb`, `.kicad_pro`, and `.kicad_dru`, not
+      regenerate them. *(Decided 2026-10-26 by the owner. The files are removed from the tree and
+      remain in git history before the deletion commit.)*
+- [x] Delete the three TACCO-2 files and confirm `tools/validate_kicad.py` no longer scans
+      `TACCO-2`. *(Closed 2026-10-26 with the deletion commit on `track/drc-backlog`.)*
 
 ##### 1.2a.1 *Cape DRC / routing / ETH2 status (2026-06-12)* — see `avionics/kicad/README.md`
 
@@ -590,7 +642,7 @@ GND2_CANB to GND) break the 5 kV galvanic isolation requirement. They must be fi
       a separate discrete Semtech LoRa chip) and only 8KB RAM vs. the
       32-64KB SRAM mLRS's codebase assumes. STM32WLE5 has the LoRa radio
       **integrated in the die** (verified against ST's own datasheet,
-      `avionics/datasheets/stm32wle5jc.pdf`): UFQFPN48 (7x7mm) or UFBGA73
+      `avionics/datasheets/st/stm32wle5jc.pdf`): UFQFPN48 (7x7mm) or UFBGA73
       (5x5mm) package, up to 256KB flash / 64KB SRAM — single-chip courtyard
       ~36-64mm^2, smaller than the bare RFM95W module (289 mm^2) it's
       replacing, and a rounding error against the ~666 mm^2 SiK frees up.
@@ -1018,6 +1070,120 @@ first-flight critical path** (`docs/FIRST_FLIGHT_READINESS.md` §3).
     not a numeric DRC fix to chase. ★
 - [ ] **U9** — REFERENCES.md, WBS/TODO and `avionics/AGENTS.md` closeout for U1–U8.
 
+### §1.10a — Bay A forward avionics items (2026-11-01)
+
+Spec `docs/BAY_A_FWD_LAYOUT.md`; thermal `docs/BAY_A_FWD_THERMAL.md`.
+
+- [ ] **BAYA-FWD-T1** — ★ BLOCKER (owner decision): no thermal tier sustains CN1's 8.3 W
+    all-radio peak; the fan tier caps it at 5.49 W (PROVISIONAL). Choose a TACCO TX
+    duty / thermal-throttle cap, or a better heat path.
+- [ ] **BAYA-FWD-T2** — Confirm the design ambient (104 °F / 40 °C ASSUMED).
+- [ ] **BAYA-FWD-T3** — Cite or bench-measure the thermal inputs (pouch conductance, PA12-CF
+    k, gap pad, film coefficients); re-run `tools/bay_a_thermal_budget.py`.
+- [ ] **BAYA-FWD-T4** — Vent-slot and fan geometry, gated in `head_layout_fit.py`
+    (after T1).
+- [ ] **BAYA-FWD-B1** — Cite the CAN-FD and RS-485 stub limits from the fitted
+    transceivers' datasheets into `STUB_LIMIT_MM` (check is PROVISIONAL until then).
+- [ ] **BAYA-FWD-B2** — Airspeed sensor footprint at the pitot hose turn (X −3.6, Y 50.5,
+    Observer underside Z 236.8); ties to §1.10 U5.
+- [ ] **BAYA-FWD-B3** — Re-check ring / CAN-FD bus length budgets with the routed
+    Bay A lengths (`head_layout_fit.py` route report).
+
+### §1.11 — Stern stack: NoNFO-Pilot-PB2 (2026-11-14)
+
+**Design shift, owner decision 2026-11-12.** The stern (Simon) control stack becomes one
+NoNFO-Pilot-PB2 board on one PB2-I. Shepherd, Inara and River stay full stacks (Pilot + PB2-I
+and TACCO + PB2-I). The fleet goes from eight compute nodes to seven. Reason: weight off the
+longest avionics arm (Y 494.7) to move the CG forward; ledger credit −0.128 lbm (−58 g),
+about 0.055 in (1.4 mm) of CG (`tools/min_stretch_relocation.py`).
+
+Considered and rejected: two merged plus two full stacks (mass-diet plan 2026-10-26-003 KD3,
+superseded here); keeping NoNFO as a held fork (2026-10-26 status, superseded here); a
+3-port Ethernet switch on RMII2 (owner chose the Pilot pattern, DP83825I + AX88772E);
+GNSS from the dorsal puck alone (owner chose an on-cape MAX-M10S, first function removed if
+space, mass or routing is short). Grounding: plan 2026-10-31-003 R3; ideation 2026-10-31 row 4.
+
+Affected: Simon FC4 and CN4 nodes, the Simon saddle, `tools/auw_ledger.py`,
+`tools/middle_layout_fit.py`, `current-specification/bom_revU.csv`, root `AGENTS.md` §1 and
+§9. The board's design files and item list live in SecureControllers
+(`kicad/NoNFO-Pilot/PB2/`, `TODO.md` §5.2); it is a fleet product with Serenity as first
+customer. Plan and sprints S34–S41:
+`docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md`.
+
+- [x] **NFP-OD18** — ★ Owner: bus architecture A / A-diet / B / B+ (brief says B+).
+    **DECIDED 2026-11-14 (owner): B+.** The trust-module MCU owns CAN-FD, RS-485, 1553 and the
+    slow lines.
+    Brief: SecureControllers `kicad/NoNFO-Pilot/PB2/ARCHITECTURE_BRIEF.md`. The pin ledger
+    shows only B+ (trust-module MCU owns the buses and the slow lines) fits the PB2-I
+    header with every function aboard. Gates S34.
+- [x] **NFP-OD19** — ★ Owner: PACE re-balance — brief `docs/PACE_REBALANCE_BRIEF.md`.
+    **DECIDED 2026-11-14 (owner): option B** (best balance, 12 cells changed). Applied to
+    root `AGENTS.md` §9 and §1.9 above.
+    Owner direction 2026-11-14: re-compute PACE from node capability and loading, no single
+    point of failure, no stack with a single tasking. Brief recommends option A (keep every
+    Primary; 7 cells change). Earlier note:
+    Root `AGENTS.md` §9 lists Simon as A / C / A / P; plan 2026-10-31-003 R3 calls the merged
+    stack the PACE Emergency path. The two disagree. The role is an input to OD-18. Gates S34.
+- [x] **NFP-OD20** — ★ Owner: USB Wi-Fi module part (also blocks TACCO fab).
+    **DECIDED 2026-11-14 (owner): option 1**, Ezurio Sterling-LWB5+ solder-down module in USB
+    mode. Data sheets catalogued REF-SENSOR-065..069.
+    Brief `docs/WIFI_MODULE_OD20_BRIEF.md` (2026-11-14) recommends the Ezurio Sterling-LWB5+
+    solder-down module in USB mode, once its integration guide confirms USB mode.
+    Open since 2026-09-29 (§1.2a). Gates S35.
+- [x] **NFP-FIT** — Real-mesh fit gate for the stern stack at Simon (S34).
+    Outline 3.402 × 2.098 in (86.4 × 53.3 mm) against the present stack box of
+    2.28 × 3.03 × 0.87 in (58 × 77 × 22 mm): the board is 0.37 in (9.4 mm) longer than the
+    box. New tool `tools/nonfo_simon_fit.py`. A fail goes to the owner as a brief.
+    **DONE 2026-11-14 (S34):** `tools/nonfo_simon_fit.py` PASS standing portrait (3.40 in
+    vertical), 1 mm to starboard, harness zone to port; landscape fails. Margin 1 mm: re-run on
+    the placed board's STEP in S38. Stack 0.777 in (19.74 mm) tall.
+- [x] **NFP-MASS** — Stern stack mass gate: ≤ 0.108 lbm (49 g) holds the credit (S34).
+    Baseline is the pouched pair, 0.236 lbm (107 g) (`tools/middle_layout_fit.py` CN4 58 g +
+    FC4 49 g). The −58 g credit assumed a merged board as light as Pilot (31 g). First
+    estimate: board about 0.14 lbm (63 g), pouched stack about 0.18 lbm (81 g), credit about
+    −26 g [CALC, unverified]. Corrected 2026-11-14: the first entry used a 118 g baseline
+    that no ledger tool carries.
+    **DONE 2026-11-14 (S34):** pouched stack 0.201 lbm (91.0 g) on a 1.6 mm board, 0.189 lbm
+    (85.7 g) on 1.0 mm; PASS below 107 g. Credit −16.0 to −21.3 g [CALC; assumed lines in the
+    zone contract]. The −58 g in `tools/min_stretch_relocation.py` is replaced in S41.
+- [x] **NFP-OD21** — ★ Owner: smallest mass credit worth building the merge for.
+    First estimate is about −26 g against −58 g planned. Gates S34.
+    **DECIDED 2026-11-14 (owner):** the BBE-Black outline stays and the board may weigh more
+    than a Pilot cape. Mass is minimised, not floored. Agent reading, not the owner's words:
+    the stack stays lighter than the 107 g pair it replaces; a heavier result goes back to
+    the owner.
+- [x] **NFP-PD1** — Map the 31 B+ lines onto the MSPM0G3519-Q1 RGZ-48 (first task of S34).
+    OD-18 was decided before this check (2026-11-14); a failure here means the 64-pin package.
+    The package bonds 44 I/O pins, so the count fits; the function assignment is unchecked.
+    Result is appended to the architecture brief.
+    **DONE 2026-11-14 (S34):** 31 lines fit with 12 ports spare; SWD and BSL kept free.
+    SecureControllers `kicad/NoNFO-Pilot/PB2/pin_ledger/mcu_ledger.py`.
+- [ ] **NFP-PB1** — Bench: PB2-I to MSPM0 host link at bus rate (gates the fab order).
+    Owner, physical. CAN-FD frames at bus rate beside IMU traffic on SPI0, on Observer
+    hardware; record worst-case latency.
+- [x] **NFP-WIFI-DS** — Obtain the Sterling-LWB5+ module data sheet (Ezurio login).
+    **DONE 2026-11-14:** owner supplied the module data sheet v5.2, the USB adapter data sheet
+    and the DVK guide (REF-SENSOR-065, 066, 069). USB mode is the `CONFIG_HOST = 000` strap;
+    −40 to +85 °C; 0.7 g; rail at least 0.8 A. Variant 453-00046 (MHF4) approved by the owner 2026-11-14.
+    Needed for the USB order code, strapping, temperature rating and mass (S35). Owner to
+    rule whether a login-gated data sheet passes the sourcing rule.
+- [ ] **NFP-QA** — Track fastener, connector and harness mass and CG per board.
+    Owner direction 2026-11-14 (PR #289). Starts with the stern stack (S34, S41); the same
+    lines are owed for Pilot, TACCO, Commo, Flight Engineer, gateway and Observer.
+- [ ] **NFP-THERM** — Thermal load check for the stern stack at peak electrical load (S40).
+- [ ] **NFP-LEDGER** — Enter the stern stack in the AUW ledger and BOM (S41).
+- [ ] **NFP-SADDLE** — Couple the Simon saddle to the new outline in CI (S41).
+- [ ] **NFP-POLICY** — Update root `AGENTS.md` §1 and §9 to seven nodes (S41).
+- [ ] **NFP-TEDF-1** — [STD] Tail EDF cooling design shift (2026-11-15, `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`): the
+    stern stack sits in the tail EDF's intake stream. NFP-THERM shall use that airflow, and
+    its result gates TEDF-02 (S46). Do it in S40.
+- [ ] **NFP-TEDF-2** — [ADV] Confirm which node commands the tail EDF throttle and the four
+    RCS valves (GW-RCS), now flight-critical in hover, and whether the PACE assignment of
+    OD-19 still holds. Brought to the owner in OD-22 (S45).
+- [ ] **NFP-TEDF-3** — [STD] The cooling-fan drive output on the stern board has no fan to
+    drive. Remove it or repurpose it, and record which (S36 or S41).
+- [ ] **NFP-FW-IF** — Hand Theme F the host-link and device-tree interface (S41).
+
 ## §1.8 — Names
 
 *(root `WBS.md` §1.8)*
@@ -1048,13 +1214,19 @@ first-flight critical path** (`docs/FIRST_FLIGHT_READINESS.md` §3).
 
 - UAV Tasks with PACE prioritization and failover per stack (primary, alternative, contingency, emergency)
 
--- Watchdog: P - Shepherd; A - Inara; C - Simon, E - River
+-- Watchdog: P - Simon; A - Shepherd; C - Inara; E - River
 
--- Comms: P - Inara; A - Shepherd; C - River; E - Simon
+-- Comms: P - Shepherd; A - River; C - Simon; E - Inara
 
--- Flight Control: P - River; A - Simon; C - Shepherd; E - Inara
+-- Flight Control: P - River; A - Inara; C - Shepherd; E - Simon
 
--- Payload Control: P - Simon; A - River; C - Inara; E - Shepherd
+-- Payload Control: P - Inara; A - Simon; C - River; E - Shepherd
+
+- **Re-balanced 2026-11-14 (owner, OD-19, option B)** for the merged stern stack
+  (`docs/PACE_REBALANCE_BRIEF.md`). Replaced: Watchdog P Shepherd / A Inara / C Simon / E River;
+  Comms P Inara / A Shepherd / C River / E Simon; Flight Control P River / A Simon / C Shepherd /
+  E Inara; Payload P Simon / A River / C Inara / E Shepherd. The crew narrative below predates the
+  re-balance; root `AGENTS.md` §9 "Per-stack tasking" is current.
 
 ---
 
@@ -1442,7 +1614,7 @@ REFERENCES.md Removed/Superseded Citations).
     reference for a different antenna.
     **Update, same day (owner-prompted footprint + regulator improvements):**
     (1) the owner supplied the vendor's own footprint DXF
-    (`avionics/datasheets/type2el-2dl-module-footprint-topview.dxf`) —
+    (`avionics/datasheets/murata/type2el-2dl-module-footprint-topview.dxf`) —
     `Murata_Type2EL_LGA107`'s 107 pads are now EXACT (parsed programmatically
     from the DXF's `NC_Work2`/`ProductsBoradOutline` layers), not a
     placeholder; only the pin-NUMBER-to-pad correspondence remains an
@@ -1711,7 +1883,7 @@ REFERENCES.md Removed/Superseded Citations).
     - [ ] mLRS HAL: BUTTON moves PB13 → PA0 (PB13 is not bonded on UFQFPN48), RF switch
         PA4 = RX_EN (PE4259 CTRL), PA5 = TX_EN (CTRL̄).
     7. **PB2 header map was wrong — rebuilt from the real schematic (2026-09-29, owner-supplied
-        `avionics/datasheets/pocketbeagle2_sch.pdf` + `pocketbeagle-2.syscfg`).** The Rev S2
+        `avionics/datasheets/beagleboard/pocketbeagle2_sch.pdf` + `pocketbeagle-2.syscfg`).** The Rev S2
         `PB2_P1`/`PB2_P2` tables put GND on P1-1 (the PB2's 5 V **VIN**), +3V3/+5V on
         P1-33..36 (PRU/UART balls), MCAN0 on the GND pins P1-15/16, SPI0 on ADC/GPIO balls and
         SDIO on MDC/PRU balls; mating that cape would have shorted VIN to ground. The verified
@@ -1767,17 +1939,62 @@ REFERENCES.md Removed/Superseded Citations).
             (free MyASIX login) into avionics/datasheets/, then replace the CH397A block (WCH =
             PRC, fails the AGENTS.md sourcing rule) and verify the 20 MHz crystal, buck inductor
             and decoupling against them.
-        - [ ] Two JST-GH expansion headers replacing the GNSS (owner 2026-10-17): DS-009 Basic
-            GPS 6-pin (5V, TX, RX, SCL, SDA, GND) + DS-009 SPI 7-pin (5V, SCK, MISO, MOSI, SS1,
-            SS2, GND) on PB2 SPI2 / UART / I2C, VCC current-limited, ESD on all lines.
-        - [ ] Sourcing rule (AGENTS.md §5, 2026-10-17): replace TVS-CAN / TVS-RS485
-            PRTR5V0U2X,115 (Nexperia, owned by PRC-domiciled Wingtech Technology) with a
-            compliant-manufacturer equivalent; name a compliant manufacturer for TVS-1553P/N
-            SMAJ33CA (generic part number).
-        - [ ] Only one GH header fits at a board edge: keep J-SPI as a 6-pin generic port (5V,
-            SCK/UART1_TX, MISO/UART6_RX, MOSI/UART6_TX, SS1/UART1_RX, GND on the SPI2 pins);
-            drop J-GPS (owner allowed 2026-10-17).
+            - [x] Datasheet v1.03 received 2026-10-17 (owner) and catalogued as REF-SENSOR-056: no
+                confidentiality marking. The 0-70 C rating is accepted: the -40..85 C figure in
+                docs/AVIONICS_PB2_REDESIGN.md is the PB2-I module's rating, not a board
+                requirement (owner 2026-10-17).
+            - [x] Reference schematic, application design note and demo BOM received 2026-10-18
+                (owner) and catalogued as REF-SENSOR-057 / 058 / 060 (no confidentiality
+                marking). CH397A block replaced in `gen_pilot_sch.py` (`ax88772e()` + support
+                block, Claude Opus 5.5): ERC 0, 134 parts. Own ECS 20 MHz crystal
+                [REF-SENSOR-059]; BLM15EX331 beads; VBUS = 4.7 k pull-up + P1-31 GPIO0_59 (owner
+                2026-10-18). Pilot.md update 2026-10-18.
+            - [x] `L-USB1` 2.2 uH: Murata DFE201610P-2R2M=P2 chosen 2026-10-20 (data sheet on file, land matches the
+                Murata recommended pattern); all 55 BOM lines now carry an MPN and maker (REF-SENSOR-062).
+            - [ ] Confirm ECS-200-20-33-AGM-TR option-code availability with a distributor.
+            - [ ] DTS: hold P1-31 GPIO0_59 as an input (high-Z) by default; drive it low only to
+                force an AX88772E USB detach.
+        - [x] ~~Two JST-GH expansion headers replacing the GNSS~~ — superseded 2026-10-17 by the
+            single-port item below (only one board-edge site).
+        - [x] Sourcing rule (AGENTS.md §5, 2026-10-17), Pilot — done 2026-10-18 (Claude Opus 5.5):
+            TVS-CAN -> TI ESD2CAN24DCKRQ1 [REF-SENSOR-053]; TVS-RS485 -> Bourns CDSOT23-SM712
+            [REF-SENSOR-054] (the PRTR5V0U2X also clamped both buses to 0..5 V, far narrower than
+            their common-mode ranges); TVS-1553P/N -> Bourns SMAJ33CA [REF-SENSOR-055], with a new
+            `Manufacturer` schematic property. Pilot.md update 2026-10-18.
+        - [x] Only one GH header fits at a board edge — done 2026-10-18 (Claude Opus 5.5): J-SPI is
+            a 6-pin SM06B-GHS-TB (5V, SCK/UART1_TX, MISO/UART6_RX, MOSI/UART6_TX, SS1/UART1_RX,
+            GND on the SPI2 pins); J-GPS, F-GPS, C-GPS5, R-I2C-SCL/SDA, ESD-GPS, ESD-SS2 removed;
+            P1-31/33/36 and P2-2/4 spare.
         - [ ] Regenerate schematic (ERC 0), then PCB: sync, re-place, re-route, DRC 0 + parity 0.
+            - [x] Placement (2026-10-19, Claude Sonnet 5.5 / Opus 5.5): parity 0, 0 copper DRC errors, 13
+                warnings (reference designators moved to Fab). Committed; 130 unconnected items remain.
+            - [ ] **Finish routing by hand** (owner decision 2026-10-20; R-1 in `avionics/kicad/Pilot/docs/Pilot-Design-Review.md`):
+                130 open connections on 68 nets, listed in `docs/Pilot-Routing-Worklist.md`. Two automatic
+                routers stalled (grid router 254 to 130; freerouting 2.2.4 about 190 unrouted). After
+                routing: DRC with parity (0 / 0 / 0), refill zones, regenerate gerbers.
+            - [ ] **Resolve R-15:** five through vias on non-exempt nets have centers inside the TI 13.1
+                bubble outlines but DRC does not flag them. Relocate or find the cause.
+        - [ ] Pilot manufacturing release (Sunstone fab, Cyber City Circuits assembly; owner 2026-10-19).
+            Package: `avionics/kicad/Pilot/docs/Pilot-Manufacturing-Transfer.md`. Open items:
+            - [ ] Stackup and controlled impedance (90 ohm USB1, 100 ohm Ethernet) from Sunstone's proposal.
+            - [ ] Owner fab choices: thickness 0.062 / 0.063 in, finish, IPC class, Tg, ITAR / FAI.
+            - [ ] Verify Sunstone outer-layer limits (min drill, annular ring, copper-to-edge): the
+                capabilities tabs are script-loaded; call 800.228.8198 or send the RFQ.
+            - [ ] Fiducials, part number and revision on silkscreen, panel strategy.
+            - [x] Part numbers for the 26 BOM lines: done 2026-10-20 via the DigiKey API (key in ~/.config/secrets.env); owner to approve the makers; derate the X5R parts.
+            - [ ] Catalogue IPC-6012 and the surface-finish standard in `REFERENCES.md`.
+            - [ ] Verify the JST GH URL (REF-CONN-003 returned HTTP 403).
+        - [x] Pilot ICDs, HDD, design review and manufacturing package written (kidoc scaffold, generated
+            tables): `avionics/kicad/Pilot/docs/`. Open inside them: power budget, mass and CG, test-point
+            plan, ICD OPEN items.
+            - [x] Schematic regenerated 2026-10-18: ERC 0, 111 parts after the GH and TVS items,
+                134 after the AX88772E swap.
+            - [ ] PCB sync, re-place, re-route (DRC 0 + parity 0). The board gains 23 parts for
+                the AX88772E (own crystal, buck inductor, two beads, per-pin decoupling) on a
+                cape whose largest free square was ~6 mm. TVS footprints change (SOT-363 ->
+                SC-70-3 / SOT-23); seven expansion parts leave. `refloorplan_pilot.py`
+                PARENT anchors updated for the new `*-USB1` parts. Best done after the
+                `L-USB1` MPN fixes its land.
         - [x] Pin and net name alignment, Pilot + TACCO (owner 2026-10-17): PB2 header pins
             P1.01..P2.36 (BeagleBoard SRM), Ethernet ring parts/nets to TI interface names
             (`PHY-RMII2`, `NIC-USB1`, `T-RMII2`, `T-USB1`, `RMII2_PHY_*`, `ETH_RMII2_*`,
@@ -1873,6 +2090,8 @@ REFERENCES.md Removed/Superseded Citations).
     (Observer job) re-applied the MCU/TPM footprint retarget on top. KiCad 9.0.2, default rules:
     0 copper/clearance errors, 305 unrouted connections. Open: route, re-verify sch<->PCB parity
     (§1.9.3), regenerate gerbers (the branch's pre-retarget `Jayne/gerbers` were dropped as stale).
+- [ ] **Observer PCB: route (305 unrouted), re-verify sch<->PCB parity, regenerate gerbers.**
+    Open remainder of the resync item above, split out 2026-10-19 so the generated TODO keeps it.
 - [ ] **Reconcile 2026-10-18 — branch work NOT carried into main (decision: main wins).**
     Recorded here so it is not rediscovered as "missing". All of it remains in git history on
     `don't-let-all-the-air-out`: (a) the Kaylee MAX42408/LM76005 buck architecture (4x MAX42408

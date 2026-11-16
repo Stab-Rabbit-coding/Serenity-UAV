@@ -3,7 +3,7 @@
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Last updated:** 2026-10-07  
-**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
+**Current design revision:** Rev U (2026-11-03, see `docs/WBS.md` §6.5 for changelog) | **Build target:** 24-inch hull (REVN_BUILD_GUIDE_24IN.md)
 
 > **This is the full historical record — every task ever defined, done or open,**
 > for clear project-progression tracking. It is a compact *index* (one line per
@@ -27,8 +27,8 @@
 |--------|-------------------|----------------|
 | Hull   | 609.6 mm CF-PETG / PU foam / CF skeleton | SCAD sources complete; all four fuselage SCAD shells at Rev S baseline, carried forward unchanged into Rev T; STLs pending regeneration where noted |
 | Wings | Fixed CF spar (20x16.3mm tube, 35% root chord), S1223-derived section, gear-linked nacelle tilt drive | Rev S1g: spar bonded wing member (not rotating shaft), root joint splits shear(socket)/moment(80x60 flange); 14T/50T reduction drive; SPAR-20-2 station 45.15→28.0mm |
-| Nacelles | Radially enlarged, QMx-proportioned shell around 2x64mm tandem EDFs, interstage stator, servo variable nozzle; axial length held | Current geometry remains 50mm Rev S4c/S4d; NAC-64-SERVO-01 active: servo nozzle drive designed and fit-closed 2026-10-04, uniform x1.06 enlargement wired through a single source 2026-10-05 (pivot, CFD, mass/CG and bench gates open) |
-| Nacelle EDFs | 2x QX-Motor 64mm EDF per nacelle, candidate QF2822-2400KV 6S; nominal 64mm thrust tube; QX 4xM3/16mm spider mounts | Existing 50mm XFly configuration remains current until 64mm fit, power, mass and thrust verification passes |
+| Nacelles | Radially enlarged, QMx-proportioned shell around 2x64mm tandem EDFs, interstage stator, servo variable nozzle; axial length held | Rev U: the 64 mm nacelle is current and the 50 mm Rev S4c/S4d geometry is archived; NAC-64-SERVO-01: servo nozzle drive designed and fit-closed 2026-10-04, uniform x1.06 enlargement wired through a single source 2026-10-05 (pivot, CFD, mass/CG and bench gates open) |
+| Nacelle EDFs | 2x QX-Motor 64mm EDF per nacelle, QF2822-2300KV (83.60 ozf / 2,370 gf at 24 V, 57.0 A; 80 A ESC, owner 2026-11-02); nominal 64mm thrust tube; QX 4xM3/16mm spider mounts | Existing 50mm XFly configuration remains current until 64mm fit, power, mass and thrust verification passes |
 | Landing gear | Sponson-mounted bays, canonical 1.5in leg (extended 3.0in variant retained) | Rev T (component design generation "R6" retained as its own permanent name): sponson wells CLOSED, leg length derived from nozzle clearance not belly height |
 | Rear propulsion | 55mm 6S EDF, reduced-area neck intake, fixed canonical elliptical tail nozzle (2.06x1.76 in / 52.3x44.7 mm) + 4 RCS bleed-air thrusters | DEFERRED — Phase 11. Adds ~1275g forward thrust; not counted in hover T/W; Phase 11 hover T/W ~1.43 |
 | Cargo bay | Clamshell doors + SG90 servos (OpenServoCore) + DRV8833 + SPT5425LV/LibreServo v2 winch + Dyneema + auto-latch + GPS ring + FPV bezel | N20 winch train retired Rev S; STS3215 winch servo superseded 2026-08-02 by SPT5425LV+LibreServo v2 (envelope gate resolved, 6 winch STLs still unimplemented — see WBS §1.1.1.2.1); other cargo STLs generated; gondola shell open |
@@ -102,6 +102,15 @@
 - [x] ★ Actuator re-select — DONE 2026-09-15 (D5), RE-CUT 2026-09-16 (Rev T5e): Pololu 20D 25:1 + six-start worm 6.67:1 + pin brake; the 25D pick could not clear the wheel (T5d-1) (`docs/TILT_ACTUATOR_SELECTION.md` §1a)
 - [ ] LG-11 coupon — demoted at wing root (flange FOS 29.2); gates tenon/thwarts
 - [ ] ★ Aero revalidation of the re-lofted wing (S1223/t17.7–t26.7; XFOIL/RANS)
+- [ ] LG-PIN-SHEAR: verify 0.6 x Su pin shear for A2 pins (REF-MAT-005)
+- [ ] ★ ENDURANCE-TGT — CAUTION: derived mission endurance target 318 s (5.3 min) airborne, two cells + payload, is NOT met (61 s PLANNING / 85 s NOMINAL hover) and is not reachable by battery capacity alone (mass-coupled). Leg durations and 30 % reserve ACCEPTED by owner 2026-10-26 (no better data); owner to choose a gap-closure path (docs/flight_envelope.md §6); tandem-pair thrust-stand hover-power measurement first
+- [ ] MASS-DIET-2SORTIE — requirements in docs/plans/2026-10-26-003-feat-mass-diet-two-sortie-plan.md (−555 g: EMI hardening, gear, NoNFO stacks; two sorties); retrieval sortie R9 OPEN, propulsion gate R10 after tandem-pair thrust-stand test
+- [ ] EDF-64-REDLINE: define a 64 mm QF2822 RPM redline in governor_config.h (flight_envelope §2.2)
+- [ ] CELL-ORIGIN: Tattu cells retained (owner 2026-10-26) with PRC-origin flag on every BOM/procurement entry; evaluate a non-PRC equivalent before purchase (plan 2026-10-26-001 KTD4)
+- [x] HEAD-CELL-G: head-cell catch load factor = 79.4 g, the gear design's 4 ft level peak (owner 2026-10-26; plan 2026-10-26-001 R7)
+- [x] LTC4370/LTC4359 input-range check vs 25.2 V 6S: LTC4370 FAILS (24 V abs max, REF-PWR-014), LTC4359 PASSES (REF-PWR-015); plan 2026-10-26-002 KTD1 now 3 × LTC4359
+- [x] analog.com URLs for REF-PWR-014/015 supplied by owner 2026-10-26
+- [ ] Record Analog Devices domicile/control for LTC4359 (AGENTS.md §5)
 
 #### 0.8.1 — Wing attach interface (Rev S1g), open requirements
 → detail: `docs/WING_ATTACH_INTERFACE.md` §5; `airframe/fuselage-mid/WBS.md` §1.1.1.5
@@ -120,11 +129,27 @@
 - [ ] TILT-CTL-09 — brake-release authorization + asymmetric MAC fail policy (spec §5.5; controller firmware)
 - [ ] TILT-CTL-02a — trip response executor and its independence from the loop MCU (controller `TRIP_IN`)
 - [ ] ENC-DAUGHTER — AEAT-8800-Q24 sensor daughter for the brake-guide pocket + 6-pin lead (spec §4 / §7)
-- [ ] ★ WA-R18 — Rev S1g +102.8 g; hover T/W ~1.19 vs 1.2 min; re-derive mass/CG
-- [ ] ★ MA-1 — BOM printed-part masses understate by +521.6 g (13.3 % AUW)
+- [x] ★ WA-R18 — CLOSED 2026-10-19: mass/CG re-derived bottom-up (`tools/auw_ledger.py`): AUW 14.25 lbm (6,466 g) hover / 14.75 lbm (6,692 g) heaviest, CG Y +39.2, hover T/W 1.32 (1.28 heaviest) at 4 × 2135 gf *(superseded 2026-11-02: thrust is 4 × 2,370 gf, QF2822-2300KV; current T/W is in `current-specification/auw_ledger.json`)*
+- [x] ★ A0 — CLOSED 2026-10-19: one AUW/CG/pitch-inertia ledger, `tools/auw_ledger.py` → `current-specification/auw_ledger.json`; every airborne BOM row classified (installed / in nacelle roll-up / excluded with reason) or the run fails
+- [ ] ★ MA-1 — printed masses are now MEASURED in the ledger; BOM `Unit_Mass_g` rows themselves still stale; add the CI check (`auw_ledger.py --check`)
+- [ ] ★ CG-SIZING — gear sizing used Y_CG 111.5 (nacelle-LOCAL pivot) and AUW 3.13 kg; now ledger-fed: fore leg 26 % static, thigh margin 0.51× at 4 ft → gear redesign (`airframe/landing-gear/WBS.md` LG-REMASS)
+- [ ] ★ HOVER-TRIM — CG Y +39.2 is 18.2 mm aft of the tilt-pivot thrust line (Y +21.0); establish the pitch-trim authority / battery move
+- [ ] ★ LEDGER-GAPS — no BOM rows for: Observer, 2 × CAN-PERIPH-GW-1, node pouches, FE can, epoxy (250.6 g estimated in the ledger); add rows and weigh
+- [ ] ★ LEDGER-STATUS — owner confirm: PRINT-PYLON excluded (no Rev T source), PRINT-PISTONS kept (no source), belly panels kept (roof battery), Faraday cage 1 of 4 bays
+- [ ] ★ DATUM-R2 — one aircraft datum (centreline, nose tip, static ground on 3.0 in gear); migrate every frame coordinate (plan `docs/plans/2026-10-19-001-aircraft-datum-migration-plan.md` U1–U10) BEFORE the fuselage rebuild
+- [ ] ★ NAC-64-REBAKE — published 64 mm pods are x1.00 (axis X ±229.39 from centreline) but nacelle_64_scale.scad says x1.06; re-render + re-bake; **HOLD RELEASED by the owner 2026-11-12 (OD-4); Sprint 3 may proceed.** The re-bake brings in the x1.06 scale, the OD-17 joint shift (0.91 in (23 mm)), the wire channels and the stud inserts (+0.0055 lbm (+2.5 g) stbd, +0.0035 lbm (+1.6 g) port); both pods are also NOT watertight. At the re-bake delete the `OD-17 joint extension` rows in `tools/auw_ledger.py nacelle_items()` or the boss is counted twice (+0.046 lbm (+20.8 g) per nacelle), and retire the two `render delta + spar ESTIMATE` ledger rows
+- [ ] ★ WEIGHT-13LB — owner target 13.0 lbm heaviest config (2026-10-19). Applied: bookkeeping −126 g, BOM cuts (pistons, Faraday cages→pouches, cradle, belly panel, tube shafts) + FE can 0.5 mm, battery → 624 g pack. Heaviest now ≈ 13.8 lbm with the pack; still open: nacelle pod foam core (−115 g, plan 2026-10-03-001), FE PDB forward re-route (−60 g), and ≈ 0.4 lbm more to find
+- [ ] ★ BATT-01 — listing VERIFIED 2026-10-26 (motionrc.com/eu: 624 g, 139×44×48, 60C, 10 AWG, EC5); weigh a pack
+- [ ] ★ BATT-02 — BLOCKED 2026-10-26 (owner): the verified Admiral Pro 139×44×48 does NOT fit the cargo roof band (`tools/cargo_layout_fit.py`): 48 up → 5,828 mm³ into the shell, 44 up → 2,712 mm³, winch drums foul above it; the payload (Z ≤ 167) blocks growing down. Choose a ≤ 38 mm-tall 6S pack, split packs, or relocate the battery; options 2026-10-26 in `docs/BATTERY_SPLIT_OPTIONS.md` (split 2 × 6S 2200 cargo + head on the FE Phase-12 combiner, CG +22.6 → +14.3 mm, and an ad hoc third pack in the payload box)
+- [ ] ★ SPLIT-BATT — execute `docs/plans/2026-10-26-001-feat-split-battery-head-rail-plan.md` U1–U7 (head R2 migration + audit, rail, catch/sled, cells, optional third cell, gates)
+- [ ] ★ FE-MULTIBATT — execute `docs/plans/2026-10-26-002-feat-fe-multi-battery-pdb-plan.md` U1–U6 (combiner, fuses, connectors, harnesses, pwr_fault); closes PWR-CONN-01
+- [ ] ★ PWR-CONN-01 — WARNING: battery/FE PDB path is specified XT60 at ~150 A hover; move to XT90 / AS150 class (fire risk)
+- [ ] FE-CAN-05 — EMC pass to confirm the 0.5 mm FE can (low-frequency H-field absorption halves vs 1.0 mm)
+- [ ] REF-NCEES-009 version — confirm FE Reference Handbook version and the Dynamics section numbers cited in `REFERENCES.md`
+- [ ] ★ ASM-EXPORT-01 — `tools/export_assembly_meshes.py` double-applies placements (stbd tilt worm/wheel exported at dX −178.4 not −89.2); census sees them outside the hull
 - [x] MA-5 — CLOSED 2026-09-15: standoff pads removed with the worm-drive bracket (−53.5 g + 23.4 g bosses)
 - [x] MA-6 — CLOSED 2026-09-15: PRINT-BATT-TRAY retired; PRINT-BATT-CRADLE 39.4 g (`battery_cradle.scad`)
-- [ ] MA-7 — add an `Installed` flag to the BOM mass column
+- [x] MA-7 — CLOSED 2026-10-19: met by the `tools/auw_ledger.py` classification gate (installed qty + reason per row, unclassified rows fail the run) instead of a BOM column
 - [ ] ★ BOM-SYNC — `bom_revS.json` vs `.csv` parity: the "canonical" JSON had dropped 14 rows and an in-place CSV rewrite truncated the file (2026-09-16, `docs/solutions/logic-errors/bom-csv-json-mirror-drift-and-in-place-rewrite-truncation.md`); write `tools/bom_sync.py` (parity assertion, temp-file + `os.replace`, overflow fold) or amend `current-specification/README.md` to name the CSV as the edited file
 - [ ] W1..W8 — ranked weight-reduction targets (W2 BOM reconciliation gates all)
 - [x] WA-R15a — CLOSED 2026-09-15: pads gone; roof band re-proved by `tools/cargo_layout_fit.py` (PASS)
@@ -194,6 +219,112 @@ see docs/WBS.md §0.10.2.)*
 - [ ] Renumber wings-nacelles WBS §1.1.4/§1.1.5 (collide with root LG/placeholders)
 - [ ] Wire gen_todo_from_wbs.py --check into pre-commit/CI beside the index check
 - [ ] Rewrite docs/AVIONICS_PB2_REDESIGN.md as a Rev T overview, then archive Rev Q/R
+
+#### 0.10.3 Operator's Manual
+→ detail: docs/WBS.md §0.10.3
+
+*(Requirement opened 2026-11-02: no user's manual existed. Requirements OM-1..OM-8 and the
+as-drafted record are in docs/WBS.md §0.10.3; the manual is
+`docs/OPERATORS_MANUAL.md`, status DRAFT — pre-first-flight.)*
+
+- [x] Draft Operator's Manual based on [REF-MIL-003] and in accordance with [REF-FAA-001]
+    and [REF-FAA-002]. *(draft v0.1 written 2026-11-02, Claude Sonnet 5.5 under owner
+    direction; docs/OPERATORS_MANUAL.md. Closed as a draft only — the items below gate
+    release.)*
+- [x] Auto-sync script in the commit chain (tools/sync_operators_manual.py, OM-9)
+    *(done 2026-11-02: pre-commit + CI --check; single source flight_limits.json)*
+- [ ] Owner (PE) review of Operator's Manual v0.1 — limits, WARNINGs, emergency procedures
+- [ ] Cite QMx sheets 11/12 + Firefly plate as fan art in REFERENCES.md
+- [ ] Fill Operator's Manual flight-test values from Phase 5/9 data (OM-5)
+- [ ] Reconcile manual with first-flight gates D1-D5 and blockers (OM-6)
+- [ ] Render Operator's Manual to PDF (no pandoc/weasyprint on this system)
+- [ ] Add Operator's Manual to REFERENCES.md "Used in" and PROJECT_INDEX
+- [ ] Catalogue extra Part 107 sections the manual needs (cert, preflight, reports)
+
+### 0.11 — Upstream KiCad Defect: `sch erc` SIGSEGV on unresolvable `lib_id`
+
+→ detail: `avionics/kicad/Pilot/KICAD_CLI_ERC_SEGFAULT_BUG.md`
+→ submission pack: `avionics/kicad/Pilot/kicad_cli_erc_segfault_repro/UPSTREAM_SUBMISSION.md`
+
+- [ ] Install `gdb` + `systemd-coredump` (+ dbgsym if available)
+- [ ] Capture backtrace of the crash (command in submission pack §2)
+- [ ] Re-test on newest reachable KiCad — if already fixed, do NOT file
+- [ ] Search KiCad GitLab for a duplicate before filing
+- [ ] File at gitlab.com/kicad/code/kicad/-/issues, attach repro zip
+
+---
+
+### 0.13 — Joint-Torque Standards Section Verification (2026-11-02)
+
+→ detail: `REFERENCES.md` REF-FAA-005, REF-NASA-004, REF-STD-BOLT-001, REF-STD-BOLT-002; plan `docs/plans/2026-11-02-001-feat-build-guide-joint-torque-and-sequence-plan.md`
+
+- [ ] Verify AC 43.13-1B [REF-FAA-005] torque chapter/paragraph against the FAA PDF
+- [ ] Verify NASA-STD-5020B [REF-NASA-004] TFSR numbers for preload and safety factor
+- [ ] Obtain ISO 898-1:2013 [REF-STD-BOLT-001]; record property-class clauses and URL
+- [ ] Obtain VDI 2230-1:2015 [REF-STD-BOLT-002]; record preload/embedding clauses
+- [ ] Send 3D-printing provider the Z-axis tensile and insert pull-out data request (owner)
+
+### 0.12 — Aft-Section SLS Sizing References (2026-10-31)
+
+→ detail: `docs/AFT_SKIN_THINNING_STUDY.md`, `REFERENCES.md` Open Standards Verification Items
+
+- [ ] Confirm the NASA SP-8007 [REF-NASA-002] bending-knockdown section against the NTRS PDF
+- [ ] Confirm the Isogrid Design Handbook [REF-NASA-003] smear against §4.2 of the NTRS PDF
+- [ ] Confirm the Roark [REF-STR-001] edition, table and case for the circular-plate patch load and the cantilever frequency
+- [x] Validate an official 3D Systems URL for DuraForm PA CF 3DS-30108A [REF-MAT-015] — validated 2026-11-01 (PA11 Black [REF-MAT-016] also validated)
+- [ ] Validate an official 3D Systems URL for DuraForm PA12 Black [REF-MAT-017]
+- [ ] Obtain PA CF build-axis (Z) tensile and flexural data (coupon or vendor), replacing the 0.5 knockdown
+- [ ] Owner sets the handling design load (now 20 lbf on a 5 mm radius patch, ASSUMED)
+- [ ] Verify Brazier 1927 [REF-STR-002] DOI/pages and the Roark ring-crush case [REF-STR-001] used in `docs/SKID_FAILURE_MODE_STUDY.md`
+- [x] ~~Size the PA11 skid root as a plastic hinge~~ — superseded 2026-10-31 by the PA12-CF elastic U-frame (owner); see `docs/SKID_FAILURE_MODE_STUDY.md` §8–10
+- [ ] Skid bench acceptance: tip stiffness ≥ 1,207 lbf/in per skid (SKID study §10.1)
+- [ ] Add I_roll to `tools/auw_ledger.py`; re-run the single-skid strike (§10.2); owner: roll-attitude limit or accepted fracture
+
+---
+
+### 0.13 — Airframe FDM CF-PETG → SLS Migration, bow to stern (2026-11-01)
+
+→ detail: `docs/SLS_MIGRATION.md`, `tools/sls_dfm_audit.py`, `tools/sls_materials.py`, [REF-MFG-001]
+
+- [x] Single SLS material source `tools/sls_materials.py` (PA CF / PA11 / PA12, Z knockdown)
+- [x] Whole-aircraft SLS DFM audit `tools/sls_dfm_audit.py` (SLS 380 envelope, 1 mm wall, trapped powder, mesh)
+- [x] Fixed nozzle: sealed 14 cc housing void opened with 3 × Ø3 mm powder-escape holes
+- [x] Stbd gear-bay STLs (4) were inside-out (double winding flip in `generate_lg_bays.py`); fixed at source + files
+- [x] Head-cell rail statics re-pointed to PA CF design values — PASS (min margin 1.70); part since retired, result historical
+- [x] Gear bellcrank bearing re-pointed to PA CF — spreader discs grow 13→14 mm (A) and 17→18 mm (B)
+- [ ] Locate an official 3dsystems.com URL for the SLS Design Guide [REF-MFG-001]
+- [ ] Feather-edge review, part by part (thicken, truncate or accept) — list in `docs/SLS_MIGRATION.md` §4
+- [ ] Re-point the remaining CF-PETG margin tools (list in `docs/SLS_MIGRATION.md` §5)
+- [x] Build orientation for every current printed part (79), critical stress in the build plane, SLS 380 fit — `docs/SLS_PRINT_ORIENTATION.md`, `tools/sls_print_orientation.py` (2026-11-01)
+- [x] Decision (owner 2026-11-01): final build orientation and machine are set with 3D Systems; repo orientations are the design-intent request (`docs/SLS_PRINT_ORIENTATION.md` §0)
+- [ ] Owner + 3D Systems: agree orientation and machine per part (SLS 380 / sPro 140 / sPro 230); record in `tools/sls_print_orientation.py`
+- [ ] Owner + 3D Systems: forward hull section (head+cargo, one piece) on the sPro 140 (lying down; strength orientation) vs SLS 380 on end
+- [x] One-piece AFT hull section `middle_rear_shell24_2mm_merged.stl` (`tools/merge_middle_rear_shell.py`, blended loft Y 501–530.5); middle/rear collar retired (2026-11-01)
+- [x] Hull seams vs QMx/Henning canon: forward seam waist step removed (loft), aft dorsal collar residue removed, cargo/middle ring step confirmed canonical — `docs/SLS_PRINT_ORIENTATION.md` §6
+- [ ] Re-run the aft-dependent tools on the merged aft section (`aft_section_mass_audit.py`, `tail_strike_requirement.py`, AUW ledger) — they still read the separate middle/rear shells
+- [x] Assembly + build guide refreshed for the 2-section SLS hull and twin pack tray (serenity_assembly.py, gen_build_guide_cards.py, REVN_BUILD_GUIDE_24IN.md Phase 0/1); card renders now EMBEDDED in the SVGs (linked PNGs showed blank in viewers) (2026-11-01)
+- [ ] Re-home the two cargo node saddles (`PRINT-NODE-SADDLE`): they bolted to the retired battery cradle's aft wall; mount is OPEN
+- [ ] Retire / regenerate void formers `void_former_cargo_{collar_rim,batt_chimney}` (their collar and cradle are retired); fix BOM `PRINT-VOID-FORMER-CARGO` qty 5 → 3
+- [ ] Add BOM rows for the merged forward/aft hull sections and the twin pack tray/sleds/gate (guide Print Schedule shows "BOM rows pending")
+- [x] Design review against the 3D Systems SLS Design Guide [REF-MFG-001] — `docs/SLS_MIGRATION.md` §7; citations corrected to pp. 4/15
+- [x] Tilt-brake pin bore clearance 0.15 → 0.3 mm per side [REF-MFG-001 pp. 7, 12]; guides re-rendered
+- [x] ~~Belly panel aft hole slot~~ — reverted 2026-11-01: belly panel is retired (BOM qty 0)
+- [ ] Stator-vane and spider-arm root fillets [REF-MFG-001 p. 4], sized with a flow/thrust check
+- [ ] Ask 3D Systems: bead-blast reach into blind heat-set boss holes, or add >2 mm vents [REF-MFG-001 p. 6]
+- [ ] ESC cover rebate fit 0.25 → 0.3 mm per side at the next 64 mm nacelle re-export
+- [x] ~~Battery-cradle hanger slotting~~ — moot: cradle retired by the one-piece hull (`d92c4f14`)
+- [ ] Update BOM (`bom_revT.csv` + `.json`) and `tools/auw_ledger.py` for `d92c4f14`: drop separate head/cargo shells, head-cargo collar, cradle, head-cell rail/sled/catch; add merged forward + aft sections + twin pack tray/sleds/gate; drop middle/rear collar + separate middle/rear shells (cargo/middle collar stays)
+- [ ] Run the twin pack gate/catch statics on PA CF (`docs/BATTERY_TRIM_ENDURANCE_OPTIONS.md` open items)
+- [x] Trade: cargo doors print-in-place with the cargo shell vs separate — recommend SEPARATE (`docs/CARGO_DOOR_INTEGRATED_HINGE_TRADE.md`); owner to accept
+- [ ] Cargo door knuckles: print bores undersize, line-ream shell + door knuckles together at assembly (0.15 mm/side as-sintered is below [REF-MFG-001 p. 12]); update `generate_cargo_doors.py` + `generate_cargo_hinge_retention.py`
+- [ ] Order cargo doors in the same 3D Systems build as the cargo shell (shared powder lot / shrink)
+- [ ] Verify the 15 confidence-V orientations (frame / load path) before the build is released
+- [ ] Ask 3D Systems for DuraForm PA CF X/Y/Z (recoater-direction) properties — requires verification
+- [ ] Owner: confirm FDM-only features to strip (4×0.6 mm perimeter wall sizing, brims, support-avoid chamfers) per part family
+- [ ] Re-export the 64 mm nacelles and wing-root flanges watertight (audit R4)
+- [ ] Re-run `tools/sls_auw_reconcile.py` after the above and update the AUW ledger
+- [ ] Lever rib over the CF frame (Y 572–620) + forward 2×M3 tie; CF plate bearing coupon (§10.3)
+- [ ] Skid-tip-to-hull measure-and-shim step at assembly, or owner accepts a 0.45 mm worst-case hull margin (§10.5)
 
 ---
 
@@ -300,6 +431,7 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] ★ Bench-verify SPT5425LV stall current + pin-removal procedure (unblocks §5.4/§6)
 - [ ] RS-485 gateway integration for LibreServo v2 bus (J_FLEX has no local transceiver)
 - [x] Winch coupler trade closed: slip clutch in the spool hub
+- [ ] ★ WINCH-PKG-01 — Rev C1 stack doesn't fit the hull: owner pick
 - [ ] ★ Winch containment: 5 positive fixes (spool = projectile)
 - [ ] Verify Part 107 dropped-object section number
 - [ ] Containment checks on assembly + pre-flight cards
@@ -331,6 +463,38 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] Mount ant-collision strobe on belly of middle section in accord…
 - [ ] Mount ant-collision steady white tail light on upper pod of rea…
 
+- [x] BAYA-FWD-01..04 Bay A fwd, tray Y163, routes, mounts+hatch
+- [ ] BAYA-FWD-05 Verify hatch seams vs full-res QMx Sheet Six
+- [ ] BAYA-FWD-06 Bay A retention statics (cite allowables)
+- [ ] BAYA-FWD-07 Select M2.5 heat-set insert (datasheet bore)
+- [ ] BAYA-FWD-08 Mass ledger + CG for Bay A mounts/hatch
+- [ ] BAYA-FWD-09 Assembly/build guide: hatch hull + new parts
+- [ ] BAYA-FWD-10 Hatch seal + cover PGND bond decision
+- [ ] BAYA-FWD-11 Place TACCO antennas; cut MMCX coax to length
+- [x] HULL-LEAK-01..03 Spar stale/roof holes/head crack sealed (rebuild)
+- [x] HULL-FUSE-01 Wing-root flanges fused into head+cargo print
+- [ ] HULL-LEAK-04 Cargo door hinge-edge seam seal
+- [ ] LG-AFT-BOLT-01 Aft-port gear bolt driver access vs wing
+- [ ] HULL-FUSE-02 Fuse other bonded mounts into one-piece print
+- [x] COOL-01 Rear-fan cooling: superseded by TEDF-01..16
+- [ ] TEDF-01 Tail EDF: record and reference repair (S42)
+- [ ] TEDF-02 Tail EDF: thermal model refresh (S46)
+- [ ] TEDF-03 Tail EDF flow tool: thrust, stall margin (S43)
+- [ ] TEDF-04 Hover trim and RCS tool, CG window (S43)
+- [ ] TEDF-05 Rear-cone layout: QX pusher, RCS exhausts (S44)
+- [ ] TEDF-06 Cargo duct layout: FE box forward, hatch (S44)
+- [ ] TEDF-07 Head layout: GNSS, ballast pocket, inlets (S44)
+- [ ] ★ TEDF-08 Gate G1 Owner Decision Brief (OD-22) (S45)
+- [ ] TEDF-09 Aft hull provisions: ring, tube, RCS (S47)
+- [ ] TEDF-10 Forward hull: ramp louvres, fused doors (S48)
+- [ ] TEDF-11 Separate parts: shroud, valves, covers (S49)
+- [ ] TEDF-12 CFD case, still air and cruise (S50)
+- [ ] TEDF-13 Coupled cooling, thrust and trim analysis (S51)
+- [ ] TEDF-14 Mass, CG, bench balance, gate G2 (OD-23) (S52)
+- [ ] TEDF-15 Seal and aperture gate (S52)
+- [ ] TEDF-16 Specifications, build guide, closeout (S53)
+- [ ] OSESC-TAIL-1 Fifth OSESC controller for the tail EDF (S49)
+- [ ] OSESC-TAIL-2 Tail EDF controller fault behaviour spec (S53)
 #### 1.1.2 — Wings
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.2
 
@@ -390,14 +554,14 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] Spar-crank placement in serenity_assembly.py is first-pass (Y=0…
 - [ ] User WIP `gear_option_compare.scad` / `gear_shell_compare.scad`…
 - [ ] [OPEN — DESIGN] Nozzle drive protrudes ~10 mm past the nacelle OD…
-- [ ] [OPEN — WA-R10] The 4 × 10 AWG disconnect route is UNBLOCKED but not…
+- [x] WA-R10 — 4×10 AWG route drawn, clearance-proven (2026-11-11)
 - [ ] [OPEN — FLIGHT SAFETY, LG-HOVER-01] Hover ground clearance is still…
 - [ ] [OPEN — VERIFY] `serenity_assembly.py` still places the deleted parts
 - [ ] [OPEN — PRINT-BLOCKING] `MOTOR_BOLT_R` is still 10.0 mm and still…
 - [ ] [OPEN — NEW, and it is a safety item] The bay is now an unfiltered…
 - [ ] [OPEN — the flow, not the geometry] Bay velocity is not verified
 - [ ] 50 A sustained is not survivable on any path evaluated
-- [ ] [OPEN — WA-R10] The 4 × 10 AWG route now EXISTS but is not drawn
+- [x] WA-R10 (dup) — "route exists" superseded 2026-11-07 by measurement
 - [ ] Window structural allowance
 - [ ] [OPEN — cross-subsystem, rescoped 2026-07-26] `Pilot.md` §13 /…
 - [ ] AK7455 off-axis bench validation
@@ -406,6 +570,10 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] NAC-MOULD-01 — nacelle mould-line conformance + nozzle shortening
 - [ ] EDF-DATA-01 — datasheet or measured source for every EDF figure
 - [ ] NAC-64-SERVO-01 — radial 64 mm tandem-EDF nacelle + servo nozzle
+- [x] NAC-64-ASM-01 — spigot vs cartridge: cartridge 3 mm short (OD-1)
+- [x] NAC-64-ASM-02 — pinion sweep finding RETRACTED (sign error)
+- [x] NAC-64-ASM-03 — bay floor, 0.138 in inserts, mouth open (2026-11-08)
+- [ ] NAC-64-ASM-04 — assembly-check coverage gaps
 - [ ] SPAR-20-AERO — The re-lofted section is no longer S1223 (root 12.1 →…
 - [ ] SPAR-20-TSCALE — `s1223_section()` carries a note that `t_scale` was…
 - [ ] SPAR-20-ALLOW — No verified CF tube flexural allowable exists in…
@@ -428,6 +596,18 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] LG-16 Confirm ductile wire temper survives jig-forming
 - [ ] LG-13 Define wire-end retention detail at bay bosses
 - [ ] LG-02 Bay mounting integration: backing plates, flank conform…
+- [ ] ★ LG-LOADPATH-A1B — Option A balanced couple, form A1b (owner 2026-10-27; plan docs/plans/2026-10-27-001): two identical 6061-T6 tension fuses per row, push side in a reversing sleeve; CF backbone plate (Rock West QI 2 x 1/8 in, bearing coupon LG-11; Toray TC1225 RTL fallback)
+  - [x] FBD + materials trade of A1/A1b/A2/A3 (tools/lg_couple_options.py)
+  - [x] Packaging gate (tools/lg_a1b_packaging.py): aft PASS az 154 / reach 55
+  - [x] Fore corners: canonical flank housing above each fore bay chosen (owner 2026-10-27)
+  - [x] Merge tool: fore flank housing pocket + 2 mm wall (tooling, a975f6de)
+  - [ ] A1B-POCKET-SCOPE — before the shell rebuild: the merge-tool housing pocket is relieved only against wing keep-outs; limit it to the flank skin band (or subtract every merged interior positive) and report what it removes (code review 2026-10-27, adversarial P1)
+  - [ ] ★ MERGE-FINALIZE-NM — cargo shell rebuild fails in repair_exported -> ensure_open: after the float32 STL round trip finalize_watertight leaves 53 boundary + 12 non-manifold edges, manifold3d rejects the shell (NotManifold) and open_plug returns an empty mesh. Baseline (no housing) fails identically -> pre-existing. Blocks regenerating the shell with the housings
+  - [x] Leg SCAD: crank r 10, A1b members, backbone (LOADPATH switch; 4af1848d)
+  - [x] Sizing tool: couple sizing; R6 pin/boss checks labelled superseded (b442addc)
+  - [x] Bays/STLs regenerated (all PASS, 7.6 g each); fore loose bodies gone; BOM rows (9c2dc7ee, 3e1c14e6, 0b0686d3)
+  - [ ] A1B backbone detail: trim the aft tilt-bracket corner (17 mm^3); anchor-pin edge distance against a cited minimum
+  - [ ] LG-11 bearing coupons on the Rock West plate before flight
 - [x] Feet separated into individual STLs (foot_1 through foot_4 in l…
 - [ ] Add top-face socket to canonical foot
 - [ ] Assess foot grip on concrete/asphalt
@@ -572,6 +752,7 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] Pilot routing + Gerbers (120/120 placed, DRC 0)
 - [ ] Flight Engineer PCB: last DRC items, route, Gerbers
 - [ ] Observer PCB resync to the ISOW1412/Section H schematic
+- [ ] ★ OBSERVER-EDGE-DRC — 9 hard copper-to-edge clearance violations (0.5 mm req.) in Observer.kicad_pcb after the 1a6fb8d5 outline reshape; move copper or change outline; KiCad Validation CI fails until fixed
 - [x] remove Wi-Fi, sik, and loRa antennas from XO. Use filtered cho…
 - [x] Re-evaluate space / restore Ethernet to XO
 - [ ] Zigbee RF chain was never actually added to XO — PCB scope g…
@@ -627,7 +808,7 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [x] 1.5.4 Pilot: add missing field connectors
 - [x] 1.5.5 XO: add missing field connectors
 - [ ] Update PHASED_BUILD_GUIDE.md
-- [ ] 1.5.6 Rebuild Graphical Buiild Guide
+- [ ] 1.5.6 Rebuild Graphical Buiild Guide — incl. BG-SEQ-1..6 per-step install order, wiring and torque (graphical-build-guide/WBS.md)
 - [ ] Sync bom_revO.json ↔ bom_revO.csv
 - [ ] Rewrite build-guide Phase 2/3 steps for the Rev T mechanism (after D2)
 - [x] Create bom_revQ.json + bom_revQ.csv
@@ -673,6 +854,13 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] ★ U7 — Per-board ERC/DRC/gerber closeout (6 boards)
 - [ ] ★ U8 — Pilot tamper-mesh creepage fix (fab blocker) + Faraday/shielding
 - [ ] U9 — REFERENCES.md + WBS/TODO + AGENTS.md closeout for U1–U8
+- [ ] ★ BAYA-FWD-T1 BLOCKER: CN1 sustained TX peak vs thermal cap
+- [ ] BAYA-FWD-T2 Confirm design ambient (104 °F assumed)
+- [ ] BAYA-FWD-T3 Cite/bench-measure Bay A thermal inputs
+- [ ] BAYA-FWD-T4 Bay A vent + fan geometry (after T1)
+- [ ] BAYA-FWD-B1 Cite CAN-FD/RS-485 stub limits
+- [ ] BAYA-FWD-B2 Airspeed sensor footprint at pitot hose turn
+- [ ] BAYA-FWD-B3 Re-check bus lengths with routed Bay A runs
 
 ---
 
@@ -835,7 +1023,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] Install the 49 MHz (Part 15 §15.235) daemon on CN1 and CN2 (sel…
 - [ ] ESC calibration (full throttle power-on → drop to zero).
 - [ ] Motor spin test (5% throttle 2s): all 5 motors spin in correct…
-- [ ] Tilt servo calibration: 0° = nacelle vertical ±0.5°, 90° = hori…
+- [ ] Tilt servo calibration: 0° = nacelle horizontal ±0.5°, 90° = vertical…
 - [ ] Rear nozzle servo endpoints verified.
 - [ ] 190mm from nose
 - [ ] GPS lock: HDOP ≤1.5 on both FC nodes; positions agree within 2m.
@@ -921,7 +1109,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 
 - [ ] Replace FAA N00000 placeholder in serenity/diagrams/decal_sheet…
 - [ ] Print decal sheet on waterslide decal paper; seal with clear co…
-- [ ] Apply decals per build_guide_19_decal_placement.svg: Serenity l…
+- [ ] Apply decals per build_guide_26_markings.svg: Serenity l…
 - [ ] Final airworthiness inspection: all fasteners, propulsion, elec…
 - [ ] Documentation archive: build log (photos + test results), Cape-…
 - [ ] FAA compliance final check: registration visible without moving…
@@ -1003,15 +1191,10 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] Forward-thrust test passed; rear EDF NOT used for hover lift; E…
 - [ ] All 5 ESC telemetry visible on CAN FD; ESC temps ≤70°C at cruis…
 
-### Phase12 — Cargo-bay Range-Extender Battery Module (Deferred)
-→ detail: `deferred/WBS.md` §Phase12
+### Phase12 — Cargo-bay Range-Extender Battery Module (PROMOTED 2026-10-26)
+→ detail: `deferred/WBS.md` §Phase12 (superseded)
 
-- [ ] RBM module:
-- [ ] Flight Engineer input:
-- [ ] Current sharing:
-- [ ] Firmware (pwr_fault):
-- [ ] W&B:
-- [ ] CAD:
+- [x] Promoted to the active build (owner 2026-10-26): the split main pack needs the multi-input combiner. Now `docs/plans/2026-10-26-001-feat-split-battery-head-rail-plan.md` (cells, rail, optional third cell, head audit) and `docs/plans/2026-10-26-002-feat-fe-multi-battery-pdb-plan.md` (FE PDB, harnesses)
 
 ---
 
@@ -1242,6 +1425,9 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 
 ### 6.4 — Rev T Checkpoint (2026-09-06)
 → detail: `docs/WBS.md` §6.4
+
+### 6.5 — Rev U Checkpoint (2026-11-03)
+→ detail: `docs/WBS.md` §6.5
 
 ---
 

@@ -106,7 +106,7 @@ OPTIONS = {
         module=1.0,
         mech_mass_g=17.7 + 2.3 + 6.9 + 3.0,  # bracket + worm + wheel + M3/inserts
         shell_delta_g=-53.5 + 6 * 3.9,  # pads removed, 6 foot bosses added
-        reach_x=-138.75,  # motor inboard face, port
+        reach_x=31.1,  # motor inboard face, port (R2; R1 -138.75)
         battery_ok=True,
         hold_unpowered=True,
         brake_needed=False,
@@ -127,7 +127,7 @@ OPTIONS = {
         module=1.0,
         mech_mass_g=20.0 + 4.0 + 6.9 + 3.0 + 12.0,  # bigger cradle, worm, wheel, hw, brake (EST)
         shell_delta_g=-53.5 + 6 * 3.9,
-        reach_x=-142.75,  # O25 body, worm PD 24 -> mid-plane -126.25
+        reach_x=27.1,  # O25 body, worm PD 24 -> mid-plane 43.6 (R2; R1 -142.75)
         battery_ok=True,
         hold_unpowered=False,
         brake_needed=True,
@@ -148,7 +148,7 @@ OPTIONS = {
         module=0.8,
         mech_mass_g=10.6 + 2 * 4.2 + 3.0 + 12.0,  # bracket, 2 gears, hw, brake (EST)
         shell_delta_g=0.0,  # pads stay (32.9 g standoffs, MA-5)
-        reach_x=-158.5,
+        reach_x=11.35,  # R2; R1 -158.5
         battery_ok=False,
         hold_unpowered=False,
         brake_needed=True,
@@ -178,7 +178,7 @@ OPTIONS = {
         + 2.1
         + 10.0,  # bracket, worm, wheel, hw, guide, solenoid+pin (EST)
         shell_delta_g=-53.5 + 6 * 3.9,
-        reach_x=-139.25,  # O26 worm tip, mid-plane -125.25
+        reach_x=30.6,  # O26 worm tip, mid-plane 44.6 (R2; R1 -139.25)
         battery_ok=True,
         hold_unpowered=False,
         brake_needed=True,
@@ -238,8 +238,9 @@ def analyse(o):
     w_max = math.radians(r["rate_nl"])
     r["alpha"] = w_max / TAU_M  # rad/s^2, motor-limited
     r["T_inertia_nac"] = I_NAC * r["alpha"]  # N.m to accelerate the nacelle
-    for ang in (5.0, 15.0, 90.0, 145.0):
+    for ang in (5.0, 15.0, 90.0, 140.0):
         r[f"t_{int(ang)}"] = math.radians(ang) / w_max + TAU_M
+    r["t_sweep"] = r["t_140"]  # full -5 -> +135 deg sweep = 140 deg of travel
     # small-signal bandwidth proxy: a +/-5 deg sinusoid is rate-limited above
     # f = rate / (2*pi*A)
     r["f_5deg"] = r["rate_nl"] / (2 * math.pi * 5.0)
@@ -318,8 +319,8 @@ def table(res):
             f"nacelle inertia costs {r['T_inertia_nac']:.3f} N.m",
         ),
         (
-            "Time +/-5 deg / +/-15 deg / 90 deg / 145 deg",
-            lambda r: f"{r['t_5']:.2f} / {r['t_15']:.2f} / {r['t_90']:.2f} / {r['t_145']:.2f} s",
+            "Time +/-5 deg / +/-15 deg / 90 deg / 140 deg",
+            lambda r: f"{r['t_5']:.2f} / {r['t_15']:.2f} / {r['t_90']:.2f} / {r['t_sweep']:.2f} s",
         ),
         (
             "Rate-limit bandwidth, +/-2 deg / +/-5 deg",
@@ -383,9 +384,9 @@ def domains(res):
         lambda r: f"{r['t_90']:.1f} s",
     )
     row(
-        "Full sweep -5 -> 140 deg",
+        "Full sweep -5 -> 135 deg (140 deg span)",
         "no requirement recorded (TILT-CTL-05)",
-        lambda r: f"{r['t_145']:.1f} s",
+        lambda r: f"{r['t_sweep']:.1f} s",
     )
     row(
         "Cruise hold, powered",
@@ -449,7 +450,7 @@ def write_scad(res, path):
             "OPT_MASS_PAIR  = [0, %s];\n" % ", ".join(f"{r['mass_pair']:.0f}" for r in res.values())
         )
         fh.write(
-            "OPT_T145       = [0, %s];\n" % ", ".join(f"{r['t_145']:.2f}" for r in res.values())
+            "OPT_TSWEEP     = [0, %s];\n" % ", ".join(f"{r['t_sweep']:.2f}" for r in res.values())
         )
         fh.write("OPT_T5         = [0, %s];\n" % ", ".join(f"{r['t_5']:.2f}" for r in res.values()))
         fh.write(
@@ -502,7 +503,7 @@ it by 2.0 mm.  A six-start worm on the slower 20D keeps TILT-CTL-07.
 {img_row("front")}
 {img_row("iso")}
 
-Looking aft from ahead: grey = hull ring sections at Y −10/20/46.6/80, brown =
+Looking aft from ahead: grey = hull ring sections at Y 295.7/325.7/352.3/385.7 (R2), brown =
 root-flange keep-out, gold = battery in its cradle, green = mission payload at
 the door crown, black lines = bridle hoist lines, blue = wheel on the drive
 shaft, dark grey = motor, red = brake envelope (Opt 2/3) or overlap (Opt 3).

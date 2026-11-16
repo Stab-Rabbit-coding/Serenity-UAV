@@ -51,7 +51,7 @@ Bus order: **CN1 → FC1 → CN2 → FC2 → CN3 → FC3 → CN4 → FC4** — o
 
 | Bay | Pair | Cape variant | Rationale |
 |-----|------|-------------|-----------|
-| A — Shepherd's room (nose, sta 0–3.58 in / 0–91 mm) | CN1 / FC1 | XO / Pilot | Bus start termination node (CAN FD 120 Ω, RS-485 120 Ω, 1553B 78 Ω); 5 kV isolated transceivers |
+| A — Shepherd's room (nose; Bay A forward 2026-11-01: CN1 Y 62–120 under the Observer, FC1 Y 88–146 above it — `docs/BAY_A_FWD_LAYOUT.md`) | CN1 / FC1 | XO / Pilot | Bus start termination node (CAN FD 120 Ω, RS-485 120 Ω, 1553B 78 Ω); 5 kV isolated transceivers |
 | B — Inara's shuttle (sta 3.58–6.50 in / 91–165 mm) | CN2 / FC2 | XO / Pilot | Rev Q: upgraded from -1. Uniform EMI hardening; ADIN1300BCPZ provides 1000BASE-T with isolation |
 | D — River's room (sta 9.88–12.60 in / 251–320 mm) | CN3 / FC3 | XO / Pilot | Rev Q: upgraded from -1. Same rationale as Inara's shuttle |
 | E — Simon's medbay (tail, sta 12.60–15.28 in / 320–388 mm) | CN4 / FC4 | XO / Pilot | Bus end termination node; 5 kV isolation at aft bus endpoint |

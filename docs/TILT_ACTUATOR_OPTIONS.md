@@ -62,7 +62,7 @@ shaft, dark grey = motor, red = brake envelope (Opt 2/3) or overlap (Opt 3).
 | Torque at nacelle, motor stall | 4.58 N.m (46.7 kgf.cm) = 26x the 0.177 N.m load | 3.36 N.m (34.3 kgf.cm) = 19x the 0.177 N.m load | 7.74 N.m (79.0 kgf.cm) = 44x the 0.177 N.m load | 1.81 N.m (18.5 kgf.cm) = 10x the 0.177 N.m load |
 | Torque limit at nacelle (governing) | 1.83 N.m, by tooth (Lewis) | 1.83 N.m, by tooth (Lewis) | 1.34 N.m, by tooth (Lewis) | 1.81 N.m, by motor stall |
 | Angular accel (motor-limited, tau_m 0.03 s ASSUMED) | 14 rad/s^2; nacelle inertia costs 0.010 N.m | 98 rad/s^2; nacelle inertia costs 0.070 N.m | 75 rad/s^2; nacelle inertia costs 0.054 N.m | 84 rad/s^2; nacelle inertia costs 0.060 N.m |
-| Time +/-5 deg / +/-15 deg / 90 deg / 145 deg | 0.24 / 0.66 / 3.79 / 6.09 s | 0.06 / 0.12 / 0.57 / 0.89 s | 0.07 / 0.15 / 0.73 / 1.15 s | 0.06 / 0.13 / 0.66 / 1.04 s |
+| Time +/-5 deg / +/-15 deg / 90 deg / 140 deg | 0.24 / 0.66 / 3.79 / 5.88 s | 0.06 / 0.12 / 0.57 / 0.86 s | 0.07 / 0.15 / 0.73 / 1.11 s | 0.06 / 0.13 / 0.66 / 1.00 s |
 | Rate-limit bandwidth, +/-2 deg / +/-5 deg | 1.9 Hz / 0.8 Hz | 13.4 Hz / 5.3 Hz | 10.3 Hz / 4.1 Hz | 11.4 Hz / 4.6 Hz |
 | Motor inboard reach (port, hull X) | -138.8 mm | -142.8 mm | -158.5 mm | -139.2 mm |
 | Battery cradle (X -197..-142) clear? | yes | yes | NO -- 13.6 mm overlap | yes |
@@ -86,7 +86,7 @@ add 3.9 g each.
 | Hover translate (2/5/10 deg collective tilt) | a_x = 0.34/0.85/1.70 m/s^2 (all options, thrust-limited) | reach 5 deg in 0.24 s | reach 5 deg in 0.06 s | reach 5 deg in 0.07 s | reach 5 deg in 0.06 s |
 | Hover yaw (differential +/-5 deg) | N = 0.72 N.m at AUW 3911 g | 0.24 s to command | 0.06 s to command | 0.07 s to command | 0.06 s to command |
 | Transition 0 -> 90 deg | monotonic, iris scheduled (nozzle_linkage_check.py) | 3.8 s | 0.6 s | 0.7 s | 0.7 s |
-| Full sweep -5 -> 140 deg | no requirement recorded (TILT-CTL-05) | 6.1 s | 0.9 s | 1.2 s | 1.0 s |
+| Full sweep -5 -> 135 deg (140 deg span) | no requirement recorded (TILT-CTL-05) | 5.9 s | 0.9 s | 1.1 s | 1.0 s |
 | Cruise hold, powered | hold against aero moment (unquantified, TILT-CTL-06) | 1.8 N.m available | 1.8 N.m available | 1.3 N.m available | 1.8 N.m available |
 | Loss of actuator power | hold (TILT_DRIVE_CONTROL_SPEC SS5.2) | holds (self-locking) | holds only if dry (mu >= 0.17); brake required | free -- brake required | holds only if dry (mu >= 0.23); brake required |
 | Hard landing 2.5 g | inertial load nulled by pivot-at-CG; train sees 0.177 N.m bound | 26x margin | 19x margin | 44x margin | 10x margin |

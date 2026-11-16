@@ -64,11 +64,14 @@ HEAD_PATH = os.environ.get("HEAD_MERGE_OUT") or os.path.join(
     REPO_ROOT, "airframe", "stls", "fuselage", "head_shell24_2mm_repaired.stl"
 )
 
-MARKER = b"SerenityUAV HULL-FRAME R1"
-
-# Head_Shell bake transform — MUST match tools/bake_hull_frame.py COMPONENTS
-# ("Head: identity rotation ... STL axes already matched the hull frame.")
-BAKE_T = np.array([-331.9993360, -17.9999640, 60.9998780])
+# Head_Shell bake transform -- READ from tools/bake_hull_frame.py COMPONENTS
+# through tools/hull_datums.py (single source, 2026-10-19; this file used to
+# restate it and drifted when the head was re-centred).
+import sys  # noqa: E402
+sys.path.insert(0, os.path.join(REPO_ROOT, "tools"))
+import hull_datums as hd  # noqa: E402
+MARKER = hd.FRAME_MARKER  # single source (aircraft datum R2, 2026-10-19)
+BAKE_T = np.array(hd.bake_translation("Head_Shell"))
 
 # CF-PETG mass reporting (same convention as merge_cargo_interior.py)
 RHO_PRINT = 1.05e-3  # g/mm^3 (as-printed, 4 perimeters + >=40% infill)
@@ -372,7 +375,7 @@ def main():
     stamp_export(result, HEAD_PATH)
     print(f"\nwrote {HEAD_PATH}")
     print(
-        "Marker preserved: SerenityUAV HULL-FRAME R1 (identity-rotation bake, "
+        "Marker preserved: SerenityUAV AIRCRAFT-FRAME R2 (identity-rotation bake, "
         "no re-bake needed -- only booleans were applied)."
     )
 

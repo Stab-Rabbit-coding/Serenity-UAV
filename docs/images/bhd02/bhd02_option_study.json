@@ -1,0 +1,526 @@
+{
+  "C": {
+    "handed port": {
+      "bolts_killed": [
+        3
+      ],
+      "relocated": [
+        {
+          "bolt": 3,
+          "drop_mm": 24.0,
+          "zb_new": 7.0,
+          "flange_centre_y": 21.0
+        }
+      ],
+      "bay_removed_mm3": 1304.0,
+      "bay_bodies_after": 1,
+      "bolt_group": {
+        "levers_mm": [
+          68.0,
+          44.0
+        ],
+        "tension_n": [
+          506,
+          327
+        ],
+        "shear_n": 152,
+        "resultant_max_n": 528,
+        "fos_tension": 7.0,
+        "fos_bearing": 3.97
+      },
+      "part_numbers": 2
+    },
+    "handed stbd": {
+      "bolts_killed": [
+        2
+      ],
+      "relocated": [
+        {
+          "bolt": 2,
+          "drop_mm": 24.0,
+          "zb_new": 7.0,
+          "flange_centre_y": 21.0
+        }
+      ],
+      "bay_removed_mm3": 1304.0,
+      "bay_bodies_after": 1,
+      "bolt_group": {
+        "levers_mm": [
+          68.0,
+          44.0
+        ],
+        "tension_n": [
+          506,
+          327
+        ],
+        "shear_n": 152,
+        "resultant_max_n": 528,
+        "fos_tension": 7.0,
+        "fos_bearing": 3.97
+      },
+      "part_numbers": 2
+    },
+    "shared": {
+      "bolts_killed": [
+        2,
+        3
+      ],
+      "relocated": [
+        {
+          "bolt": 2,
+          "drop_mm": 24.0,
+          "zb_new": 7.0,
+          "flange_centre_y": 21.0
+        },
+        {
+          "bolt": 3,
+          "drop_mm": 24.0,
+          "zb_new": 7.0,
+          "flange_centre_y": 21.0
+        }
+      ],
+      "bay_removed_mm3": 2608.0,
+      "bay_bodies_after": 1,
+      "bolt_group": {
+        "levers_mm": [
+          44.0,
+          44.0
+        ],
+        "tension_n": [
+          555,
+          555
+        ],
+        "shear_n": 152,
+        "resultant_max_n": 575,
+        "fos_tension": 6.3,
+        "fos_bearing": 3.65
+      },
+      "part_numbers": 1
+    },
+    "baseline": {
+      "bolt_group": {
+        "levers_mm": [
+          68.0,
+          68.0
+        ],
+        "tension_n": [
+          359,
+          359
+        ],
+        "shear_n": 152,
+        "resultant_max_n": 390,
+        "fos_tension": 9.8,
+        "fos_bearing": 5.39
+      }
+    }
+  },
+  "A": {
+    "port": {
+      "intact": {
+        "area_mm2": 4353.0,
+        "h_mm": 79.8,
+        "centroid_z": 66.87,
+        "I_mm4": 2549988.0,
+        "sigma_doc_mpa": 0.189,
+        "fos_doc": 26.4,
+        "sigma_bonded_mpa": 0.228,
+        "sigma_bearing_mpa": 0.123,
+        "sigma_gov_mpa": 0.228,
+        "fos_gov": 21.9,
+        "passes": 1.0
+      },
+      "cut": {
+        "area_mm2": 2756.0,
+        "h_mm": 79.8,
+        "centroid_z": 76.07,
+        "I_mm4": 1508191.0,
+        "sigma_doc_mpa": 0.299,
+        "fos_doc": 16.7,
+        "sigma_bonded_mpa": 0.475,
+        "sigma_bearing_mpa": 0.284,
+        "sigma_gov_mpa": 0.475,
+        "fos_gov": 10.5,
+        "passes": 1.0
+      },
+      "removed_mm3": 8705.0,
+      "removed_g": 4.5,
+      "cut_area_mm2": 3567.0,
+      "bodies_after": 5,
+      "islands_dropped_mm3": [
+        765.0,
+        41.0,
+        1.0
+      ],
+      "gear_vs_cut_flange_mm3": 0.0,
+      "cut_x_cf_spar_mm3": 2.2,
+      "cut_to_spar_gap_mm": 0.0
+    },
+    "stbd": {
+      "intact": {
+        "area_mm2": 4400.0,
+        "h_mm": 79.8,
+        "centroid_z": 66.84,
+        "I_mm4": 2550734.0,
+        "sigma_doc_mpa": 0.187,
+        "fos_doc": 26.7,
+        "sigma_bonded_mpa": 0.228,
+        "sigma_bearing_mpa": 0.122,
+        "sigma_gov_mpa": 0.228,
+        "fos_gov": 21.9,
+        "passes": 1.0
+      },
+      "cut": {
+        "area_mm2": 2831.0,
+        "h_mm": 79.8,
+        "centroid_z": 75.44,
+        "I_mm4": 1568237.0,
+        "sigma_doc_mpa": 0.291,
+        "fos_doc": 17.2,
+        "sigma_bonded_mpa": 0.451,
+        "sigma_bearing_mpa": 0.268,
+        "sigma_gov_mpa": 0.451,
+        "fos_gov": 11.1,
+        "passes": 1.0
+      },
+      "removed_mm3": 8369.0,
+      "removed_g": 4.4,
+      "cut_area_mm2": 3567.0,
+      "bodies_after": 4,
+      "islands_dropped_mm3": [
+        656.0,
+        41.0,
+        1.0
+      ],
+      "gear_vs_cut_flange_mm3": 0.0,
+      "cut_x_cf_spar_mm3": 2.2,
+      "cut_to_spar_gap_mm": 0.0
+    }
+  },
+  "B2": {
+    "fore-port": {
+      "relief_mm3": 587.7,
+      "relief_g": 0.3,
+      "box": [
+        [
+          -81.0,
+          -7.0,
+          53.4
+        ],
+        [
+          -73.4,
+          7.0,
+          67.3
+        ]
+      ],
+      "depth_z_mm": 14.0,
+      "section_x": -77.2,
+      "section_area_mm2": 1180.0,
+      "section_area_after_mm2": 1101.0,
+      "section_loss_pct": 6.7,
+      "section_contours": [
+        5,
+        16
+      ],
+      "gap_to_cf_spar_mm": 4.1,
+      "gap_to_drive_shaft_mm": 37.7
+    },
+    "fore-stbd": {
+      "relief_mm3": 806.7,
+      "relief_g": 0.4,
+      "box": [
+        [
+          -266.4,
+          -7.0,
+          53.4
+        ],
+        [
+          -257.5,
+          14.8,
+          68.7
+        ]
+      ],
+      "depth_z_mm": 15.3,
+      "section_x": -261.9,
+      "section_area_mm2": 1178.0,
+      "section_area_after_mm2": 1070.0,
+      "section_loss_pct": 9.1,
+      "section_contours": [
+        5,
+        14
+      ],
+      "gap_to_cf_spar_mm": 3.5,
+      "gap_to_drive_shaft_mm": 33.0
+    },
+    "aft-port": {
+      "relief_mm3": 2062.4,
+      "relief_g": 1.1,
+      "box": [
+        [
+          -81.0,
+          74.7,
+          58.0
+        ],
+        [
+          -61.7,
+          122.0,
+          72.9
+        ]
+      ],
+      "depth_z_mm": 14.9,
+      "section_x": -71.3,
+      "section_area_mm2": 1159.0,
+      "section_area_after_mm2": 1038.0,
+      "section_loss_pct": 10.4,
+      "section_contours": [
+        5,
+        12
+      ],
+      "gap_to_cf_spar_mm": 43.9,
+      "gap_to_drive_shaft_mm": 26.2
+    },
+    "aft-stbd": {
+      "relief_mm3": 2263.7,
+      "relief_g": 1.2,
+      "box": [
+        [
+          -278.2,
+          74.2,
+          58.0
+        ],
+        [
+          -257.5,
+          122.0,
+          72.9
+        ]
+      ],
+      "depth_z_mm": 14.9,
+      "section_x": -267.8,
+      "section_area_mm2": 1156.0,
+      "section_area_after_mm2": 1034.0,
+      "section_loss_pct": 10.6,
+      "section_contours": [
+        5,
+        11
+      ],
+      "gap_to_cf_spar_mm": 43.4,
+      "gap_to_drive_shaft_mm": 25.7
+    }
+  },
+  "B1": {
+    "15": {
+      "defines": [
+        "CRANK_AZ=-37",
+        "CHORD_AZ=53"
+      ],
+      "wing_clash_mm3": {
+        "fore-port boss carrier": 542.6,
+        "fore-port wire bosses": 213.2,
+        "fore-port wire seats": 8.0,
+        "fore-stbd boss carrier": 691.1,
+        "fore-stbd wire bosses": 293.7,
+        "fore-stbd wire seats": 29.7,
+        "fore-stbd M3 bolt keep-out": 2.5,
+        "aft-port cowl (flange+liner)": 267.3,
+        "aft-port boss carrier": 166.1,
+        "aft-port wire bosses": 154.5,
+        "aft-port M3 bolt keep-out": 60.4,
+        "aft-stbd cowl (flange+liner)": 339.4,
+        "aft-stbd boss carrier": 179.1,
+        "aft-stbd wire bosses": 150.7,
+        "aft-stbd wire seats": 1.3,
+        "aft-stbd M3 bolt keep-out": 61.4
+      },
+      "new_clashes": [
+        "fore-port M3 bolt keep-out x CF spar port",
+        "fore-port M3 bolt keep-out x root flange port",
+        "fore-port bay (printed part) x 10AWG bundle exit port",
+        "fore-port bay (printed part) x CF spar port",
+        "fore-port bay (printed part) x nav harness exit port",
+        "fore-port bay (printed part) x root flange port",
+        "fore-port boss carrier x nav harness exit port",
+        "fore-port boss carrier x root flange port",
+        "fore-port clevis ears x root flange port",
+        "fore-port clevis gussets x root flange port",
+        "fore-port cowl (flange+liner) x 10AWG bundle exit port",
+        "fore-port cowl (flange+liner) x CF spar port",
+        "fore-port cowl (flange+liner) x root flange port",
+        "fore-port leg (thigh+shin+foot) x root flange port",
+        "fore-stbd M3 bolt keep-out x CF spar stbd",
+        "fore-stbd M3 bolt keep-out x root flange stbd",
+        "fore-stbd bay (printed part) x 10AWG bundle exit stbd",
+        "fore-stbd bay (printed part) x CF spar stbd",
+        "fore-stbd bay (printed part) x nav harness exit stbd",
+        "fore-stbd bay (printed part) x root flange stbd",
+        "fore-stbd boss carrier x nav harness exit stbd",
+        "fore-stbd boss carrier x root flange stbd",
+        "fore-stbd clevis ears x root flange stbd",
+        "fore-stbd clevis gussets x root flange stbd",
+        "fore-stbd cowl (flange+liner) x 10AWG bundle exit stbd",
+        "fore-stbd cowl (flange+liner) x CF spar stbd",
+        "fore-stbd cowl (flange+liner) x root flange stbd",
+        "fore-stbd leg (thigh+shin+foot) x root flange stbd",
+        "fore-stbd wire bosses x root flange stbd"
+      ],
+      "function": [
+        {
+          "corner": "fore-port",
+          "bay_bodies": 2,
+          "leg_sweep_vs_own_bay_mm3": 21.6
+        },
+        {
+          "corner": "fore-stbd",
+          "bay_bodies": 2,
+          "leg_sweep_vs_own_bay_mm3": 21.6
+        },
+        {
+          "corner": "aft-port",
+          "bay_bodies": 2,
+          "leg_sweep_vs_own_bay_mm3": 21.6
+        },
+        {
+          "corner": "aft-stbd",
+          "bay_bodies": 2,
+          "leg_sweep_vs_own_bay_mm3": 21.6
+        }
+      ]
+    },
+    "20": {
+      "defines": [
+        "CRANK_AZ=-42",
+        "CHORD_AZ=48"
+      ],
+      "wing_clash_mm3": {
+        "fore-port boss carrier": 480.2,
+        "fore-port wire bosses": 203.1,
+        "fore-port wire seats": 10.5,
+        "fore-stbd boss carrier": 611.8,
+        "fore-stbd wire bosses": 257.0,
+        "fore-stbd wire seats": 18.2,
+        "fore-stbd M3 bolt keep-out": 2.5,
+        "aft-port cowl (flange+liner)": 267.3,
+        "aft-port boss carrier": 67.1,
+        "aft-port wire bosses": 63.2,
+        "aft-port M3 bolt keep-out": 60.4,
+        "aft-stbd cowl (flange+liner)": 339.4,
+        "aft-stbd boss carrier": 71.5,
+        "aft-stbd wire bosses": 63.7,
+        "aft-stbd M3 bolt keep-out": 61.4
+      },
+      "new_clashes": [
+        "fore-port M3 bolt keep-out x CF spar port",
+        "fore-port M3 bolt keep-out x root flange port",
+        "fore-port bay (printed part) x 10AWG bundle exit port",
+        "fore-port bay (printed part) x CF spar port",
+        "fore-port bay (printed part) x nav harness exit port",
+        "fore-port bay (printed part) x root flange port",
+        "fore-port boss carrier x nav harness exit port",
+        "fore-port boss carrier x root flange port",
+        "fore-port clevis ears x root flange port",
+        "fore-port clevis gussets x root flange port",
+        "fore-port cowl (flange+liner) x 10AWG bundle exit port",
+        "fore-port cowl (flange+liner) x CF spar port",
+        "fore-port cowl (flange+liner) x root flange port",
+        "fore-port leg (thigh+shin+foot) x root flange port",
+        "fore-stbd M3 bolt keep-out x CF spar stbd",
+        "fore-stbd M3 bolt keep-out x root flange stbd",
+        "fore-stbd bay (printed part) x 10AWG bundle exit stbd",
+        "fore-stbd bay (printed part) x CF spar stbd",
+        "fore-stbd bay (printed part) x nav harness exit stbd",
+        "fore-stbd bay (printed part) x root flange stbd",
+        "fore-stbd boss carrier x nav harness exit stbd",
+        "fore-stbd clevis ears x root flange stbd",
+        "fore-stbd clevis gussets x root flange stbd",
+        "fore-stbd cowl (flange+liner) x 10AWG bundle exit stbd",
+        "fore-stbd cowl (flange+liner) x CF spar stbd",
+        "fore-stbd cowl (flange+liner) x root flange stbd",
+        "fore-stbd leg (thigh+shin+foot) x root flange stbd"
+      ],
+      "function": [
+        {
+          "corner": "fore-port",
+          "bay_bodies": 2,
+          "leg_sweep_vs_own_bay_mm3": 100.2
+        },
+        {
+          "corner": "fore-stbd",
+          "bay_bodies": 2,
+          "leg_sweep_vs_own_bay_mm3": 100.2
+        },
+        {
+          "corner": "aft-port",
+          "bay_bodies": 2,
+          "leg_sweep_vs_own_bay_mm3": 100.2
+        },
+        {
+          "corner": "aft-stbd",
+          "bay_bodies": 2,
+          "leg_sweep_vs_own_bay_mm3": 100.2
+        }
+      ]
+    },
+    "30": {
+      "defines": [
+        "CRANK_AZ=-52",
+        "CHORD_AZ=38"
+      ],
+      "wing_clash_mm3": {
+        "fore-port boss carrier": 297.6,
+        "fore-port wire bosses": 37.6,
+        "fore-stbd boss carrier": 339.6,
+        "fore-stbd wire bosses": 37.9,
+        "fore-stbd M3 bolt keep-out": 2.5,
+        "aft-port cowl (flange+liner)": 267.3,
+        "aft-port boss carrier": 1.0,
+        "aft-port M3 bolt keep-out": 60.4,
+        "aft-stbd cowl (flange+liner)": 339.4,
+        "aft-stbd M3 bolt keep-out": 61.4
+      },
+      "new_clashes": [
+        "fore-port M3 bolt keep-out x CF spar port",
+        "fore-port M3 bolt keep-out x root flange port",
+        "fore-port bay (printed part) x 10AWG bundle exit port",
+        "fore-port bay (printed part) x CF spar port",
+        "fore-port bay (printed part) x root flange port",
+        "fore-port clevis ears x root flange port",
+        "fore-port clevis gussets x root flange port",
+        "fore-port cowl (flange+liner) x 10AWG bundle exit port",
+        "fore-port cowl (flange+liner) x CF spar port",
+        "fore-port cowl (flange+liner) x root flange port",
+        "fore-port leg (thigh+shin+foot) x root flange port",
+        "fore-stbd M3 bolt keep-out x CF spar stbd",
+        "fore-stbd M3 bolt keep-out x root flange stbd",
+        "fore-stbd bay (printed part) x 10AWG bundle exit stbd",
+        "fore-stbd bay (printed part) x CF spar stbd",
+        "fore-stbd bay (printed part) x root flange stbd",
+        "fore-stbd clevis ears x root flange stbd",
+        "fore-stbd clevis gussets x root flange stbd",
+        "fore-stbd cowl (flange+liner) x 10AWG bundle exit stbd",
+        "fore-stbd cowl (flange+liner) x CF spar stbd",
+        "fore-stbd cowl (flange+liner) x root flange stbd",
+        "fore-stbd leg (thigh+shin+foot) x root flange stbd"
+      ],
+      "function": [
+        {
+          "corner": "fore-port",
+          "bay_bodies": 2,
+          "leg_sweep_vs_own_bay_mm3": 563.1
+        },
+        {
+          "corner": "fore-stbd",
+          "bay_bodies": 2,
+          "leg_sweep_vs_own_bay_mm3": 563.1
+        },
+        {
+          "corner": "aft-port",
+          "bay_bodies": 2,
+          "leg_sweep_vs_own_bay_mm3": 563.1
+        },
+        {
+          "corner": "aft-stbd",
+          "bay_bodies": 2,
+          "leg_sweep_vs_own_bay_mm3": 563.1
+        }
+      ]
+    }
+  }
+}

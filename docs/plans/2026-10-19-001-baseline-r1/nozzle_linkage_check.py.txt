@@ -1,0 +1,20 @@
+
+=== run: ADOPTED model (wing-fixed sun -> nacelle pinion -> crank -> pushrod -> ring) ===
+  architecture: docs/NOZZLE_DRIVE_TRADE.md 'DECISION AMENDMENT -- hybrid A+B adopted (2026-07-19)'
+  frame       : nacelle-local; tilt cancels out of the rod-length equation (see module docstring)
+  pinion axis : (x=-38.0, y=0.0, z=133.5) mm, parallel to local X;  PIVOT_Z=107.5, SYNC_CD=26.0
+  crank       : CRANK_R=8.50 mm, CRANK_PHASE=206.00 deg
+  pushrod     : PUSHROD_LEN=48.00 mm
+  ring lever  : RING_LEVER_R=32.0 mm, RING_LEVER_AZ=157.5 deg, ball z=170.25 mm
+  (context only, not used in the solve) PHI_CLOSED=16.96 deg, PHI_OPEN=2.39 deg
+  (a) reachable at all 91 sampled tilt angles (0..90 deg, 1.0 deg step): yes
+  (b) monotonic: yes (decreasing azimuth)
+  (c) psi(0 deg)  =   -0.360 deg  (target 0.000, err 0.360 deg)
+      psi(90 deg) =  -24.176 deg
+      span        =   23.816 deg  (target 23.75, err 0.066 deg = 0.3 %)
+  (d) transmission angle 88.13..103.84 deg;  worst min(TA, 180-TA) = 76.16 deg at tilt 90.0 deg  (floor 40.0 deg)
+  PASS: reachable, monotonic, span within +/-5.0 deg of the 23.75 deg target, and transmission angle above the 40.0 deg floor.
+
+PASS: run (CRANK_R=8.50, CRANK_PHASE=206.00, PUSHROD_LEN=48.00)
+
+--- stderr ---

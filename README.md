@@ -10,7 +10,7 @@
 [![CAD: FreeCAD | OpenSCAD | Blender](https://img.shields.io/badge/CAD-FreeCAD%20%7C%20OpenSCAD%20%7C%20Blender-fe7d37)](airframe/README.md)
 [![PCB: KiCad 9](https://img.shields.io/badge/PCB-KiCad%209-1BA94C)](avionics/README.md)
 [![Firmware: C | Python](https://img.shields.io/badge/firmware-C%20%7C%20Python-2f81f7)](avionics/firmware/)
-[![Status: Rev T — Phase 5 build](https://img.shields.io/badge/status-Rev%20T%20%E2%80%94%20Phase%205%20build-dfb317)](TODO.md)
+[![Status: Rev U — Phase 5 build](https://img.shields.io/badge/status-Rev%20U%20%E2%80%94%20Phase%205%20build-dfb317)](TODO.md)
 
 *"Can't stop the signal, and can't take the sky from me."*
 
@@ -25,8 +25,7 @@ spar and Rev S4c nacelle geometry; re-render pending (see `TODO.md` §0.10).*
 
 Serenity UAV is a fully functional electric ducted fan (EDF) tilt-rotor aircraft engineered as an
 actual physical build of the Firefly-class transport *Serenity* (Joss Whedon, 2002) — every
-component here is fabricated or procured, not conceptual. Four canonical CF-PETG-printed hull
-sections carry two tilting EDF nacelles, a belly cargo bay with powered winch and clamshell doors,
+component here is fabricated or procured, not conceptual. A two-part SLS-printed hull (one-piece forward head+cargo section and one-piece aft middle+rear section) carries two tilting EDF nacelles, a belly cargo bay with powered winch and clamshell doors,
 and an 8-node cooperative avionics architecture with PACE (Primary/Alternate/Contingency/Emergency)
 failover across every flight-critical function.
 
@@ -74,13 +73,13 @@ Throughout the mission, the aircraft shall also:
 | Length | 24.0 in (609 mm) |
 | Wingspan | 19.1 in (486 mm) |
 | Height | 7.93 in (201.5 mm) |
-| AUW — Phases 5–10 (nacelles only) | ~8.62 lbm (3,911 g) |
-| AUW — Phase 11 (full system) | ~9.42 lbm (4,273 g) |
+| AUW — two cells + 8 oz payload (Rev T-SB) | 13.93 lbm (6,318 g), provisional (`docs/flight_envelope.md`) |
+| AUW — Phase 11 (full system) | not re-derived since the 64 mm / split-battery redesign |
 | Payload capacity (minimum) | 8.0 oz (226 g) in a 4″ × 3″ × 3″ bay |
-| Thrust — nacelles only (hover) | 9.84 lbf (4,464 g) |
+| Thrust — nacelles only | 20.90 lbf (9,480 g) = 4 × 83.60 ozf (2,370 gf), QF2822-2300KV at 24 V, 80 A ESCs |
 | Thrust — Phase 11 rear EDF (cruise) | ~2.81 lbf (1,275 g) net after RCS bleed |
-| T/W — nacelles only (hover) | ≈ 1.14 (VTOL hover capable; margin corrected 2026-08-22, see TODO.md §0.10.1) |
-| T/W — Phase 11 (hover, nacelles only) | ≈ 1.04 (rear EDF adds mass but is forward-thrust only) |
+| T/W — nacelles only (hover) | ≈ 1.50 with payload (design floor 1.2; provisional pending mass truth) |
+| T/W — Phase 11 (hover, nacelles only) | not re-derived |
 | Compute | 8× PocketBeagle 2 Industrial (AM6254), PACE failover |
 | Onboard buses | CAN FD, MIL-STD-1553C, RS-485, Ethernet RSTP ring |
 | External comms | Five C2 links: Wi-Fi 5 GHz, Zigbee 2.4 GHz, mLRS, SiK/MAVLink 915 MHz, 49 MHz AX.25 |
@@ -94,22 +93,22 @@ stale 2,768 g AUW) and remain provisional until the bottom-up AUW ledger recompu
 </tr>
 </table>
 
-## Project Status (2026-10-07)
+## Project Status (2026-11-03)
 
-**Rev T, design and PCB layout. Nothing is fabricated or assembled; the physical build has not
+**Rev U, design and PCB layout. Nothing is fabricated or assembled; the physical build has not
 started.** The path to first flight is in `docs/FIRST_FLIGHT_READINESS.md`; open work is in
 [`TODO.md`](TODO.md), generated from the full record in [`WBS.md`](WBS.md).
 
 | Area | State |
 |------|-------|
-| Airframe | SCAD shells at Rev S baseline, carried into Rev T; STL re-exports pending after the TACCO 60 × 35 mm change; cargo-shell mesh defect open |
-| Nacelles | 50 mm Rev S4c is current; 64 mm tandem-EDF redesign (NAC-64-SERVO-01) with a servo-driven nozzle is designed and fit-closed, with pivot, CFD, mass, and bench gates open |
+| Airframe | SCAD shells at Rev S baseline, carried into Rev U; STL re-exports pending after the TACCO 60 × 35 mm change; cargo-shell mesh defect open |
+| Nacelles | The 64 mm tandem-EDF nacelle (NAC-64-SERVO-01) with a servo-driven nozzle is the Rev U nacelle; the 50 mm nacelle is archived. Pivot (residual +9.6 mm), CFD, mass, and bench gates are open; the published pod STLs need a re-bake, and the 64 mm ESC bay covers are not yet generated (`tools/check_nacelle_deps.py`) |
 | Avionics PCBs | Pilot and TACCO placed with ERC 0 / DRC 0 before routing, on corrected 4.80 mm PB2 rails; routing and Gerbers open. Flight Engineer, Observer, and Commo Rev T need further PCB work |
 | Buses | Fleet MIL-STD-1553C via the Holt HI-6138 on every Pilot and TACCO (2026-09-28) |
 | Comms | mLRS on a bare STM32WLE5JC; Wi-Fi USB module selection is a fab blocker; Commo becomes one standalone node (Rev T, 2026-09-29) |
 | Firmware | `serenity-cn` Phase 6 done; `serenity-fc` Phase 6 stub; Phase 7 open |
 | Ground station | Skipper in design; ground-side radio loadout decision open |
-| BOM | `bom_revT` published 2026-09-28; avionics rows lag the 2026-10 PCB changes |
+| BOM | `bom_revU` published 2026-11-03 (carry-forward of `bom_revT`, 2026-09-28); avionics rows lag the 2026-10 PCB changes |
 | Build guide | Hand-drawn pre-Rev-T art; rebuild open (task 1.5.6) |
 
 ## Subsystems
@@ -121,7 +120,7 @@ started.** The path to first flight is in `docs/FIRST_FLIGHT_READINESS.md`; open
 
 **Airframe**
 
-Four-section CF-PETG printed hull (head, cargo, middle, rear) with high-lift wings, hollow-walled
+SLS-printed (DuraForm PA CF) hull with high-lift wings: in two sections (forward head+cargo and aft middle+rear), hollow-walled
 and foam-filled to the canonical Firefly outer mold line. Rev S1g gave the wing a fixed,
 bonded 20×16.3 mm carbon-fiber spar as its primary bending member, replacing the earlier
 rotating-shaft design.
@@ -147,10 +146,10 @@ deliberately progressive, field-replaceable failure mode rated for a 6 ft full-A
 
 **Nacelles**
 
-Two tilting pods each carry a tandem 50 mm EDF pair behind an 11-fin stator, with a variable-area
-nozzle scheduled on measured tilt (0°–145° pivot) and driven by one sub-micro servo per pod. Rev S4c
-hollowed the pods (−179 g/pair) and added hinged ESC bays with flush access covers on a 4×90° motor
-pattern; a 64 mm tandem-EDF redesign is in progress.
+Two tilting pods each carry a tandem 64 mm EDF pair (QX-Motor QF2822-2300KV, 2,370 gf each), with a
+variable-area nozzle scheduled on measured tilt (−5° to +135° pivot; 0° = horizontal) and driven by one KST X06
+sub-micro servo per pod. The 64 mm pod is a uniform ×1.06 enlargement of the canonical shell with an integral
+stage-1 motor plate and a removable stage-2 cartridge. The earlier 50 mm pods (Rev S4c) are archived.
 
 [Nozzle-Drive Trade Study →](docs/NOZZLE_DRIVE_TRADE.md)
 
@@ -169,7 +168,7 @@ the EMI-hardened Flight Engineer power distribution board.
 </tr>
 <tr>
 <td width="50%" valign="top">
-<img src="graphical-build-guide/build_guide_09_avionics.svg" width="100%" alt="Avionics — 8-node PACE failover architecture"><br><br>
+<img src="graphical-build-guide/build_guide_17_avionics_nodes.svg" width="100%" alt="Avionics nodes — Rev T+ build guide card 17"><br><br>
 
 **Avionics**
 
@@ -235,14 +234,14 @@ above are the current design baseline. Full engineering detail for each subsyste
 subsystem's own README/doc — see the link on each card in [Subsystems](#subsystems) above. The
 narrative that used to live directly in this file (full Airframe/Powerplant/Avionics/Cargo
 Handling write-ups) is preserved verbatim, for historical reference, in
-[`archives/root-readme-deep-dive-2026-08-03/`](archives/root-readme-deep-dive-2026-08-03/).
+[`archives/root-readme-deep-dive-2026-08-03.tar.gz`](archives/MANIFEST.md) (unpack per [`archives/README.md`](archives/README.md)).
 
 ---
 
 ## References
 
 - Design conversation: [claude.ai/share/a1e3900e-d2bf-4690-ba63-25178e7de666](https://claude.ai/share/a1e3900e-d2bf-4690-ba63-25178e7de666)
-- Latest design revision BOM: `current-specification/bom_revT.json` (Rev T, 2026-09-28)
+- Latest design revision BOM: `current-specification/bom_revU.json` (Rev U, 2026-11-03)
 
 ---
 
@@ -263,7 +262,7 @@ Licensed by Steve Griffing, PE(CSE), CISSP-ISSEP, CPP, according to what each fi
 
 See `docs/attribution_and_licensing.md` for the full policy, the per-subsystem `LICENSE`
 federation map, and the CERN-OHL-W "Available Component" treatment of upstream
-canonical-reference geometry. Revision T, September 2026.
+canonical-reference geometry. Revision U, November 2026.
 
 ## Attribution
 

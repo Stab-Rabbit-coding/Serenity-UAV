@@ -128,6 +128,12 @@ telemetry gateways. Folder/file/BOM designator is `CAN-PERIPH-GW-1`
 `AGENTS.md` §5 "Component sourcing and openness" rules (no restricted-country silicon by
 manufacturer domicile/control; public, NDA-free datasheets) before it enters a schematic.
 
+**Coordinates (owner directive 2026-10-19):** a board keeps KiCad's own coordinates only
+while it is being designed in KiCad. Every PCB **STEP or STL used for fitting** — bay and
+enclosure fit, the airframe census, the mass ledger — is exported or placed **in the
+aircraft datum** at its installed position (origin on the centreline, at the nose tip, on
+the static ground plane; `airframe/AGENTS.md` "Canonical Geometry and Coordinate System").
+
 ### Design Rules Checker (DRC) Workflow
 
 Every schematic and PCB modification **must** be verified: run **ERC** on the `.kicad_sch` and

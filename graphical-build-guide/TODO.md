@@ -80,7 +80,7 @@
 - [ ] Thread 2mm steel longitudinal shaft through nacelle wall channel…
 - [ ] Mount crown pinion on shaft at nozzle end; mesh with Idler-In on the…
 - [ ] Mount idler gear on its bracket to the nozzle outer housing
-- [ ] Full sweep test (Rev R1, 2026-06-22): rotate nacelle -5°→140°
+- [ ] Full sweep test (Rev R1, 2026-06-22): rotate nacelle -5°→135°
 - [ ] Confirm petal closed position matches nacelle hull profile at 0°.
 - [ ] Port nacelle EDF rotation: CW from intake; stbd: CCW from intake
 - [ ] Stator fins visible and clear in Z=53–73mm gap on each nacelle
@@ -121,6 +121,14 @@
 ### 1.5.6 Rebuild Graphical Build Guide
 → full detail: `WBS.md` §1.5.6
 
+- [ ] BG-PLAN-2 — Place the board STEP models in the card renders
+- [ ] BG-SEQ-1 — Per-step assembly spec
+- [ ] BG-SEQ-2 — Torque table with citations
+- [ ] BG-SEQ-3 — Wire-before-or-after ordering analysis
+- [ ] BG-SEQ-4 — Navigation lights worked example
+- [ ] BG-SEQ-5 — Two-section hull sequence
+- [ ] BG-PLAN-1 — Execute `docs/plans/2026-11-02-001-feat-build-guide-joint…
+- [ ] BG-SEQ-6 — Connector and harness steps
 - [ ] Pipeline: Update silhouette pipeline (`gen_hull_outlines.py`)
 - [ ] Pipeline: Update outline mapping (`update_overview_paths.py`)
 - [ ] Pipeline: Coordinate alignment check — Verify outline-derivation…
@@ -134,8 +142,12 @@
 - [ ] Phase A (08/10): Rebuild `overview_close_up_head.svg`
 - [ ] Phase A (09/10): Rebuild `overview_close_up_cargo.svg`
 - [ ] Phase A (10/10): Rebuild `overview_close_up_rear.svg`
-- [ ] Phase B (1/2): Rebuild `build_plan.svg` — Update master construction…
-- [ ] Phase B (2/2): Rebuild `components_overview.svg`
+- [ ] Re-audit `REVN_BUILD_GUIDE_24IN.md` Phases 4–11 for Rev T+
+- [ ] Sync the tilt range to the owner's 2026-10-31 ruling
+- [ ] Owner decision: 6704ZZ trunnion pair at 89 % C0 under ultimate load…
+- [ ] Add a BOM row for the machined 14T tilt pinion (brass/steel…
+- [ ] Place the remaining unplaced parts in the master assembly
+- [ ] Draw the 10 AWG ESC route, disconnect bay → ESC (WA-R10), then…
 - [ ] Phase C (01/10): Rebuild `build_guide_01_parts.svg`
 - [ ] Phase C (02/10): Rebuild `build_guide_02_keel.svg`
 - [ ] Phase C (03/10): Rebuild `build_guide_03_hull_prep.svg`

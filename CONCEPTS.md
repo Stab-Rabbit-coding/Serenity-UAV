@@ -76,3 +76,22 @@ A PocketBeagle 2 stacking-rail pin that is wired on the PocketBeagle itself to m
 ## Isolation Band
 
 The region of a cape that belongs to the isolated (bus-side) reference of the isolated CAN-FD and RS-485 transceivers: their isolated pin rows, the field connectors and the filters between them. Only isolated-domain nets and chassis ground may have copper inside it on the layers it covers, and the main ground and supply planes are cut away beneath it; the gap between the band and logic-side copper is the barrier the board actually delivers, whatever the transceiver's own isolation rating says. A band need not cover every layer: when every isolated pad sits on one face, the opposite outer layer may carry logic copper beneath it, separated by the laminate, provided no logic via enters the band — so whatever sits there must route on that face alone.
+
+## Bay Station
+
+One of the two fore-aft positions — fore and aft — at which a landing-gear bay
+is mounted on each side of the cargo section. Each of the four corners
+(station × side) is its own printed solid, generated from one SCAD design
+source: the bay's back face conforms to the hull flank measured at that
+corner, so the fore and aft bays differ, and each starboard bay is the
+**mirror image** of its port twin about the ship centreline, not a rotated
+copy. Any property claimed for "the bay" (one body, clearance, fit) has to be
+shown at every corner, because the conforming back face alone can change it.
+
+## Gear Box
+
+The canonical (Henning) faceted block on each lower cargo flank, under the wing root, that houses the landing-gear hips. Each thigh leaves the box through a square leg-support pillar with an open trapezoidal swing slot. It is fused into the one-piece forward hull as skin, not as a separate part: its walls stand only outside the old hull, and its interior opens into the cargo hold. The bolted gear bays (see Bay Station) sit inside it as internal structure. It is styling plus enclosure, not the primary load path.
+
+## Corner Cartridge
+
+The field-replaceable unit for one landing-gear corner: leg, hip pin, CF backbone, tension fuses and mounting frame, removed and installed as one assembly through a removable canonical hatch in the Gear Box. A broken corner is swapped in the field and repaired at the bench. Port and starboard cartridges are exact mirrors; fore and aft cartridges differ.

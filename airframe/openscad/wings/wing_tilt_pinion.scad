@@ -33,7 +33,7 @@
 // ASSUMED nominal); +7 g on the wing tip vs the unmodelled baseline.
 //
 // IN-CONTEXT CHECK (2026-10-03): this mesh rolled against the 64 mm trunnion
-// ring over tilt -5..140 deg (spin = PH + orbit x (1 + 50/14)): tooth overlap
+// ring over tilt -5..135 deg (spin = PH + orbit x (1 + 50/14)): tooth overlap
 // 0.03-0.06 mm³ throughout (zero-backlash tangency), pod 0 mm³.
 //
 // Standards: ISO 8752 (spring-type straight pins, slotted, heavy duty) — see

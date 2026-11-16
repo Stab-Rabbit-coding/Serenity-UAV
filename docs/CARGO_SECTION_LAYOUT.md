@@ -1,4 +1,4 @@
-# Cargo Section Layout — Rev T5f (2026-09-21; Rev T5e 2026-09-16, Rev T5/T5b 2026-09-15 base)
+# Cargo Section Layout — Rev U (2026-11-07; carried forward from Rev T5f, 2026-09-21; Rev T5e 2026-09-16, Rev T5/T5b 2026-09-15 base)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI note:** Drafted by Claude (model: Claude Opus 5, Anthropic) under the author's

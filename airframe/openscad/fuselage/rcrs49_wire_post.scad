@@ -51,7 +51,7 @@
 //   boards do not share an antenna (TODO.md §1.4.2, redundancy mandate).
 //
 // References:
-//   docs/REVN_BUILD_GUIDE_24IN.md, Phase 1, Step 8 (superseded by §1.4.2
+//   archives/docs-superseded/REVN_BUILD_GUIDE_24IN_rev_s_stub.md, Phase 1, Step 8 (superseded by §1.4.2
 //     port/starboard relocation, 2026-06-22 — update build guide to match):
 //     "Print from rcrs49_wire_post.scad: forward post (~120 mm from nose) +
 //      aft post (~580 mm from nose)" — now ×2 sets (port + starboard).

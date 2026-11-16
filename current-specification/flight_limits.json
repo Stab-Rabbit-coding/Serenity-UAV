@@ -1,0 +1,59 @@
+{
+  "_meta": {
+    "purpose": "Single source for the flight/propulsion limits that the Operator's Manual, tools and docs quote. Edit here first; tools/sync_operators_manual.py propagates to docs/OPERATORS_MANUAL.md on every commit.",
+    "owner_correction": "2026-11-02 (owner, Steve Griffing): zero tilt datum is horizontal; tilt range -5 to +135 deg; EDF is QX QF2822-2300KV, 83.60 ozf (2370 gf) at 24 VDC / 57.0 A, with 80 A ESCs.",
+    "license": "CC-BY-SA-4.0 (data file; SPDX-License-Identifier: CC-BY-SA-4.0)"
+  },
+  "tilt": {
+    "zero_datum": "horizontal (cruise)",
+    "min_deg": -5.0,
+    "max_deg": 135.0,
+    "hover_deg": 90.0,
+    "source": "owner 2026-11-02 (supersedes the -5 to 140/145 deg figures)"
+  },
+  "fan": {
+    "model": "QX Motor QF2822-2300KV 64 mm EDF",
+    "thrust_gf": 2370.0,
+    "thrust_ozf": 83.60,
+    "voltage_v": 24.0,
+    "current_a": 57.0,
+    "power_w": 1368.0,
+    "esc_a": 80,
+    "n_per_nacelle": 2,
+    "n_nacelles": 2,
+    "source": "REF-EDF-003 second sheet (QF2822-2300KV manual); owner 2026-11-02 (80 A ESC)"
+  },
+  "regulatory": {
+    "v_ne_kt": 87.0,
+    "max_agl_ft": 400.0,
+    "min_visibility_sm": 3.0,
+    "cloud_below_ft": 500.0,
+    "cloud_horizontal_ft": 2000.0,
+    "source": "REF-FAA-002 sections 107.51(a)-(d)"
+  },
+  "failsafe": {
+    "cell_warn_v": 3.50,
+    "cell_rtl_v": 3.30,
+    "cell_emergency_v": 3.00,
+    "pack_warn_v": 21.0,
+    "pack_rtl_v": 19.8,
+    "pack_emergency_v": 18.0,
+    "heartbeat_timeout_ms": 100,
+    "radio_loss_rtl_sik_lora_s": 5,
+    "radio_loss_rtl_49mhz_s": 10,
+    "tof_halt_m": 1.0,
+    "tof_resume_m": 1.5,
+    "esc_cutback_c": 85,
+    "esc_shutdown_c": 95,
+    "esc_cutback_throttle_pct": 70,
+    "source": "docs/failsafe_thresholds.md; docs/POWER_DISTRIBUTION.md section 8"
+  },
+  "ops": {
+    "transition_floor_ft": 20.0,
+    "phase5_transition_min_m": 8.0,
+    "payload_oz": 8.0,
+    "payload_g": 226.8,
+    "t_w_floor": 1.2,
+    "source": "docs/flight_envelope.md sections 3 and 5; README.md"
+  }
+}

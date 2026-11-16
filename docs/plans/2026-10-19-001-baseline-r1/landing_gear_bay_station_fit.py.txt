@@ -1,0 +1,23 @@
+cargo_sect_shell24_2mm_repaired.stl: 1,075,956 faces, watertight=True
+
+Standoff of each canonical hip from the real skin, measured ALONG the SS2.4a panel normal (r=34 mm footprint):
+  fore-port   31848 verts   skin along-normal p5  -22.71  p50   -4.40  p95  +21.28 mm
+              outboard skin standoff from hip =  +21.28 mm (p75 +8.35)
+              local skin normal (+0.950,-0.122,-0.288)   11.9 deg off the SS2.4a panel constant  [  1713 mm^2]
+  fore-stbd   31809 verts   skin along-normal p5  -21.91  p50   -5.32  p95  +19.02 mm
+              outboard skin standoff from hip =  +19.02 mm (p75 +8.09)
+              local skin normal (-0.944,-0.133,-0.302)   10.5 deg off the SS2.4a panel constant  [  1711 mm^2]
+  aft-port    27972 verts   skin along-normal p5  -20.15  p50  -10.22  p95   +2.94 mm
+              outboard skin standoff from hip =   +2.94 mm (p75 -3.75)
+              local skin normal (+0.965,-0.154,-0.215)   16.3 deg off the SS2.4a panel constant  [  1746 mm^2]
+  aft-stbd    28005 verts   skin along-normal p5  -20.00  p50   -9.86  p95   +3.78 mm
+              outboard skin standoff from hip =   +3.78 mm (p75 -3.42)
+              local skin normal (-0.961,-0.172,-0.218)   15.8 deg off the SS2.4a panel constant  [  1748 mm^2]
+
+  standoff spread +2.94 .. +21.28 mm (range 18.34 mm)
+  port/stbd mirror check: fore 2.26 mm, aft 0.84 mm
+
+  => BAY_BACK_X must place the frame's outer face at each station's standoff;
+     a single shared value is only valid if the spread is small.
+
+--- stderr ---

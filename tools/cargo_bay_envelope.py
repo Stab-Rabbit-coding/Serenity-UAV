@@ -104,7 +104,8 @@ DOOR_PATHS = [
 sys.path.insert(0, os.path.join(REPO_ROOT, "airframe", "blender-scripts"))
 import merge_cargo_interior as mci  # noqa: E402
 
-X_CL = -169.9                       # hull centreline, cargo section
+import hull_datums as hd  # noqa: E402  aircraft datum R2 (2026-10-19)
+X_CL = hd.X_CL                      # centreline (R1 -169.9)
 SPAR_Y = mci.WING_SPAR_Y            # +38.15 mm (Rev S1b, 35 % root chord)
 SPAR_Z = mci.WING_SPAR_Z            # +68.42 mm (S1223 camber midline)
 APERTURE = mci.APERTURE             # clamshell belly opening, hull frame
@@ -176,7 +177,7 @@ def free_interval(region, probe, reference):
     return None, None
 
 
-def station_envelope(mesh, y, z_floor=10.0, z_ceiling=170.0):
+def station_envelope(mesh, y, z_floor=90.0, z_ceiling=250.0):  # R1 Z 10 / 170
     """Usable interior at station `y`: (x_lo, x_hi, z_lo, z_hi) or None.
 
     `z_floor` is the top of the closed clamshell doors -- nothing may be mounted
@@ -190,7 +191,7 @@ def station_envelope(mesh, y, z_floor=10.0, z_ceiling=170.0):
     if z_lo is None:
         return None
     z_mid = (z_lo[1] + z_hi[1]) / 2.0
-    lateral = LineString([(-270.0, z_mid), (-70.0, z_mid)])
+    lateral = LineString([(-100.15, z_mid), (99.85, z_mid)])  # R1 X -270 / -70
     x_lo, x_hi = free_interval(region, lateral, (X_CL, z_mid))
     if x_lo is None:
         return None
@@ -203,7 +204,7 @@ def print_stations(mesh):
     print("  floor = Z +10 (top of the closed clamshell doors)")
     print(f"\n{'Y':>7s}  {'X interior':>20s} {'width':>7s}   "
           f"{'Z interior':>18s} {'height':>7s}")
-    for y in np.arange(-64.0, 126.0, 6.0):
+    for y in np.arange(241.7, 431.7, 6.0):  # R1 Y -64..126
         env = station_envelope(mesh, float(y))
         if env is None:
             print(f"{y:7.0f}   (bay axis obstructed at this station)")
@@ -213,8 +214,8 @@ def print_stations(mesh):
         # the probe escaped through an opening (a landing-gear bay aperture, or
         # the belly forward of the clamshell).  Mark it rather than reporting the
         # probe length as if it were an interior width.
-        unbounded = (x_lo <= -269.9 or x_hi >= -70.1
-                     or z_hi >= 169.9)
+        unbounded = (x_lo <= -100.05 or x_hi >= 99.75
+                     or z_hi >= 249.9)
         flag = "   <- probe escaped an opening; not a wall-bounded span" \
             if unbounded else ""
         print(f"{y:7.0f}  X {x_lo:8.1f}..{x_hi:8.1f} {x_hi - x_lo:7.1f}   "

@@ -1,0 +1,131 @@
+{
+  "kicad_cli": "9.0",
+  "boards": [
+    {
+      "board": "Bus-Gateway",
+      "pcb": "avionics/kicad/Bus-Gateway/kicads/CAN-PERIPH-GW-1.kicad_pcb",
+      "step": "avionics/kicad/Bus-Gateway/step/CAN-PERIPH-GW-1.step",
+      "status": "ok",
+      "missing_models": [
+        "Could not add 3D model to L1.",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_Taiyo-Yuden_NR-20xx.step"
+      ],
+      "seconds": 8.1,
+      "bytes": 2751954
+    },
+    {
+      "board": "Commo",
+      "pcb": "avionics/kicad/Commo/kicads/Commo.kicad_pcb",
+      "step": "avionics/kicad/Commo/step/Commo.step",
+      "status": "ok",
+      "missing_models": [
+        "Could not add 3D model to D-ANT-SIK.",
+        "Could not add 3D model to TCXO 25M.",
+        "Could not add 3D model to UART CMC.",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Filter.3dshapes/Bourns_SRF2012.step",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Oscillator.3dshapes/Oscillator_SMD_SeikoEpson_TG2520SMN-xxx-xxxxxx-4Pin_2.5x2.0mm.step",
+        "File not found: ${SECURE_CONTROLLERS_LIB}/SecureControllers.3dshapes/Infineon_TSSLP-2-4_0.62x0.32mm.step"
+      ],
+      "seconds": 8.1,
+      "bytes": 2420589
+    },
+    {
+      "board": "FlightEngineer",
+      "pcb": "avionics/kicad/FlightEngineer/kicads/FlightEngineer.kicad_pcb",
+      "step": "avionics/kicad/FlightEngineer/step/FlightEngineer.step",
+      "status": "ok",
+      "missing_models": [
+        "Could not add 3D model to J_5V.",
+        "Could not add 3D model to J_6V.",
+        "Could not add 3D model to J_BATT.",
+        "Could not add 3D model to J_ESC1.",
+        "Could not add 3D model to J_ESC2.",
+        "Could not add 3D model to J_ESC3.",
+        "Could not add 3D model to J_ESC4.",
+        "Could not add 3D model to RS1.",
+        "Could not add 3D model to RS2.",
+        "Could not add 3D model to RS3.",
+        "Could not add 3D model to RS4.",
+        "Could not add 3D model to RS_MAIN.",
+        "Could not add 3D model to U_TPM.",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Connector_AMASS.3dshapes/AMASS_XT30PW-F_1x02_P2.50mm_Horizontal.step",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Connector_AMASS.3dshapes/AMASS_XT60PW-F_1x02_P7.20mm_Horizontal.step",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Connector_Molex.3dshapes/Molex_Nano-Fit_105309-xx04_1x04_P2.50mm_Vertical.step",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-32-1EP_5x5mm_P0.5mm_EP3.6x3.6mm.step",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_Shunt_Vishay_WSK2512_6332Metric_T1.19mm.step"
+      ],
+      "seconds": 13.5,
+      "bytes": 5086568
+    },
+    {
+      "board": "Observer",
+      "pcb": "avionics/kicad/Observer/kicads/Observer.kicad_pcb",
+      "step": "avionics/kicad/Observer/step/Observer.step",
+      "status": "ok",
+      "missing_models": [
+        "Could not add 3D model to CMC5.",
+        "Could not add 3D model to J_LASER.",
+        "Could not add 3D model to T1_CMC1.",
+        "Could not add 3D model to T1_CMC2.",
+        "Could not add 3D model to T2_CMC1.",
+        "Could not add 3D model to T2_CMC2.",
+        "Could not add 3D model to U_REG_1V2_L.",
+        "Could not add 3D model to U_REG_3V3_L.",
+        "Could not add 3D model to Y1.",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Connector_JST.3dshapes/JST_SH_BM02B-SRSS-TB_1x02-1MP_P1.00mm_Vertical.step",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Crystal.3dshapes/Crystal_SMD_2012-2Pin_2.0x1.2mm.step",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_CommonModeChoke_Coilcraft_0805USB.step",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_Taiyo-Yuden_NR-20xx.step"
+      ],
+      "seconds": 17.4,
+      "bytes": 7078401
+    },
+    {
+      "board": "Pilot",
+      "pcb": "avionics/kicad/Pilot/kicads/Pilot.kicad_pcb",
+      "step": "avionics/kicad/Pilot/step/Pilot.step",
+      "status": "ok",
+      "missing_models": [
+        "Could not add 3D model to L-USB1.",
+        "Could not add 3D model to NIC-USB1.",
+        "Could not add 3D model to PHY-RMII2.",
+        "Could not add 3D model to TPM.",
+        "Could not add 3D model to X-25M.",
+        "Could not add 3D model to X-50M.",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_Murata_DFE201610P.step",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Oscillator.3dshapes/Oscillator_SMD_ECS_2520MV-xxx-xx-4Pin_2.5x2.0mm.step",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-32-1EP_4x4mm_P0.4mm_EP2.9x2.9mm.step",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-32-1EP_5x5mm_P0.5mm_EP3.6x3.6mm.step",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/Texas_RMQ0024A_WQFN-24-1EP_3x3mm_P0.4mm_EP1.9x1.9mm.step"
+      ],
+      "seconds": 9.7,
+      "bytes": 2929924
+    },
+    {
+      "board": "TACCO",
+      "pcb": "avionics/kicad/TACCO/kicads/TACCO.kicad_pcb",
+      "step": "avionics/kicad/TACCO/step/TACCO.step",
+      "status": "ok",
+      "missing_models": [
+        "Could not add 3D model to D-ANT-MLRS.",
+        "Could not add 3D model to D-ANT-RADIO.",
+        "Could not add 3D model to MLRS-MCU.",
+        "Could not add 3D model to PHY-RMII2.",
+        "Could not add 3D model to SW-MLRS.",
+        "Could not add 3D model to TPM.",
+        "Could not add 3D model to X-25M.",
+        "Could not add 3D model to X-50M.",
+        "Could not add 3D model to X-MLRS.",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Button_Switch_SMD.3dshapes/SW_Push_1P1T_NO_CK_KMR2.step",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Oscillator.3dshapes/Oscillator_SMD_ECS_2520MV-xxx-xx-4Pin_2.5x2.0mm.step",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Oscillator.3dshapes/Oscillator_SMD_SeikoEpson_TG2520SMN-xxx-xxxxxx-4Pin_2.5x2.0mm.step",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-32-1EP_5x5mm_P0.5mm_EP3.6x3.6mm.step",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-48-1EP_7x7mm_P0.5mm_EP5.6x5.6mm.step",
+        "File not found: ${KICAD9_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/Texas_RMQ0024A_WQFN-24-1EP_3x3mm_P0.4mm_EP1.9x1.9mm.step",
+        "File not found: ${SECURE_CONTROLLERS_LIB}/SecureControllers.3dshapes/Infineon_TSSLP-2-4_0.62x0.32mm.step"
+      ],
+      "seconds": 10.7,
+      "bytes": 3643508
+    }
+  ]
+}

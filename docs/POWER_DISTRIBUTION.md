@@ -95,9 +95,9 @@ over-current threshold in governor_config.h: `EDF_ESC_OVERCURRENT_A = 80 A`).
 | Pilot (sensor suite + CAN/RS-485) | 4 | 700 | 1 400 | 2 800 | 5 600 |
 | XO (radios TX simultaneous) | 4 | 1 500 | 2 500 | 6 000 | 10 000 |
 | Commo sub-modules | 4 | 100 | 250 | 400 | 1 000 |
-| HX711 + load cell | 1 | 10 | 10 | 10 | 10 |
+| LC-ADC (ADS1231 + load cell, drawn from the gateway 3V3 buck; 5 V-equivalent at η = 0.9 assumed, 350 Ω bridge — `docs/CARGO_WINCH_SPECIFICATION.md` §5.5) | 1 | 8 | 8 | 8 | 8 |
 | SPT5425LV/LibreServo v2 winch servo (via CAN-PERIPH-GW, RAIL-2) ⚠ current not yet bench-verified, STS3215-era figure carried forward | 1 | 200 | 1200 | 200 | 1200 |
-| **5 V subtotal** | — | — | — | **13 410** | **26 710** |
+| **5 V subtotal** | — | — | — | **13 408** | **26 708** |
 
 At 5 V / 22.2 V conversion: 26.7 A × 5 V / 22.2 V ≈ **6.0 A from VBAT** at peak.
 (The WS2812B exhaust LED rings — formerly 240 mA nom / 600 mA peak — were removed

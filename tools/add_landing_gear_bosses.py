@@ -4,7 +4,7 @@ to the baked Cargo_Shell outer skin.
 
 This implements TODO.md LG-02 / docs/LANDING_GEAR_ANALYSIS.md SS4.7 against the
 ALREADY-BAKED `cargo_sect_shell24_2mm_repaired.stl` (hull-frame coordinates,
-"SerenityUAV HULL-FRAME R1" marker). Per CLAUDE.md, this mesh must never be
+"SerenityUAV AIRCRAFT-FRAME R2" marker, hd.FRAME_MARKER). Per CLAUDE.md, this mesh must never be
 re-baked (no transform is applied here -- only new geometry is unioned/cut in
 place, in the same hull-frame coordinates the file already carries).
 
@@ -26,8 +26,15 @@ boss integration in the meantime.
 Run: python3 tools/add_landing_gear_bosses.py
 """
 
+import os
+import sys
+
 import numpy as np
 import trimesh
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import bake_hull_frame as bhf  # noqa: E402
+import hull_datums as hd  # noqa: E402
 
 CARGO_DIR = "airframe/stls/fuselage/cargo"
 INPUT_STL = f"{CARGO_DIR}/cargo_sect_shell24_2mm_repaired.stl"
@@ -39,7 +46,7 @@ POST_MID_Z = 79.8 * 2.0 / 3.0
 POST_TOP_Z = 79.8
 SPRING_L = 45.0
 DUCTILE_L = 30.0
-HULL_ATTACH_Z = 44.0  # mm above cargo belly -- validated Rev R1 socket height
+HULL_ATTACH_Z = hd.BELLY_Z + 44.0  # 44 mm above the cargo belly -- validated Rev R1 socket height
 
 BOSS_OD = 10.0
 # BOSS_LEN: generous length -- robust overlap even where the local hull
@@ -52,11 +59,12 @@ BORE_D = 5.5  # mm, wire-end clearance bore
 BORE_DEPTH = 10.0  # mm
 
 # (label, X, Y, corner Z-rotation deg) -- see module docstring
+# aircraft datum R2; R1 X -96 / -242, Y 2 / 107
 CORNERS = [
-    ("fwd-port", -96.0, 2.0, 0.0),
-    ("fwd-stbd", -242.0, 2.0, 90.0),
-    ("aft-port", -96.0, 107.0, 180.0),
-    ("aft-stbd", -242.0, 107.0, 270.0),
+    ("fwd-port", 73.85, 307.7, 0.0),
+    ("fwd-stbd", -72.15, 307.7, 90.0),
+    ("aft-port", 73.85, 412.7, 180.0),
+    ("aft-stbd", -72.15, 412.7, 270.0),
 ]
 
 POST_ORIGIN_Z = HULL_ATTACH_Z - POST_TOP_Z
@@ -182,7 +190,8 @@ def main():
 
     print("Recombining with inner shell ...", flush=True)
     combined = trimesh.util.concatenate([result, inner])
-    combined.export(OUTPUT_STL)
+    hdr = (hd.FRAME_MARKER + b" cargo_sect_shell24_2mm_bossed")[:80].ljust(80, b"\0")
+    bhf.write_stl_binary(OUTPUT_STL, np.asarray(combined.triangles, dtype=np.float64), hdr)
     print(f"Saved -> {OUTPUT_STL}", flush=True)
     print(
         f"Final: bodies={combined.body_count}, "

@@ -65,36 +65,21 @@ FUSELAGE_STLS := \
     $(STLS)/fuselage/battery_tray.stl \
     $(STLS)/fuselage/belly_panel.stl
 
-# -- Nacelle mechanism parts (SCAD-sourced; imported by the
-#    assembly's nacelle_rows() sub-component placements) --------
-# Rev T (2026-07-18, Option B pushrod drive): the tilt-to-nozzle GEAR train
-# (bevel housing, bevel pair, Pinion A, Nozzle Drive Pinion, sector gear) is
-# DELETED and archived (airframe/archive/); replaced by the spar-crank pushrod
-# (nacelle_pushrod_crank.stl).  See docs/NOZZLE_DRIVE_TRADE.md.
-# Option A (2026-09-28): the spar-crank/pushrod AND its replacement wing-sun +
-# pinion sync gears are RETIRED and archived (archives/airframe-archives/archive/
-# openscad/nacelles/); the nozzle is servo-driven.  Their targets are removed.
-# Rev T3 (2026-08-09, airframe/wings-nacelles/WBS.md SS1.1.3.1): the nozzle
-# flaps shingled into master+seal pairs, and the combined "asm" preview
-# split into two named-endpoint renders (FLAP_PHI = PHI_CLOSED / PHI_OPEN)
-# so serenity_assembly.py can pick the one matching each nacelle's
-# configured tilt (see nozzle_iris_stl() there). The old single
-# nacelle_nozzle_iris.stl (no suffix, always PHI_CLOSED) is superseded by
-# -closed.stl and no longer built here or imported by the assembly.
+# -- Nacelle (Rev U: the 64 mm nacelle; part-local prints, handed by PYLON_SIDE / NZ_SIDE) --
+# The 50 mm sleeve, spider, trunnion, iris and ESC-cover rules were removed with the 50 mm
+# sources (frozen in archives/rev-T-frozen.tar.gz).  The 64 mm ESC bay covers are not built
+# here: they wait on the 80 A ESC part selection (WBS NAC-64-ESC-80A), and
+# tools/check_nacelle_deps.py lists them as NOT PUBLISHED.  Pods and trunnions are baked
+# elsewhere (tools/bake_hull_frame.py).
 NACELLE_STLS := \
-    $(STLS)/nacelles/edf_stator_sleeve.stl               \
-    $(STLS)/nacelles/edf_aft_spider_sleeve.stl           \
-    $(STLS)/nacelles/nacelle_trunnion.stl                \
-    $(STLS)/nacelles/esc/nacelle_esc_cover_port_a.stl    \
-    $(STLS)/nacelles/esc/nacelle_esc_cover_port_b.stl    \
-    $(STLS)/nacelles/esc/nacelle_esc_cover_stbd_a.stl    \
-    $(STLS)/nacelles/esc/nacelle_esc_cover_stbd_b.stl    \
-    $(STLS)/nacelles/nozzles/nacelle_nozzle_iris-closed.stl \
-    $(STLS)/nacelles/nozzles/nacelle_nozzle_iris-open.stl   \
-    $(STLS)/nacelles/nozzles/nacelle_nozzle_throat.stl   \
-    $(STLS)/nacelles/nozzles/nacelle_nozzle_ring.stl     \
-    $(STLS)/nacelles/nozzles/nacelle_nozzle_flap.stl     \
-    $(STLS)/nacelles/nozzles/nacelle_nozzle_flap_seal.stl
+    $(STLS)/nacelles/edf_motor_mount_64mm_stage2_stbd.stl \
+    $(STLS)/nacelles/edf_motor_mount_64mm_stage2_port.stl \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_throat_64mm_stbd.stl \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_throat_64mm_port.stl \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_ring_64mm_stbd.stl \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_ring_64mm_port.stl \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_flap_64mm.stl \
+    $(STLS)/nacelles/nozzles/nacelle_nozzle_flap_seal_64mm.stl
 
 # -- Wings (SCAD-sourced part-local prints; the port/stbd wing
 #    shells the ASSEMBLY uses are baked elsewhere) --------------
@@ -148,144 +133,51 @@ $(STLS)/fuselage/belly_panel.stl: \
 	@echo "[stl] $@"
 
 # ============================================================
-# Nacelle mechanism rules
+# Nacelle mechanism rules (64 mm)
 # ============================================================
-$(STLS)/nacelles/edf_stator_sleeve.stl: \
-        $(SCAD)/nacelles/edf_stator_sleeve.scad
+NAC=$(SCAD)/nacelles
+
+$(STLS)/nacelles/edf_motor_mount_64mm_stage2_stbd.stl: $(NAC)/edf_motor_mount_64mm.scad $(NAC)/nacelle_64_scale.scad
 	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    $(SCAD)/nacelles/edf_stator_sleeve.scad \
-	    -o $@
+	$(OPENSCAD) $(SCAD_FLAGS) -D PYLON_SIDE=1 $(NAC)/edf_motor_mount_64mm.scad -o $@
 	@echo "[stl] $@"
 
-$(STLS)/nacelles/edf_aft_spider_sleeve.stl: \
-        $(SCAD)/nacelles/edf_aft_spider_sleeve.scad
+$(STLS)/nacelles/edf_motor_mount_64mm_stage2_port.stl: $(NAC)/edf_motor_mount_64mm.scad $(NAC)/nacelle_64_scale.scad
 	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    $(SCAD)/nacelles/edf_aft_spider_sleeve.scad \
-	    -o $@
+	$(OPENSCAD) $(SCAD_FLAGS) -D PYLON_SIDE=-1 $(NAC)/edf_motor_mount_64mm.scad -o $@
 	@echo "[stl] $@"
 
-# Rev T4 (2026-08-30): the nacelle now hangs on a FIXED wing spar, so the
-# tilt bearing, the 50T ring gear and the encoder ring magnet all move into
-# this one printed part.  It is separate from the pod ON PURPOSE — its axis is
-# nacelle-local X, so integral gear teeth would print as stacked overhangs and
-# the bearing seat as a bridged horizontal bore.  See its header.
-$(STLS)/nacelles/nacelle_trunnion.stl: \
-        $(SCAD)/nacelles/nacelle_trunnion.scad
+# Throat and ring are handed (NZ_SIDE +1 starboard, -1 port: the ring lever azimuth and the
+# housing stop pocket mirror).  The flaps are common to both nozzles: 4 master + 4 seal per
+# nacelle, the seal lapped 0.2 mm radially outboard of the master.
+$(STLS)/nacelles/nozzles/nacelle_nozzle_throat_64mm_stbd.stl: $(NAC)/nacelle_nozzle_iris_64mm.scad
 	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    $(SCAD)/nacelles/nacelle_trunnion.scad \
-	    -o $@
+	$(OPENSCAD) $(SCAD_FLAGS) -D 'NZ_PART="throat"' -D NZ_SIDE=1 $(NAC)/nacelle_nozzle_iris_64mm.scad -o $@
 	@echo "[stl] $@"
 
-# -- Hinged-ESC bay access covers (Rev T4c) --------------------
-# FOUR distinct parts, not one printed four times.  The shell is not
-# axisymmetric, so the bay at azimuth 69 and the bay at 249 sit on different
-# surface, and port and starboard are mirror images rather than copies.
-#
-# ** NACELLE_SIDE IS INVERTED RELATIVE TO THE FILENAME. ** The Rev R1
-# nacelle-swap renamed the pod outputs to their PHYSICAL mounting side without
-# changing the shell selector, so nacelle_port_revs.stl is rendered with
-# NACELLE_SIDE=-1.  A cover MUST use the same value as the pod it closes;
-# building it on the other shell puts ~440 mm3 of cover inside the pod, which
-# tools/nacelle_esc_bay_fit.py --check-fit measures.
-$(STLS)/nacelles/esc/nacelle_esc_cover_port_a.stl: \
-        $(SCAD)/nacelles/nacelle_esc_cover.scad \
-        $(SCAD)/nacelles/nacelle_esc_bay.scad \
-        $(SCAD)/nacelles/nacelle_shell_grid.scad \
-        $(SCAD)/nacelles/nacelle_hollow_profile.scad
+$(STLS)/nacelles/nozzles/nacelle_nozzle_throat_64mm_port.stl: $(NAC)/nacelle_nozzle_iris_64mm.scad
 	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) $(SCAD)/nacelles/nacelle_esc_cover.scad \
-	    -D NACELLE_SIDE=-1 -D RENDER_BAY=0 -o $@
+	$(OPENSCAD) $(SCAD_FLAGS) -D 'NZ_PART="throat"' -D NZ_SIDE=-1 $(NAC)/nacelle_nozzle_iris_64mm.scad -o $@
 	@echo "[stl] $@"
 
-$(STLS)/nacelles/esc/nacelle_esc_cover_port_b.stl: \
-        $(SCAD)/nacelles/nacelle_esc_cover.scad \
-        $(SCAD)/nacelles/nacelle_esc_bay.scad \
-        $(SCAD)/nacelles/nacelle_shell_grid.scad \
-        $(SCAD)/nacelles/nacelle_hollow_profile.scad
+$(STLS)/nacelles/nozzles/nacelle_nozzle_ring_64mm_stbd.stl: $(NAC)/nacelle_nozzle_iris_64mm.scad
 	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) $(SCAD)/nacelles/nacelle_esc_cover.scad \
-	    -D NACELLE_SIDE=-1 -D RENDER_BAY=1 -o $@
+	$(OPENSCAD) $(SCAD_FLAGS) -D 'NZ_PART="ring"' -D NZ_SIDE=1 $(NAC)/nacelle_nozzle_iris_64mm.scad -o $@
 	@echo "[stl] $@"
 
-$(STLS)/nacelles/esc/nacelle_esc_cover_stbd_a.stl: \
-        $(SCAD)/nacelles/nacelle_esc_cover.scad \
-        $(SCAD)/nacelles/nacelle_esc_bay.scad \
-        $(SCAD)/nacelles/nacelle_shell_grid.scad \
-        $(SCAD)/nacelles/nacelle_hollow_profile.scad
+$(STLS)/nacelles/nozzles/nacelle_nozzle_ring_64mm_port.stl: $(NAC)/nacelle_nozzle_iris_64mm.scad
 	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) $(SCAD)/nacelles/nacelle_esc_cover.scad \
-	    -D NACELLE_SIDE=1 -D RENDER_BAY=0 -o $@
+	$(OPENSCAD) $(SCAD_FLAGS) -D 'NZ_PART="ring"' -D NZ_SIDE=-1 $(NAC)/nacelle_nozzle_iris_64mm.scad -o $@
 	@echo "[stl] $@"
 
-$(STLS)/nacelles/esc/nacelle_esc_cover_stbd_b.stl: \
-        $(SCAD)/nacelles/nacelle_esc_cover.scad \
-        $(SCAD)/nacelles/nacelle_esc_bay.scad \
-        $(SCAD)/nacelles/nacelle_shell_grid.scad \
-        $(SCAD)/nacelles/nacelle_hollow_profile.scad
+$(STLS)/nacelles/nozzles/nacelle_nozzle_flap_64mm.stl: $(NAC)/nacelle_nozzle_iris_64mm.scad
 	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) $(SCAD)/nacelles/nacelle_esc_cover.scad \
-	    -D NACELLE_SIDE=1 -D RENDER_BAY=1 -o $@
+	$(OPENSCAD) $(SCAD_FLAGS) -D 'NZ_PART="flap"' $(NAC)/nacelle_nozzle_iris_64mm.scad -o $@
 	@echo "[stl] $@"
 
-$(STLS)/nacelles/nozzles/nacelle_nozzle_iris-closed.stl: \
-        $(SCAD)/nacelles/nacelle_nozzle_iris.scad
+$(STLS)/nacelles/nozzles/nacelle_nozzle_flap_seal_64mm.stl: $(NAC)/nacelle_nozzle_iris_64mm.scad
 	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    -D 'FLAP_PHI=PHI_CLOSED' \
-	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
-	    -o $@
-	@echo "[stl] $@"
-
-$(STLS)/nacelles/nozzles/nacelle_nozzle_iris-open.stl: \
-        $(SCAD)/nacelles/nacelle_nozzle_iris.scad
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    -D 'FLAP_PHI=PHI_OPEN' \
-	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
-	    -o $@
-	@echo "[stl] $@"
-
-# Nozzle print-ready parts pulled from the same iris file via RENDER_PART
-# (throat-and-housing, unison ring, and one flap — printed × 8).
-$(STLS)/nacelles/nozzles/nacelle_nozzle_throat.stl: \
-        $(SCAD)/nacelles/nacelle_nozzle_iris.scad
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    -D 'RENDER_PART="throat"' \
-	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
-	    -o $@
-	@echo "[stl] $@"
-
-$(STLS)/nacelles/nozzles/nacelle_nozzle_ring.stl: \
-        $(SCAD)/nacelles/nacelle_nozzle_iris.scad
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    -D 'RENDER_PART="ring"' \
-	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
-	    -o $@
-	@echo "[stl] $@"
-
-$(STLS)/nacelles/nozzles/nacelle_nozzle_flap.stl: \
-        $(SCAD)/nacelles/nacelle_nozzle_iris.scad
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    -D 'RENDER_PART="flap"' \
-	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
-	    -o $@
-	@echo "[stl] $@"
-
-# Rev T3 (2026-08-09) seal flap -- 4 per nozzle, lapped 0.2 mm radially
-# outboard of the 4 master flaps (PRINT-NACELLE-FLAP-MASTER/-SEAL, 4+4).
-$(STLS)/nacelles/nozzles/nacelle_nozzle_flap_seal.stl: \
-        $(SCAD)/nacelles/nacelle_nozzle_iris.scad
-	@mkdir -p $(dir $@)
-	$(OPENSCAD) $(SCAD_FLAGS) \
-	    -D 'RENDER_PART="flap_seal"' \
-	    $(SCAD)/nacelles/nacelle_nozzle_iris.scad \
-	    -o $@
+	$(OPENSCAD) $(SCAD_FLAGS) -D 'NZ_PART="flap_seal"' $(NAC)/nacelle_nozzle_iris_64mm.scad -o $@
 	@echo "[stl] $@"
 
 # ============================================================

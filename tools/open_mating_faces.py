@@ -100,7 +100,11 @@ from shapely.geometry import Polygon
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 FUS = os.path.join(REPO, "airframe", "stls", "fuselage")
-MARKER = b"SerenityUAV HULL-FRAME R1"
+import sys as _sys  # noqa: E402
+import os as _os  # noqa: E402
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+import hull_datums as hd  # noqa: E402
+MARKER = hd.FRAME_MARKER  # single source (aircraft datum R2, 2026-10-19)
 CAVITY_FLOOR = 1000.0  # mm^2 — ignore section loops smaller than a real bore
 MIN_BORE = 3000.0      # mm^2 — a station's 2nd loop must exceed this to count "open"
 PLUG_GROW = 0.5        # mm — grow the plug past the bore so the whole membrane goes
@@ -114,7 +118,8 @@ DEFAULT_PROBE = 0.1    # mm — is_capped() probe depth (see is_capped docstring
 #
 #   rel_path:  path under airframe/stls/fuselage/ (for CLI use / reference)
 #   method:    "plug" or "flatcut" (see module docstring)
-#   face_y:    the nominal mating-plane hull Y station
+#   face_y:    the nominal mating-plane Y station, aircraft datum R2 (comments
+#              below dated before 2026-10-19 quote R1 numbers)
 #   keep_sign: +1 if the owning section occupies Y > face_y, -1 if Y < face_y
 #   clean_y:   ("plug" only) a nearby Y with a known-clean 2-loop cross-section
 #              to sample the plug's footprint from; None for "flatcut" (its
@@ -123,11 +128,11 @@ DEFAULT_PROBE = 0.1    # mm — is_capped() probe depth (see is_capped docstring
 APERTURES = {
     "head_aft": dict(
         rel_path="head_shell24_2mm_repaired.stl",
-        method="flatcut", face_y=-71.2, keep_sign=-1, clean_y=None,
+        method="flatcut", face_y=234.5, keep_sign=-1, clean_y=None,  # R1 -71.2
     ),
     "middle_fwd": dict(
         rel_path="middle_shell24_2mm_repaired.stl",
-        method="plug", face_y=131.0, keep_sign=+1, clean_y=136.0,
+        method="plug", face_y=436.7, keep_sign=+1, clean_y=441.7,  # R1 131 / 136
     ),
     "cargo_fwd": dict(
         rel_path="cargo/cargo_sect_shell24_2mm_repaired.stl",
@@ -143,19 +148,19 @@ APERTURES = {
         # line instead of the true joint profile (found 2026-09-05, reported
         # by the owner after the first aperture-allowlist fix). -63.0 is
         # comfortably past the taper (loop bbox already full-width by -67).
-        method="plug", face_y=-69.5, keep_sign=+1, clean_y=-63.0,
+        method="plug", face_y=236.2, keep_sign=+1, clean_y=242.7,  # R1 -69.5 / -63
     ),
     "cargo_aft": dict(
         rel_path="cargo/cargo_sect_shell24_2mm_repaired.stl",
-        method="plug", face_y=129.0, keep_sign=-1, clean_y=127.5,
+        method="plug", face_y=434.7, keep_sign=-1, clean_y=433.2,  # R1 129 / 127.5
     ),
     "middle_aft": dict(
         rel_path="middle_shell24_2mm_repaired.stl",
-        method="plug", face_y=202.3, keep_sign=-1, clean_y=201.0,
+        method="plug", face_y=508.0, keep_sign=-1, clean_y=506.7,  # R1 202.3 / 201
     ),
     "rear_fwd": dict(
         rel_path="rear_shell24_2mm_repaired.stl",
-        method="plug", face_y=204.3, keep_sign=+1, clean_y=206.0,
+        method="plug", face_y=510.0, keep_sign=+1, clean_y=511.7,  # R1 204.3 / 206
     ),
 }
 

@@ -27,13 +27,16 @@ Non-negotiable, project-wide requirements:
 **Propulsion:** every thrust, mass, and dimension figure for an EDF, ESC, motor, or any other
 component is a descriptive measurement and shall not be recorded in this file. Each such figure
 shall come from the manufacturer's datasheet or from a user-verified measurement, and shall carry
-a citation to that source. Take values for calculations from `current-specification/bom_revT.json`
+a citation to that source. Take values for calculations from `current-specification/bom_revU.json`
 and `airframe/README.md`; flag any value that lacks a datasheet or user-verified source in the
-owning `WBS.md` instead of propagating it. Each nacelle carries two EDFs in series. The Phase 11
-fuselage EDF (optional, deferred) feeds the **fixed** canonical elliptical tail nozzle — **never**
-an iris — plus RCS bleed-air thrusters for pitch/yaw; its remainder is longitudinal forward thrust
-only and shall not be counted toward hover lift. Details: `deferred/AGENTS.md`,
-`deferred/aft-edf/README.md`.
+owning `WBS.md` instead of propagating it. Each nacelle carries two EDFs in series. The
+fuselage (tail) EDF is part of the first build (owner, 2026-11-15; it was optional and deferred to
+Phase 11). It draws all its air through the fuselage interior to cool the avionics, and feeds the
+**fixed** canonical elliptical tail nozzle — **never** an iris — plus RCS bleed-air thrusters for
+pitch/yaw. In hover it is the only pitch trim and control, so it is flight-critical there. Its
+remainder is longitudinal forward thrust only and shall not be counted toward hover lift. Details:
+`airframe/fuselage-mid/WBS.md` §1.1.1.4.0 and
+`docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
 
 **Avionics architecture** (8-node, PACE failover — requirements only; for implementation and PCB
 status see `avionics/README.md` and each board's own `.md` under `avionics/kicad/<board>/`, which
@@ -190,11 +193,16 @@ replaced and tracked in the owning WBS.
 
 Serenity's hull is complex — bounding-box/centroid math is inadequate for part placement, and
 the canonical outer mold line must stay intact: interior modifications blend into it and never
-alter the exterior unless structurally required. When uncertain, request manual FreeCAD
+alter the exterior unless structurally required. Deviations from the canonical exterior hull
+shall be minimized. In addition, every deviation from canon shall maintain the style and
+character of the Serenity spaceship and shall not introduce elements that are incongruent or
+inconsistent with it (owner directive 2026-11-01). When uncertain, request manual FreeCAD
 placement from the user. `airframe/AGENTS.md` ("Canonical Geometry and Coordinate System",
 "Geometry Reference Points", "Geometry Integrity — Keep Skin True to Canon") and
 `airframe/HULL_FRAME_REFERENCE.md` ("Canonical Accuracy References" plus the validated extents
-table) own the hull-frame coordinate standard, the four-section layout, and the
+table) own the aircraft datum (ONE origin for the whole aircraft: centreline, nose tip,
+static ground plane — owner directive 2026-10-19; only a PCB inside KiCad keeps its own
+coordinates), the four-section layout, and the
 canonical-accuracy authority order over `docs/references/` (`REFERENCES.md`
 REF-CAD-002/003/004) — do not duplicate any of it here.
 
@@ -227,12 +235,15 @@ Callout severity and requirement-verb usage follow CNAF M-3710.7 §1.5–1.6 (NA
 Flight and Operating Instructions Manual) [REF-MIL-003 §1.5, §1.6], adapted for a build/design
 repo rather than a flight-ops manual:
 
-- **WARNING** — a procedure, practice, or condition that may result in injury, death, or loss
-  of the aircraft/vehicle if not carefully observed or followed. Reserve for personnel-safety
-  or airframe-loss risk (e.g., handling a charged spring, using a soldering iron, releasing a payload near people, a live battery pack, or a load-bearing
-  joint that can fail catastrophically).
-- **CAUTION** — a procedure, practice, or condition that may result in damage to equipment if
-  not carefully observed or followed, with no personnel-injury or airframe-loss risk (e.g., overtorquing a fitting, shorting a circuit).
+- **WARNING** — a procedure, practice, or condition that may result in injury to or death of
+  people if not carefully observed or followed. Reserve for personnel-safety risk (e.g.,
+  handling a charged spring, using a soldering iron, releasing a payload near people, a live
+  battery pack, or a failure that can bring the aircraft down on or near people).
+- **CAUTION** — a procedure, practice, or condition that may result in damage to or loss of
+  equipment if not carefully observed or followed, with no risk of injury to people. **This
+  includes total loss of the aircraft** (e.g., overtorquing a fitting, shorting a circuit, a
+  load-bearing joint or power branch that can fail and down the aircraft where no person is at
+  risk).
 - **Note** — information about a procedure, practice, or condition that must be emphasized, but
   carries no WARNING- or CAUTION-level risk.
 
@@ -256,13 +267,39 @@ language states what is required regardless of actor.
 
 ## 7. Fabrication Standards
 
-- **Material: CF-PETG** — 0.15 mm layer height, ≥4 perimeters, ≥40% infill load-bearing /
-  25% non-structural. Replace any stray "PETG" reference with CF-PETG when found; verify any
-  other material mentioned in the repo. (The DaVinci Jr prototype is exempt — not expected to
-  meet full-build spec.)
-- Exterior shell: hollow to 2.0 mm (0.079 in), watertight, no voids; fill with 2 lb/ft³
-  (32 kg/m³) low-density closed-cell foam; inter-section mating faces stay open for build
-  access and inter-compartment cable routing.
+- **Print process and material (Rev U, owner decisions 2026-10-31):** the flight-article hull
+  and nacelle printed parts are **SLS DuraForm PA CF** [3DS-30108A], printed by a service
+  bureau (vendor not yet selected). PA11 goes at impact points (gear feet). **Every PA CF flight
+  part shall meet material specification MS-SLS-PACF, `docs/MATSPEC_SLS_PA_CF.md`** (owner-approved
+  2026-11-11: brittle design basis, build orientation on every drawing, process record and witness
+  coupons per build, inspection and acceptance). See
+  `docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md` and `tools/sls_auw_reconcile.py`. **Mass
+  basis (Rev U):** printed parts are priced at the 3D Systems datasheet solid density,
+  from the single source `tools/sls_materials.py` (PA CF 1.11 g/cc, PA11 1.03 g/cc,
+  ASTM D792; verified against the sheets 2026-11-07). Never price an SLS part with the old FDM
+  1.05 g/cc; convert any mass written on that basis with `sls_materials.sls_from_fdm_mass`.
+  **The BOM is the procurement output, so every printed part's `Unit_Mass_g` shall equal its mesh
+  mass** (STL volume × the SLS density above). `tools/check_bom_mesh_sync.py` gates this in CI;
+  `--write` re-syncs the BOM after the ledger is regenerated.
+- **Hull sections (Rev U):** the hull is **two** SLS parts at 24 in. The forward part (head+cargo,
+  with the canonical gear box fused in as skin) is `PRINT-HEAD-CARGO-ONEPIECE`; the aft part
+  (middle+rear) is `PRINT-MIDDLE-REAR-ONEPIECE`. Both are built and ship as gzip tarballs (over
+  GitHub's 100 MB limit). One internal cargo/middle splice collar joins them.
+- **FDM CF-PETG** — 0.15 mm layer height, ≥4 perimeters, ≥40% infill load-bearing /
+  25% non-structural — remains the specification for FDM prints: prototype prints and any
+  part not yet moved to SLS. Replace any stray "PETG" reference with CF-PETG when found;
+  verify any other material mentioned in the repo. (The DaVinci Jr prototype is exempt — not
+  expected to meet full-build spec.)
+- Exterior shell: hollow, watertight, no voids; fill with 2 lb/ft³ (32 kg/m³) low-density
+  closed-cell foam; inter-section mating faces stay open for build access and
+  inter-compartment cable routing.
+- **SLS wall thickness (owner OD-19 option A, 2026-11-11):** size SLS PA CF walls from the
+  table in `docs/SLS_MIN_WALL_THICKNESS.md` by load category (load-bearing or not) and backing
+  (foam-backed, free-standing or lattice-supported). Use its **"XY fixed" column only when the
+  drawing states the print orientation**; otherwise use "any orientation". Where a part's
+  category or orientation is not stated, the wall **shall be 2.0 mm (0.079 in)**. The table is
+  a minimum gauge: load-bearing parts are still sized by their own loads. Its floor is the
+  interim 0.059 in (1.5 mm) until the service bureau states a minimum (WBS SLS-WALL-FLOOR).
 - Integrate mounting brackets/bosses/ribs into the shell print wherever feasible.
 - Load-bearing mating joints require a minimum 2-wall contact annulus **and** a positive-stop
   shoulder — friction fit alone is never acceptable for a flight-critical joint.
@@ -319,10 +356,15 @@ here; canonical source is `docs/OBSERVER_LASER_ANALYSIS.md` (current revision) a
 
 | Stack | Watchdog | Comms | Flight Control | Payload |
 | --- | --- | --- | --- | --- |
-| Shepherd | P | A | C | E |
-| Inara | A | P | E | C |
-| River | C | E | P | A |
-| Simon | A | C | A | P |
+| Shepherd | A | P | C | E |
+| Inara | C | E | A | P |
+| River | E | A | P | C |
+| Simon | P | C | E | A |
+
+Re-balanced 2026-11-14 (owner, OD-19, option B) for the seven-node fleet: Simon is one PB2-I plus a
+trust-module MCU, so it takes the lightest Primary and Flight Control E. Every role has four distinct
+holders and every stack holds one level of every role. Basis: `docs/PACE_REBALANCE_BRIEF.md`,
+`tools/pace_balance.py`. Corrects the earlier table, whose Watchdog column had two A holders and no E.
 
 Radio assignment follows the hardware each stack actually carries, not a fixed link name. The
 current per-board radio complement and per-stack link priority are in `avionics/README.md`
@@ -336,10 +378,12 @@ current per-board radio complement and per-stack link priority are in `avionics/
 
 Per-stack tasking:
 
-- Shepherd: watchdog/fault-detect/failover/authentication.
-- Inara: camera/external sensors/high-bandwidth ground link.
-- River: forward EDF + nacelle tilt sync + most resilient comms.
-- Simon: aft EDF + alternate watchdog + Observer/cargo oversight.
+- Shepherd: primary comms (high-bandwidth ground link) + alternate watchdog.
+- Inara: payload and cargo control (Observer, winch, cameras and external sensors) + alternate
+  flight control.
+- River: forward EDF + nacelle tilt sync + primary flight control + alternate comms.
+- Simon: aft EDF + primary watchdog/fault-detect/failover/authentication (the trust-module MCU
+  keeps its bus presence through a host reboot) + alternate payload.
 
 ## 10. Workflow
 
@@ -477,5 +521,8 @@ The shall/should/may definitions and the WARNING/CAUTION/NOTE call-out
 convention above follow CNAF M-3710.7, *NATOPS General Flight and Operating
 Instructions*, issued by Commander, Naval Air Forces (CNAF)
 (<https://www.secnav.navy.mil/doni/SECNAV%20Manuals1/3710.7%20(CNAF).pdf>).
+**Owner deviation from CNAF M-3710.7:** CNAF assigns loss of the aircraft to WARNING. This repo
+does not: a WARNING is a risk of injury or death to people only, and loss of the aircraft with
+no risk to people is a CAUTION.
 The will/could definitions and the active-voice/passive-voice distinction
 above are this project's own convention, not drawn from that source.

@@ -19479,90 +19479,73 @@
 		(layer "B.SilkS")
 		(uuid "ed8bf191-2d3c-48e3-9014-b68e130882e9")
 	)
-	(gr_line
-		(start 243.743246 140.989622)
-		(end 243.743246 161.628563)
+(gr_line
+		(start 243.743246 164.559093)
+		(end 187.743246 179.009093)
 		(stroke
 			(width 0.1)
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "0151707b-993c-42c2-bb2e-1b50e613b378")
-	)
-	(gr_arc
-		(start 173.893246 126.089766)
-		(mid 175.028475 123.739738)
-		(end 177.575 123.168258)
-		(stroke
-			(width 0.1)
-			(type default)
-		)
-		(layer "Edge.Cuts")
-		(uuid "6546246c-3a84-4c4f-9a45-247ef5f66bb3")
+		(uuid "c1cc3743-4372-47b5-bbd7-ec0db9ab72ca")
 	)
 	(gr_line
-		(start 241.425 164.550072)
-		(end 177.575 179.449928)
+		(start 187.743246 179.009093)
+		(end 177.743246 174.309093)
 		(stroke
 			(width 0.1)
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "830e967e-0cfa-49eb-8776-635a9b9cbcaf")
-	)
-	(gr_arc
-		(start 241.425 138.068114)
-		(mid 243.093263 139.124854)
-		(end 243.743246 140.989622)
-		(stroke
-			(width 0.1)
-			(type default)
-		)
-		(layer "Edge.Cuts")
-		(uuid "8bae44f2-26e7-45d6-91f1-ae97e4473675")
+		(uuid "57e49e19-a711-43fa-aa62-e37b71662416")
 	)
 	(gr_line
-		(start 177.575 123.168258)
-		(end 241.425 138.068114)
+		(start 177.743246 174.309093)
+		(end 177.743246 128.309093)
 		(stroke
 			(width 0.1)
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "99889c80-c795-4cce-a3e8-059578afe9d7")
-	)
-	(gr_arc
-		(start 177.575 179.449928)
-		(mid 175.028477 178.878448)
-		(end 173.893246 176.52842)
-		(stroke
-			(width 0.1)
-			(type default)
-		)
-		(layer "Edge.Cuts")
-		(uuid "b2080f33-569a-47b1-9e3d-3d7f1ee3f1d4")
+		(uuid "80ae9cd0-b478-4fb4-b4dc-d1832c34b3b9")
 	)
 	(gr_line
-		(start 173.893246 176.52842)
-		(end 173.893246 126.089766)
+		(start 177.743246 128.309093)
+		(end 187.743246 123.609093)
 		(stroke
 			(width 0.1)
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "d9590c92-8e84-43fd-bf02-07abe819a39d")
+		(uuid "c0369d53-3104-4dea-91fc-0b23c741af6b")
 	)
-	(gr_arc
-		(start 243.743246 161.628563)
-		(mid 243.093285 163.493349)
-		(end 241.425 164.550072)
+	(gr_line
+		(start 187.743246 123.609093)
+		(end 243.743246 138.059093)
 		(stroke
 			(width 0.1)
 			(type default)
 		)
 		(layer "Edge.Cuts")
-		(uuid "e32c0991-b2f0-4b5e-8805-f3e4e0a0151d")
+		(uuid "1f6cf08d-ba2c-4267-bbd6-2a1324cdba62")
 	)
+	(gr_line
+		(start 243.743246 138.059093)
+		(end 243.743246 164.559093)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "Edge.Cuts")
+		(uuid "a77f39f8-48ec-49d4-a8ed-7070a2d2218e")
+	)
+
+
+
+
+
+
+
 	(gr_text "Camera and Laser Sensor suite"
 		(at 238 151 270)
 		(layer "B.Fab")
@@ -19615,7 +19598,7 @@
 		)
 		(polygon
 			(pts
-				(xy 69.85 25.4) (xy 0 41.7) (xy -0.360761 40.154035) (xy 69.489238 23.854035)
+				(xy 243.743246 164.559093) (xy 187.743246 179.009093) (xy 187.743246 177.509093) (xy 243.743246 163.059093)
 			)
 		)
 	)
@@ -19647,7 +19630,7 @@
 		)
 		(polygon
 			(pts
-				(xy 0 -16.3) (xy 69.85 0) (xy 69.489238 1.545964) (xy -0.360761 -14.754035)
+				(xy 243.743246 138.059093) (xy 187.743246 123.609093) (xy 187.743246 125.109093) (xy 243.743246 139.559093)
 			)
 		)
 	)

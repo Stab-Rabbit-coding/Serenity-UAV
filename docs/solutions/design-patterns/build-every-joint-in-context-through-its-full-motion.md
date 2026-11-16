@@ -1,6 +1,7 @@
 ---
 title: "Build every joint in context, through its full motion, with its non-printed parts and air paths, before release"
 date: 2026-10-03
+last_updated: 2026-10-11
 category: design-patterns
 module: "airframe (all joints and interfaces; first found at the nacelle tilt joint)"
 problem_type: design_pattern
@@ -18,10 +19,10 @@ related_components:
   - airframe/openscad/nacelles/nacelle_trunnion_64mm.scad
   - airframe/openscad/nacelles/nacelle_tip_gear_variants.scad
   - tools/nacelle_trunnion_fit.py
-tags: [assembly, in-context, clash, motion-sweep, harness, pcb, cooling, pitot, manifold3d]
+  - tools/landing_gear_bay_function.py
+  - airframe/openscad/fuselage/canonical_leg_r6_3_0in.scad
+tags: [assembly, in-context, clash, motion-sweep, harness, pcb, cooling, pitot, manifold3d, landing-gear, energy-absorber, procured-parts]
 ---
-
-# Build every joint in context, through its full motion
 
 ## Context
 
@@ -122,8 +123,35 @@ mesh placed by measured geometry, the trunnion and the pinion, and accepts
 manifold3d sweep over the tilt range reports the intersection volume for
 every pair: pinion and shaft against the pod, the trunnion and the wing, and
 the nav-harness port against the shaft sweep. Option A (a 10.5 mm gear face)
-plus relief 1 has been implemented, and its re-sweep against this gate is
-pending in WBS item NAC-64-TILT-03 until the pod render finishes.
+plus relief 1 has been implemented and re-swept over −5 to 140°: pinion and
+shaft against the pod, and shaft against the trunnion, are all 0 mm³
+(NAC-64-TILT-03, resolved).
+
+**Second example (2026-10-11, landing-gear energy absorber).** The gear's
+four absorber wires (two ductile, two spring) are procured stock. They had
+never been modelled as solids. They appeared only as sizing numbers in
+`tools/landing_gear_r6_sizing.py` and as bores in the bay. Once
+`tools/landing_gear_bay_function.py` posed them as solids, at rest and at
+full-stroke bow, three defects appeared that had survived every earlier
+gate:
+
+- The thigh sockets sat at 3.5 mm pitch in one row. The sizing re-solve
+  had grown the wires to 4.26 and 3.59 mm, so neighbouring wires overlapped
+  by 21–54 mm³ at rest and the socket bores ran into each other. Four
+  bores cannot fit across the 14 mm lug in one row at any pitch.
+- `posed_wire()` bowed the wires along the pin axis, not in the swing plane
+  its comment described. At full stroke the outer wire would run into the
+  clevis ear.
+- The bay boss started 6 mm inside each wire's free span, so about a
+  quarter of the bow span ran through solid plastic (277 mm³ per bay).
+
+Rule 2 applies to every part a sizing script changes. When a procured
+part grows, re-check its packaging against the solids. The census must
+model the part, not just the bore it fits into. The fix, two rows of two
+wires on crank horns, is tracked as BHD-02g / BHD-02k in
+`airframe/fuselage-mid/WBS.md`. The aft station was done 2026-10-12; the
+fore station is still open, with the owner choosing F1–F3.
 
 AI attribution: drafted by Claude (Claude Opus 5.5, Anthropic) from the
-2026-10-03 session, under the direction of Stab-Rabbit-coding.
+2026-10-03 session, under the direction of Stab-Rabbit-coding; second
+example added by Claude (Claude Opus 5.5) from the 2026-10-10/11 session.

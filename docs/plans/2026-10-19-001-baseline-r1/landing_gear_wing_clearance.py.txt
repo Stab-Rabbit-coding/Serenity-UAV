@@ -1,0 +1,39 @@
+LG-10.4 wing clearance -- Rev R6 gear bay vs wing-root structure
+  shell   : airframe/stls/fuselage/cargo/cargo_sect_shell24_2mm_repaired.stl
+  spar    : bore D20.4 / boss D30.1 at Y +21.0, Z 66.85
+  mortise : 12.8 x 20.8 at Y +57.5, Z 58.0
+  envelope: 1,075,956 faces, watertight=True
+  bay     : 4 bay seat collars + 24 cuts (aperture, flange rebate, 16 M3 bores)
+
+1. bay aperture/rebate vs wing material (bay eating the wing mount)
+  clear -- 80 pairs, no intersection
+
+2. bay material vs wing voids (bay blocking the spar rod / root tenon)
+  clear -- 56 pairs, no intersection
+
+3. bay bolt bores vs wing material (accepted pad nick, budgeted)
+  clear -- 160 pairs, no intersection
+
+4. bay bolt bores vs servo M3 pilot bores (no allowance)
+  clear -- 128 pairs, no intersection
+
+proud wing material inside the flange rebate (plate frame)
+  footprint v -48..30, half-width 22.5..27.0, frame 5 mm thick
+  upper bolt centres at |u| = 22.0, M3 clearance D3.4
+  fore-port  x spar boss port   proud  4.428 mm  vol    2.60 mm^3  |u| 25.97..26.87  v +12.57..+21.15
+  fore-stbd  x spar boss stbd   proud  5.327 mm  vol    1.89 mm^3  |u| 26.05..26.86  v +12.91..+20.91
+
+  worst proud 5.327 mm vs 5 mm frame thickness -> a pocket cannot absorb it
+  affected patch starts at |u| 25.97, v +12.57
+
+5. printed gear (each feature, leg swept) vs real wing / flange / spar / harness (tools/landing_gear_bay_function.py)
+  FOUL  fore-port  bay (printed part)       x nav harness exit port            67.2 mm^3
+  FOUL  fore-stbd  bay (printed part)       x nav harness exit stbd            59.8 mm^3
+  FOUL  fore-port  boss carrier             x nav harness exit port             6.5 mm^3
+  FOUL  fore-stbd  boss carrier             x nav harness exit stbd             6.5 mm^3
+  FOUL  fore-port  gear function: bodies 1 {'wires_x_bay_mm3': 273.2, 'wires_x_leg_rest_mm3': 54.6}
+  FOUL  fore-stbd  gear function: bodies 1 {'wires_x_bay_mm3': 273.2, 'wires_x_leg_rest_mm3': 54.6}
+
+  INTERFERES -- 6 fouling pair(s), worst 67.200 mm^3
+
+--- stderr ---

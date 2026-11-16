@@ -4,7 +4,7 @@
 //   in hull frame (port side; SIDE = -1 MIRRORS to starboard about X_CL, BHD-05).
 // ===========================================================================
 // ============================================================
-// tilt_brake.scad -- Rev T5e (2026-09-16; Rev T5b 2026-09-15 base)
+// tilt_brake.scad -- Rev U (2026-11-07; carried forward from Rev T5e, 2026-09-16; Rev T5b 2026-09-15 base)
 // Spring-applied, solenoid-released PIN BRAKE for the nacelle-tilt worm
 // shaft.  Satisfies BRK-1..3 (docs/TILT_DRIVE_CONTROL_SPEC.md SS5.2) for the
 // selected Option 2 drive (4-start worm, back-drivable).
@@ -69,7 +69,14 @@ EPS = 0.01;
 SLOTS       = 12;
 PIN_D       = 2.0;
 PIN_L       = 22.0;
-PIN_CLR     = 0.15;
+PIN_CLR     = 0.3;            // [mm] per side, pin in the printed guide bore.
+                              //   Was 0.15 (FDM).  SLS: 0.2 mm is the minimum
+                              //   and 0.3 mm the general clearance between
+                              //   SLS faces [REF-MFG-001 pp. 7, 12]; a bound
+                              //   pin is a fail-to-release/engage brake, so
+                              //   0.3 (2026-11-01 SLS migration).  Worm-side
+                              //   angular play this adds is divided by the
+                              //   worm reduction at the nacelle.
 PIN_R       = 5.5;            // pin radius from the worm axis (slot pitch circle)
 PIN_TRAVEL  = 3.0;
 SLOT_DEPTH  = 2.5;

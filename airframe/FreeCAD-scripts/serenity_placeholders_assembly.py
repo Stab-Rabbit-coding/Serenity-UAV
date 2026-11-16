@@ -106,7 +106,7 @@ _PLACEHOLDERS = [
     ("SHUNT-1MOHM", "power/Shunt_CSS2H_2512K_1mohm.stl", "Shunt_1mohm"),
     # Cargo
     ("N20-WINCH", "cargo/N20_motor_300RPM_6V.stl", "N20_motor_winch"),
-    ("HX711-LC", "cargo/HX711_loadcell_ADC_breakout.stl", "HX711_ADC"),
+    ("LC-ADC", "cargo/LC_ADC_ADS1231_board.stl", "LC_ADC_ADS1231"),
     ("DRV8833-CARGO", "cargo/DRV8833_Hbridge_breakout.stl", "DRV8833_Hbridge"),
     ("DYNEEMA-SK75", "cargo/Dyneema_SK75_0p5mm_coil.stl", "Dyneema_SK75"),
     # Gears

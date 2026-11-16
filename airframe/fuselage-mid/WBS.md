@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Current design revision:** Rev T (2026-09-06, see `docs/WBS.md` §6.4 for changelog)
+**Current design revision:** Rev U (2026-11-03, see `docs/WBS.md` §6.5 for changelog)
 
 > **Detail-holder for the root WBS.** The repository-root [`TODO.md`](../../TODO.md)
 > is a compact index — headings, subheadings, and short (<=70-char) checkbox items
@@ -769,24 +769,42 @@ Record: `docs/CARGO_SECTION_LAYOUT.md`, `docs/TILT_ACTUATOR_SELECTION.md`,
 - [x] **Void formers for the optional chin pour** — `tools/gen_cargo_void_formers.py`, 4 STLs. *(done 2026-09-15; 5 STLs from 2026-09-16 — `node_bay` added)*
 - [x] **D-T5-3 — avionics nodes in the cargo section** — CLOSED 2026-09-16 (Rev T5e): all four nodes placed and proven — FC2/FC3 aft strip Y 99.5..121.5 / Z 87..124; CN2/CN3 flat on the chin floor Y −58..0 / Z 66..88 on `chin_node_shelf.stl` (4 floor bosses merged). The chin FLANKS were measured short three times (2026-09-15 ×2, 2026-09-16); the shoulder pockets were rejected (55 × 31 window). `docs/CARGO_SECTION_LAYOUT.md` §0/§3a.
 - [ ] **WINCH-D — `CARGO_WINCH_SPECIFICATION.md` Rev D**: twin-drum bridle at Y 55.5, lines at X −200.75/−138.95, drums Z 133.4..149.4, pedestal bosses at X −211.75/−127.95.
+- [ ] **WINCH-PKG-01 — ★ owner decision: the Rev C1 winch stack does not fit the one-piece forward hull as specified (2026-11-07, `tools/winch_packaging_fit.py`, Claude Opus 5.5).** At the layout reservation (X 0, Y 14.04 in (356.5 mm), axle Z 8.72 in (221.4 mm)) the SPT5425LV clashes with the hull wall by 0.37 in² (241 mm²) of section and both pedestals and the solenoid also clash; 523 hull-clear placements exist (X −2.36…1.57 in (−60…40 mm)) but none of the 30 nearest the payload centre is clear of the tilt-actuator worm/motor/brake (up to 0.354 in³ (5,800 mm³)). Options (a) aft/low spool + bridle/fairlead, (b) right-angle or belt servo, (c) move the tilt hardware, (d) two spools. Detail: `docs/CARGO_WINCH_SPECIFICATION.md` §3.11. Blocks the six Rev C winch STLs and their BOM mesh sync. Exit: one option chosen, stack clear of hull + layout solids in the tool (exit 0).
 - [ ] **OBS-CARGO — cargo Observer tray SCAD in hull frame** (envelope PLACED 2026-09-16, Rev T5e: standing behind the payload box at Y 108.5..128.5, Z 14.2..85, X_CL ± 38.4; 4 belly bosses merged at (X_CL ± 30, Y 112.5 / 117), M2.5). Re-author `cargo_vera_faraday.scad` (legacy Y-as-dorsal frame) to these bosses, with the 28 mm nadir camera on the tray's top edge looking forward-down through the clamshell aperture (hoist monitor; no belly window).
 - [x] **T5e — tilt bracket re-cut** — DONE 2026-09-16. The tilted-motor idea was tried in `cargo_layout_fit.py` and REJECTED (a coaxial motor's gap to the wheel tip is `WORM_PD/2 − MOTOR_D/2 − m` at any worm angle, and a worm swung ≥ 5° aft lands on the port hoist line at Y 55.5). Built instead: Pololu 20D 25:1 CB (#3712) + six-start m1 Ø26 worm (C 33, 144 °/s no-load), motor 2.0 mm above the wheel tip. Closes **T5d-1**; also found and closed **T5d-2** (T5b board rails ran through the worm — board now on the web's OUTBOARD face, Y 55..97.9 / Z 83..119.5) and **T5d-3** (web not cut for the worm; brake guide straddled the web). Shell re-merged (287.2 cm³ / 301.6 g), all gates PASS, STLs exported (bracket 16.3 g, worm 6.0, wheel 6.9, guide 2.1, chin shelf 9.4).
 - [ ] **NODE-SADDLE — author `node_saddle.scad`** for N2/N4 (2 off). Rev T5e moved the aft pair to Y 99.5..121.5, 13 mm behind the cradle aft wall — a floor- or aft-thwart-mounted saddle is now the likelier design; the 8 × M3 holes in `battery_cradle.scad`'s aft wall stay as an option.
 - [ ] **HARN-CLIP — encoder-harness turn-down clip** on the tilt bracket (the Y 37.5 wall bore exits inside the wheel disc; 9 mm to turn). 2026-10-07: a clip alone cannot meet it — superseded in substance by **BHD-04** (move the exit into the shoulder pocket).
 - [ ] **BHD — cargo bulkhead in-context fit check (2026-10-07, Claude Opus 5.5).** `tools/cargo_bulkhead_context.py` (58 solids, 1,653 pairs, door 0–180° sweep, 10 AWG corridor search) FAILS: 53 clashes, 12 desyncs. Record + renders: `docs/CARGO_BULKHEAD_FIT_CHECK.md`. Close each sub-item, then make the gate pass.
     - [x] **BHD-01 — bore the bonded root flanges** — DONE 2026-10-07: generator subtracts `mci.wing_keepout_negatives()` (less mortise); flange overlaps 0; −2.6 g solid per flange. (`generate_wing_root_flange.py` cuts no spar Ø20.4 / shaft Ø4.4 / encoder Ø7.5 / nav Ø4.2 penetrations; spar ∩ flange 1,566 mm³ P/S). BUILD-BLOCKING. Reuse `merge_cargo_interior` bore cuts; −2.1 g per flange.
-    - [ ] **BHD-02 — fore gear bays vs wing root** (bay ∩ CF spar 973/968 mm³, ∩ flange 1,579/1,526, ∩ wing 1,181/1,467, ∩ 10 AWG and nav bores). BUILD-BLOCKING; reopens LG-10.4. Owner decision: move the fore bay station or re-shape the bay top. Fix `landing_gear_wing_clearance.py` to test the real flange/spar/wing meshes.
+    - [ ] **BHD-02 — gear bays vs wing root** (bay ∩ CF spar 973/968 mm³, ∩ flange 1,579/1,526, ∩ wing 1,181/1,467, ∩ 10 AWG and nav bores). BUILD-BLOCKING; reopens LG-10.4. 2026-10-10 (Claude Opus 5.5): per-feature census `tools/landing_gear_bay_function.py` + option study `docs/BHD02_OPTION_STUDY.md` (A flange cut FOS 21.9→10.5; B1 cluster rotation REJECTED, B2 wing relief FOS ≥ 4.8; C handed vs shared bolt bearing 3.97 / 3.65 → 4 mm backing plate).
+        - [x] **BHD-02a — owner decision A** — DECIDED 2026-10-10 (Stab-Rabbit-coding): **move the fore bay station**, not cut the flange. Sweep (`bhd02_option_study.py --sweep fore-port`): fore hip at Y ≤ −36 clears flange, spar, wing, head/cargo collar, chin nodes, cradle, harnesses and tilt drive (−32: 1 mm³ flange; −28: 116). Feet move ~35 mm forward → wheelbase 170 → 205 mm; level 4-pt aft share 43.1 → 44.3 % (24.2 → 24.9 J), governing 6 ft tail-down case (50 %, 28.07 J) unchanged.
+        - [ ] **BHD-02f — fore station re-layout — BLOCKED on owner** (2026-10-10, study §10 "No clean fore station"): at Y −38 a third of the bay footprint is off the hull (flank curls into the chin ramp; lower-forward M3 0 mm³ flange, forward ear+gusset loose 1,561 mm³) and the bay hits the TACCO pouch; no Y clears the root flange with the footprint on the hull. Recommended hybrid: hip Y −16 (X −115.0 / −224.8) + smaller flange notch 5,361 mm³, FOS 16.1, off the spar, TACCO 0, coverage 0.92. Canonical corners left at the LG-10.2 station.
+        - [x] **BHD-02h — mirrored handedness + conforming-seat machinery** — DONE 2026-10-10: CORNERS hand column, mirrored `hull_legs()` / census / `mci._plate_frame`; `mci.lg_skin_layer` (hull rebate + collar) and `tools/generate_lg_bays.py` (printed flange + liner) from one skin-following definition; aft bays generate as ONE body (fixes BHD-14 at the aft station once published).
+        - [x] **BHD-02i — lower-forward M3 bears on nothing** — DONE 2026-10-12: the generator seats every M3 on flange + collar (aft bolt moved up 7 mm); `tools/lg_collar_integrity.py` verifies bearing on the merged hull. (found 2026-10-10, pre-existing): the (−17.5, −43) bolt at both aft bays has 3.4 / 5.4 mm³ of flange around it (others 275 mm³) — the flank curls under there, 15–17 mm inboard of the flat seat; today's flat bay clamps it over air. Generator to relocate any bolt lacking flange AND hull-collar material; hull bores follow via `lg_bay_corner_params.py`.
+        - [ ] **BHD-02j — publish the generated bays**: run `generate_lg_bays.py`, re-merge the hull with `LG_CONFORM`, point the census / assembly / exporter at the per-corner STLs (drop the shared `bay` from `export_landing_gear_stls.py` COMMON), re-run seat-fit, wing-clearance, bulkhead and stance gates.
+        - [x] **BHD-02b — owner decision B** — DECIDED 2026-10-10: **redesign the wire geometry** (not a wing relief). Applies to the AFT corners only once the fore station moves (fore clusters then clear the wing). Moving the aft station does not help (wing 874 → 43 mm³ at +32 mm).
+        - [ ] **BHD-02k — energy-absorber wire layout is physically impossible as drawn** (found 2026-10-10 by the census's new wire / stop-pin solids): (1) 4 sockets in ONE row at `WIRE_STAGGER` 3.5 mm pitch, but wires are Ø4.26 ductile / Ø3.59 spring (sizing re-solve grew them) — adjacent wires overlap 21–54 mm³ at rest and the Ø4.9 socket bores merge; four Ø4.9 bores cannot fit the 14 mm `LUG_W` in one row at any pitch (19.6 mm); (2) `posed_wire()` `rotate([0,0,90])` sends the bow along the PIN axis, not the swing plane its comment claims — at full stroke (5.7 mm) the outer wire reaches y ≈ 13, through the clevis ear (7.5..10.5); (3) DONE: the boss root sat 6 mm into each wire's free span (wires ∩ bay 277 mm³) — free-span counterbore added, 277 → 6 mm³. Fix (1)+(2) as part of BHD-02g (owner B: redesign the wire geometry).
+        - [ ] **BHD-02g — wire-geometry redesign (both stations)** — AFT DONE 2026-10-12, FORE OPEN. Two rows of two (6 mm pitch, 6 mm crank, horns, swing-plane bow, carrier per row, counterbore + bow relief). Aft rows 30 / 120 deg, stop pin 210: census function checks all 0.0 mm³, conforming aft bays 1 body, bearing FOS 4.42–4.49, hull re-merged with the seat collar trimmed around the cluster (collar-integrity gate PASS). FORE: no layout clears the payload keep-out / doors — owner to choose F1 (lighter fore absorber, needs a nose-down design case), F2 (narrow the payload keep-out) or F3 (hull + door rework); study §12. **2026-10-19: owner chose F1; F1 then FAILED its own nose-down case.** The ledger (`tools/auw_ledger.py`) puts the CG at Y +39.8 (not the Y +111.5 the sizing used) and AUW at 6.69 kg (not 3.13): each fore leg carries 26.2 % static vs 23.8 % aft, and the rigid-body nose-down case (`landing_gear_r6_sizing.py` `two_point_case`) needs 23.6–39.5 J per fore leg over 0–25° vs 21.7–38.5 J aft. The fore absorber cannot be lighter than the aft; F1 is withdrawn. Re-decide after LG-REMASS (`airframe/landing-gear/WBS.md`) sets the new wire/leg size, since the fore clash depends on it. **2026-10-19 (later): owner asked to SEE F2 vs F3 (function and canonical appearance both) before choosing.** **DECIDED 2026-10-19 (owner): F2** -- the payload keep-out's two fore vertical edges are chamfered 8 x 5.5 mm (README mission payload amended to match), plus the door fore-outboard corner relief (taken into DOOR-REWORK). **2026-10-26: F2 implementation DEFERRED to LG-LOADPATH** (`airframe/landing-gear/WBS.md`): the 8 × 5.5 mm chamfer was sized against the fore wire cluster, which the load-path fix moves; the chamfer orientation (X vs Y leg) is also unrecorded.
+        - [x] **DOOR-REWORK — owner 2026-10-19:** the port door opens first and closes OVER the starboard door (lapped, so the two never clash in their swing), and ONE latch holds both. Replaces the two-latch / meet-at-centreline arrangement (`docs/CARGO_DOOR_LATCH_SPEC.md`, `generate_cargo_doors.py`). **DONE 2026-10-26 (Claude Opus 5.5):** half-lap with a flush interior (`generate_cargo_doors.py` LAP_*: port outer lip 1.2 mm reaching 6 mm past X_CL, 0.7 mm proud of the belly; stbd inner lip, 0.3 mm gap); symmetric hinge line (X ±47.46, Z 85.51/85.49) from the port belly data; `door_latch_mechanism.scad` Rev B: ONE latch (port), stbd drive-only, hook root 7 × 3.5 (FOS_shear 2.97 at 2 doors), crank split from the fixed bracket (new `door_latch_crank_{port,stbd}.stl`, PRINT-DOOR-LATCH-CRANK), PIVOT_IN 10 → 2, BASE_LIFT 4.5 → 7; statics in `docs/CARGO_DOOR_LATCH_SPEC.md` §0a. Bulkhead census: doors/latch vs payload and door seam clashes RESOLVED, symmetry DELIBERATE (registered).
+            - [ ] DOOR-REWORK-SEQ — gateway shall sequence port-open before stbd-open and stbd-close before port-close (`docs/CARGO_DOOR_GATEWAY_SPEC.md` §4 DOOR_COMMAND); CAUTION: stbd is unlatched while port is open — doors operated in hover/low speed only.
+        - [x] **★ BRAKE-GUIDE-MOUNT — found 2026-10-19 by `tools/placement_audit.py`:** the tilt brake guide (both sides) lands on a cut-out in the bracket web — 2.9 mm from any bracket material, its 2 × M2.5 have nothing to bolt to. The brake is the unpowered nacelle hold (WA-R16). Fix the web slot in `tilt_actuator_bracket.scad` (lines ~218–233) or move the guide tab; re-run the audit. **DONE 2026-10-26:** the web's worm "slot" was a 34 mm disc (hull of r 17 cylinders whose fore centre sat behind the 10 mm worm); now two rectangles sized to the worm and collar. 430 of 442 mm² of the guide footprint is backed and both M2.5 holes sit in full web; brackets re-exported (port/stbd mirrored).
+        - [ ] **TILT-BRKT-STBD-SKIN — found 2026-10-19:** the starboard tilt bracket's fore-top corner (Y +2.6, Z 130–133) is 1.1–1.65 mm OUTSIDE the cargo outer skin (port is inside — the known 2.7 mm starboard flank narrowing). Chamfer/relieve the starboard corner at the shared parameter, re-merge. 2026-10-26: cargo rebuilt as the mirror of its port half (`merge_cargo_interior.SYMMETRIC_FROM_PORT`), so the stbd flank now equals the port; re-check with `tools/placement_audit.py` at close-out.
+        - [ ] **ASM-PLACE — `tools/placement_audit.py` 2026-10-19 remaining:** `Dorsal_Antenna_Fin` unplaced (at the origin); legacy no-source accessories `Cargo_GPS_Ring` (20 mm outside the skin), `Cargo_Release_Servo_Bracket` (2.5 mm off the hull), `Cargo_Door_Servo_Bracket` (SERVO-PLACE) still at estimates; `Wing_Stbd` sits 0.39 mm off its socket vs port 0.05 (symmetry). Retired from the assembly the same day: N20 winch mount/spool, DRV8833 tray, autolatch cradle.
+        - [ ] **BHD-02c — owner decision C** — DECIDED 2026-10-10: handed fore bays + 4 mm backing plate. NOTE: at the moved fore station the bay no longer touches the CF spar (sweep: spar 0 mm³ for hip Y ≤ −16), so the upper-bolt relocation that C answered is not needed; confirm with the owner whether to keep the shared 4-bolt part.
+        - [ ] **BHD-02d — gear-block reshape** per A–C (spar relief, relocated upper M3 at y 21, wing pockets), then census PASS at both stations.
+        - [x] **BHD-02e — `landing_gear_wing_clearance.py` false CLEAR fixed** — DONE 2026-10-10: check 5 runs the real-mesh per-feature census; now reports INTERFERES (57 pairs) until BHD-02d lands; `--nominal-only` exits 3, never CLEAR.
+    - [x] **BHD-14 — aft-station gear bay prints as TWO bodies** — DONE 2026-10-12: the conforming aft bays are one body (generator gate); was: (found 2026-10-10): published `lg_r6_common_bay.stl` (default `BAY_STATION="aft"`) = 16,225 + 6,236 mm³; the boss carrier/wire-boss block does not reach the liner at the aft datum. BUILD-BLOCKING (loose energy-absorber seats). Fix in BHD-02d; also make `export_landing_gear_stls.py` assert body count on what it writes. Learning: `docs/solutions/design-patterns/gate-a-part-invariant-at-every-selector-value-it-is-published-at.md`.
     - [ ] **BHD-03 — 10 AWG bundle exit in the worm-wheel plane** (∩ wheel 138 mm³ P/S, 6.8/5.0 mm to the payload keep-out). Stop the Ø16.3 continuation in the shoulder pocket and route aft per the corridor path (Ø20 bottleneck, 192 mm). Bend radius from the wire datasheet (not yet set).
     - [ ] **BHD-04 — encoder conduit exit** (∩ wheel 165 mm³ P/S, ∩ payload 108/164): move into the shoulder pocket with BHD-03.
     - [x] **BHD-05 — starboard brake guide must be MIRRORED, not translated** — DONE 2026-10-07: `tilt_brake.scad` mirror_side(), `tilt_brake_guide_stbd.stl`, assembly + gate updated, 0 mm³, SYNC. (∩ stbd controller board 385 mm³, solenoid ∩ web 149). Export `tilt_brake_guide_stbd.stl` (mirror) and place it in `serenity_assembly.py`; mirrored copy verified 0 mm³.
-    - [ ] **BHD-06 — latch pivot brackets inside the closed doors** (252/254 mm³ at X −123.5..−117.5, Y 33..45, Z 3..6.5) and 102/35 mm³ into the payload keep-out. Re-seat the bracket base above the door panel.
+    - [x] **BHD-06 — latch pivot brackets inside the closed doors** — DOOR CLASH FIXED 2026-10-12: `door_latch_mechanism.scad` standoff base lifted `BASE_LIFT` 4.5 mm (1 mm over the door top at the bracket station); door closed ∩ bracket 252/254 → 0.0 / 0.0 mm³, swept 0.3 / 0.3 (contact at the hinge); bracket still bonds to the hull wall (33.8 / 145.6 mm³). OPEN: latch crank/mortise ∩ payload keep-out 81.9 / 27.6 mm³ (latch kinematics vs the corrected payload floor), and the port bracket STL exports as 2 bodies / not watertight (pre-existing at HEAD). **CLOSED 2026-10-26 by DOOR-REWORK:** latch bracket ∩ payload keep-out 584/544 → 0 (pivot 2 mm inboard of the hinge), door swept ∩ bracket 0, port bracket one body (crank split out).
     - [ ] **BHD-07 — door swing limited to 145°** (owner 2026-10-07; gear stops a 180° swing at 148° S). Spec + gate updated, doors clear the gear at 145°. OPEN: mechanical stop + servo end-point.
-    - [ ] **BHD-13 — door seam jams on synchronised opening** (41 mm³ at 5°, clear by 15°; zero seam gap, crown corner swings inboard). Seam gap/chamfer or sequenced opening.
-    - [ ] **BHD-08 — payload keep-out Z0 8.72 vs measured closed-door floor 10.86.** Correct the datum in `cargo_layout_fit.py`; the box top then reaches Z 87.06 vs Pilot FC2/FC3 at Z 87.0 (0.06 mm interference, 2 mm budget).
+    - [x] **BHD-13 — door seam jams on synchronised opening** (41 mm³ at 5°, clear by 15°; zero seam gap, crown corner swings inboard). Seam gap/chamfer or sequenced opening. **CLOSED 2026-10-26 by DOOR-REWORK:** lapped seam + sequenced doors (DOOR-REWORK-SEQ); the doors no longer butt at X_CL.
+    - [ ] **BHD-08 — payload keep-out Z0 8.72 vs measured closed-door floor 10.86.** 2026-10-12: datum CORRECTED to 10.86 in `cargo_layout_fit.py` (with a drift check against `cargo_bay_envelope.door_top()`); the layout gate now shows the real conflict, payload ∩ aft Pilot nodes 15 / 15 mm³. Raising the nodes 2.06 mm restores the 2 mm payload gap but cuts their shoulder gap to 1.50 / 1.58 mm (< 2) and grows the BHD-10 collar overlap 22/24 → 25/28 mm³ — decide together with BHD-10 (O3 thinner stack does not help in Z). Owner decision.
     - [ ] **BHD-09 — cargo Observer envelope ∩ cargo/middle splice collar 1,186 mm³** (lower 10.5 mm of the tray inside the ring). Re-shape/raise the tray (OBS-CARGO).
-    - [ ] **BHD-10 — Pilot FC2/FC3 + cable zones 0.5 mm into the collar** (22/24/19/19 mm³); moving forward hits the tilt controller boards — owner decision on the aft-strip layout (NODE-SADDLE).
-    - [ ] **BHD-11 — TACCO CN2/CN3 tops vs real cradle nose** (21 mm³ P/S, cradle mesh to Z 87.6 vs envelope Z ≥ 90): T5g regression; trim the node station or relieve the cradle.
-    - [ ] **BHD-12 — stbd root flange 0.76 mm inboard of mirror → ∩ stbd tilt bracket 10.5 mm³**; desyncs follow CENSUS-01's two centre planes (−169.85 vs −169.241). Fix at the shared parameter, both sides.
+    - [ ] **BHD-10 — Pilot FC2/FC3 + cable zones 0.5 mm into the collar** (22/24/19/19 mm³, upper-outboard corners only). 2026-10-10 option pictures in `docs/BHD02_OPTION_STUDY.md` §9 (`tools/bhd10_aft_strip_options.py`): O1 forward shift REJECTED (∩ tilt boards 201/216 mm³); O2 collar ring relief 596 mm³ (8.9 % of the cargo-side bond band, gap 1.05 mm); O3 2.5 mm thinner pouched stack clears all. Owner decision; recommended: measure the first-article stack first (O3), O2 only after a collar bond check (NODE-SADDLE).
+    - [x] **BHD-11 — TACCO CN2/CN3 tops vs real cradle nose** — CLOSED 2026-10-07: TACCO reverted to 55 × 35 (chin pouch Y −58..0) on main; gate shows 0 mm³. (21 mm³ P/S, cradle mesh to Z 87.6 vs envelope Z ≥ 90): T5g regression; trim the node station or relieve the cradle.
+    - [x] **BHD-12 — stbd root flange 0.76 mm inboard of mirror → ∩ stbd tilt bracket 10.5 mm³**; desyncs follow CENSUS-01's two centre planes (−169.85 vs −169.241). Fix at the shared parameter, both sides. **CLOSED 2026-10-26:** cargo rebuilt as the mirror of its port half; flange window bounded at a mirrored |X| ≥ 60 band (the stbd plate had climbed onto an interior wall as a 0.4 mm sheet: the 13.64 mm DESYNC); stbd wall-bracket and harness stations now mirrored in `merge_cargo_interior.py` and `cargo_bulkhead_context.py` (were typed copies). Root flange, wing, spar, harness exits SYNC 0.00; root flange stbd ∩ tilt bracket resolved.
     - [ ] **BHD-GATE — add `cargo_bulkhead_context.py` to pre-commit/CI** once BHD-01..12 close; make `cargo_layout_fit.py` read the real cradle/collar meshes.
 - [ ] **GPS-ANT — Ø36 patch antenna part** for the dorsal cups (legacy ANN-MB-00 is 82 × 60 mm and does not fit).
 - [x] **MOTOR_ENC_L — verify the 25D encoder-version length** — VOID 2026-09-16: the 25D is retired (T5d-1); the 20D #3712's 41 mm body + 6 mm rear shaft are confirmed from the product page (REF-ACT-001).
@@ -991,9 +1009,20 @@ do not restate its dimensions here.
 - [ ] **Line-shed test.** Confirm the line actually runs clear of drum and fairlead under load.
     The ~0.7 N capstan retention on the last two turns is analytic, not measured. Verify the
     inboard end is **not** anchored.
+- [ ] **CARGO-LC-01 — LC-ADC line-tension sense board (TI ADS1231IDR) replaces the HX711 module.**
+    *(owner decision 2026-10-20: the HX711 maker is PRC-domiciled, which the component-sourcing
+    rule in `AGENTS.md` §5 forbids; rejection recorded in `docs/CARGO_WINCH_SPECIFICATION.md` §5.5.)*
+    Design, fabricate and bench-test the board: ADS1231IDR + support passives per the datasheet
+    Figure 24 application example (REFERENCES.md REF-SENSOR-063), 4-pin JST-GH to `J_FLEX`
+    (`+3V3`, `GND`, SCLK, DRDY/DOUT), AVDD = DVDD = gateway `+3V3`, `SPEED` and `PDWN` straps.
+    Gates: (a) the load-cell element is selected first — bridge ≥ 350 Ω (spec open item 18);
+    (b) KiCad ERC/DRC clean and a parts-sourcing check against `AGENTS.md` §5 for every passive;
+    (c) real mass replaces the 3 g allowance in `bom_revT` row `LC-ADC` and the
+    22 × 14 × 5 mm placeholder (`generate_placeholders.py`) is replaced by the board outline;
+    (d) bench test with a known mass confirms scale, tare and the `loadcell_fail` flag.
 - [ ] **Firmware — winch state machine** (Simon payload-primary, gateway-side control).
     `WINCH_STATUS` / `WINCH_COMMAND` frames, TPM-signed per [REF-NIST-001 §2.1]; STS3215 bus
-    driver; HX711 re-hosted from TACCO to the gateway; Shepherd watchdog cuts RAIL-2 on
+    driver; ADS1231 load-cell driver (replaces the HX711, see CARGO-LC-01); Shepherd watchdog cuts RAIL-2 on
     heartbeat timeout (which *engages* the catch). Bus IDs assigned in firmware, not in the
     spec. Cross-ref `avionics/firmware/WBS.md`.
 - [ ] **Re-run the §6 mass/CG table** once the SPT5425LV+LibreServo v2 unit is bench-weighed;
@@ -1168,6 +1197,127 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     - [ ] Wire strobe to led pwd output on Pilot cape in Simon's medbay
 
 ##### 1.1.1.4 *Rear Engine Cone*
+
+### Bay A forward — head nodes, twin tray, access hatch (2026-11-01)
+
+Plan `docs/plans/2026-11-01-001-feat-bay-a-forward-adoption-plan.md`; spec
+`docs/BAY_A_FWD_LAYOUT.md`; thermal `docs/BAY_A_FWD_THERMAL.md`.
+
+- [x] **BAYA-FWD-01** — Bay A forward published: CN1 flat under the Observer (Y 62–120),
+    FC1 flat above it (Y 88–146, Z 230.5); `head_layout_fit.py` default, side mode read-only.
+- [x] **BAYA-FWD-02** — Twin pack tray published at Y 163–283 (stop Y 159–163);
+    `twin_pack_tray_params.scad` + tray/sled/gate STLs regenerated.
+- [x] **BAYA-FWD-03** — Harness routes gated (ROUTES table): CN1 run → riser → crossover
+    (Y 148–158, forward of the tray stop) → port link → port channel.
+- [x] **BAYA-FWD-04** — Mounts + canonical bridge-roof hatch generated and gated
+    (`tools/gen_bay_a_fwd_mounts.py`): CN1 drawer, CN1 gate, FC1 shelf, hatch cover/flange,
+    merged hull with the opening cut.
+- [ ] **BAYA-FWD-05** — Verify the hatch seam stations (Y 60 / Y 137, X ±27) against a
+    full-resolution QMx Sheet Six [REF-CAD-003] (repo copy is a low-res extract).
+- [ ] **BAYA-FWD-06** — Retention statics: cite cam-strap, snap-gate, M2.5 insert pull-out
+    and bond-shear allowables against 30.5 lbf (135.5 N) per node; statics now PROVISIONAL.
+- [ ] **BAYA-FWD-07** — Select the M2.5 heat-set insert (bore assumed 3.6 mm) from its
+    datasheet, per the sourcing rules; update `M25_INSERT`.
+- [ ] **BAYA-FWD-08** — Mass ledger: add drawer, shelf, gate, hatch flange/cover and any fan
+    to `tools/auw_ledger.py`; re-run the CG roll-up.
+    - 2026-11-15, done: Bay A node station now read from `tools/head_layout_fit.py`
+      (was a typed estimate at Y 45.7); nose Observer added as an ASSUMED 60 g; new
+      configuration `hover_twin_2200` carries the two cells in the published twin tray.
+      Hover CG with the twin tray: 0.03 in (0.8 mm) aft of the pivot. The retired single
+      cargo pack (`hover_4000`) read 0.40 in (10.2 mm) aft.
+    - Still open: drawer, shelf, gate, hatch flange and cover masses; nose pods and
+      pitot masses; a BOM row for the 6S 2200 cells; owner decision to make
+      `hover_twin_2200` the headline configuration for the tools that read `hover_4000`.
+- [ ] **BAYA-FWD-09** — Assembly/build guide: use `head_cargo_shell24_2mm_merged_hatch.stl`
+    and the new parts; retire the single-cell rail/sled/catch from the assembly.
+- [ ] **BAYA-FWD-10** — Hatch seal (rain/dust) and cover-to-PGND bond decision.
+- [ ] **BAYA-FWD-11** — Place the TACCO antennas and cut the 3 MMCX coax leads to length
+    (plan 003 deferred antenna placement).
+- [x] **HULL-LEAK-01** — Spar bore + mortise were stale at Y 326.7 after the 0.5 in aft
+    wing-root shift (SPAR_Y 339.4): cargo shell, merged hull and wing-root flanges
+    regenerated from source; flanges now centred on SPAR_Y (FOS 20.7). Found by the
+    cooling-air CFD leak check (`tools/assembly_integrity_check.py`).
+- [x] **HULL-LEAK-02** — Four roof holes (Y 255.7 / 385.7, X ±18): the retired cargo
+    cradle's boss subtraction ran above the roof. Cradle hangers retired at source
+    (`merge_cargo_interior.CARGO_CRADLE = False`); subtraction removed.
+- [x] **HULL-LEAK-03** — Head roof centreline crack (X 0, Y 99–104.5) bridged in the
+    one-piece merge.
+- [x] **HULL-FUSE-01** — Wing-root flanges fused into the one-piece head+cargo print
+    (separate only for mesh-processing reasons; bond line removed).
+- [ ] **HULL-LEAK-04** — Cargo door hinge-edge seam (X ±47–52, Y 317–378): specify the
+    door seal/gasket (cooling stream is suction; any opening becomes an inlet).
+- [ ] **LG-AFT-BOLT-01** — Aft-port gear bay upper-fwd bolt (R2 47.2, 417.8, 134.4):
+    driver-access keep-out clashes the port wing (979 mm³) after the wing shift; no
+    seat within 30 mm. Aft bays NOT regenerated (last valid STLs kept). Re-site the
+    bolt or the driver access.
+- [ ] **HULL-FUSE-02** — Assess fusing the other bonded mounts into the one-piece print
+    (gear bays, A1b housings, chin node shelf, Bay A drawer + hatch flange, twin tray
+    rails); keep removable / different-material parts separate.
+- [x] **COOL-01** — Rear-fan cooling stream. **Superseded 2026-11-15** by the tail EDF
+    cooling design shift below (TEDF-01..16). The Delta fan stage is not built.
+
+###### 1.1.1.4.0 *Tail EDF cooling, ramp intake and RCS — design shift (owner, 2026-11-15)*
+
+**Design-shift record (`AGENTS.md` §10).** Adopted by the owner 2026-11-16 as the path
+forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
+
+- **What changes.** The tail EDF flies from the first build and is the fuselage's only air
+  mover. All its air passes through the interior: most through a louvred, screened forward
+  cargo ramp, the rest through the bow inlets. The cargo doors are fused shut, with one
+  belly service hatch; there is no internal cargo. The winch stays on the cargo floor, with
+  its fairlead under the tilt pivot. Four RCS jets are populated. The tail EDF is the
+  QX-Motor 64 mm nacelle unit in a pusher shroud. The Flight Engineer box, the tail EDF
+  speed controller and the RCS servos move forward. The GNSS antenna moves under the
+  bridge window, and the bow gains an adjustable ballast pocket.
+- **Why.** A small tail fan moves enough bulk air but too little local air, and three
+  nodes fail. EDF air through the interior cools every node. In hover the tail EDF is
+  also the only pitch trim and control, so it has to fly from the first build.
+- **Rejected.** The Delta fan stage with cut-out covers; intakes in the rear bell with a
+  baffled insert; the XFly X5 50 mm and a custom 55 mm rotor; actuated or bolted cargo
+  doors; a long drive shaft from a motor in the cargo bay. Reasons are in the plan's Key
+  Decisions.
+- **Affected.** Both hull halves; the cargo bay layout; the winch, door gateway and RCS
+  gateway specifications; the stern stack (`avionics/WBS.md` §1.11); a fifth
+  Open-Secure-ESC controller; root `AGENTS.md` §1; `deferred/` Phase 11 items.
+- **Model tier.** Each item carries **[STD]** (a standard model can do it from the plan)
+  or **[ADV]** (needs an advanced model: physics derivation, CFD diagnosis, cross-domain
+  trade, or an owner brief). Any item escalates to ADV when a gate fails twice.
+
+- [ ] **TEDF-01** — [STD] Record and reference repair: `deferred/` Phase 11 items into the
+    first build, reference faults, `requirements-dev.txt`. Plan U1. (S42)
+- [ ] **TEDF-02** — [STD] Thermal model refresh: closed-cavity fix, ramp and bow branches,
+    EDF flow input. Needs NFP-THERM. Plan U2. (S46)
+- [ ] **TEDF-03** — [ADV] Tail EDF flow tool: installed thrust, flow split, stall margin.
+    Plan U3. (S43)
+- [ ] **TEDF-04** — [ADV] Hover trim and RCS tool: trim use, jet sizing, CG window.
+    Plan U4. (S43)
+- [ ] **TEDF-05** — [ADV] Rear-cone layout: QX pusher unit, RCS at Y 634, trapezoidal
+    exhausts on the canon plate pattern. Plan U5. (S44)
+- [ ] **TEDF-06** — [STD] Cargo duct layout: Flight Engineer box forward, hatch, fairlead
+    under the pivot, screen, flow guides, line guard. Plan U6. (S44)
+- [ ] **TEDF-07** — [STD] Head layout: GNSS patch under the bridge window, ballast pocket,
+    bow inlets. Plan U7. (S44)
+- [ ] **TEDF-08** — [ADV] Gate G1 Owner Decision Brief and figures (OD-22). Plan U8. (S45)
+- [ ] **TEDF-09** — [STD] Aft hull provisions: ring, fused tube, nozzle, RCS exhausts.
+    Needs OD-22. Plan U9. (S47)
+- [ ] **TEDF-10** — [STD] Forward hull provisions: ramp louvres, fused doors, hatch,
+    fairlead, inlets, window seat, ballast pocket. Needs OD-22 and Blender. Plan U10. (S48)
+- [ ] **TEDF-11** — [STD] Separate parts: pusher shroud, valves, screen frame, flow
+    guides, hatch cover, window cover. Needs OD-22. Plan U11. (S49)
+- [ ] **TEDF-12** — [ADV] CFD case, still air and cruise. Plan U12. (S50)
+- [ ] **TEDF-13** — [ADV] Coupled analysis: cooling, thrust, trim, endurance, fault
+    cases. Plan U13. (S51)
+- [ ] **TEDF-14** — [STD] Mass, CG, bench balance allowance and gate G2 (OD-23).
+    Plan U14. (S52)
+- [ ] **TEDF-15** — [STD] Seal and aperture gate. Plan U15. (S52)
+- [ ] **TEDF-16** — [STD] Specifications, build guide and closeout. Plan U16. (S53)
+- [ ] **OSESC-TAIL-1** — [STD] Fifth Open-Secure-ESC controller (OSESC-NAC) for the tail
+    EDF: forward mount in the cargo duct, lead length and its EMI check, and bench
+    qualification at about 80 % continuous duty for hover. Cross-repo:
+    `Stab-Rabbit-coding/Open-Secure-ESC`. (S49, bench in P3)
+- [ ] **OSESC-TAIL-2** — [ADV] Controller behaviour for a flight-critical tail EDF:
+    throttle floor while the avionics are powered, and fault reporting to the flight
+    controller. Specification only here; firmware in the Open-Secure-ESC repo. (S53)
 
 ###### 1.1.1.4.1 *Anti-Collision Tail Light*
 

@@ -6,7 +6,7 @@
 //   into serenity_assembly.py at identity placement.
 // ===========================================================================
 // ============================================================
-// simon_node_saddle.scad -- Rev T6 (2026-09-17)
+// simon_node_saddle.scad -- Rev U (2026-11-07; carried forward from Rev T6, 2026-09-17)
 // Saddle for Simon's med bay: the aft flight-control / comms node pair
 // CN4 (XO cape, low) + FC4 (Pilot cape, high), each a PB2I + cape stack in a
 // Faraday pouch (58 x 37 x 22, cargo_layout_fit.NODE_*), STANDING transverse

@@ -43,8 +43,11 @@ SHELL_STL = os.path.join(
     "cargo_sect_shell24_2mm_repaired.stl",
 )
 
-X_CL = -169.9          # hull centreline (airframe/AGENTS.md)
-Z_LO, Z_HI = 2.0, 75.0  # lower-hull band to search
+import sys  # noqa: E402
+sys.path.insert(0, SCRIPT_DIR)
+import hull_datums as hd  # noqa: E402  aircraft datum R2 (2026-10-19)
+X_CL = hd.X_CL           # centreline
+Z_LO, Z_HI = 82.0, 155.0  # lower-hull band to search (R1 2..75)
 X_OFF = 30.0           # ignore anything within this of the centreline
 MIN_AREA = 120.0       # mm^2, drop slivers
 MIN_NX = 0.70          # patch normal must point mostly outboard

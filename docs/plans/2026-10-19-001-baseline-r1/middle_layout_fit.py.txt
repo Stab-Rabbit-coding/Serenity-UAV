@@ -1,0 +1,69 @@
+Kaylee can: 75.0 x 94.0 x 28.0 mm ext, 32 g at 0.5 mm; lid clearance over a 16.0 mm component = 5.4 mm
+Y budget: sleeve 139.0 | plate 140.0..148.0 | can 148.0..176.0 | pouches 178.0..200.0 | rear face 203.6
+
+=== MIDDLE section: 683,404 faces, 0 extra obstacle mesh(es) ===
+envelope                           hit mm3  <gap mm3   extra  note
+Kaylee can                               0         0       0  
+Kaylee entry plate                       0         0       0  
+CN4 (XO) pouch                           0         0       0  
+FC4 (Pilot) pouch                        0         0       0  
+Simon cable zone                         0         0       0  
+Simon saddle                         11345     14204       0  seats on / cuts skin (hit expected)
+hatch cut                            10788     14262       0  seats on / cuts skin (hit expected)
+Kaylee cradle pillar 0                 217       665       0  seats on / cuts skin (hit expected)
+Kaylee cradle pillar 1                 217       667       0  seats on / cuts skin (hit expected)
+Kaylee cradle pillar 2                 578      1294       0  seats on / cuts skin (hit expected)
+Kaylee cradle pillar 3                 591      1302       0  seats on / cuts skin (hit expected)
+SMA-49 (Commo whip)                     67       423       0  seats on / cuts skin (hit expected)
+SMA-915-SIK                             70       304       0  seats on / cuts skin (hit expected)
+SMA-WIFI                                70       304       0  seats on / cuts skin (hit expected)
+Simon trunk                              0         0       0  
+fan-out E5                               0         0       0  
+fan-out E5 (stbd)                        0         0       0  
+crest B2 (middle)                        0         0       0  
+pairwise interference (raw overlap, mm3):
+  none
+
+Phase 11 free bore area (neck void minus equipment) vs scoop capture 3090 mm^2:
+  Y=135: void    14389  blocked       0  free    14389 mm^2  ok
+  Y=145: void    13046  blocked    6486  free     6560 mm^2  ok
+  Y=155: void    12558  blocked    6926  free     5632 mm^2  ok
+  Y=165: void    22030  blocked    6926  free    15105 mm^2  ok
+  Y=175: void    16882  blocked    6926  free     9956 mm^2  ok
+  Y=185: void    11343  blocked    5062  free     6281 mm^2  ok
+  Y=195: void    11431  blocked    5062  free     6369 mm^2  ok
+  Y=201: void    10575  blocked       0  free    10575 mm^2  ok
+
+=== CARGO section: 1,048,160 faces, 2 extra obstacle mesh(es) ===
+envelope                           hit mm3  <gap mm3   extra  note
+ESC E1 flange-face drop                  0       101       0   FAIL (gap 2.0)  box X-126..-119 Y5..26 Z27..75
+ESC E1 flange-face drop (stbd)           0        44       0   FAIL (gap 2.0)  box X-221..-214 Y5..26 Z27..75
+ESC E1a wheel-shadow slab                0         0       0  RECORD ONLY (accepted, see doc)
+ESC E1a wheel-shadow slab (stbd)         0         0       0  RECORD ONLY (accepted, see doc)
+ESC E3 under-wheel trough                0         3       0   FAIL (gap 2.0)  box X-130..-110 Y26..85 Z32..44
+ESC E3 under-wheel trough (stbd)         0         4       0   FAIL (gap 2.0)  box X-230..-210 Y26..85 Z32..44
+ESC E34 rise                             0         0       0  
+ESC E34 rise (stbd)                      0         0       0  
+ESC E4 Observer slot                     0         0       0  
+ESC E4 Observer slot (stbd)              0         0       0  
+tilt feed T1                             0         0       0  
+tilt feed T1 (stbd)                      0         0       0  
+crest B1 (cargo)                         0         0       0  
+pairwise interference (raw overlap, mm3):
+  none
+
+Mass / CG ledger (hull-frame Y; moment about the tilt axis Y 46.6, + = nose-up-heavy aft):
+  Flight Engineer PCB assembly         158.0 g  Y  162.0      18233 g*mm
+  Kaylee can (0.5 mm 6061)              31.8 g  Y  162.0       3671 g*mm
+  entry plate + EMC bushings            25.0 g  Y  144.0       2435 g*mm
+  Kaylee hardware                       10.0 g  Y  162.0       1154 g*mm
+  CN4 XO node + pouch                   58.0 g  Y  189.0       8259 g*mm
+  FC4 Pilot node + pouch                49.0 g  Y  189.0       6978 g*mm
+  TOTAL middle-section equipment       331.8 g  Y  169.4      40730 g*mm
+  -> CG shift of the 3911 g aircraft: +10.4 mm (aft) vs the same aircraft without these items
+  (battery, for scale: 750 g at Y 13 -> -25200 g*mm)
+  masses: 332 g = 0.732 lbm
+
+RESULT: FAIL (4 envelope(s) foul a shell/gap, 0 pair overlap(s))
+
+--- stderr ---

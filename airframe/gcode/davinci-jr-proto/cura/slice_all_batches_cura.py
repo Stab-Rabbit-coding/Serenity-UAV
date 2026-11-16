@@ -92,42 +92,37 @@ PARTS = [
     ("D", "cargo_vera_faraday", "fuselage/cargo/cargo_vera_faraday.stl", 1.0, 25, False,
      "KNOWN DEFECT: lid body floats ~9mm above base in source STL -- reposition "
      "in slicer/GUI before printing (see mesh-integrity report). Sliced as-is here."),
-    # Batch E / F
-    ("E", "nacelle_nozzle_flap",
-     "nacelles/nozzles/nacelle_nozzle_flap.stl", 1.0, 15, False, ""),
-    ("E", "nacelle_nozzle_flap_seal",
-     "nacelles/nozzles/nacelle_nozzle_flap_seal.stl", 1.0, 15, False, ""),
-    ("E", "nacelle_nozzle_ring",
-     "nacelles/nozzles/nacelle_nozzle_ring.stl", 1.0, 15, False, ""),
-    ("E", "nacelle_nozzle_throat",
-     "nacelles/nozzles/nacelle_nozzle_throat.stl", 1.0, 15, False, ""),
-    ("F", "nacelle_nozzle_iris-closed",
-     "nacelles/nozzles/nacelle_nozzle_iris-closed.stl", 1.0, 10, False, ""),
-    ("F", "nacelle_nozzle_iris-open",
-     "nacelles/nozzles/nacelle_nozzle_iris-open.stl", 1.0, 10, False, ""),
-    # Batch G
-    ("G", "nacelle_trunnion",
-     "nacelles/nacelle_trunnion.stl", 1.0, 25, False, ""),
-    ("G", "nacelle_servo_bracket",
-     "nacelles/nacelle_servo_bracket.stl", 1.0, 25, False, ""),
-    ("G", "edf_stator_sleeve",
-     "nacelles/edf_stator_sleeve.stl", 1.0, 25, False, ""),
-    ("G", "edf_aft_spider_sleeve",
-     "nacelles/edf_aft_spider_sleeve.stl", 1.0, 25, False, ""),
-    # Batch H
-    ("H", "nacelle_esc_cover_port_a",
-     "nacelles/esc/nacelle_esc_cover_port_a.stl", 1.0, 20, False, ""),
-    ("H", "nacelle_esc_cover_port_b",
-     "nacelles/esc/nacelle_esc_cover_port_b.stl", 1.0, 20, False, ""),
-    ("H", "nacelle_esc_cover_stbd_a",
-     "nacelles/esc/nacelle_esc_cover_stbd_a.stl", 1.0, 20, False, ""),
-    ("H", "nacelle_esc_cover_stbd_b",
-     "nacelles/esc/nacelle_esc_cover_stbd_b.stl", 1.0, 20, False, ""),
-    # Batch I -- nacelle pods, 89% (heavy, handled separately -- see --skip-heavy)
-    ("I", "nacelle_port_revs",
-     "nacelles/nacelle_port_revs.stl", 0.89, 15, True, "HEAVY"),
-    ("I", "nacelle_stbd_revs",
-     "nacelles/nacelle_stbd_revs.stl", 0.89, 15, True, "HEAVY"),
+    # Rev U: the 50 mm nacelle parts that were listed in batches E-I are archived
+    # (archives/rev-T-frozen.tar.gz).  64 mm parts below; bed is 150 x 150 x 150 mm.
+    # Batch E -- nozzle (throat/ring are handed: print one of each side)
+    ("E", "nacelle_nozzle_flap_64mm",
+     "nacelles/nozzles/nacelle_nozzle_flap_64mm.stl", 1.0, 15, False, ""),
+    ("E", "nacelle_nozzle_flap_seal_64mm",
+     "nacelles/nozzles/nacelle_nozzle_flap_seal_64mm.stl", 1.0, 15, False, ""),
+    ("E", "nacelle_nozzle_ring_64mm_port",
+     "nacelles/nozzles/nacelle_nozzle_ring_64mm_port.stl", 1.0, 15, False, ""),
+    ("E", "nacelle_nozzle_ring_64mm_stbd",
+     "nacelles/nozzles/nacelle_nozzle_ring_64mm_stbd.stl", 1.0, 15, False, ""),
+    ("E", "nacelle_nozzle_throat_64mm_port",
+     "nacelles/nozzles/nacelle_nozzle_throat_64mm_port.stl", 1.0, 15, False, ""),
+    ("E", "nacelle_nozzle_throat_64mm_stbd",
+     "nacelles/nozzles/nacelle_nozzle_throat_64mm_stbd.stl", 1.0, 15, False, ""),
+    # Batch G -- cartridge and trunnion
+    ("G", "edf_motor_mount_64mm_stage2_port",
+     "nacelles/edf_motor_mount_64mm_stage2_port.stl", 1.0, 25, False, ""),
+    ("G", "edf_motor_mount_64mm_stage2_stbd",
+     "nacelles/edf_motor_mount_64mm_stage2_stbd.stl", 1.0, 25, False, ""),
+    ("G", "nacelle_trunnion_64mm_port",
+     "nacelles/nacelle_trunnion_64mm_port.stl", 1.0, 25, False, ""),
+    ("G", "nacelle_trunnion_64mm_stbd",
+     "nacelles/nacelle_trunnion_64mm_stbd.stl", 1.0, 25, False, ""),
+    # Batch I -- nacelle pods.  64 mm pod extents are 95 x 194 x 99 mm, so 150/194 = 0.77; 0.75
+    # leaves ~3 % margin.  Bed-fit arithmetic only: NOT verified by a slice (the 50 mm pods were
+    # 0.89).  ESC bay covers for the 64 mm pod are not published yet, so no batch H.
+    ("I", "nacelle_port_64mm",
+     "nacelles/nacelle_port_64mm.stl", 0.75, 15, True, "HEAVY"),
+    ("I", "nacelle_stbd_64mm",
+     "nacelles/nacelle_stbd_64mm.stl", 0.75, 15, True, "HEAVY"),
     # Batch J
     ("J", "wing_port_s1223_revo",
      "wings/wing_port_s1223_revo.stl", 1.0, 15, False, ""),
