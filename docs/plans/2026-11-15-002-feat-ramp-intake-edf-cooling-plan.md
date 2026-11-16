@@ -24,6 +24,7 @@ execution: code
 
 - **Objective.** Make the tail EDF the fuselage's air mover from the first build. It draws all its air through the fuselage interior, by way of a louvred cargo ramp and the bow inlets. Move mass forward into the freed cargo bay so that the trim closes.
 - **Product authority.** The owner (Stab-Rabbit-coding). His decisions of 2026-11-15, recorded under Key Decisions, override anything else here.
+- **Standing.** Adopted by the owner on 2026-11-16 as the path forward. The design shift is recorded in `airframe/fuselage-mid/WBS.md` §1.1.1.4.0 and in root `AGENTS.md` §1.
 - **Supersedes.** The fan stage, fan adapter, intake covers, rear-bell intakes and baffled insert of `docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md`.
 - **Authority order for an executor.** Product Contract requirements, then Key Technical Decisions, then unit text. Root `AGENTS.md` and `airframe/AGENTS.md` bind all of it.
 - **Execution profile.** Records, analysis and layout tools with tests, hull geometry, separate parts, a CFD case, an analysis document and specification updates. No flight hardware is built, and no flight-control firmware is written.
@@ -385,24 +386,26 @@ flowchart TB
 
 ## Implementation Units
 
-| U-ID | Title | Key files | Depends on |
-| --- | --- | --- | --- |
-| U1 | Design-shift record and reference repair | `airframe/fuselage-mid/WBS.md`, `deferred/WBS.md`, `AGENTS.md`, `REFERENCES.md` | — |
-| U2 | Thermal model refresh | `tools/node_thermal_forced_air.py` | U1, stern thermal check |
-| U3 | Tail EDF flow tool | `tools/tail_edf_flow.py` | U1 |
-| U4 | Hover trim and RCS tool | `tools/hover_trim_rcs.py` | U3 |
-| U5 | Rear-cone layout | `tools/rear_cone_layout_fit.py` | U1 |
-| U6 | Cargo duct layout | `tools/cargo_duct_layout_fit.py` | U1 |
-| U7 | Head layout: GNSS, ballast pocket, bow inlets | `tools/head_layout_fit.py` | U1 |
-| U8 | G1 brief and figures | `docs/FUSELAGE_COOLING_LAYOUT_BRIEF.md`, `tools/cooling_g1_figures.py` | U2 to U7 |
-| U9 | Aft hull provisions | `tools/aft_edf_provisions.py`, `tools/merge_middle_rear_shell.py` | U8 (G1) |
-| U10 | Forward hull provisions | `tools/fwd_duct_provisions.py`, `airframe/blender-scripts/merge_cargo_interior.py` | U8 (G1) |
-| U11 | Separate parts | `airframe/openscad/fuselage/tail-edf/` | U8 (G1) |
-| U12 | CFD case | `tools/cfd_cooling_case.py` | U9, U10, U11 |
-| U13 | Coupled analysis | `docs/FUSELAGE_COOLING_ANALYSIS.md` | U12, U2 |
-| U14 | Mass, CG, bench balance and gate G2 | `tools/auw_ledger.py`, `current-specification/bom_revU.json` | U9, U10, U11 |
-| U15 | Seal and aperture gate | `tools/assembly_integrity_check.py` | U9, U10 |
-| U16 | Specifications, build guide and closeout | `docs/CARGO_WINCH_SPECIFICATION.md`, `docs/PHASED_BUILD_GUIDE.md` | U13, U14, U15 |
+| U-ID | Title | Key files | Depends on | Sprint | Model |
+| --- | --- | --- | --- | --- | --- |
+| U1 | Design-shift record and reference repair | `airframe/fuselage-mid/WBS.md`, `deferred/WBS.md`, `AGENTS.md`, `REFERENCES.md` | — | S42 | STD |
+| U2 | Thermal model refresh | `tools/node_thermal_forced_air.py` | U1, stern thermal check | S46 | STD |
+| U3 | Tail EDF flow tool | `tools/tail_edf_flow.py` | U1 | S43 | ADV |
+| U4 | Hover trim and RCS tool | `tools/hover_trim_rcs.py` | U3 | S43 | ADV |
+| U5 | Rear-cone layout | `tools/rear_cone_layout_fit.py` | U1 | S44 | ADV |
+| U6 | Cargo duct layout | `tools/cargo_duct_layout_fit.py` | U1 | S44 | STD |
+| U7 | Head layout: GNSS, ballast pocket, bow inlets | `tools/head_layout_fit.py` | U1 | S44 | STD |
+| U8 | G1 brief and figures | `docs/FUSELAGE_COOLING_LAYOUT_BRIEF.md`, `tools/cooling_g1_figures.py` | U2 to U7 | S45 | ADV |
+| U9 | Aft hull provisions | `tools/aft_edf_provisions.py`, `tools/merge_middle_rear_shell.py` | U8 (G1) | S47 | STD |
+| U10 | Forward hull provisions | `tools/fwd_duct_provisions.py`, `airframe/blender-scripts/merge_cargo_interior.py` | U8 (G1) | S48 | STD |
+| U11 | Separate parts | `airframe/openscad/fuselage/tail-edf/` | U8 (G1) | S49 | STD |
+| U12 | CFD case | `tools/cfd_cooling_case.py` | U9, U10, U11 | S50 | ADV |
+| U13 | Coupled analysis | `docs/FUSELAGE_COOLING_ANALYSIS.md` | U12, U2 | S51 | ADV |
+| U14 | Mass, CG, bench balance and gate G2 | `tools/auw_ledger.py`, `current-specification/bom_revU.json` | U9, U10, U11 | S52 | STD |
+| U15 | Seal and aperture gate | `tools/assembly_integrity_check.py` | U9, U10 | S52 | STD |
+| U16 | Specifications, build guide and closeout | `docs/CARGO_WINCH_SPECIFICATION.md`, `docs/PHASED_BUILD_GUIDE.md` | U13, U14, U15 | S53 | STD |
+
+**Sprints and model tier.** The units run as sprints S42 to S53 of `docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md`, Theme C. Each sprint fits one session under the 5-hour token cap and ends with that plan's close-out ritual. **STD** means a standard model can do the unit from its text and patterns. **ADV** means the unit needs an advanced model: it derives or validates a physics model, diagnoses CFD, makes a cross-domain trade, or writes an owner brief. Any unit escalates to ADV when one of its gates fails twice. The WBS items are TEDF-01 to TEDF-16 in `airframe/fuselage-mid/WBS.md` §1.1.1.4.0, one per unit.
 
 ### U1. Design-shift record and reference repair
 

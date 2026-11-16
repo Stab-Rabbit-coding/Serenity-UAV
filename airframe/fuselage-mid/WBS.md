@@ -1253,10 +1253,71 @@ Plan `docs/plans/2026-11-01-001-feat-bay-a-forward-adoption-plan.md`; spec
 - [ ] **HULL-FUSE-02** — Assess fusing the other bonded mounts into the one-piece print
     (gear bays, A1b housings, chin node shelf, Bay A drawer + hatch flange, twin tray
     rails); keep removable / different-material parts separate.
-- [ ] **COOL-01** — Rear-fan cooling stream (Delta ASB02505SHA-AY6B): finish the
-    OpenFOAM case (`tools/cfd_internal_air_domain.py` voxel domain + fanPressure),
-    feed velocities to `tools/node_thermal_forced_air.py`, draw bow inlets + Phase 11
-    tail exhaust on QMx/Henning lines, add fan/duct/brass mass to the CG roll-up.
+- [x] **COOL-01** — Rear-fan cooling stream. **Superseded 2026-11-15** by the tail EDF
+    cooling design shift below (TEDF-01..16). The Delta fan stage is not built.
+
+###### 1.1.1.4.0 *Tail EDF cooling, ramp intake and RCS — design shift (owner, 2026-11-15)*
+
+**Design-shift record (`AGENTS.md` §10).** Adopted by the owner 2026-11-16 as the path
+forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
+
+- **What changes.** The tail EDF flies from the first build and is the fuselage's only air
+  mover. All its air passes through the interior: most through a louvred, screened forward
+  cargo ramp, the rest through the bow inlets. The cargo doors are fused shut, with one
+  belly service hatch; there is no internal cargo. The winch stays on the cargo floor, with
+  its fairlead under the tilt pivot. Four RCS jets are populated. The tail EDF is the
+  QX-Motor 64 mm nacelle unit in a pusher shroud. The Flight Engineer box, the tail EDF
+  speed controller and the RCS servos move forward. The GNSS antenna moves under the
+  bridge window, and the bow gains an adjustable ballast pocket.
+- **Why.** A small tail fan moves enough bulk air but too little local air, and three
+  nodes fail. EDF air through the interior cools every node. In hover the tail EDF is
+  also the only pitch trim and control, so it has to fly from the first build.
+- **Rejected.** The Delta fan stage with cut-out covers; intakes in the rear bell with a
+  baffled insert; the XFly X5 50 mm and a custom 55 mm rotor; actuated or bolted cargo
+  doors; a long drive shaft from a motor in the cargo bay. Reasons are in the plan's Key
+  Decisions.
+- **Affected.** Both hull halves; the cargo bay layout; the winch, door gateway and RCS
+  gateway specifications; the stern stack (`avionics/WBS.md` §1.11); a fifth
+  Open-Secure-ESC controller; root `AGENTS.md` §1; `deferred/` Phase 11 items.
+- **Model tier.** Each item carries **[STD]** (a standard model can do it from the plan)
+  or **[ADV]** (needs an advanced model: physics derivation, CFD diagnosis, cross-domain
+  trade, or an owner brief). Any item escalates to ADV when a gate fails twice.
+
+- [ ] **TEDF-01** — [STD] Record and reference repair: `deferred/` Phase 11 items into the
+    first build, reference faults, `requirements-dev.txt`. Plan U1. (S42)
+- [ ] **TEDF-02** — [STD] Thermal model refresh: closed-cavity fix, ramp and bow branches,
+    EDF flow input. Needs NFP-THERM. Plan U2. (S46)
+- [ ] **TEDF-03** — [ADV] Tail EDF flow tool: installed thrust, flow split, stall margin.
+    Plan U3. (S43)
+- [ ] **TEDF-04** — [ADV] Hover trim and RCS tool: trim use, jet sizing, CG window.
+    Plan U4. (S43)
+- [ ] **TEDF-05** — [ADV] Rear-cone layout: QX pusher unit, RCS at Y 634, trapezoidal
+    exhausts on the canon plate pattern. Plan U5. (S44)
+- [ ] **TEDF-06** — [STD] Cargo duct layout: Flight Engineer box forward, hatch, fairlead
+    under the pivot, screen, flow guides, line guard. Plan U6. (S44)
+- [ ] **TEDF-07** — [STD] Head layout: GNSS patch under the bridge window, ballast pocket,
+    bow inlets. Plan U7. (S44)
+- [ ] **TEDF-08** — [ADV] Gate G1 Owner Decision Brief and figures (OD-22). Plan U8. (S45)
+- [ ] **TEDF-09** — [STD] Aft hull provisions: ring, fused tube, nozzle, RCS exhausts.
+    Needs OD-22. Plan U9. (S47)
+- [ ] **TEDF-10** — [STD] Forward hull provisions: ramp louvres, fused doors, hatch,
+    fairlead, inlets, window seat, ballast pocket. Needs OD-22 and Blender. Plan U10. (S48)
+- [ ] **TEDF-11** — [STD] Separate parts: pusher shroud, valves, screen frame, flow
+    guides, hatch cover, window cover. Needs OD-22. Plan U11. (S49)
+- [ ] **TEDF-12** — [ADV] CFD case, still air and cruise. Plan U12. (S50)
+- [ ] **TEDF-13** — [ADV] Coupled analysis: cooling, thrust, trim, endurance, fault
+    cases. Plan U13. (S51)
+- [ ] **TEDF-14** — [STD] Mass, CG, bench balance allowance and gate G2 (OD-23).
+    Plan U14. (S52)
+- [ ] **TEDF-15** — [STD] Seal and aperture gate. Plan U15. (S52)
+- [ ] **TEDF-16** — [STD] Specifications, build guide and closeout. Plan U16. (S53)
+- [ ] **OSESC-TAIL-1** — [STD] Fifth Open-Secure-ESC controller (OSESC-NAC) for the tail
+    EDF: forward mount in the cargo duct, lead length and its EMI check, and bench
+    qualification at about 80 % continuous duty for hover. Cross-repo:
+    `Stab-Rabbit-coding/Open-Secure-ESC`. (S49, bench in P3)
+- [ ] **OSESC-TAIL-2** — [ADV] Controller behaviour for a flight-critical tail EDF:
+    throttle floor while the avionics are powered, and fault reporting to the flight
+    controller. Specification only here; firmware in the Open-Secure-ESC repo. (S53)
 
 ###### 1.1.1.4.1 *Anti-Collision Tail Light*
 

@@ -1174,6 +1174,14 @@ customer. Plan and sprints S34–S41:
 - [ ] **NFP-LEDGER** — Enter the stern stack in the AUW ledger and BOM (S41).
 - [ ] **NFP-SADDLE** — Couple the Simon saddle to the new outline in CI (S41).
 - [ ] **NFP-POLICY** — Update root `AGENTS.md` §1 and §9 to seven nodes (S41).
+- [ ] **NFP-TEDF-1** — [STD] Tail EDF cooling design shift (2026-11-15, `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`): the
+    stern stack sits in the tail EDF's intake stream. NFP-THERM shall use that airflow, and
+    its result gates TEDF-02 (S46). Do it in S40.
+- [ ] **NFP-TEDF-2** — [ADV] Confirm which node commands the tail EDF throttle and the four
+    RCS valves (GW-RCS), now flight-critical in hover, and whether the PACE assignment of
+    OD-19 still holds. Brought to the owner in OD-22 (S45).
+- [ ] **NFP-TEDF-3** — [STD] The cooling-fan drive output on the stern board has no fan to
+    drive. Remove it or repurpose it, and record which (S36 or S41).
 - [ ] **NFP-FW-IF** — Hand Theme F the host-link and device-tree interface (S41).
 
 ## §1.8 — Names

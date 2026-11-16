@@ -29,11 +29,14 @@ component is a descriptive measurement and shall not be recorded in this file. E
 shall come from the manufacturer's datasheet or from a user-verified measurement, and shall carry
 a citation to that source. Take values for calculations from `current-specification/bom_revU.json`
 and `airframe/README.md`; flag any value that lacks a datasheet or user-verified source in the
-owning `WBS.md` instead of propagating it. Each nacelle carries two EDFs in series. The Phase 11
-fuselage EDF (optional, deferred) feeds the **fixed** canonical elliptical tail nozzle — **never**
-an iris — plus RCS bleed-air thrusters for pitch/yaw; its remainder is longitudinal forward thrust
-only and shall not be counted toward hover lift. Details: `deferred/AGENTS.md`,
-`deferred/aft-edf/README.md`.
+owning `WBS.md` instead of propagating it. Each nacelle carries two EDFs in series. The
+fuselage (tail) EDF is part of the first build (owner, 2026-11-15; it was optional and deferred to
+Phase 11). It draws all its air through the fuselage interior to cool the avionics, and feeds the
+**fixed** canonical elliptical tail nozzle — **never** an iris — plus RCS bleed-air thrusters for
+pitch/yaw. In hover it is the only pitch trim and control, so it is flight-critical there. Its
+remainder is longitudinal forward thrust only and shall not be counted toward hover lift. Details:
+`airframe/fuselage-mid/WBS.md` §1.1.1.4.0 and
+`docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
 
 **Avionics architecture** (8-node, PACE failover — requirements only; for implementation and PCB
 status see `avionics/README.md` and each board's own `.md` under `avionics/kicad/<board>/`, which

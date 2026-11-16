@@ -16,6 +16,8 @@ execution: code
 **Target repo:** `Serenity-UAV`. All paths are relative to that repo.
 **Source issue:** GitHub issue #290, "fuselage cooling". It is the design basis for WBS item COOL-01.
 
+> **SUPERSEDED 2026-11-15.** The owner replaced the fan stage with the tail EDF cooling design. This document is kept as the record of the measured baseline. Do not execute its units. The plan in force is `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
+
 > **WARNING — engineering review required.** Every analysis result this plan produces shall be reviewed and accepted by a qualified engineer before it is applied to flight hardware. A passing margin is an input to that review. It is not a clearance to build.
 
 ---

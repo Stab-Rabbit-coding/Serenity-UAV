@@ -4,6 +4,12 @@
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Status:** DEFERRED — not archived; build pending after all other systems are proven.
 
+> **Status note, 2026-11-16 (design shift).** The tail EDF, its speed controller and the RCS are
+> no longer deferred: they are part of the first build (owner, 2026-11-15). The tail EDF is the
+> QX-Motor 64 mm nacelle unit, not a 55 mm unit. The Phase 11 items below are kept as written until
+> WBS item TEDF-01 rewrites them. Authority: `airframe/fuselage-mid/WBS.md` §1.1.1.4.0 and
+> `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
+
 > **STALE DESIGN — requires regeneration before Phase 11.** The files in this folder describe a
 > superseded 120 mm EDF + 8-petal iris nozzle design. The current canonical fuselage EDF
 > (per AGENTS.md) is a **55 mm 6S unit** feeding a **fixed** elliptical exit nozzle
