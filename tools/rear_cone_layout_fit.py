@@ -109,7 +109,7 @@ RCS_PATTERNS = {
 RCS_RECOMMENDED = "D upper 45, lower 30 below horizontal"
 RCS_Y_TOL = 8.0  # mm, the recommended pattern shall stay clear over this fore-and-aft band
 
-_MESH = {}
+_MESH: dict = {}
 
 
 def load_aft_hull():

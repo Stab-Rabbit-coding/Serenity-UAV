@@ -120,8 +120,10 @@ _HEAD = hlf.layout()[0]
 _BAY_A = [_HEAD[k]["solid"].centroid for k in sorted(_HEAD) if k.startswith("Bay A node")]
 if len(_BAY_A) != 2:
     raise RuntimeError(f"expected the CN1 and FC1 Bay A node envelopes, found {len(_BAY_A)}")
-_BAY_A_C = tuple(float(v) for v in np.mean(_BAY_A, axis=0))
-_OBS_NOSE_C = tuple(float(v) for v in hlf.observer_board().centroid)
+_BAY_A_M = np.mean(_BAY_A, axis=0)
+_BAY_A_C = (float(_BAY_A_M[0]), float(_BAY_A_M[1]), float(_BAY_A_M[2]))
+_OBS_M = hlf.observer_board().centroid
+_OBS_NOSE_C = (float(_OBS_M[0]), float(_OBS_M[1]), float(_OBS_M[2]))
 NODE_ST = {
     "A": (_BAY_A_C, "head_layout_fit Bay A node CN1 + FC1 envelopes (mean centroid)"),
     "chin": ((X_CL, 0.5 * (clf.N_CHIN_Y0 + clf.N_CHIN_Y1),
