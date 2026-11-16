@@ -304,7 +304,7 @@ mesh, fully turbulent, 0 deg, slip-wall limits as above.
 ## Owner decisions on OD-17 (2026-11-11)
 
 - **Power crossing: DECIDED 2026-11-11. Option D, tilt joint moved 0.91 in (23 mm) outboard**
-  (`P64_JOINT_SHIFT` in `nacelle_64_scale.scad`). Wires routed unbound and qualified by test (OD-18
+  (`P64_JOINT_SHIFT` in `nacelle_64_scale.scad`). Wires routed unbound and qualified by test (OD-24
   item 3, WBS NAC-64-WIRE-QUAL).
 - **Junction: DECIDED. Rounded end plate with fillets** (0.24 in (6 mm) convex rounding, short wall, 0.24 in
   (6 mm) concave fillet), not the 1.50 in glove. Basis: the junction CFD above (14 % less drag).
@@ -356,19 +356,19 @@ fairing and rounded end plate are a new published part, `PRINT-WING-TIP-FAIRING`
 | Check | Finding |
 |---|---|
 | **Statics and dynamics** | Tilting rotates the pod about the spanwise axis, so the fairing gap cannot close. The fairing is wing-fixed and carries only its own air load over a 1.39 in (35 mm) span. The wires are intended to carry the tilt as twist inside the spar bore, so that no conductor flexes in bending; twist length, torque and fatigue are unverified (NAC-64-WIRE-TWIST). Spar-root moment grows 6.4 lbf·in (0.72 N·m) (brief, option D); the spar allowable is still unverified (SPAR-20-ALLOW). |
-| **Function** | Fits geometrically; qualification pending NAC-64-WIRE-QUAL (the bend basis is a declared centreline interpretation, OD-18 item 3). Four wires run from the spar mouth to their own studs, each with a tightest point of at least 0.650 in (16.50 mm), 3 × wire OD, and no two wires interpenetrate. The first drawn paths had 0.08–0.14 in (2.1–3.6 mm) kinks; the check caught them, and the aft pair's bend plane is now tilted 12° so it fans out inside the bend. Wire to duct wall at least 0.088 in (2.24 mm). The 4-wire bundle (0.32 in (8.14 mm) radius) clears the spar mouth and the bend chamber. |
-| **Structural integrity** | Bay inserts keep 0.091 in (2.31 mm) minimum wall to the flow bore (minimum 0.079 in (2.0 mm)). The fairing's outer half-thickness at the tilt axis is bore radius + 0.079 in (2.0 mm) for the same minimum wall, so it is 0.08 in (2 mm) thicker per side than the CFD body (OD17-FAIR-WALL, below). The fairing is a hollow 0.059 in (1.5 mm) shell (first build was 0.079 in (2.0 mm); 1.5 mm decided under OD-19 A, OD-18 item 4) with a 2 lb/ft³ foam core (owner 2026-11-11, OD17-FAIR-HOLLOW); two Ø0.16 in (4 mm) fill/vent holes in the outboard cap are also the SLS powder-escape holes. |
+| **Function** | Fits geometrically; qualification pending NAC-64-WIRE-QUAL (the bend basis is a declared centreline interpretation, OD-24 item 3). Four wires run from the spar mouth to their own studs, each with a tightest point of at least 0.650 in (16.50 mm), 3 × wire OD, and no two wires interpenetrate. The first drawn paths had 0.08–0.14 in (2.1–3.6 mm) kinks; the check caught them, and the aft pair's bend plane is now tilted 12° so it fans out inside the bend. Wire to duct wall at least 0.088 in (2.24 mm). The 4-wire bundle (0.32 in (8.14 mm) radius) clears the spar mouth and the bend chamber. |
+| **Structural integrity** | Bay inserts keep 0.091 in (2.31 mm) minimum wall to the flow bore (minimum 0.079 in (2.0 mm)). The fairing's outer half-thickness at the tilt axis is bore radius + 0.079 in (2.0 mm) for the same minimum wall, so it is 0.08 in (2 mm) thicker per side than the CFD body (OD17-FAIR-WALL, below). The fairing is a hollow 0.059 in (1.5 mm) shell (first build was 0.079 in (2.0 mm); 1.5 mm decided under OD-25 A, OD-24 item 4) with a 2 lb/ft³ foam core (owner 2026-11-11, OD17-FAIR-HOLLOW); two Ø0.16 in (4 mm) fill/vent holes in the outboard cap are also the SLS powder-escape holes. |
 | **Mechanism and component interactions** | Static overlaps at tilt 0: only the known pod/cartridge rib contact, 0.0007 in³ (12 mm³). Sweep −5…+135°: trunnion ring gear against pinion only (tooth phase, by design); pod material in the pinion sweep 0 in³ (0 mm³); wires and fairing against every wing-fixed part 0 in³ (0 mm³). Nearest gaps: fairing to pod 0.039 in (0.99 mm), to pinion 0.031 in (0.78 mm), to trunnion 0.039 in (1.00 mm). |
 | **Weight and balance** | Fairing 0.046 lbm (20.7 g) PA CF shell at 1.5 mm skin [REF-MAT-015] + 0.0008 lbm (0.4 g) foam per side (first 2.0 mm build 0.051 lbm (23.2 g); 0.011 lbm (5.0 g) saved per aircraft) (0.080 lbm (36.4 g) solid before the owner's 2026-11-11 hollow-and-foam direction). Joint extension per nacelle: pod +0.046 lbm (+20.8 g) measured on the renders (369,451 → 388,178 mm³), spar +0.009 lbm (+3.9 g) ESTIMATE. Ledger at the Sprint 2 build (2.0 mm skin): hover AUW 6,403 g (14.12 lbm) → 6,500 g (14.33 lbm), T/W 1.48 → 1.46. Re-run 2026-11-16 at `main` (1.5 mm skin, plus the later Bay A / Observer changes, BAYA-FWD-08): hover_4000 AUW 6,554 g (14.45 lbm), T/W 1.45; heaviest_4000_payload 6,781 g (14.95 lbm), T/W 1.40 (`current-specification/auw_ledger.json`). The pod roll-up still uses the pre-shift published pod until NAC-64-REBAKE (S3); the ledger carries the joint extension as its own row until then. Wing-fixed fairing: the nacelle pivot is unaffected. |
-| **Canonical shape** | The nacelle sits 0.91 in (23 mm) further from the wing tip (accepted 2026-11-11). Wing planform unchanged (22.8° taper kept). The fairing outer shape is **HELD** pending OD17-FAIR-BORE (OD-18 item 2; the as-built CFD at the end of this brief); a combined run on the chosen bore treatment follows that decision. Owner judgement against REF-CAD-003 stands. |
+| **Canonical shape** | The nacelle sits 0.91 in (23 mm) further from the wing tip (accepted 2026-11-11). Wing planform unchanged (22.8° taper kept). The fairing outer shape is **HELD** pending OD17-FAIR-BORE (OD-24 item 2; the as-built CFD at the end of this brief); a combined run on the chosen bore treatment follows that decision. Owner judgement against REF-CAD-003 stands. |
 
 **Harness lengths (pod side, centreline, spar mouth to stud lug).** Forward pair 2.43 in (61.7 mm); aft
 pair 2.78 in (70.7 mm). The wing-side run (spar bore to the wing's connection) is not drawn in this
 sprint; cut length = pod-side run + wing-side run + service loop.
 
-### OD-18 — owner decisions (decided 2026-11-11)
+### OD-24 — owner decisions (decided 2026-11-11; numbered OD-18 until 2026-11-16, renumbered to clear a collision with the NoNFO OD-18)
 
-**Decided by the owner, 2026-11-11:** item 1 — accept the `wires` check as the WA-R10 exit; item 2 — **hold** the fairing outer shape until a CFD drag re-run on the thickened shape; item 3 — wires routed **unbound**, centreline basis taken as an interpretation, qualified by the torsion-and-bend test (WBS NAC-64-WIRE-QUAL), channel enlarged only if the test fails; item 4 — skin **1.5 mm** under OD-19 option A (adopted into `AGENTS.md` §7). The original briefs follow.
+**Decided by the owner, 2026-11-11:** item 1 — accept the `wires` check as the WA-R10 exit; item 2 — **hold** the fairing outer shape until a CFD drag re-run on the thickened shape; item 3 — wires routed **unbound**, centreline basis taken as an interpretation, qualified by the torsion-and-bend test (WBS NAC-64-WIRE-QUAL), channel enlarged only if the test fails; item 4 — skin **1.5 mm** under OD-25 option A (adopted into `AGENTS.md` §7). The original briefs follow.
 
 1. **Cable exit criterion.** The plan wrote it as "`--stage cable` finds a route at 0.32 in (8.14 mm)
    radius", i.e. one 0.64 in (16.3 mm) corridor for the whole bundle from the spar to the bay. Option D
@@ -404,15 +404,15 @@ sprint; cut length = pod-side run + wing-side run + service loop.
    I built it at 0.079 in (2.0 mm), the `AGENTS.md` §7 exterior-shell skin. *Corrected 2026-11-11:* the
    earlier 0.039 in (1.0 mm) "SLS process minimum" mis-cited REF-MFG-001 p. 15 (a tank wall). The interim
    floor for PA CF is **0.059 in (1.5 mm)** (`docs/SLS_MIN_WALL_THICKNESS.md`, foam-backed
-   non-load-bearing row), which needs OD-19 or a §7 waiver. Rebuild with
+   non-load-bearing row), which needs OD-25 or a §7 waiver. Rebuild with
    `tools/nacelle64_wing_fairing.py --skin 1.5` for the mesh mass. Neither skin is load-checked; the
-   part carries only its own air load. **Decision: 2.0 mm (as built) or 1.5 mm under OD-19.**
-   **Decided 2026-11-11: 1.5 mm under OD-19 option A.** Rebuilt: 0.046 lbm (20.7 g) shell + 0.5 g foam
+   part carries only its own air load. **Decision: 2.0 mm (as built) or 1.5 mm under OD-25.**
+   **Decided 2026-11-11: 1.5 mm under OD-25 option A.** Rebuilt: 0.046 lbm (20.7 g) shell + 0.5 g foam
    per side (was 23.2 g), 0.011 lbm (5.0 g) saved per aircraft. Ray-cast check: shell body median
    1.50 mm; readings below 1.4 mm are in the bonded fillet toe (within 6 mm of the wing) or within
    2 mm of a sharp edge (hole lips, bore edge, trailing-edge cut), i.e. ray artefacts.
 
-## As-built fairing CFD (OD17-FAIR-CFD, owner OD-18 item 2; run 2026-11-12)
+## As-built fairing CFD (OD17-FAIR-CFD, owner OD-24 item 2; run 2026-11-12)
 
 **Question.** Does the fairing as thickened for printing (2.0 mm wall at the tilt axis, 2.0 mm trailing-edge
 cut, 94 % fillet toe) cost drag against the zero-wall body of the junction CFD above?

@@ -293,7 +293,7 @@ language states what is required regardless of actor.
 - Exterior shell: hollow, watertight, no voids; fill with 2 lb/ft³ (32 kg/m³) low-density
   closed-cell foam; inter-section mating faces stay open for build access and
   inter-compartment cable routing.
-- **SLS wall thickness (owner OD-19 option A, 2026-11-11):** size SLS PA CF walls from the
+- **SLS wall thickness (owner OD-25 (was OD-19) option A, 2026-11-11):** size SLS PA CF walls from the
   table in `docs/SLS_MIN_WALL_THICKNESS.md` by load category (load-bearing or not) and backing
   (foam-backed, free-standing or lattice-supported). Use its **"XY fixed" column only when the
   drawing states the print orientation**; otherwise use "any orientation". Where a part's

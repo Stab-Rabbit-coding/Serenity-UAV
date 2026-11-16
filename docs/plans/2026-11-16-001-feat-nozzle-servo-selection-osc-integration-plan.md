@@ -11,6 +11,10 @@ depth: deep
 
 # Nozzle Servo Selection and Secure Servo Integration - Plan
 
+**Roadmap index (2026-11-16, owner):** this plan's Sprints 0–6 (U1–U7) are Rev U sprints **S5.0–S5.6**
+in `docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md` §6, ahead of S5's geometry units.
+KTD4 is the proposed answer to that plan's OD-8 (nozzle-servo gateway variant).
+
 **Companion plan:**
 `open-servo-core-secure/docs/plans/2026-11-16-001-feat-parametric-secure-microservo-board-plan.md`
 (the board family). Its units are named `BD-U<n>` here. Paths are relative to this repository
