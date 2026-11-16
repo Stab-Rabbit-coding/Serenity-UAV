@@ -16654,6 +16654,13 @@
       ],
       "archived": false
     },
+    "tools/tests/test_auw_ledger_cooling.py": {
+      "description": "Tests for the PROVISIONAL cooling-airflow block of tools/auw_ledger.py.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/tests/test_bay_a_fwd_mounts.py": {
       "description": "test_bay_a_fwd_mounts.py -- Bay A forward mounts and hatch (plan",
       "tags": [
@@ -20989,6 +20996,7 @@
       "tools/sync_operators_manual.py",
       "tools/tail_strike_requirement.py",
       "tools/tests/test_allowables.py",
+      "tools/tests/test_auw_ledger_cooling.py",
       "tools/tests/test_bay_a_fwd_mounts.py",
       "tools/tests/test_bay_a_fwd_routes.py",
       "tools/tests/test_bay_a_thermal_budget.py",

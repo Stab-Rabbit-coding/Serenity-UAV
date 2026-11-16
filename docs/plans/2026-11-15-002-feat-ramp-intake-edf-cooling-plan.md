@@ -346,6 +346,7 @@ flowchart TB
   U10 --> U12
   U11 --> U12
   U12 --> U13
+  U2 --> U13
   U9 --> U14
   U10 --> U14
   U11 --> U14
@@ -626,7 +627,7 @@ flowchart TB
 | Canonical shape | Ramp louvres, fused doors, hatch, RCS exhausts on the plate pattern, nozzle, bow inlets and the bridge window cover against the references |
 | Flow sizing | Installed thrust, flow split, stall margin, jet sizing, each with its Reynolds and Mach number |
 | Electrical | Tail EDF current and its speed controller rating; the power run from the forward Flight Engineer station (from U6); RCS servo supply |
-| Harness and mounting fit | Motor leads, RCS pushrods, GNSS coax, bend radii and connector clearance |
+| Harness and mounting fit | Motor leads, RCS control cables, GNSS coax, bend radii and connector clearance |
 | Thermal load | Node temperatures with EDF flow in still air, at cruise and in the restrained ground case; the minimum cooling throttle and the governing node; flow guide positions; the stern load as a bracketed range |
 
 - **G1 decisions:** the aft CG window; the RCS exhaust outlines; the RCS valve concept (sliding shutter, hinged plate flap, or servos aft); the drive arrangement; the louvre form among low-loss options and the minimum R27 pressure margin; the GNSS antenna placement; the response to a tail EDF, RCS or intake-blockage fault in hover and in forward flight, and the GW-RCS failsafe state; whether `hover_twin_2200` becomes the headline ledger configuration (if yes, the build guide, the EMI WBS and the Phase 5 hover-endurance criterion move to the twin cells, with the tail EDF load, in U16); what the Cargo Observer watches. The hover endurance cost is shown as an estimate.

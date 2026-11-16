@@ -26,7 +26,10 @@
 > speed controller and the four RCS jets are part of the first build and flight-critical in hover,
 > so a nacelle-only first hover is no longer the plan. TEDF-16 brings their installation into
 > Phase 5. The Galaxy X5 nacelle units and the ~2,768 g AUW below are pre-shift figures; the
-> ledger hover mass is 15.08 lbm (6,840 g) with twin 2200 mAh cells (`current-specification/auw_ledger.json`).
+> planning estimate
+> for the hover mass is 15.08 lbm (6,840 g) with twin 2200 mAh cells and the tail hardware added (plan 002); the
+> ledger baseline without the tail hardware is 14.49 lbm (6,572 g), `hover_twin_2200` in
+> `current-specification/auw_ledger.json`, and gains the tail hardware under TEDF-14.
 
 > **Pre-shift record — Aft EDF not installed** (Phase 11). The 4 nacelle XFly Galaxy X5 EDFs (1240g each, 90%
 > additive via stator = 2232g/nacelle × 2 = 4464g total) deliver T/W ≈ **1.61** at the
