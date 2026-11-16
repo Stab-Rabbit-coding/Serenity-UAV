@@ -72,3 +72,6 @@ airframe/stls/fuselage/head_cargo_shell24_2mm_merged.stl
 # Aft hull (104 MB) is within 1 % of the limit too; committed as .stl.tar.gz (owner 2026-11-02).
 # Regenerate: tools/merge_middle_rear_shell.py, or unpack the tarball.
 airframe/stls/fuselage/middle_rear_shell24_2mm_merged.stl
+
+# Compound Engineering machine-local config (never commit)
+.compound-engineering/*.local.yaml
