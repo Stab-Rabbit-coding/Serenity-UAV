@@ -85,7 +85,7 @@
 → full detail: `WBS.md` §5.5
 
 - [ ] OD17-FAIR-WALL — Fairing thickened 0.08 in (2 mm) per side for the…
-- [ ] OD17-FAIR-CFD — Owner OD-18 item 2 (2026-11-11)
+- [ ] OD17-FAIR-BORE — Owner: the open bore beyond the collar (finding…
 - [ ] OD17-TOOLS-01 — One fairing module
 - [ ] WBS-BURNDOWN-01 — Count closures by identity, not by count
 

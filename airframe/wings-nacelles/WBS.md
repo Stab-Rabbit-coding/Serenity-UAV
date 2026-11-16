@@ -2828,7 +2828,7 @@ and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
 - [ ] **OD17-FAIR-WALL — Fairing thickened 0.08 in (2 mm) per side** for
     the minimum wall (CFD body had zero wall at the collar bore); drag not re-run (OD-18 item 2).
     **Owner 2026-11-11: CFD re-run first** — see OD17-FAIR-CFD.
-- [ ] **OD17-FAIR-CFD — Owner OD-18 item 2 (2026-11-11): re-run the junction drag CFD on the as-built
+- [x] **OD17-FAIR-CFD — DONE 2026-11-12** (results in `docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md`, "As-built fairing CFD": the as-built assembly is 0.181 lbf (0.806 N) against 0.147 lbf (0.652 N) for the idealised end plate, +23 %, mainly from the open 2.20 in (56 mm) bore beyond the collar; see OD17-FAIR-BORE). Original item: Owner OD-18 item 2 (2026-11-11): re-run the junction drag CFD on the as-built
     fairing** (outer half-thickness bore + 2.0 mm at the tilt axis, trailing edge cut at 2.0 mm) and
     compare with the zero-wall body that gave 14 % less drag than the 1.50 in glove
     (`od17_junction_cfd/`). Hold release of the fairing outer shape until done. If the drag penalty
@@ -2853,6 +2853,14 @@ and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
     1.0 mm: shell 0.039 lbm (17.5 g) + foam 0.5 g per side, saves 0.026 lbm (11.6 g) per aircraft, needs
     a §7 waiver; the outer half-thickness at the axis could then drop 1 mm toward the CFD shape
     (OD17-FAIR-WALL).
+- [ ] **OD17-FAIR-BORE — Owner: the open bore beyond the collar (finding 2026-11-12, OD17-FAIR-CFD).**
+    The fairing's 2.20 in (56 mm) bore runs its whole length, but the pod collar ends at X 2.94 in
+    (74.8 mm) and the trunnion at 3.11 in (79.0 mm), so out to the fairing's end at X 3.71 in (94.3 mm)
+    the bore is an open forward-facing pocket. The CFD puts the as-built assembly +23 % over the idealised
+    shape: 0.035 lbf (0.153 N) per fairing, 0.069 lbf (0.31 N) for two, at 40 kt (see the brief). Options for the owner: leave as is; add a nose cap that closes
+    the bore past the collar (the idealised end plate approximates the result); or move the end plate
+    inboard. Not decided and not changed. Needs an Owner Decision Brief with the six checks before any
+    change, and a CFD run of the chosen variant.
 - [ ] **OD17-TOOLS-01 — One fairing module.** The NACA section, TE line,
     loft and cap code is copied in `nacelle64_optD_aft_fairing.py`, `nacelle64_optD_glove.py`
     and `od17_junction_cfd/geom.py`, and the copies differ: the TE half-thickness floor is 0.039 in (1.0 mm)
