@@ -5,6 +5,7 @@ from pathlib import Path
 
 _spec = importlib.util.spec_from_file_location(
     "pace_balance", Path(__file__).resolve().parents[1] / "pace_balance.py")
+assert _spec is not None and _spec.loader is not None
 pb = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(pb)
 

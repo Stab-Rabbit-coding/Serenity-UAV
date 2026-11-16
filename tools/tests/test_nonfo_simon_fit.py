@@ -5,6 +5,7 @@ from pathlib import Path
 
 _spec = importlib.util.spec_from_file_location(
     "nonfo_simon_fit", Path(__file__).resolve().parents[1] / "nonfo_simon_fit.py")
+assert _spec is not None and _spec.loader is not None
 nf = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(nf)
 C = nf.load_contract()
