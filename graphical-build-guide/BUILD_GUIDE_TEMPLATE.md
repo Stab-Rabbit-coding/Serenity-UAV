@@ -113,3 +113,24 @@ Each phase build guide includes a **completion checklist** that shall be verifie
 - [ ] System security: TPM enrollment, key generation, operator certificates installed
 - [ ] Ground station (Skipper) communication verified
 - [ ] First hover test completed and stable
+
+## Illustrations and Graphics
+
+Moved verbatim from `graphical-build-guide/AGENTS.md` on 2026-11-17 (AGENTS.md review, Q6).
+
+### Acceptable Formats
+
+- **CAD screenshots:** FreeCAD or Blender rendered views showing part placement
+- **Assembly photos:** High-resolution images of completed subassemblies
+- **Exploded diagrams:** 3D renderings showing how parts fit together
+- **Wiring diagrams:** Schematic or labeled photos of electrical connections
+- **Dimension drawings:** Technical drawings with key measurements
+
+### Graphics Guidelines
+
+- Use clear, well-lit photographs (outdoor natural light preferred)
+- Include a **reference object** (ruler, coin, or part with known size) for scale
+- Label key features and critical dimensions
+- Add arrows and annotations to highlight assembly sequence or proper orientation
+- Ensure text is readable (minimum 10-point font)
+- Provide both overview and detail views for complex assemblies

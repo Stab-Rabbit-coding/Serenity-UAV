@@ -14,6 +14,8 @@ body,p,li,td,th,code,pre{font-family:'OpenDyslexic','OpenDyslexicMono',sans-seri
 
 # Serenity-Class Tiltrotor UAV — Build Guide Rev U (24-inch)
 
+> **Pre-shift guide (note 2026-11-17).** This guide predates the 2026-11-16 design shift (`docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`): the tail EDF, its speed controller and the RCS are installed in Phase 5, and TEDF-16 rewrites this guide. Its nacelle figures (XFly Galaxy X5, 6.10 lbm AUW) are also pre-shift. Statements below that the aft EDF or RCS is "deferred to Phase 11" are superseded; the current procedure is `graphical-build-guide/flight-phases/WBS.md` §Phase5.
+
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Year:** 2026 | **Status:** Rev U refresh (2026-10-31). Phases 0–3 now describe the Rev U
@@ -131,11 +133,11 @@ blender --background --python airframe/blender-scripts/serenity_render_views.py 
 | 8 | Finishing: Decals + FAA + Docs | Legal, complete, documented | ~$25 |
 | 9 | Performance Tuning | PID governor optimisation, endurance, cross-wind hover | ~$0 |
 | 10 | Advanced Autonomy | BVLOS readiness, extended missions, multi-link redundancy | ~$0 |
-| 11 | **Aft EDF Integration** *(deferred)* | ★ **CRUISE + RCS** — 55mm rear EDF + canonical nozzle + 4 RCS jets | ~$70 |
+| (former 11) | **Aft EDF Integration** *(superseded 2026-11-16: first build, Phase 5)* | ★ **CRUISE + RCS** — 55mm rear EDF + canonical nozzle + 4 RCS jets | ~$70 |
 
 > Costs are USD estimates as of 2026. PCB assembly assumes JLCPCB pricing.
-> Phase 11 is intentionally deferred until Phases 0–10 are proven in flight.
-> See `deferred/aft-edf/` for all Phase 11 design files.
+> The former Phase 11 (aft EDF + RCS) is no longer deferred: since 2026-11-16 it is part of the first build, Phase 5.
+> `deferred/aft-edf/` holds the pre-shift design files.
 
 ---
 
@@ -185,7 +187,7 @@ wherever one exists; it is the same part in its leg-local frame.
 | Landing gear | `fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl` (aft) and `lg_r6_3_0in_leg_frame_fore.stl` (fore); `lg_r6_common_foot.stl` ×4; bays `lg_r6_3_0in_bay_{fore,aft}-{port,stbd}_print.stl`, four distinct mirror parts | as listed | `PRINT-LG-*` |
 | Cargo | `fuselage/cargo/cargo_door_{port,stbd}.stl`, `fuselage/cargo/cargo_hinge_retention.stl`, `fuselage/cargo/door_latch_bracket_{port,stbd}.stl`, `fuselage/cargo/door_latch_crank_{port,stbd}.stl`, `fuselage/cargo/door_horn.stl` ×2, `fuselage/cargo/gateway_door_tray.stl`, `fuselage/cargo/cargo_door_servo_bracket.stl`, `fuselage/cargo/cargo_release_servo_bracket.stl`, `fuselage/cargo/cargo_fpv_bezel.stl`, `fuselage/cargo/cargo_gps_retention_ring.stl`, `fuselage/cargo/chin_node_shelf.stl` | as listed | `PRINT-CARGO-*`, `PRINT-DOOR-*`, `PRINT-GW-DOOR-TRAY`, `PRINT-CHIN-SHELF` |
 | Void formers | `fuselage/cargo/void_former_cargo_{harness_trunk_port,harness_trunk_stbd,node_bay}.stl` (`collar_rim` and `batt_chimney` are obsolete) | 1 each | `PRINT-VOID-FORMER-CARGO` |
-| Deferred (Phase 11) | Rear canonical nozzle, RCS nozzles, RCS manifold: see `deferred/AGENTS.md` | — | — |
+| Former Phase 11 (pre-shift deferral) | Rear canonical nozzle, RCS nozzles, RCS manifold: superseded. The nozzle and RCS exhausts are built into the aft hull (TEDF-09); the separate parts are under TEDF-11 | — | — |
 
 > **NOTE:** The winch has no hull-frame STLs yet (WBS LEDGER-GAPS), so it is not in the
 > master assembly or the renders. Order its parts from the `PRINT-CARGO-WINCH-*` rows.
@@ -302,7 +304,7 @@ rebates (port and starboard are distinct mirror prints). **DRAFT — not bench-v
 - Belly port, X≈**260mm**: SiK 915MHz SMA-RP bulkhead *(relocated forward from 310mm — station 310mm is now the neck intake ring; 260mm is in cargo bay belly, Panel C, clear of intake frame)*
 - Belly stbd, X≈260mm: LoRa RFM95W 915MHz SMA-RP bulkhead
 - Dorsal, X≈**120mm**: **49MHz (Part 15 §15.235) forward wire post** — PETG insulated mast (~10mm tall, 12×12mm foot), bonded to dorsal hull skin just aft of bridge/cockpit section; loading coil + LC pi-network at this post; RG-316 coax routed internally to Bay A Commo (XCVR-49MHZ-2) module *(replaces dorsal fin + vertical whip — wire now runs nose-to-tail along hull spine)*
-- Aft dorsal hull, X≈580mm: **49MHz (Part 15 §15.235) temporary aft wire post** — PETG hook post (~10mm tall) bonded to aft dorsal hull skin near station ~580mm with 5-min epoxy; electrically open (insulated end). *(Note: the permanent aft post on the canonical tail nozzle (`rear_nozzle_canonical.stl`) is a Phase 11 item. This temporary post is removed and replaced in Phase 11.)*
+- Aft dorsal hull, X≈580mm: **49MHz (Part 15 §15.235) temporary aft wire post** — PETG hook post (~10mm tall) bonded to aft dorsal hull skin near station ~580mm with 5-min epoxy; electrically open (insulated end). *(Note: the permanent aft post on the canonical tail nozzle (`rear_nozzle_canonical.stl`) is a former Phase 11 item. This temporary post is removed and replaced in former Phase 11.)*
 - Dorsal fwd, X≈140mm: Wi-Fi 2.4/5GHz antenna
 - **49MHz top wire**: 0.3mm stainless steel wire or 22AWG enamelled copper, strung from forward post hook (~120mm) to temporary aft post hook (~580mm) with light tension (~20g); CF keel bar connected to Commo (XCVR-49MHZ-2) GND as counterpoise
 - **⚠ GPS clearance check**: forward wire post at ~120mm is ~43mm from GPS patch (both dorsal face). Bench-verify GPS HDOP ≤1.5 with Commo (49 MHz) transmitting before flight. If GPS degrades, move GPS patch to ≥165mm from nose.
@@ -560,11 +562,11 @@ After cure:
 
 **Goal:** ★ **FIRST FLIGHT** with 4-node avionics — full VTOL hover using nacelle EDFs only.
 
-> **Aft EDF not installed.** The 55mm fuselage EDF is deferred to Phase 11. The 4 nacelle EDFs
+> **Pre-shift record — superseded 2026-11-16 (the tail EDF and RCS are installed in Phase 5).** Aft EDF not installed. The 55mm fuselage EDF is deferred to former Phase 11. The 4 nacelle EDFs
 > (XFly Galaxy X5, 2.73 lbf / 1,240 gf each, 90% additive via stator = 4.91 lbf (2,232 gf)/nacelle × 2 = 9.84 lbf (4,464 gf) total)
 > deliver nacelle T/W ≈ **1.61** at the Phase 5–10 AUW of 6.10 lbm (2,768 g) — **sufficient for full VTOL
-> hover**. Phase 11 adds the rear EDF for forward-flight (cruise) thrust and RCS attitude authority — it
-> fires aft through the canonical nozzle and does not boost hover (Phase 11 hover T/W ≈ 1.43).
+> hover**. Former Phase 11 adds the rear EDF for forward-flight (cruise) thrust and RCS attitude authority — it
+> fires aft through the canonical nozzle and does not boost hover (former Phase 11 hover T/W ≈ 1.43).
 
 ### Node Install Order
 
@@ -576,7 +578,7 @@ Install **CN1 + FC1** in Shepherd's room / Bay A (nose), **CN2 + FC2** in Inara'
 3. Plug 72-pin expansion connector between PB2-I and Cape.
 4. Connect CAN FD, RS-485, 1553, ETH chain connectors per bus harness.
 5. Connect ESC DSHOT signal leads to Pilot PRU-ICSS header.
-6. Connect the two tilt controllers (`OSESC-TILT-TC`, DRV8874-Q1 brushed drive) to the bus, each with its gearmotor and brake solenoid on its own `FUSE-TILT-3A` feed. Connect the two nozzle servos to their gateway. The 4 RCS valve servos are Phase 11.
+6. Connect the two tilt controllers (`OSESC-TILT-TC`, DRV8874-Q1 brushed drive) to the bus, each with its gearmotor and brake solenoid on its own `FUSE-TILT-3A` feed. Connect the two nozzle servos to their gateway. The 4 RCS valve servos are former Phase 11.
 7. Connect GPS patch antenna coax to Pilot GPS header. Mount GPS patch antenna on hull dorsal surface at nearest bay location.
 
 ### ESC Assignment — Cross-Nacelle Redundancy
@@ -591,11 +593,11 @@ hover rather than losing one nacelle entirely.
 | ESC2 | Stage 2 (aft) | Port | pod Z 104.2–176.9 mm | **FC2** |
 | ESC3 | Stage 1 (fore) | Starboard | pod Z 30.5–103.2 mm | **FC1** |
 | ESC4 | Stage 2 (aft) | Starboard | pod Z 104.2–176.9 mm | **FC2** |
-| ESC5 | 55mm rear EDF | Fuselage | — | **DEFERRED — Phase 11** |
+| ESC5 | tail EDF (pre-shift: 55mm rear EDF) | Fuselage | — | **SUPERSEDED — first build (Phase 5, TEDF-16)** |
 
 > **Failure mode (nacelles only):** FC1 loss → FC2 holds ESC2 (port aft) + ESC4 (stbd aft).
 > FC2 loss → FC1 holds ESC1 (port fore) + ESC3 (stbd fore). Half-thrust in both nacelles either way.
-> ESC5 and Panel F 50A ESC are not installed until Phase 11.
+> Pre-shift: ESC5 and the Panel F 50A ESC were not installed until the former Phase 11. Now the tail EDF's speed controller (OSESC-TAIL-1) is installed forward in the cargo duct in Phase 5 (TEDF-16).
 
 ### Wiring Connections for 4-Node Minimum Build
 
@@ -605,10 +607,10 @@ hover rather than losing one nacelle entirely.
 | ESC3 DSHOT (stbd EDF1) | Pilot FC1 PRU Ch.1 | ESC3 | Conduit Shepherd's room (Bay A) → stbd wing root |
 | ESC2 DSHOT (port EDF2) | Pilot FC2 PRU Ch.0 | ESC2 | Conduit Inara's shuttle (Bay B) → port wing root |
 | ESC4 DSHOT (stbd EDF2) | Pilot FC2 PRU Ch.1 | ESC4 | Conduit Inara's shuttle (Bay B) → stbd wing root |
-| ESC5 / rear EDF | — | — | **DEFERRED — Phase 11** (PRU Ch.2 reserved) |
+| ESC5 / tail EDF | — | — | **SUPERSEDED — first build (Phase 5)**; the controlling node is assigned at G1 (NFP-TEDF-2 / OD-22) |
 | Nacelle tilt drive (port) | Tilt controller, bus-networked | 20D gearmotor + brake solenoid | Fused tilt feed `F_TILT_P` |
 | Nacelle tilt drive (stbd) | Tilt controller, bus-networked | 20D gearmotor + brake solenoid | Fused tilt feed `F_TILT_S` |
-| 4× RCS valve servos | — | — | **DEFERRED — Phase 11** |
+| 4× RCS valve servos | — | — | **SUPERSEDED — first build (Phase 5, TEDF-11)** |
 | CAN FD bus | CN1→FC1→CN2→FC2 | Ring (open at FC2 end) | CAN conduit, 120Ω term at CN1 |
 
 ### Firmware Flash
@@ -627,7 +629,7 @@ hover rather than losing one nacelle entirely.
 - [ ] GPS lock achieved on all 4 FC nodes (CN1/CN2 may relay for minimum flight)
 - [ ] FAA registration applied
 - [ ] Battery C-rating confirmed for peak draw
-- [ ] *(Rear 55mm EDF, 4× RCS valve servos, and 50A Panel F ESC are Phase 11 items — do not install yet)*
+- [ ] *(Pre-shift note, superseded 2026-11-16: the tail EDF, 4× RCS valves and the tail speed controller are Phase 5 items; follow `graphical-build-guide/flight-phases/WBS.md` §Phase5)*
 
 ### First Flight Protocol
 
@@ -732,11 +734,11 @@ Install clamshell cargo door hinges and latch. Bond cargo bay walls (per cargo_s
 | ~~`blender_intake_cut.py`~~ | ~~Blender~~ | ~~Cut 120mm belly intake in s_middle~~ | **Superseded** — belly scoop removed in Rev N; use canonical middle shell instead |
 | `blender_nozzle_gen.py` | Blender | Generate nacelle iris nozzle petals and rings | `nacelle_nozzle_petal.stl`, `nacelle_nozzle_ring.stl` |
 | `serenity/stl/middle_canonical_shell24.scad` | OpenSCAD | Canonical middle fuselage shell (belly restored) | `middle_canonical_shell24.stl` |
-| `deferred/aft-edf/openscad/rear_neck_intake_shell24.scad` | OpenSCAD | Rear neck shell with reduced-area scoop windows (55mm EDF) *(Phase 11 — regen)* | `rear_neck_intake_shell24.stl` |
-| `deferred/aft-edf/openscad/neck_intake_frame.scad` | OpenSCAD | CF-PETG structural intake frame ring (55mm) *(Phase 11 — regen)* | `neck_intake_frame.stl` |
-| `deferred/aft-edf/openscad/aft_edf_plenum.scad` | OpenSCAD | Plenum: 55mm EDF inlet + 4 RCS bleed taps *(Phase 11 — regen)* | `aft_edf_plenum.stl` |
-| `deferred/aft-edf/openscad/rear_nozzle_canonical.scad` | OpenSCAD | Fixed canonical elliptical tail nozzle (2.06×1.76 in) *(Phase 11 — new)* | `rear_nozzle_canonical.stl` |
-| `deferred/aft-edf/openscad/rcs_thruster.scad` | OpenSCAD | RCS bleed-jet nozzle + manifold + valve bracket *(Phase 11 — new)* | `rcs_thruster_nozzle.stl`, `rcs_distribution_manifold.stl`, `rcs_valve_bracket.stl` |
+| `deferred/aft-edf/openscad/rear_neck_intake_shell24.scad` | OpenSCAD | Rear neck shell with reduced-area scoop windows (55mm EDF) *(former Phase 11 — regen)* | `rear_neck_intake_shell24.stl` |
+| `deferred/aft-edf/openscad/neck_intake_frame.scad` | OpenSCAD | CF-PETG structural intake frame ring (55mm) *(former Phase 11 — regen)* | `neck_intake_frame.stl` |
+| `deferred/aft-edf/openscad/aft_edf_plenum.scad` | OpenSCAD | Plenum: 55mm EDF inlet + 4 RCS bleed taps *(former Phase 11 — regen)* | `aft_edf_plenum.stl` |
+| `deferred/aft-edf/openscad/rear_nozzle_canonical.scad` | OpenSCAD | Fixed canonical elliptical tail nozzle (2.06×1.76 in) *(former Phase 11 — new)* | `rear_nozzle_canonical.stl` |
+| `deferred/aft-edf/openscad/rcs_thruster.scad` | OpenSCAD | RCS bleed-jet nozzle + manifold + valve bracket *(former Phase 11 — new)* | `rcs_thruster_nozzle.stl`, `rcs_distribution_manifold.stl`, `rcs_valve_bracket.stl` |
 
 Blender scripts run headless: `blender --background --python <script>.py`  
 OpenSCAD STLs: `openscad -o <output>.stl <file>.scad`
@@ -799,7 +801,9 @@ regulatory readiness for real-world deployment.
 
 ---
 
-## Phase 11 — Aft EDF Integration *(Deferred)*
+## Former Phase 11 — Aft EDF Integration *(pre-shift record; superseded 2026-11-16, now Phase 5)*
+
+> **Superseded.** The steps below describe the pre-shift design (55 mm EDF, plenum, bleed taps, separate nozzle part). The current procedure is `graphical-build-guide/flight-phases/WBS.md` §Phase5; TEDF-16 rewrites this chapter.
 
 **Goal:** Install the 55mm fuselage EDF, reduced-area intake, the fixed canonical elliptical tail
 nozzle, and 4 EDF-fed RCS bleed-air thrusters — adding forward-flight (cruise) thrust and pitch/yaw
@@ -865,7 +869,7 @@ geometry shall be regenerated for the 55mm fan, the canonical nozzle, and the RC
 5. **Bench RCS test** — confirm pitch/yaw authority from the 4 bleed jets at cruise throttle.
 6. **Forward-flight thrust test** — rear EDF at 60% throttle; verify forward thrust and ESC temps ≤70°C. **Do not use the rear EDF for hover lift.**
 
-### Phase 11 Checks
+### Former Phase 11 Checks (pre-shift)
 
 - [ ] All regenerated rear-EDF STLs pass mesh watertightness verification
 - [ ] Intake frame tongues fully seated; shoulder flanges bonded flush; no gaps
@@ -882,4 +886,4 @@ geometry shall be regenerated for the 55mm fan, the canonical nozzle, and the RC
 
 *Rev U refresh 2026-10-31 (first 24-inch build documented as Rev N, May 2026)*  
 *Supersedes Rev M (18-inch, 80mm EDF, AM6254 upgrade)*  
-*Phase 11 (Aft EDF) deferred per root AGENTS.md — 2026-06-07*
+*Former Phase 11 (Aft EDF): deferral superseded 2026-11-16 (first build, Phase 5)*

@@ -83,7 +83,7 @@ HUB_D = 28.0  # mm, rotor hub over the 2627 motor -- ASSUMED
 MOTOR_TAIL_GAP = 4.0  # mm, motor tail to the exit plane -- ASSUMED
 RING_L = 10.0  # mm, axial length of the hull-fused mounting ring -- ASSUMED
 K_INTAKE = 1.20  # intake throat area / fan swept area -- ASSUMED design ratio
-BLEED = 0.15  # RCS bleed fraction of EDF flow (deferred/WBS.md Phase 11: "~15 %")
+BLEED = 0.15  # RCS bleed fraction of EDF flow (deferred/WBS.md former Phase 11: "~15 %")
 JETS_OPEN = 2  # jets open at once at full bleed (one pitch, one yaw) -- ASSUMED
 RCS_BORE = 12.0  # mm, proposed RCS pipe bore
 INTAKE_N, INTAKE_W, INTAKE_L = 4, 24.0, 30.0  # count, width (around), length (along Y), mm
@@ -338,7 +338,7 @@ def _tube_g(d_mean, wall, length):
 def parts(L, meas):
     """Estimated mass and station of each added part: (name, g, Y, config, basis).
     config: 'both' = printed now and stays; 'fan' = fan configuration only;
-    'edf' = Phase 11 only.  Volumes are envelope estimates, priced at the SLS PA CF
+    'edf' = former Phase 11 only.  Volumes are envelope estimates, priced at the SLS PA CF
     solid density (tools/sls_materials.py); U9 replaces them with mesh masses."""
     rho = sls.rho_g_mm3(sls.PA_CF)
     d_hull = meas["stations"][int(5 * round(L["ring_y0"] / 5))]["dia"]

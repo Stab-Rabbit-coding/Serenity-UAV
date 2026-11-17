@@ -614,7 +614,7 @@ knife. Sand support-contact surfaces to 320 grit if surface finish matters for t
   Batch F) was archived at Rev T (2026-07-18, replaced by the Option B pushrod tilt drive).
   Its STLs now live only as reference placeholders in `airframe/placeholders/gears/` and are
   **not part of this print set.**
-- **Rear 120 mm EDF deferred** — remains Phase 11 per root `AGENTS.md`; its STL is a
+- **Rear 120 mm EDF deferred** — remains former Phase 11 per root `AGENTS.md`; its STL is a
   placeholder (`airframe/placeholders/propulsion/EDF_120mm_6S_deferred.stl`), not a build
   target. Dropped from this guide's batches entirely (was Batch G/I/J in the Rev P edition).
 - **ESC bay covers, splice collars, Faraday enclosure, hinge retention** are new parts with

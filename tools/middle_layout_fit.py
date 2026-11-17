@@ -36,7 +36,7 @@ Why the layout looks the way it does (measured 2026-09-17, not assumed)
   That caps Kaylee's component height at 16 mm above the board -- an ICD
   requirement on the pending Flight Engineer PCB respin (FlightEngineer.md
   SS Rev T6 mechanical ICD), not something this tool can relax.
-* Phase 11 turns the neck into the aft-EDF intake: the tool reports the free
+* Former Phase 11 turns the neck into the aft-EDF intake: the tool reports the free
   bore area at every station against the 3,090 mm^2 scoop capture figure
   (airframe/fuselage-mid/WBS.md SS1.1.1.3) so the scoop station can be
   chosen aft of Kaylee.
@@ -87,7 +87,7 @@ NECK_ZC = 157.8  # R1 77.8; bore centre Z at Y 140 (drifts to ~80.5 by Y 198)
 NECK_R = 62.5  # nominal bore radius (129 x 129.5 at Y 140; 120 x 125 at Y 198)
 FWD_SLEEVE_Y1 = 444.7  # R1 139.0; cargo/middle collar sleeve reaches Y 121..139
 AFT_SLEEVE_Y0 = 500.0  # R1 194.3; middle/rear collar sleeve reaches Y 194.3..212.3
-REAR_RESERVED_Y = MID_Y1  # nothing of this layout may pass the rear face (Phase 11)
+REAR_RESERVED_Y = MID_Y1  # nothing of this layout may pass the rear face (former Phase 11)
 
 # ---------------------------------------------------------------------------
 # Kaylee's room -- Flight Engineer PDB, Rev T6 can
@@ -226,7 +226,7 @@ T1 = (52.85, 65.85, 390.7, 404.7, 126.0, 161.0)  # R2
 # S -- Simon trunk: 5 V + buses from the plate's port edge aft past the can
 S1 = (FE_CAN_X1 + 2.0, FE_CAN_X1 + 16.0, FE_PLATE_Y0, SIMON_Y0, 136.0, 180.0)  # R2 Z
 
-# Phase 11 scoop capture (55 mm EDF, 1.3x duct match), WBS SS1.1.1.3
+# Former Phase 11 scoop capture (55 mm EDF, 1.3x duct match), WBS SS1.1.1.3
 PHASE11_CAPTURE_MM2 = 3090.0
 
 # Masses for the ledger (g).  Kaylee PCB assembly per FlightEngineer.md
@@ -457,7 +457,7 @@ def neck_void(shell_tm, y):
 
 
 def airflow_report(shell_tm, solids):
-    print("\nPhase 11 free bore area (neck void minus equipment) vs scoop capture "
+    print("\nformer Phase 11 free bore area (neck void minus equipment) vs scoop capture "
           f"{PHASE11_CAPTURE_MM2:.0f} mm^2:")
     for y in (440.7, 450.7, 460.7, 470.7, 480.7, 490.7, 500.7, 506.7):  # R1 135..201
         v = neck_void(shell_tm, y)

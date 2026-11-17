@@ -1185,7 +1185,7 @@ def build_plan_svg():
         'T+</text>',
         '<text x="28" y="70" font-size="13" fill="#d6dee6">Install every conduit, void former, and '
         'mount '
-        "before the foam pour (Phase 4). Phase 11 is deferred.</text>",
+        "before the foam pour (Phase 4).</text>",
     ]
     y = 104
     for ph, name, cards, goal in PHASES:

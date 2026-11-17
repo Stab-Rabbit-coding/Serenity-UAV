@@ -95,7 +95,7 @@
 | head_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
 | middle_canonical_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
 | cargo_sect_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
-| rear_neck_intake_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | Superseded 2026-11-16: no scoop windows; the neck is the open air passage to the tail EDF, and the hulls are rebuilt under TEDF-09/10. Pre-shift: print now; cover reduced-area scoop windows (sized for 55mm EDF) with removable 3mm PETG blanks until Phase 11 |
+| rear_neck_intake_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | Superseded 2026-11-16: no scoop windows; the neck is the open air passage to the tail EDF, and the hulls are rebuilt under TEDF-09/10. Pre-shift: print now; cover reduced-area scoop windows (sized for 55mm EDF) with removable 3mm PETG blanks until former Phase 11 |
 | wings_s1223_revo.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
 | eng_left_stator_shell24_revo.stl | CF-PETG | 0.15mm | 25% gyroid, 4 walls | 1 | |
 | eng_right_stator_shell24_revo.stl | CF-PETG | 0.15mm | 25% gyroid, 4 walls | 1 | |
@@ -180,7 +180,7 @@
 
 - [ ] Install 49 MHz (Part 15 §15.235) forward wire post (dorsal, X≈120mm, bonded with 5-min epoxy).
 
-- [ ] Install 49 MHz (Part 15 §15.235) **temporary** aft wire post: PETG hook bonded to aft dorsal hull skin near station ~580mm (NOT on rear nozzle frame — that post is Phase 11). This temporary post reduces antenna length slightly; field-strength compliance with 47 CFR §15.235 is firmware power-limited (see §0.1), not antenna-length dependent.
+- [ ] Install 49 MHz (Part 15 §15.235) **temporary** aft wire post: PETG hook bonded to aft dorsal hull skin near station ~580mm (NOT on rear nozzle frame — that permanent post goes on the tail nozzle in Phase 5). This temporary post reduces antenna length slightly; field-strength compliance with 47 CFR §15.235 is firmware power-limited (see §0.1), not antenna-length dependent.
 
 - [ ] String 49MHz top wire (0.3mm SS wire or 22AWG enamelled Cu) from forward post to temporary aft post with ~20g tension; CF keel connected to the 49 MHz (Part 15 §15.235) GND as counterpoise.
 
