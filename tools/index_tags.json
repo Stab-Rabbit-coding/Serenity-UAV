@@ -3805,6 +3805,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/ck/Littelfuse-CK-KMR2-Series-Datasheet.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/cml-microcircuits/cmx994ds.pdf": {
       "description": "PDF document",
       "tags": [
@@ -19380,6 +19387,7 @@
       "avionics/datasheets/bourns/Bourns_MF-PSMF.pdf",
       "avionics/datasheets/bourns/SRF2012A.pdf",
       "avionics/datasheets/central-semiconductor/2N3866_SERIES.PDF",
+      "avionics/datasheets/ck/Littelfuse-CK-KMR2-Series-Datasheet.pdf",
       "avionics/datasheets/cml-microcircuits/cmx994ds.pdf",
       "avionics/datasheets/coilcraft/0805cs.pdf",
       "avionics/datasheets/coilcraft/0805hq.pdf",
