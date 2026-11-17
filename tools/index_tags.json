@@ -140,7 +140,8 @@
     "CONCEPTS.md": {
       "description": "Concepts",
       "tags": [
-        "documentation"
+        "documentation",
+        "redundancy-failover"
       ],
       "archived": false
     },
@@ -3414,6 +3415,15 @@
       "tags": [
         "avionics-hardware",
         "licensing"
+      ],
+      "archived": false
+    },
+    "avionics/PACE.md": {
+      "description": "PACE Failover Matrix and Per-Stack Tasking",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "redundancy-failover"
       ],
       "archived": false
     },
@@ -9857,7 +9867,7 @@
       "archived": false
     },
     "deferred/aft-edf/README.md": {
-      "description": "Aft Fuselage EDF \u2014 Deferred to Phase 11",
+      "description": "Aft Fuselage EDF \u2014 Pre-shift Design Record (former Phase 11; superseded 2026-11-16)",
       "tags": [
         "deferred-future",
         "documentation",
@@ -10438,6 +10448,13 @@
       ],
       "archived": false
     },
+    "docs/SOURCING_POLICY.md": {
+      "description": "Component Sourcing and Openness Policy",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md": {
       "description": "Tail Strike on the Aft Skids (4 ft Drop) and Landing-Gear Materials in SLS",
       "tags": [
@@ -10544,6 +10561,13 @@
     },
     "docs/WING_SECTION_POLAR_COMPARISON.md": {
       "description": "Serenity UAV \u2014 As-Built Wing Sections vs True S1223: XFOIL and NeuralFoil Polars",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/adr/0001-single-project-revision-letter.md": {
+      "description": "One project-wide revision letter",
       "tags": [
         "documentation"
       ],
@@ -15635,7 +15659,7 @@
       "archived": false
     },
     "tools/auw_ledger.py": {
-      "description": "Python script",
+      "description": "Serenity UAV -- bottom-up all-up-weight, CG, pitch inertia and hover T/W.",
       "tags": [
         "build-tooling"
       ],
@@ -15731,6 +15755,13 @@
     },
     "tools/cg_relocation_study.py": {
       "description": "cg_relocation_study.py -- move equipment forward until the hover CG sits on",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/check_agents_size.py": {
+      "description": "Fail when an AGENTS.md file exceeds its size cap.",
       "tags": [
         "build-tooling"
       ],
@@ -16693,6 +16724,13 @@
       ],
       "archived": false
     },
+    "tools/tests/test_check_agents_size.py": {
+      "description": "Tests for tools/check_agents_size.py.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/tests/test_check_hull_tarballs.py": {
       "description": "Tests for tools/check_hull_tarballs.py.",
       "tags": [
@@ -16966,6 +17004,7 @@
       "archives/MANIFEST.md",
       "archives/README.md",
       "avionics/AGENTS.md",
+      "avionics/PACE.md",
       "avionics/README.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
@@ -17074,6 +17113,7 @@
       "docs/SLS_MIGRATION.md",
       "docs/SLS_MIN_WALL_THICKNESS.md",
       "docs/SLS_PRINT_ORIENTATION.md",
+      "docs/SOURCING_POLICY.md",
       "docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md",
       "docs/TILT_ACTUATOR_OPTIONS.md",
       "docs/TILT_ACTUATOR_SELECTION.md",
@@ -17088,6 +17128,7 @@
       "docs/WIFI_MODULE_OD20_BRIEF.md",
       "docs/WING_ATTACH_INTERFACE.md",
       "docs/WING_SECTION_POLAR_COMPARISON.md",
+      "docs/adr/0001-single-project-revision-letter.md",
       "docs/attribution_and_licensing.md",
       "docs/brainstorms/2026-09-29-commo-49mhz-single-chip-search.md",
       "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
@@ -17632,11 +17673,13 @@
     "redundancy-failover": [
       "AGENTS.md",
       "CLAUDE-MEMORY.md",
+      "CONCEPTS.md",
       "README.md",
       "airframe/SPEC_VERIFICATION_0.6.1.md",
       "airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad",
       "airframe/openscad/fuselage/middle_canonical_shell24.scad",
       "avionics/AGENTS.md",
+      "avionics/PACE.md",
       "avionics/README.md",
       "avionics/TODO.md",
       "avionics/emi-hardening/WBS.md",
@@ -19306,6 +19349,7 @@
     "avionics-hardware": [
       "avionics/AGENTS.md",
       "avionics/LICENSE",
+      "avionics/PACE.md",
       "avionics/README.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
@@ -20888,6 +20932,7 @@
       "tools/cfd_internal_air_domain.py",
       "tools/cg_mass_reduction_study.py",
       "tools/cg_relocation_study.py",
+      "tools/check_agents_size.py",
       "tools/check_bom_mesh_sync.py",
       "tools/check_datum_drift.py",
       "tools/check_hull_tarballs.py",
@@ -21016,6 +21061,7 @@
       "tools/tests/test_bay_a_fwd_mounts.py",
       "tools/tests/test_bay_a_fwd_routes.py",
       "tools/tests/test_bay_a_thermal_budget.py",
+      "tools/tests/test_check_agents_size.py",
       "tools/tests/test_check_hull_tarballs.py",
       "tools/tests/test_esc80_cooptimize.py",
       "tools/tests/test_export_pcb_step.py",

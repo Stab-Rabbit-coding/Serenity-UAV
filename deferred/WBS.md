@@ -7,7 +7,7 @@
 > **Status note, 2026-11-16 (design shift).** The tail EDF, its speed controller and the RCS are
 > no longer deferred: they are part of the first build (owner, 2026-11-15). The tail EDF is the
 > QX-Motor 64 mm nacelle unit, not a 55 mm unit. The neck-scoop, plenum and bleed-tap items below are closed as
-> superseded (2026-11-16 document review); the remaining Phase 11 items stay as written until
+> superseded (2026-11-16 document review); the remaining former Phase 11 items stay as written until
 > WBS item TEDF-01 rewrites them. Authority: `airframe/fuselage-mid/WBS.md` §1.1.1.4.0 and
 > `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
 
@@ -26,27 +26,26 @@
 
 | Master § | Branch | Open | First flight |
 |----------|--------|-----:|:------------:|
-| §Phase11 | Phase 11 — Aft EDF Integration (Deferred) | 29 | — |
-| §Phase12 | Phase 12 — Cargo-bay Range-Extender Battery Module (promoted 2026-10-26) | 0 | — |
-| | **Total open (this subsystem)** | **29** | |
+| §Phase11 | Former Phase 11 — Aft EDF Integration (dissolved 2026-11-17) | 0 | — |
+| §Phase12 | Phase 11 — Cargo-bay Range-Extender Battery Module (promoted 2026-10-26; anchor keeps its old ID §Phase12) | 0 | — |
+| | **Total open (this subsystem)** | **0** | |
 
 ---
 
 
-> **Phase 12 (Range-Extender Battery Module)** rides in the cargo bay on the same Observer hooks/release and adds a `J_BATT2` input to Flight Engineer — a cruise-range, not hover, enhancement. See the Observer cross-cutting map in [avionics/kicad/Observer/observer/TODO.md](../avionics/kicad/Observer/observer/TODO.md).
+> **Phase 11 (Range-Extender Battery Module, anchor §Phase12)** rides in the cargo bay on the same Observer hooks/release and adds a `J_BATT2` input to Flight Engineer — a cruise-range, not hover, enhancement. See the Observer cross-cutting map in [avionics/kicad/Observer/observer/TODO.md](../avionics/kicad/Observer/observer/TODO.md).
 
 
-## §Phase11 — Aft EDF Integration (Deferred)
+## §Phase11 — Former Phase 11: Aft EDF Integration (dissolved 2026-11-17)
 
 *(root `WBS.md` §Phase11)*
+
+> **Moved 2026-11-17 (owner):** the open steps and pass criteria of this section are first-build work and now live in `graphical-build-guide/flight-phases/WBS.md` §Phase5 (tail EDF, speed controller and RCS parts, installation, firmware, ground tests and pass criteria) and §Phase9 (forward-thrust schedule and test). Only the superseded pre-shift records remain below.
 
 - [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct, plan 002) Print `rear_neck_intake_shell24.stl` from `deferred/aft-edf/openscad/rear_neck_intake_shell24.scad`. Verify NECK_X ≈ 310mm alignment in slicer. **Scoop windows must be re-sized for the 55 mm EDF (reduced area).**
 - [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct, plan 002) Remove temporary window covers from existing neck shell, or swap in the new windowed shell if a plain shell was used for Phases 0–10.
 - [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct, plan 002) **Regenerate** `neck_intake_frame.scad` for the 55 mm intake area; print `neck_intake_frame.stl` (CF-PETG, 0.15mm, 40% gyroid, 4 walls).
 - [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct and the RCS jets are apertures in the thrust tube, plan 002) **Regenerate** `aft_edf_plenum.scad`: 55 mm circular EDF inlet + 4 RCS bleed taps (~15% flow); print `aft_edf_plenum.stl` (CF-PETG, 0.20mm, 20% gyroid) — EDF housing, treated as structural per CLAUDE.md Fabrication Standards.
-- [ ] **Generate** `rear_nozzle_canonical.scad`: fixed canonical elliptical tail nozzle, exit 2.06×1.76 in (52.3×44.7 mm, ~1,836 mm²), hull-matched outer surface; print `rear_nozzle_canonical.stl` (CF-PETG, 0.15mm, 30%, 4 walls). **No iris, no servo.**
-- [ ] **Generate** `rcs_distribution_manifold.scad` + `rcs_thruster_nozzle.scad` + `rcs_valve_bracket.scad`; print `rcs_distribution_manifold.stl` (×1, PETG), `rcs_thruster_nozzle.stl` (×4, CF-PETG), `rcs_valve_bracket.stl` (×4, CF-PETG).
-- [ ] Run mesh watertightness verification on all regenerated STLs; report findings here and resolve.
 - [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct and the RCS jets are apertures in the thrust tube, plan 002) Dry-fit `neck_intake_frame.stl` into the resized scoop windows; registration tongues insert with ~0.2mm clearance (sand if tight).
 - [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct, plan 002) Verify aerodynamic orientation: intake lips face forward (−Y / nose-ward).
 - [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct, plan 002) Apply structural epoxy to tongues + shoulder flanges; press frame into position; clamp; cure 24h.
@@ -55,37 +54,11 @@
 - [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct and the RCS jets are apertures in the thrust tube, plan 002) Bond plenum forward arms to intake frame exits; fillet joints; cure 2h.
 - [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct and the RCS jets are apertures in the thrust tube, plan 002) Bond `rcs_distribution_manifold.stl` to the 4 plenum bleed taps; route 4 bleed ducts to the RCS jet locations.
 - [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct and the RCS jets are apertures in the thrust tube, plan 002) Pressure-test: seal EDF face with tape; cover all but one scoop; shop-vac — confirm draft at EDF inlet and at all 4 RCS jets, no joint leakage.
-- [ ] Bench-test 55mm EDF (correct rotation, no vibration).
-- [ ] Install EDF retaining ring at station ~430mm inside Panel F; bond; cure 1h.
 - [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct and the RCS jets are apertures in the thrust tube, plan 002) Seat EDF in plenum 55mm inlet; press forward to retaining lip; bond with 4 dabs slow-cure epoxy.
-- [ ] Route motor leads through Panel F to 50A ESC; route signal lead forward via MAIN-PWR conduit to Inara's shuttle (Bay B, FC2 PRU Ch.2).
-- [ ] Install 50A ESC in Panel F bay; foam tape + cable tie. Cure 2h before applying thrust.
-- [ ] Bond `rear_nozzle_canonical.stl` to the tail-cone exit (Panel F aft end), blending into the canonical hull outer mold line. **Fixed — no moving petals.**
-- [ ] Install 4× `rcs_thruster_nozzle.stl` at their RCS stations; connect each to its bleed duct.
-- [ ] Install 4× SG90-class proportional valves on `rcs_valve_bracket.stl`; link each valve to its RCS bleed duct.
-- [ ] Calibrate RCS valves: 0% = closed (no bleed); 100% = full bleed jet. Map 2 jets to pitch, 2 to yaw.
-- [ ] Bond permanent aft 49 MHz (Part 15 §15.235) wire post to top of the canonical tail nozzle (5-min epoxy).
-- [ ] Remove temporary aft post from station ~580mm.
-- [ ] Restring 49MHz top wire (~470mm) from forward post to nozzle aft post with ~20g tension.
-- [ ] Enable ESC5 in FC2 firmware (PRU Ch.2); configure BDSHOT governor for the 55mm EDF.
-- [ ] **GW-RCS — build the RCS valve gateway** *(first build since 2026-11-16, TEDF-10/TEDF-11 and the G1 valve-concept and failsafe decisions of plan 002; latency is measured on the repurposed `N_STACKS=1` board, not on the retired door gateway; the placement depends on the valve concept, not Panel F by default)* (specified 2026-09-21, `docs/CARGO_DOOR_GATEWAY_SPEC.md` §9; `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` Deployment 5): one `SKIPPER-CAN-PERIPH-GW-PCB` in the Panel F bay beside the 50 A ESC — `N_STACKS=1` on an osc-native chain if OpenServoCore has shipped (GW-DOOR-2), else `N_STACKS=2` `END_TO_END` for four hardware timer channels; tray = `gateway_door_tray.scad` re-parameterised (`GW_PCB_L`) on bosses cut into the rear-cone shell (blocked on its MESH-01 regeneration); `J_PWR` from the aft 5 V feed, valves on a fused 6 V branch; trunks extended aft through the inner neck. ~+23 g to the Phase 11 mass line.
-- [ ] Add the 4 RCS proportional-valve channels to the attitude-control mixer **as signed `RCS_COMMAND` frames to GW-RCS (≥ 50 Hz, fail-CLOSED on heartbeat/MAC loss — RCS authority absent when `RCS_STATUS` stops)**, not as FC2 local PWM (`avionics/WBS.md` U1); measure the per-frame signing latency on the repurposed `N_STACKS=1` gateway board (the door gateway is retired); calibrate pitch/yaw authority via `governor_cal.py`.
-- [ ] Add rear EDF to the forward-thrust (cruise) schedule — NOT the hover lift mixer.
-- [ ] Verify all 5 ESC heartbeats on CAN FD; confirm FC2 cross-drive capability for ESC5.
-- [ ] Bench-test RCS attitude authority; then forward-flight thrust test with the rear EDF at 60% throttle.
-- [ ] All regenerated rear-EDF STLs pass mesh watertightness verification
 - [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct and the RCS jets are apertures in the thrust tube, plan 002) Intake frame tongues fully seated in the resized scoop windows
-- [ ] Plenum + RCS manifold pressure-test passed (draft at EDF inlet and all 4 RCS jets; no leakage)
-- [ ] EDF seated at station ~430mm, centerline ±2mm; rotation verified before sealing
-- [ ] 50A ESC installed; ESC5 signal routed to FC2 PRU Ch.2
-- [ ] Canonical nozzle bonded flush to hull outer mold line; exit 2.06×1.76 in verified
-- [ ] All 4 RCS valves calibrated; pitch/yaw authority confirmed on bench
-- [ ] 49MHz aft wire post on canonical nozzle; top wire re-strung at full ~470mm span
-- [ ] Forward-thrust test passed; rear EDF NOT used for hover lift; ESC temps ≤70°C
-- [ ] All 5 ESC telemetry visible on CAN FD; ESC temps ≤70°C at cruise power
 
 
-## §Phase12 — Cargo-bay Range-Extender Battery Module (PROMOTED 2026-10-26)
+## §Phase12 — Phase 11: Cargo-bay Range-Extender Battery Module (PROMOTED 2026-10-26; anchor keeps its old ID)
 
 *(root `WBS.md` §Phase12)*
 

@@ -195,7 +195,7 @@ the project's original CERN-OHL-W 2.0 work is separately licensed.
 | **Source** | [thingiverse.com/thing:2991269](https://www.thingiverse.com/thing:2991269) |
 | **License** | CC BY 4.0 |
 | **Use (nacelle)** | Scaled to 70 mm (2.76") ID. Servo removed. M0.5 rack teeth added to inner ring OD. Outer housing integrated with Serenity bell geometry. Gear-coupled to nacelle tilt pivot via sector/bevel/crown chain — fully passive, no servo. **Current — active design.** |
-| **Use (fuselage)** | **Superseded — deferred Phase 11 legacy design only.** Scaled to 40 mm (1.57") ID, SG90 servo actuated, 8-petal iris integrated with a 120 mm fuselage EDF (`deferred/aft-edf/`). Per root `AGENTS.md`, the canonical fuselage EDF is now a 55 mm 6S unit with a **fixed** elliptical exit nozzle (2.06 in × 1.76 in / 52.3 mm × 44.7 mm) feeding 4 RCS bleed-air thrusters — it is explicitly NOT an iris. The `deferred/aft-edf/` files predate this change and require regeneration for the 55 mm + canonical-nozzle + RCS spec before Phase 11 (tracked in TODO.md §Phase 11). |
+| **Use (fuselage)** | **Superseded — deferred former Phase 11 legacy design only.** Scaled to 40 mm (1.57") ID, SG90 servo actuated, 8-petal iris integrated with a 120 mm fuselage EDF (`deferred/aft-edf/`). Per root `AGENTS.md`, the canonical fuselage EDF is now a 55 mm 6S unit with a **fixed** elliptical exit nozzle (2.06 in × 1.76 in / 52.3 mm × 44.7 mm) feeding 4 RCS bleed-air thrusters — it is explicitly NOT an iris. The `deferred/aft-edf/` files predate this change and require regeneration for the 55 mm + canonical-nozzle + RCS spec before former Phase 11 (tracked in TODO.md §former Phase 11). |
 
 ## Remix attribution template
 

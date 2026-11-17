@@ -1,5 +1,7 @@
 # Serenity UAV — Landing Gear Structural Analysis
 
+> **Pre-shift figures (note 2026-11-17).** This document predates the 2026-11-16 design shift (`docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`): the tail EDF (QX 64 mm) and the RCS are part of the first build (Phase 5). "Former Phase 11" below means the pre-shift aft-EDF configuration (55 mm or 120 mm EDF, 3,130 g design case). Its figures are history, not current values; current values are in `current-specification/auw_ledger.json` and the plan.
+
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **AI note:** Rev R6 analysis and geometry authored by Claude (model: Claude
 Fable 5, Anthropic) under the author's direction, 2026-07-21; extended for
@@ -164,7 +166,7 @@ The landing gear does NOT need to be reusable after a worst-case drop
 | Configuration | AUW |
 | --- | --- |
 | Phase 5–10 (no aft EDF) | 6.10 lbm (2,768 g) |
-| Phase 11 (full system, **design case**) | **6.90 lbm (3,130 g)** |
+| Former Phase 11 (full system, **design case**) | **6.90 lbm (3,130 g)** |
 
 > **Mass-growth caveat (§11.6):** the Rev R6 gear is heavier than the R5
 > system it replaces (+163 g for the 1.5in default, +273 g for the 3.0in
@@ -805,7 +807,7 @@ Wires (6 ft schedule)                91 g                91 g
 Pins/bolts (est.)                    34 g                34 g
 ------------------------------------------------------------------
 System                            ≈436 g              ≈503 g
-  (% of Phase 11 AUW)              14%                 16%
+  (% of former Phase 11 AUW)              14%                 16%
 Rev R5 system it replaces          ≈230 g wraps         ≈230 g
   growth vs R5                     +163 g              +273 g
 ```

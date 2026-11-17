@@ -68,7 +68,7 @@ and `current-specification/bom_revQ.csv`, ref BATT-6S-4000).
 > **Endurance note:** 5.3 min is the calculated continuous hover figure at 45 A
 > (50 % throttle). In practice, transit, climb/descent, and reduced-throttle segments
 > extend usable flight time. The 4000 mAh cell is sized for the mass budget; see
-> `POWER_DISTRIBUTION.md §11` for a dual-battery Phase 12 path if endurance is
+> `POWER_DISTRIBUTION.md §11` for a dual-battery Phase 11 path if endurance is
 > insufficient after initial flight testing.
 
 ---

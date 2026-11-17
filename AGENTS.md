@@ -1,63 +1,49 @@
 # Serenity UAV — Agent Instructions
 
-Applies to every AI agent working in this repository — Claude, GPT, Gemini, Grok,
-local/llama.cpp models, or any other. **This file is the single authoritative source of
-project-wide policy.** `CLAUDE.md` (root) is a one-line pointer to this file, kept only for
-tooling that looks for that filename specifically.
+Applies to every AI agent working in this repository (Claude, GPT, Gemini, Grok, local models,
+or any other). **This file is the single authoritative source of project-wide policy.**
+`CLAUDE.md` (root) is a one-line pointer here for tooling that expects that filename.
+
+AGENTS.md files carry **standing rules and routing pointers only**; design status, decision
+history, and measured figures live in the owning README, WBS, plan, or board `.md` (owner,
+2026-11-17). Domain terms: `CONCEPTS.md`.
 
 ## 1. Project
 
 Build a fully functional EDF tilt-rotor UAV replica of the Firefly-class ship "Serenity"
-(Joss Whedon). All work targets an **actual physical build** — every component will be
-fabricated or procured. Never leave a spec as "TBD"; quote real masses, CG, and loads. See
-`README.md` for the mission profile.
+(Joss Whedon). All work targets an **actual physical build**; every component is fabricated or
+procured. Mission profile: `README.md`.
 
 Non-negotiable, project-wide requirements:
 
 - **Redundancy/failover** in every system where feasible (dual ESCs, independent battery
   rails, manual override).
 - **Security**: every message, internal and external, is digitally signed, authenticated, and
-  logged; every Cape carries a TPM; logs write to hardware-enforced non-executable microSD.
-  Comply with NIST SP 800-207 Zero Trust [REF-NIST-001 §2.1, §2.2, §3.3].
-- **EMI hardening**: design objective is correct operation in a 500 W/m² RF field (e.g. near a
+  logged; every cape carries a TPM and every other PCB an SE; logs write to hardware-enforced
+  non-executable microSD. Comply with NIST SP 800-207 Zero Trust [REF-NIST-001 §2.1, §2.2, §3.3].
+- **EMI hardening**: design objective is correct operation in a 500 W/m² RF field (e.g., near a
   radiating broadcast/cellular antenna).
-- Avionics, comms, and software are designed for reuse on other UAV/UGV/USV/robot platforms,
-  not just this airframe.
+- Avionics, comms, and software are designed for reuse on other UAV/UGV/USV/robot platforms.
 
-**Propulsion:** every thrust, mass, and dimension figure for an EDF, ESC, motor, or any other
-component is a descriptive measurement and shall not be recorded in this file. Each such figure
-shall come from the manufacturer's datasheet or from a user-verified measurement, and shall carry
-a citation to that source. Take values for calculations from `current-specification/bom_revU.json`
-and `airframe/README.md`; flag any value that lacks a datasheet or user-verified source in the
-owning `WBS.md` instead of propagating it. Each nacelle carries two EDFs in series. The
-fuselage (tail) EDF is part of the first build (owner, 2026-11-15; it was optional and deferred to
-Phase 11). It draws all its air through the fuselage interior to cool the avionics, and feeds the
-**fixed** canonical elliptical tail nozzle — **never** an iris — plus RCS bleed-air thrusters for
-pitch/yaw. In hover it is the only pitch trim and control, so it is flight-critical there. Its
-remainder is longitudinal forward thrust only and shall not be counted toward hover lift. Details:
-`airframe/fuselage-mid/WBS.md` §1.1.1.4.0 and
-`docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
+**Propulsion (requirements only).** Each nacelle carries two EDFs in series, each
+independently PID-controlled by a different node; any flight-control node can take over any
+EDF. The tail EDF is part of the first build and flight-critical in hover: it draws all its air
+through the fuselage interior to cool the avionics, feeds the **fixed** canonical elliptical
+tail nozzle (**never** an iris) plus RCS bleed-air thrusters for pitch/yaw, is the only hover
+pitch trim, and its remainder is forward thrust that shall not be counted toward hover lift.
+Basis: `airframe/fuselage-mid/WBS.md` §1.1.1.4.0 and
+`docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`. Values for calculations come
+from `current-specification/bom_revU.json` and `airframe/README.md`, never from this file.
 
-**Avionics architecture** (8-node, PACE failover — requirements only; for implementation and PCB
-status see `avionics/README.md` and each board's own `.md` under `avionics/kicad/<board>/`, which
-is authoritative for as-built state):
-
-- 8× PocketBeagle2 Industrial SBC nodes, each carrying **Pilot** (flight control/sensor cape) +
-  **TACCO** (comms/logging/payload cape), 5 kV galvanic isolation on CAN FD/RS-485/Ethernet.
-- **Commo** (49 MHz + SiK transceiver) is one standalone MCU node at the antennas, reachable by
-  all stacks over CAN-FD / RS-485 / MIL-STD-1553C (no Ethernet). Decision (Rev T, approved
-  2026-09-29): it replaces the Rev S PB2-I capes in River's Room and Simon's Medbay. Its decision record and revision
-  history are in `avionics/kicad/Commo/Commo.md` and
-  `docs/plans/2026-09-29-001-feat-commo-standalone-bus-node-plan.md`.
-- Onboard bus: CAN FD, MIL-STD 1553, RS-485, Ethernet — all 8 nodes interconnected. Commo
-  (Rev T) is the only non-SBC node on 1553.
-- External C2, all 5 usable for command and control: Wi-Fi 5 GHz, Zigbee 2.4 GHz, and mLRS (all
-  3 on every TACCO cape, so all 8 nodes), plus MAVLink/SiK 915 MHz and AX.25 49 MHz (47 CFR Part
-  15 §15.235 — unlicensed, **not** Part 95 RCRS [REF-FCC-003]), both via Commo. S-Bus is not a
-  C2 channel. Band-by-band FCC citations: `avionics/AGENTS.md` "External Communications
-  Regulations Compliance".
-- Each nacelle has 2 EDFs in series, independently PID-controlled by two different SBCs. Any
-  of the 4 flight-control nodes can take over any EDF.
+**Avionics (requirements only).** Seven PocketBeagle2 Industrial (PB2-I) compute nodes:
+Shepherd, Inara and River are full stacks (Pilot cape + PB2-I and TACCO cape + PB2-I); Simon
+is one PB2-I plus a trust-module MCU (`avionics/WBS.md` §1.11, OD-19 option B). Commo
+(49 MHz + SiK) is one standalone MCU node at the antennas, reachable by every stack over
+CAN FD / RS-485 / MIL-STD-1553C (no Ethernet). Onboard buses: CAN FD, MIL-STD-1553C, RS-485,
+Ethernet, galvanic isolation at every bus terminal on every PCB (5 kV at PB2-I nodes). External C2, all five usable for command
+and control: Wi-Fi 5 GHz, ZigBee 2.4 GHz and mLRS on every TACCO cape; SiK 915 MHz and AX.25
+49 MHz (47 CFR Part 15 §15.235, unlicensed, **not** Part 95 RCRS [REF-FCC-003]) via Commo.
+S-Bus is not a C2 channel. As-built state: `avionics/README.md` and each board's `.md`.
 
 ## 2. Subsystem Files
 
@@ -65,262 +51,167 @@ Read this file plus the one matching your task's scope:
 
 | File | Scope |
 | --- | --- |
-| `airframe/AGENTS.md` | Structural/CAD/3D design, hull-frame coordinates, fabrication, STL/SCAD, FreeCAD |
-| `avionics/AGENTS.md` | KiCad PCB design, capes, security/crypto, comms protocols |
-| `docs/AGENTS.md` | Documentation standards, standards vetting, references |
+| `airframe/AGENTS.md` | Structural/CAD/3D design, aircraft datum, STL/SCAD, FreeCAD, Blender |
+| `avionics/AGENTS.md` | KiCad PCB design, capes and nodes, security/crypto, FCC bands |
+| `docs/AGENTS.md` | Documentation standards, citation procedure, references |
 | `gcs/AGENTS.md` | Ground Control Station (Skipper) |
-| `tools/AGENTS.md` | Build automation, bake tool, Blender pipeline |
-| `current-specification/AGENTS.md` | Active specs, revision numbering, traceability |
-| `graphical-build-guide/AGENTS.md` | Build guide, fabrication checklists |
-| `deferred/AGENTS.md` | Phase 11+ work, planned upgrades, rejected-design history |
+| `tools/AGENTS.md` | Build automation, validators, script standards |
+| `current-specification/AGENTS.md` | Active specifications |
+| `graphical-build-guide/AGENTS.md` | Build guide, phases, fabrication checklists |
+| `deferred/AGENTS.md` | Deferred work, planned upgrades, rejected-design history |
 
-A subsystem file is authoritative within its own scope. If it contradicts this file, do not
-pick one silently — see §11.
+A subsystem file only **adds** scope-specific detail. Where this file speaks, it wins; a
+subsystem line that contradicts it is a defect — fix it (§11).
 
 ## 3. Attribution and Licensing
 
-Work is licensed by **what the file produces** (owner rule, 2026-10-04) — see
-`docs/attribution_and_licensing.md` for the full policy and the per-subsystem `LICENSE`
-federation map:
+Work is licensed by **what the file produces** (owner rule, 2026-10-04; full policy and the
+per-subsystem `LICENSE` map: `docs/attribution_and_licensing.md`):
 
-- **Hardware — and any code that defines, creates or renders hardware** (OpenSCAD,
-  KiCad files and scripts, FreeCAD, Blender, G-code/slicer profiles, and tools that
-  write or render meshes/CAD/PCB) — **CERN-OHL-W 2.0** (SPDX `CERN-OHL-W-2.0`).
-  Full text: `LICENSE` (root) / `LICENSES/CERN-OHL-W 2.0`.
-- **Code whose end result is software or firmware** (firmware, device trees, ground
-  software, analysis/verification/CI tools) — **MIT** (SPDX `MIT`). Full text:
-  `LICENSES/MIT`.
-- **Documents** (Markdown, text, specifications, build guides, and **all images** — SVG,
-  PNG, JPG, WebP and every other format, including renders and figures produced by
-  hardware tools) — **CC BY-SA 4.0** (SPDX `CC-BY-SA-4.0`). Full text:
-  `LICENSES/CC-BY-SA 4.0`. Raster images carry it in embedded XMP metadata, SVGs in a
-  header comment, and `REUSE.toml` declares it for the project's image folders.
+- **Hardware, and code that defines, creates or renders hardware** (OpenSCAD, KiCad files and
+  scripts, FreeCAD, Blender, G-code/slicer profiles, mesh/CAD/PCB writers): **CERN-OHL-W 2.0**.
+- **Code whose end result is software or firmware** (firmware, device trees, ground software,
+  analysis/verification/CI tools): **MIT**.
+- **Documents and all images** (Markdown, text, specifications, build guides, SVG/PNG/JPG/WebP,
+  renders): **CC BY-SA 4.0**. Raster images carry it in XMP, SVGs in a header comment;
+  `REUSE.toml` covers the image folders.
 
 Every new file's header carries one line: `License: <name> — see LICENSES/<file>
-(SPDX-License-Identifier: <id>)`. Creative Commons advises against CC licences for
-software, which is why code is MIT (keeps attribution, unlike CC0). Third-party material
-keeps its own licence.
+(SPDX-License-Identifier: <id>)`. Third-party material keeps its own licence; before committing
+any model, image, symbol, SCAD, STL, or code snippet, confirm it is compatible with the licence
+above for its file type. Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (personal copyright
+retained; avionics boards carry his LLC name).
 
-Author: Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (personal copyright retained; avionics
-boards are marked with his personally owned LLC name).
-
-- **Never fabricate a reference, citation, standard, or other resource.**
-- Cite every resource used, whether or not the license requires it.
-- Distinguish AI-generated work from human work; credit human contributors by GitHub username
-  unless a governing project document says otherwise.
-- Cite each AI system/model separately for its own contribution — e.g. Opus 4.8, Sonnet,
-  Haiku 4.5, Gemini, and Grok are never lumped together.
-- Every design decision, algorithm, or geometry technique drawn from an external reference
-  **must** be cited in the source file's docstring/comment block and in the commit message.
-- Derivative files carry the **full attribution chain** back to upstream sources.
-- **Before committing any model, image, KiCad symbol, SCAD file, STL, or code snippet**,
-  confirm its license is compatible with the applicable project license — CERN-OHL-W 2.0 for
-  hardware/CAD/PCB files, CC BY-SA 4.0 for documentation/code/scripts/drawings (see
-  `docs/attribution_and_licensing.md`). Only license-compatible items are integrated.
+- **Never fabricate a reference, citation, standard, or other resource.** Cite every resource
+  used, whether or not its licence requires it. Distinguish AI-generated from human work; credit
+  humans by GitHub username and each AI system/model separately, never lumped together.
+- Cite every design decision, algorithm, or geometry technique drawn from an external
+  reference in the source file's comment block and in the commit message; derivative files
+  carry the full attribution chain.
 
 ## 4. Standards Vetting
 
-Every design decision with any effect beyond cosmetic appearance must be vetted against
-applicable standards/regulations before implementation. Every citation is cataloged in
-`REFERENCES.md` and written as `[REF-ID §section.subsection.paragraph]`. **Never guess or
-invent a section number.** If a citation can't be verified, mark it "requires verification" in
-`REFERENCES.md` and add a `TODO.md §0.x` item.
-
-`docs/AGENTS.md` ("Standards Vetting Policy", "Applicable Standards Bodies") owns the required
-`REFERENCES.md` catalog fields, the citation-audit and reference-lifecycle procedures, and the
-list of applicable standards bodies — read it there, do not restate it here. All
-legal/regulatory matters are US jurisdiction.
+Vet every non-cosmetic design decision against applicable standards/regulations before
+implementation. Catalog every citation in `REFERENCES.md` and
+write it as `[REF-ID §section.subsection.paragraph]`. **Never guess or invent a section number.**
+The catalog fields, the citation-audit and reference-lifecycle procedures, and the standards
+bodies are in `docs/AGENTS.md`. United States regulatory and standards bodies take precedence;
+all legal/regulatory matters are US jurisdiction.
 
 ## 5. Engineering Requirements
 
 - Account for real weight, balance, power, space, and component capability on every change;
-  quote actual masses/CG shifts — never leave them "TBD."
-- **Units — imperial-primary, metric in parentheses**: `10 in (254 mm)`, `2.5 lbm (1.13 kg)`,
-  `4.8 lbf (21.4 N)`, `25 kt (12.8 m/s)`. Use **lbm** for mass, **lbf** for force — never bare
-  "lb." Thrust/lift/aerodynamic loads are forces (lbf/N); component weight and payload capacity
-  are masses (lbm/kg). Airspeed and wind speed are always **kt** (never mph/km/h).
-- Failover: every system needs a fallback or redundant path where feasible.
-- **Component measurements** (mass, thrust, dimensions, ratings): take them only from the
-  manufacturer's datasheet or other manufacturer document, or from a user-verified measurement,
-  and cite the source where the value is recorded. Never take a figure from a seller listing,
-  memory, or an earlier estimate without that support.
-- EDF housings are structural, printed as part of the build — specify wall thickness, infill,
-  and material for each.
-- PCBs are packed tight; final footprint positions are placed manually by the user after
-  script-driven population and net-building. If a DRC violation requires moving a footprint,
-  **refer it to the user**; other DRC fixes may be made directly.
-
-### Component sourcing and openness (owner rule, 2026-10-17)
-
-These rules gate every part selection, on every board, before a part enters a schematic or BOM.
-A part that fails either rule **shall not** be designed in. Existing parts that fail are
-replaced and tracked in the owning WBS.
-
-- **No restricted-country silicon.** No integrated circuit, discrete semiconductor, or
-  semiconductor-bearing module shall be used whose manufacturer (the design owner / brand of
-  record) meets any of the following:
-    - It is domiciled in a restricted country: the People's Republic of China (including Hong
-      Kong and Macau), the Russian Federation, the Islamic Republic of Iran, the Democratic
-      People's Republic of Korea, or any country later designated a "foreign country of
-      concern" [REF-LAW-003].
-    - It is owned by, controlled by, or subject to the direction of the government or ruling
-      party of a restricted country, or it is a subsidiary or affiliate of such an entity
-      [REF-LAW-002 §1822(1)(D)-(E)].
-    - It is a named or determined covered entity [REF-LAW-001 §5949(j)(3)] [REF-LAW-002
-      §1822(1)].
-
-  **Scope.** The test is the manufacturer's domicile and control (owner decision 2026-10-17).
-  The wafer-fab and assembly/test sites are recorded wherever the vendor publishes them, but
-  they do not disqualify a part. The rule is stricter than the statutes, which bind federal
-  procurement only. It exists because this airframe's avionics are "the components that
-  control the unmanned aircraft" and its "communication links" [REF-LAW-002 §1823(a)], and
-  because the fleet trust architecture assumes an auditable supply chain.
-
-  **Generic part numbers.** A part number sold by many manufacturers (for example SMAJ33CA)
-  satisfies the rule only once a compliant manufacturer is named in its MPN / BOM entry.
-- **Open, NDA-free documentation only.** Every IC and module shall have a datasheet, and any
-  design information its circuit depends on, that is publicly available and shareable without
-  a non-disclosure agreement, a confidentiality marking such as "CONFIDENTIAL: Development
-  Partners Only", or redistribution terms that would stop the repository from citing and
-  archiving it. This is the OSHWA certification condition: "third-party components such as
-  chips must have fully accessible and shareable datasheets" [REF-LIC-002]. A free
-  registration wall is acceptable only if the documents carry no confidentiality terms; record
-  the access route in `REFERENCES.md`.
-- When a candidate fails either rule, record it as rejected, with the reason, in the board's
-  design document, so it is not proposed again.
+  quote actual masses, CG shifts, and loads. Never write "TBD".
+- **Missing values:** where no datasheet or user-verified value exists yet, write
+  `UNVERIFIED — <basis>, see <WBS id>`, giving the best documented estimate and its source,
+  and open that WBS item to obtain the real value. Never present it as verified.
+- **Component measurements** (mass, thrust, dimensions, ratings) come only from the
+  manufacturer's datasheet or document, or a user-verified measurement, cited where recorded —
+  never from a seller listing, memory, or an earlier estimate.
+- **Units: imperial first, metric in parentheses**: `10 in (254 mm)`, `2.5 lbm (1.13 kg)`,
+  `4.8 lbf (21.4 N)`, `25 kt (12.8 m/s)`, `25 lbf·in (2.8 N·m)`. Use **lbm** for mass and
+  **lbf** for force, never bare "lb". Thrust, lift, and aerodynamic loads are forces; component
+  weight and payload are masses. Airspeed and wind speed are always **kt**.
+- **Part selection gate:** every IC, discrete semiconductor, and module shall pass
+  `docs/SOURCING_POLICY.md` (no restricted-country silicon by manufacturer domicile/control;
+  public, NDA-free datasheets) before it enters a schematic or BOM.
+- EDF housings are structural printed parts: specify wall thickness, infill, and material.
+- PCBs are packed tight: the user places final footprints after scripted population and
+  net-building. Refer any DRC fix that moves a footprint to the user; make other fixes directly.
 
 ### Airframe geometry
 
-Serenity's hull is complex — bounding-box/centroid math is inadequate for part placement, and
-the canonical outer mold line must stay intact: interior modifications blend into it and never
-alter the exterior unless structurally required. Deviations from the canonical exterior hull
-shall be minimized. In addition, every deviation from canon shall maintain the style and
-character of the Serenity spaceship and shall not introduce elements that are incongruent or
-inconsistent with it (owner directive 2026-11-01). When uncertain, request manual FreeCAD
-placement from the user. `airframe/AGENTS.md` ("Canonical Geometry and Coordinate System",
-"Geometry Reference Points", "Geometry Integrity — Keep Skin True to Canon") and
-`airframe/HULL_FRAME_REFERENCE.md` ("Canonical Accuracy References" plus the validated extents
-table) own the aircraft datum (ONE origin for the whole aircraft: centreline, nose tip,
-static ground plane — owner directive 2026-10-19; only a PCB inside KiCad keeps its own
-coordinates), the four-section layout, and the
-canonical-accuracy authority order over `docs/references/` (`REFERENCES.md`
-REF-CAD-002/003/004) — do not duplicate any of it here.
+- **One aircraft datum** (owner directive 2026-10-19): origin on the centreline, at the nose
+  tip, on the static ground plane; only a PCB inside KiCad keeps its own coordinates. Axes,
+  frames, and migration rules: `airframe/AGENTS.md`.
+- Keep the canonical outer mold line intact: interior modifications blend into it, and the
+  exterior changes only where structurally required. Minimize deviations from canon; every
+  deviation shall keep the style and character of the Serenity ship and add nothing
+  incongruent (owner directive 2026-11-01). Check exterior deviations against
+  `docs/references/` (REF-CAD-002/003) in the authority order of `airframe/HULL_FRAME_REFERENCE.md`.
+- Bounding-box/centroid math is inadequate for placement; use the validated extents in
+  `airframe/HULL_FRAME_REFERENCE.md`, or request manual FreeCAD placement.
+- Nacelle nozzle requirement: `airframe/AGENTS.md` "Nacelle Nozzle Drive". Landing-gear and
+  nozzle-mechanism design: `docs/LANDING_GEAR_ANALYSIS.md`, `docs/NOZZLE_DRIVE_TRADE.md`.
 
-Landing-gear and nacelle-nozzle-drive implementation details change as the design matures — do
-not restate their specifics in this file. Canonical sources: `docs/LANDING_GEAR_ANALYSIS.md`
-(landing gear) and `docs/NOZZLE_DRIVE_TRADE.md` (nozzle drive), both at current revision,
-routed from `airframe/AGENTS.md` "Landing Gear" and "Nacelle Nozzle Drive" — which also state
-the fixed nozzle-diameter functional requirement. The drive mechanism that achieves it is under
-active trade study and must not be assumed.
+## 6. Coding and Documentation Standards
 
-## 6. Coding Standards
-
-- Clean, syntactically correct, secure code — avoid OWASP Top 10 classes (injection, XSS,
-  etc.). Pass all linting.
-- **4-space indent, every language, always.**
-- Verbose comments in each language's native style. If a format has no comment syntax (e.g.
-  KiCad), put comments in an accompanying Markdown file instead. **KiCad files: never use `;`
-  or `#`** — use `( comment 1 "text" )` blocks only.
+- Clean, syntactically correct, secure code; avoid OWASP Top 10 classes; pass all linting.
+  **4-space indent, every language.** Verbose comments in each language's native style; where a
+  format has no comment syntax, use an accompanying Markdown file. **KiCad files: never `;` or
+  `#`**; use `( comment 1 "text" )` blocks.
 - Security engineering complies with NIST SP 800-82 Rev 3 [REF-NIST-002 §5.3, §5.4, §6.2.5],
-  SP 800-160 Vol 1 Rev 1 [REF-NIST-003 Ch.3], SP 800-207 [REF-NIST-001 §2.1].
-- **On an exploitable failure** (race condition, memory corruption, buffer overflow,
-  use-after-free, privilege escalation, etc.): stop, immediately generate a sanitized bug
-  report (generalized failure type, affected subsystem, repro steps, observed-vs-expected —
-  no filenames/paths/PII), and do not commit the failure pattern until it's been discussed.
-  See `.githooks/pre-commit` / `tools/precommit_sanitize.py`.
+  SP 800-160 Vol 1 Rev 1 [REF-NIST-003 Ch.3], and SP 800-207 [REF-NIST-001 §2.1].
+- **On an exploitable failure** (race, memory corruption, overflow, use-after-free, privilege
+  escalation, etc.): stop, write a sanitized bug report (failure type, subsystem, repro steps,
+  observed vs. expected; no filenames, paths, or PII), and do not commit the failure pattern
+  until it has been discussed. Enforced by `tools/precommit_sanitize.py`.
 
-### Warnings, Cautions, Notes, and Wording
+### WARNING, CAUTION, NOTE, and wording
 
-Callout severity and requirement-verb usage follow CNAF M-3710.7 §1.5–1.6 (NATOPS General
-Flight and Operating Instructions Manual) [REF-MIL-003 §1.5, §1.6], adapted for a build/design
-repo rather than a flight-ops manual:
+This section applies to every document in the repository, human- or AI-authored. Callouts and
+requirement verbs follow CNAF M-3710.7 §1.5–1.6 [REF-MIL-003 §1.5, §1.6]:
 
 - **WARNING** — a procedure, practice, or condition that may result in injury to or death of
-  people if not carefully observed or followed. Reserve for personnel-safety risk (e.g.,
-  handling a charged spring, using a soldering iron, releasing a payload near people, a live
-  battery pack, or a failure that can bring the aircraft down on or near people).
+  people if not carefully observed or followed (e.g., a charged spring, a soldering iron, a
+  live battery pack, a payload release or failure that can bring the aircraft down on people).
 - **CAUTION** — a procedure, practice, or condition that may result in damage to or loss of
-  equipment if not carefully observed or followed, with no risk of injury to people. **This
-  includes total loss of the aircraft** (e.g., overtorquing a fitting, shorting a circuit, a
-  load-bearing joint or power branch that can fail and down the aircraft where no person is at
-  risk).
-- **Note** — information about a procedure, practice, or condition that must be emphasized, but
-  carries no WARNING- or CAUTION-level risk.
+  equipment, with no risk to people. **Owner deviation from CNAF M-3710.7:** CNAF assigns loss
+  of the aircraft to WARNING; here, loss of the aircraft with no risk to people is a CAUTION.
+- **NOTE** — information that must be emphasized but carries no WARNING- or CAUTION-level risk.
 
-Never downgrade a WARNING-level risk into a Note, and never use WARNING/CAUTION for information
-that is merely helpful rather than risk-bearing.
+Never downgrade a WARNING-level risk to a NOTE, never use WARNING/CAUTION for merely helpful
+information, and never use an ad hoc label ("IMPORTANT:", "ATTENTION:").
 
-Requirement wording follows the same source [REF-MIL-003 §1.6]:
-
-- **Shall** — the procedure is mandatory.
-- **Should** — the procedure is recommended, not mandatory.
-- **May** / **need not** — the procedure is optional.
-- **Will** — indicates futurity only; it never indicates any degree of requirement. Do not use
-  "will" where "shall" is meant.
-
-**Active vs. passive voice (project addition — not in CNAF M-3710.7):** write procedural and
-instructional text in the active voice ("Torque the fastener to 25 in-lb," not "The fastener
-shall be torqued to 25 in-lb") except where the shall/should/may/will wording above requires the
-passive construction to state the requirement itself (e.g., "The joint shall be inspected before
-final assembly"). Active voice names who or what performs the action; passive requirement
-language states what is required regardless of actor.
+- **Shall** — mandatory (not "must"). **Should** — recommended. **May** / **need not** — optional. **Will**
+  — futurity only, never a requirement. **Could** (project) — only physical/performance limits.
+- **Voice** (project convention): active voice for procedures, directions, and specifications,
+  including procedural steps inside an as-built document; passive voice for as-built
+  description. Passive is allowed where a shall/should/may requirement needs it ("The joint
+  shall be inspected before final assembly").
 
 ## 7. Fabrication Standards
 
-- **Print process and material (Rev U, owner decisions 2026-10-31):** the flight-article hull
-  and nacelle printed parts are **SLS DuraForm PA CF** [3DS-30108A], printed by a service
-  bureau (vendor not yet selected). PA11 goes at impact points (gear feet). **Every PA CF flight
-  part shall meet material specification MS-SLS-PACF, `docs/MATSPEC_SLS_PA_CF.md`** (owner-approved
-  2026-11-11: brittle design basis, build orientation on every drawing, process record and witness
-  coupons per build, inspection and acceptance). See
-  `docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md` and `tools/sls_auw_reconcile.py`. **Mass
-  basis (Rev U):** printed parts are priced at the 3D Systems datasheet solid density,
-  from the single source `tools/sls_materials.py` (PA CF 1.11 g/cc, PA11 1.03 g/cc,
-  ASTM D792; verified against the sheets 2026-11-07). Never price an SLS part with the old FDM
-  1.05 g/cc; convert any mass written on that basis with `sls_materials.sls_from_fdm_mass`.
-  **The BOM is the procurement output, so every printed part's `Unit_Mass_g` shall equal its mesh
-  mass** (STL volume × the SLS density above). `tools/check_bom_mesh_sync.py` gates this in CI;
-  `--write` re-syncs the BOM after the ledger is regenerated.
-- **Hull sections (Rev U):** the hull is **two** SLS parts at 24 in. The forward part (head+cargo,
-  with the canonical gear box fused in as skin) is `PRINT-HEAD-CARGO-ONEPIECE`; the aft part
-  (middle+rear) is `PRINT-MIDDLE-REAR-ONEPIECE`. Both are built and ship as gzip tarballs (over
-  GitHub's 100 MB limit). One internal cargo/middle splice collar joins them.
-- **FDM CF-PETG** — 0.15 mm layer height, ≥4 perimeters, ≥40% infill load-bearing /
-  25% non-structural — remains the specification for FDM prints: prototype prints and any
-  part not yet moved to SLS. Replace any stray "PETG" reference with CF-PETG when found;
-  verify any other material mentioned in the repo. (The DaVinci Jr prototype is exempt — not
-  expected to meet full-build spec.)
-- Exterior shell: hollow, watertight, no voids; fill with 2 lb/ft³ (32 kg/m³) low-density
-  closed-cell foam; inter-section mating faces stay open for build access and
-  inter-compartment cable routing.
-- **SLS wall thickness (owner OD-25 (was OD-19) option A, 2026-11-11):** size SLS PA CF walls from the
-  table in `docs/SLS_MIN_WALL_THICKNESS.md` by load category (load-bearing or not) and backing
-  (foam-backed, free-standing or lattice-supported). Use its **"XY fixed" column only when the
-  drawing states the print orientation**; otherwise use "any orientation". Where a part's
-  category or orientation is not stated, the wall **shall be 2.0 mm (0.079 in)**. The table is
-  a minimum gauge: load-bearing parts are still sized by their own loads. Its floor is the
-  interim 0.059 in (1.5 mm) until the service bureau states a minimum (WBS SLS-WALL-FLOOR).
-- Integrate mounting brackets/bosses/ribs into the shell print wherever feasible.
-- Load-bearing mating joints require a minimum 2-wall contact annulus **and** a positive-stop
-  shoulder — friction fit alone is never acceptable for a flight-critical joint.
-- Design every field-serviceable part for **common hand-tool disassembly**.
-- **Mesh validation is mandatory after every 3D-model edit** — watertight, no
-  self-intersection, correct normals, manifold topology. Report findings to `TODO.md`; resolve
-  before commit.
-- **Every schematic/PCB edit requires a KiCad ERC + DRC pass.** Resolve violations, or
-  document them (rule + reason) in `TODO.md`. Production requires a complete schematic + PCB +
-  copper traces + correct IC footprints + production-ready Gerbers.
+- **Print process and material (Rev U):** flight-article hull and nacelle printed parts are
+  **SLS DuraForm PA CF** [3DS-30108A] from a service bureau; PA11 at impact points (gear feet).
+  Every PA CF flight part shall meet MS-SLS-PACF (`docs/MATSPEC_SLS_PA_CF.md`). Selection
+  basis: `docs/SLS_MATERIAL_SELECTION_3DSYSTEMS.md`.
+- **Mass basis:** price printed parts at the datasheet solid density from the single source
+  `tools/sls_materials.py`; convert any FDM-basis mass with `sls_materials.sls_from_fdm_mass`.
+  Every printed part's BOM `Unit_Mass_g` shall equal its mesh mass (`tools/check_bom_mesh_sync.py`
+  gates this in CI; `--write` re-syncs).
+- **Hull:** two SLS parts joined by one internal splice collar; both ship as gzip tarballs.
+- **SLS walls** (OD-25 option A): size from `docs/SLS_MIN_WALL_THICKNESS.md` by load category
+  and backing. Where category or print orientation is not stated, the wall shall be
+  0.079 in (2.0 mm). Load-bearing parts are still sized by their own loads.
+- **FDM CF-PETG** remains the spec for prototype prints and parts not yet moved to SLS:
+  0.006 in (0.15 mm) layers, ≥4 perimeters, ≥40% infill load-bearing / 25% non-structural.
+  Replace any stray "PETG" with CF-PETG. The DaVinci Jr prototype is exempt.
+- Exterior shell: hollow, watertight, no voids; fill with 2 lbm/ft³ (32 kg/m³) closed-cell foam;
+  inter-section mating faces stay open for build access and cable routing.
+- Integrate brackets, bosses, and ribs into the shell print wherever feasible; design every
+  field-serviceable part for common hand-tool disassembly. Load-bearing mating joints need a
+  2-wall contact annulus **and** a positive-stop shoulder, never friction fit alone.
+- **Mesh gate:** after every 3D-model edit run `python3 tools/validate_stls.py` (watertight, no
+  self-intersection, outward normals, manifold); verify Z-range and bore diameters in console
+  output. Resolve every finding before commit.
+- **ERC/DRC gate:** after every schematic/PCB edit run
+  `python3 tools/validate_kicad.py --changed-since origin/main`. Resolve each violation, or
+  record it (rule + reason) as an open item in the owning `WBS.md` and the board's `.md`.
+  Production needs a complete schematic, PCB, copper, correct footprints, and Gerbers.
 
 ## 8. Revisions
 
-- **Letter revision** (Rev R, Rev S, …): a comprehensive checkpoint. Every component is
-  current, integrated, tested, and documented as of that letter — whether or not it changed
-  since an earlier letter.
-- **Numbered modification** after a letter (R1, R2, … — resets at each new letter): an
-  incremental change. Components carried forward unchanged are part of the next letter's
-  baseline.
-- An archived item keeps the revision label it held at archival and drops out of future
-  revisions.
+- **One project-wide letter revision.** The current baseline is **Rev U** (in progress). A
+  letter revision is a comprehensive checkpoint: every component is current, integrated,
+  tested, and documented as of that letter, whether or not it changed.
+- **Numbered modification** after a letter (U1, U2, …; resets at each letter) is an incremental
+  change. Unchanged components carry forward into the next letter's baseline.
+- Board-level letters already in use (e.g., Commo Rev T, avionics Rev S1/S2) are frozen
+  historical labels; every component is stamped Rev U when Rev U closes (ADR
+  `docs/adr/0001-single-project-revision-letter.md`). Do not start a new board-level letter.
+- An archived item keeps its label and drops out of future revisions. Coordinate frames are
+  not revisions: write "frame R1"/"frame R2", never "Rev R2".
 
 ## 9. Naming and Roles
 
@@ -330,204 +221,79 @@ language states what is required regardless of actor.
 | Pilot | Flight Control + Sensor cape |
 | TACCO | Comms/Logging/Payload cape |
 | Flight Engineer | Power Distribution Board |
-| Commo | 49 MHz + SiK transceiver cape |
+| Commo | 49 MHz + SiK standalone transceiver node |
 | Observer | Cargo-handling + nose/cargo-bay vision/ToF/laser board |
 | Shepherd's Room | Bay A — forward avionics |
 | Inara's Shuttle | Bay B — port avionics |
 | River's Room | Bay C — starboard avionics |
 | Simon's Medbay | Bay D — aft avionics |
 
-The six board names (Skipper, Pilot, TACCO, Flight Engineer, Commo, Observer) are **generic role
-names**, chosen 2026-08-01 to replace the project's original Firefly-character board names
-(TODO.md §0.9 item 8 — avoiding trademark exposure, §3 above). The four bay names were **not**
-renamed. The former-name/inspiration table and the full renaming record live in
-`docs/attribution_and_licensing.md` §6 (also `docs/WBS.md` §0.9) — historical only; never use a
-former name in new work.
+Board names are generic role names; never use a former (Firefly-character) board name in new
+work (record: `docs/attribution_and_licensing.md` §6).
 
-Flight Engineer's box sits forward in the sealed cargo duct (TEDF-06, plan
-`docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`, 2026-11-16), where its mass recovers
-hover trim; the middle-section inner neck is now the open air passage to the tail EDF. (Pre-shift it sat
-in the inner neck, minimizing power-run length to all four nacelles/stacks/battery.) Observer is a standalone board
-(not a PB2-I cape) — `avionics/AGENTS.md` "Observer — Cargo-Handling System and Nose/Cargo-Bay
-Vision, ToF & Laser Board" owns its install sites and interfaces. **Observer's laser-indicator
-specs (class, spread angle, per-site optics) change as the design matures — do not restate them
-here; canonical source is `docs/OBSERVER_LASER_ANALYSIS.md` (current revision) and
-`avionics/kicad/Observer/Observer.md`.**
-
-**PACE per stack** (Primary / Alternative / Contingency / Emergency):
-
-| Stack | Watchdog | Comms | Flight Control | Payload |
-| --- | --- | --- | --- | --- |
-| Shepherd | A | P | C | E |
-| Inara | C | E | A | P |
-| River | E | A | P | C |
-| Simon | P | C | E | A |
-
-Two roles are being added to this matrix (owner direction 2026-11-16, plan `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md` R41, NFP-TEDF-5): tail EDF and RCS control, and thrust monitor and trim compensation. The matrix rules are revised for six roles and the assignment is decided at gate G1 (OD-22); the table below is the four-role record until then.
-
-Re-balanced 2026-11-14 (owner, OD-19, option B) for the seven-node fleet: Simon is one PB2-I plus a
-trust-module MCU, so it takes the lightest Primary and Flight Control E. Every role has four distinct
-holders and every stack holds one level of every role. Basis: `docs/PACE_REBALANCE_BRIEF.md`,
-`tools/pace_balance.py`. Corrects the earlier table, whose Watchdog column had two A holders and no E.
-
-Radio assignment follows the hardware each stack actually carries, not a fixed link name. The
-current per-board radio complement and per-stack link priority are in `avionics/README.md`
-"External Comms" and each board's own `.md`; this file does not restate them. Decisions:
-
-- 2026-09-21 TACCO/Commo radio relocation: every stack's TACCO cape carries Wi-Fi + ZigBee and
-  mLRS; Commo hosts 49 MHz and SiK.
-- Rev T (approved 2026-09-29): any stack can key either Commo radio over CAN-FD / RS-485 / 1553C,
-  and a PACE-aware PTT ownership lease decides which stack transmits. Losing the one Commo node
-  drops every stack to Wi-Fi / ZigBee / mLRS.
-
-Per-stack tasking:
-
-- Shepherd: primary comms (high-bandwidth ground link) + alternate watchdog.
-- Inara: payload and cargo control (Observer, winch, cameras and external sensors) + alternate
-  flight control.
-- River: forward EDF + nacelle tilt sync + primary flight control + alternate comms.
-- Simon: aft EDF (provisional: which node commands the now flight-critical tail EDF and RCS valves is
-  open under NFP-TEDF-2 / OD-22) + primary watchdog/fault-detect/failover/authentication (the trust-module MCU
-  keeps its bus presence through a host reboot) + alternate payload.
+- **PACE:** any change to a node's role or failover level shall be checked against
+  `avionics/PACE.md` and approved by the owner before implementation.
 
 ## 10. Workflow
 
-- Read this file and the matching subsystem `AGENTS.md` before starting a task; check
-  `TODO.md` and recent git history for context; verify any citation you use against
-  `REFERENCES.md`. `docs/solutions/` holds documented solutions to past problems (bugs,
-  design patterns, workflow lessons), organized by category with YAML frontmatter
-  (`module`, `tags`, `problem_type`) — worth a search when working in an area it covers.
-  `CONCEPTS.md` (repo root) defines shared domain vocabulary — entities, named processes,
-  and status concepts with project-specific meaning — relevant when orienting to the
-  codebase or discussing domain concepts.
-- New standards citation: look it up by REF-ID first; if absent, add it to `REFERENCES.md`
-  with a validated URL and exact section, then cite the REF-ID. Never guess a section number.
-- Keep `PROJECT_INDEX.md` current for active files; when a file is archived, move its entry to
-  `ARCHIVE_INDEX.md`.
+- Before a task, read this file and the matching subsystem `AGENTS.md`; check the owning
+  `TODO.md` and recent git history; search `docs/solutions/` for past solutions in the area.
+- **Hooks:** enable once per clone (`git config core.hooksPath .githooks`); never skip hooks or
+  bypass signing. Without hooks, run `python3 tools/precommit_index.py` and stage its output.
+- **Never hand-edit generated files:** `PROJECT_INDEX.md`, `ARCHIVE_INDEX.md`, `tools/index_tags.json`
+  (`tools/precommit_index.py`) and every `TODO.md` (`tools/gen_todo_from_wbs.py`).
+- **AGENTS.md caps:** root ≤300 lines / 20 KB, subsystem ≤100 lines / 7 KB
+  (`tools/check_agents_size.py`, hook and CI). State each rule once, in its owning file; link it.
+- **Interpreter:** `/usr/bin/python3` for tools importing `trimesh` (the `.venv` hides it).
 
-### WBS.md / TODO.md Federation (Rev S2)
+### WBS.md / TODO.md federation
 
-Every subsystem that owns WBS branches keeps **two files, not one**:
+Each subsystem keeps a **`WBS.md`** (the full record: every task, done or open, with notes and
+rationale) and a generated **`TODO.md`** (open top-level items only, one ≤70-char line each,
+pointing back to `WBS.md`). Root `WBS.md` is a compact index into the subsystem files. Large
+subsystems split `WBS.md` detail across files (new file past ~500 lines); the inventory is in
+`docs/WBS_FEDERATION.md`, and split files are governed by their parent folder's `AGENTS.md`.
 
-- **`WBS.md`** — the full historical record: every task ever defined, done or open, with full
-  notes/rationale/nested sub-steps for project-progression tracking. Root `WBS.md` is itself a
-  compact index (headings, subheadings, single-line ≤70-char items, done + open) that points
-  into each subsystem's own `WBS.md` for the real narrative detail.
-- **`TODO.md`** — a lean, generated-from-`WBS.md` list of **only currently-open (unchecked)
-  top-level items**, one line each (≤70 chars), each pointing back to its entry in the local
-  `WBS.md`. This is the "what's actually left" view. Close an item in `WBS.md` first;
-  `TODO.md` is regenerated/pruned from there, never edited as the source of truth.
+- **Open an item:** find the owning file in `docs/WBS_FEDERATION.md`; take the next ID in that
+  branch's existing scheme; add a `- [ ]` entry with full notes there and a ≤70-char line under
+  the matching root `WBS.md` heading; then run `python3 tools/gen_todo_from_wbs.py`.
+- **Finished work:** check the item off in the owning `WBS.md` first, then regenerate every
+  `TODO.md` (`--check` reports drift and exits non-zero; it runs in the hook and CI). A
+  `TODO.md` line with no `WBS.md` home is a defect: move it into `WBS.md`, then regenerate.
 
-Governance stays with the `AGENTS.md` files listed in §2. Several subsystems split `WBS.md`
-detail across more than one file so none exceeds ~500 lines (the threshold at which a subsystem
-gets a new detail file); the full per-subsystem inventory of those `{TODO,WBS}.md` pairs — for
-`avionics/`, `airframe/`, `graphical-build-guide/`, `docs/`, `gcs/`, `deferred/`, `tools/`, and
-`current-specification/` — is in **`docs/WBS_FEDERATION.md`**. Split detail files are governed
-by their parent folder's `AGENTS.md` (no separate federated `AGENTS.md` per split).
+### Design-shift gate (mandatory, before implementation)
 
-New work: close it in the owning `WBS.md` first (full notes there), then regenerate every
-`TODO.md` with `/usr/bin/python3 tools/gen_todo_from_wbs.py` (`--check` reports drift and
-exits non-zero). Never hand-edit a `TODO.md`; a `TODO.md` line with no `WBS.md` home is a
-defect in the record — move the content into the owning `WBS.md`, then regenerate. Sync root
-and subsystem `WBS.md` before committing.
+A **design shift** changes a subsystem's capability (moving a functional block between PCBs,
+swapping a major part's make/model, changing how an assembly mounts or actuates), not a bug
+fix, DRC/ERC cleanup, placement/routing, or documentation correction.
 
-### Design-shift documentation gate (mandatory, before implementation)
+1. **Document the decision first** in the owning `WBS.md` (and root `WBS.md` if
+   federation-visible), before any KiCad, OpenSCAD, Blender, or STL change: what changes, why,
+   what was considered and rejected, and which boards/parts/files are affected. In the same
+   pass, add at least a dated status note to the matching descriptive doc (board `.md`,
+   `current-specification/README.md`, or airframe doc).
+2. **Then write an implementation plan** at `docs/plans/YYYY-MM-DD-NNN-<type>-<slug>-plan.md`
+   (e.g., the Claude Code `ce-plan` skill).
+3. **Then implement** in the KiCad or STL/CAD sources.
 
-A **design shift** is any change that alters an avionics or airframe subsystem's
-*capability*, not just its implementation — moving a radio, sensor, or other functional
-block from one PCB to another; swapping one radio, servo, actuator, or major part for a
-different make/model; changing how a structural assembly (e.g. cargo bay doors, landing
-gear, a joint) mounts or actuates; or any other change a stakeholder would recognize as
-"we now do X differently" rather than "we fixed a bug in X." Routine bug fixes, DRC/ERC
-cleanup, placement/routing work, and documentation corrections are not design shifts and
-don't require this gate.
+If implementation came first, write the WBS entry next; a KiCad/STL change is never the first
+place a decision appears.
 
-For a design shift, work in this order — **do not reverse it**:
+### Other practice
 
-1. **Document the decision first**, in the owning subsystem's `WBS.md` (and root `WBS.md`
-   if it's federation-visible), before any KiCad, OpenSCAD, Blender, or STL file changes.
-   The entry must state what changes, why, what was considered and rejected (per the
-   project's "explicit rejection with reasons" discipline), and which boards/parts/files
-   are affected. This makes the decision the **authoritative, promulgated record** other
-   work in the project can rely on from that point forward — not something reverse-engineered
-   from a diff after the fact.
-   Update matching descriptive docs in the same pass (a board's own `.md` in
-   `avionics/kicad/<Board>/`, `current-specification/README.md`, or the equivalent
-   airframe doc) — at minimum a dated status note if a full rewrite isn't warranted, so a
-   reader of the descriptive doc alone is not misled by stale content.
-2. **Then generate an implementation plan** (`ce-plan` or equivalent) from that documented
-   decision.
-3. **Then implement** in the KiCad project files (schematic → PCB) or STL/CAD sources,
-   per the normal workflow in this file and the owning subsystem `AGENTS.md`.
-
-If implementation work is already underway or done before the WBS entry exists (e.g. the
-decision was made verbally or mid-session), write the WBS entry retroactively as the next
-step, before moving on — never leave a shipped design shift undocumented, and never let a
-KiCad/STL change be the first place the decision appears in the repo.
-
-- Prefer editing existing files. No speculative abstractions, feature flags, or unused
-  scaffolding — build only what the task needs.
-- Blender: run headless — `blender --background --python <script>.py`. FreeCAD:
-  `freecadcmd <script>.py`. STL output goes to `airframe/stls/{fuselage,nacelles,wings}/`;
-  verify Z-range/bore-diameter in console output before committing.
-- File naming: the legacy `s_` prefix is dropped (Rev R1). Fix a stale `s_`-prefixed
-  reference opportunistically when you touch that code/doc — not as a dedicated sweep.
-- Git: create new commits, don't amend (unless asked); never skip hooks or bypass signing;
-  never force-push `main`. Use a HEREDOC for multi-line commit messages, and credit the
-  authoring model, e.g. `Co-Authored-By: <Model Name> <noreply@anthropic.com>`.
-- Occasionally add a sparse, on-topic Firefly/Serenity quote to documentation (style:
-  `docs/PHASED_BUILD_GUIDE.md`, `TODO.md` footer) — never in place of required technical
-  content.
+- Prefer editing existing files; no speculative abstractions, feature flags, or scaffolding.
+- Blender and FreeCAD run headless; invocations and output paths: `tools/TOOL_REFERENCE.md`.
+- Drop the legacy `s_` file prefix (Rev R1) when you touch a reference that carries it.
+- Git: create new commits, don't amend unless asked; never force-push `main`; use a HEREDOC for
+  multi-line messages; credit the authoring AI system with its own vendor's trailer (e.g.,
+  Claude: `Co-Authored-By: Claude <noreply@anthropic.com>`).
+- A sparse, on-topic Firefly quote in docs is welcome, never in place of required content.
 
 ## 11. Conflicts and Unknowns
 
-1. This file (project-wide) vs. a subsystem `AGENTS.md` (scope-specific): the subsystem file
-   governs within its own scope unless this file explicitly excludes that topic.
-2. Any conflict between this file and a subsystem file: **stop and get user adjudication
-   before proceeding** — do not guess, do not pick a side unilaterally.
+1. This file wins wherever it speaks; a contradicting subsystem line is a defect to fix.
+2. A contradiction this file does not settle (between two subsystem files, or between a rule
+   and the owning WBS/plan record): **stop and get the owner's decision** before proceeding.
 3. `REFERENCES.md` (verified standards) outranks comments or assumptions.
-4. Actual code/model state outranks stale documentation — if they diverge, fix the doc to
-   match reality and note why they diverged.
-5. Task unclear, or information you need is missing: **ask the user.** Never guess or invent
-   details.
-
----
-**Authoritative file.** `CLAUDE.md` (root) points here for tooling that expects that
-filename.
-
-## Word Usage and Documentation Style
-
-This section applies to all documents in this repository, human- and AI-authored alike.
-
-### Voice
-
-- Use **active voice** for all directions and authoritative specification documents.
-- Use **passive voice** for all descriptive as-built documents.
-
-### Mandatory word usage
-
-| Word | Meaning | Example |
-|---|---|---|
-| **shall** | The action is prescribed as mandatory. | "You shall obey the law." |
-| **will** | One thing follows another; no mandatory action is demanded. | "Friday will come after Thursday." |
-| **should** | Preferred but not mandatory. | "You may do it that way, but you should do it this way." |
-| **may** | A permissible action by an entity (AI or human). | |
-| **could** | Used only to describe the physical or performance limits of objects. | |
-
-### Call-out boxes
-
-- A call-out box labeled **WARNING** shall prominently accompany any directive, instruction, or checklist item that, if not followed, creates a hazard to life or bodily injury.
-- A call-out box labeled **CAUTION** shall accompany directives, instructions, and checklist items that, if not followed carefully, create a hazard to objects.
-- A call-out box labeled **NOTE** will accompany other items that need emphasis but do not present hazardous conditions.
-
-### Reference
-
-The shall/should/may definitions and the WARNING/CAUTION/NOTE call-out
-convention above follow CNAF M-3710.7, *NATOPS General Flight and Operating
-Instructions*, issued by Commander, Naval Air Forces (CNAF)
-(<https://www.secnav.navy.mil/doni/SECNAV%20Manuals1/3710.7%20(CNAF).pdf>).
-**Owner deviation from CNAF M-3710.7:** CNAF assigns loss of the aircraft to WARNING. This repo
-does not: a WARNING is a risk of injury or death to people only, and loss of the aircraft with
-no risk to people is a CAUTION.
-The will/could definitions and the active-voice/passive-voice distinction
-above are this project's own convention, not drawn from that source.
+4. Actual code/model state outranks stale documentation: fix the doc to match and note why.
+5. Task unclear, or information missing: **ask the user.** Never guess or invent details.
