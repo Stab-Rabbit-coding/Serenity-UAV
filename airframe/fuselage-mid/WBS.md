@@ -1305,10 +1305,26 @@ forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
 - [ ] **TEDF-02** — [STD] Thermal model refresh: closed-cavity fix, ramp and bow branches,
     EDF flow input, tail speed controller and motor as limited nodes, minimum cooling throttle.
     The stern stack step needs NFP-THERM. Plan U2. (S45; swapped with S46 on 2026-11-16)
-- [ ] **TEDF-03** — [ADV] Tail EDF flow tool: installed thrust, flow split, stall margin.
-    Plan U3. (S43)
-- [ ] **TEDF-04** — [ADV] Hover trim and RCS tool: trim use, jet sizing, CG window, louvre-loss
-    bound, independent trim schedule, degraded-mode time history and yaw. Plan U4. (S43)
+- [x] **TEDF-03** — [ADV] Tail EDF flow tool: installed thrust, flow split, stall margin.
+    Plan U3. (S43, closed 2026-11-17: `tools/tail_edf_flow.py`, 16 tests, one limits list.
+    Checked against momentum theory (closed form) and the maker's free-air figures
+    [REF-EDF-003]; the plan's planning figures agree within 1 to 6 % as a regression note.
+    PROVISIONAL: every loss coefficient, the bow and Bay A areas and the stall pressure are
+    ASSUMED. Step 8, recalibration to the owner's pre-G1 bench run, stays open and gates U8:
+    root `WBS.md` §0.14.)
+- [x] **TEDF-04** — [ADV] Hover trim and RCS tool: trim use, jet sizing, CG window, louvre-loss
+    bound, independent trim schedule, degraded-mode time history and yaw. Plan U4. (S43,
+    closed 2026-11-17: `tools/hover_trim_rcs.py`, 21 tests, one limits list. Checked against a
+    hand moment balance about the pivot and the CG. Plan scenario reproduces the plan table
+    within a few percentage points (regression note). **Finding:** on the ledger as it stands
+    (plan moves not applied) the CG is 1.5 mm forward of the pivot and the run FAILS R23 and R30
+    (trim use 131 % at full throttle). Applying the plan's own CG deltas to the corrected ledger
+    (`--case projected`) leaves the CG at about 0.0 mm, 1.4 mm short of this tool's window edge
+    (+1.3 mm); limiting the Flight Engineer box move to about 77 % reaches the edge (linear,
+    ESTIMATE). The plan's final +2.3 mm rested on a baseline that lacked the Bay A parts, the
+    nose sensor bodies and the pitot parts. Owner/G1 decision; items in root `WBS.md` §0.14.
+    Open for U13/U17: closed-loop recovery and the minimum credited hover height; OQ11 pitch-excursion limit; unmeasured tilt lag, dead time
+    and backlash.)
 - [ ] **TEDF-05** — [ADV] Rear-cone layout: QX pusher unit, RCS scoops at Y 628 with structure at the
     shroud joint, ventral exhausts at 245° and 295° canted 25° aft, trapezoidal exhausts on the canon
     plate pattern, 3D jet check, the three RCS valve concepts for G1. Plan U5. (S44)
