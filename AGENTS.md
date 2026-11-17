@@ -363,6 +363,8 @@ here; canonical source is `docs/OBSERVER_LASER_ANALYSIS.md` (current revision) a
 | River | E | A | P | C |
 | Simon | P | C | E | A |
 
+Two roles are being added to this matrix (owner direction 2026-11-16, plan `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md` R41, NFP-TEDF-5): tail EDF and RCS control, and thrust monitor and trim compensation. The matrix rules are revised for six roles and the assignment is decided at gate G1 (OD-22); the table below is the four-role record until then.
+
 Re-balanced 2026-11-14 (owner, OD-19, option B) for the seven-node fleet: Simon is one PB2-I plus a
 trust-module MCU, so it takes the lightest Primary and Flight Control E. Every role has four distinct
 holders and every stack holds one level of every role. Basis: `docs/PACE_REBALANCE_BRIEF.md`,

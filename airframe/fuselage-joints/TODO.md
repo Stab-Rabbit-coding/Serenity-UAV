@@ -32,7 +32,6 @@
 ##### 1.1.1.0a *Blender-Canonical Source Adoption (Rev R1, 2026-06-13)*
 → full detail: `WBS.md` §1.1.1.0a
 
-- [ ] Door-servo pads, latch-catch lips, belly ribs, hinge-pin blocks
 - [ ] Shepherd's "Book" Faraday-tray dorsal mount in `head_shell24.scad`
 - [ ] Leg-mount clearance (§1.1.4): the deferred Rev R5 wire-brace corner…
 - [ ] Door latching: the aperture is a clean opening (no seating rabbet)

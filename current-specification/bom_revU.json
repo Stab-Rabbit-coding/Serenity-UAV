@@ -17,19 +17,6 @@
       "Notes": "*** RETIRED Rev U (2026-11-07): the 64 mm nacelle replaces the 50 mm EDF (MOTOR-QF2822-2300KV + ROTOR-QX64-12B). Qty 0 keeps the row traceable; the 50 mm design is frozen in archives/rev-T-frozen.tar.gz and the earlier note follows. 1240g thrust each (XFly Galaxy X5 canonical); 70g unit mass; verify CW vs CCW rotation before nacelle install; 2 per nacelle tandem with 11-fin stator (90% efficiency); Rev S1 positioning Z=22..72mm EDF1, Z=98..143mm EDF2"
     },
     {
-      "Ref": "EDF-55-6S",
-      "Description": "55mm EDF unit @ 6S — Phase 11 DEFERRED",
-      "Category": "Propulsion",
-      "Qty": "0",
-      "Unit_Mass_g": "95",
-      "Total_Mass_g": "0",
-      "Supplier": "HobbyKing / AliExpress",
-      "Supplier_PN_or_Search": "55mm 6S ducted fan EDF ~1500g thrust",
-      "Est_Unit_Price_USD": "45.00",
-      "Est_Total_Price_USD": "0.00",
-      "Notes": "*** PHASE 11 DEFERRED — rear fuselage EDF; not installed in Phases 5-10 (CLAUDE.md: \"optional addition once everything else works\"); ~1500g fan thrust; exhausts aft through fixed canonical elliptical nozzle (2.06x1.76 in); also feeds 4 RCS bleed jets (~15% flow); FORWARD (cruise) thrust only — not counted in hover T/W ***"
-    },
-    {
       "Ref": "ESC-40A-6S",
       "Description": "40A 6S BLHeli32 ESC, BDSHOT600",
       "Category": "ESC",
@@ -41,19 +28,6 @@
       "Est_Unit_Price_USD": "18.00",
       "Est_Total_Price_USD": "72.00",
       "Notes": "*** RETIRED Rev U (2026-11-07): the 64 mm nacelle uses OSESC-NAC. Qty 0 keeps the row traceable; the 50 mm design is frozen in archives/rev-T-frozen.tar.gz and the earlier note follows. One per 50mm EDF; mount in nacelle hub bore ID=20mm; 55A burst"
-    },
-    {
-      "Ref": "ESC-50A-6S",
-      "Description": "50A 6S BLHeli32 ESC — Phase 11 DEFERRED",
-      "Category": "ESC",
-      "Qty": "0",
-      "Unit_Mass_g": "35",
-      "Total_Mass_g": "0",
-      "Supplier": "AliExpress / HobbyKing",
-      "Supplier_PN_or_Search": "BLHeli32 50A 6S ESC ~65A burst",
-      "Est_Unit_Price_USD": "22.00",
-      "Est_Total_Price_USD": "0.00",
-      "Notes": "*** PHASE 11 DEFERRED — not installed in Phases 5-10; for 55mm rear EDF only; ~65A burst; XT60; F_ESC5 = 60A MIDI fuse ***"
     },
     {
       "Ref": "SERVO-TILT",
@@ -641,19 +615,6 @@
       "Notes": "2026-10-20 (owner decision): replaces HX711-LC (Avia Semiconductor, P. R. China per its datasheet p.1; fails the component-sourcing rule, AGENTS.md section 5 -- rejection recorded in docs/CARGO_WINCH_SPECIFICATION.md section 5.5). ADS1231IDR is Texas Instruments (US), Active, public datasheet SBAS414D (REFERENCES.md REF-SENSOR-063); Digi-Key 296-43578-1-ND, USD 6.48 each with 3332 in stock on 2026-10-20. Est. USD 8.50 = IC 6.48 + 2.00 allowance for PCB, passives and JST-GH (estimate, not quoted). Mass 3 g is the retired module's allowance carried forward (no layout yet) -- replace with the PCB roll-up when WBS CARGO-LC-01 completes. Interface unchanged from the HX711: two-wire clock/data on CAN-PERIPH-GW J_FLEX; AVDD = DVDD = +3V3 from J_FLEX (RAIL-2 at 5.4 V exceeds the ADS1231 5.3 V supply limit; docs/CARGO_WINCH_SPECIFICATION.md section 5.5). Load-cell element is NOT yet in the BOM (spec open item 18); bridge must be >= 350 ohm."
     },
     {
-      "Ref": "DRV8833-CARGO",
-      "Description": "DRV8833 dual H-bridge motor driver breakout — cargo door + release servo controller",
-      "Category": "Cargo",
-      "Qty": "0",
-      "Unit_Mass_g": "3",
-      "Total_Mass_g": "0",
-      "Supplier": "Amazon / AliExpress",
-      "Supplier_PN_or_Search": "DRV8833 dual H-bridge motor driver breakout board",
-      "Est_Unit_Price_USD": "2.00",
-      "Est_Total_Price_USD": "0.00",
-      "Notes": "RETIRED 2026-09-21 -- the door/release servos are driven by CAN-PERIPH-GW-DOOR (docs/CARGO_DOOR_GATEWAY_SPEC.md D-GW-1/D-GW-3); no local H-bridge. Qty 0, row kept for the record. Original note: Rev P new; drives 2x SG90 cargo servos; over-current protection for door-jam scenario; mounts in cargo_drv8833_tray.stl; 2.7-10.8V supply"
-    },
-    {
       "Ref": "DYNEEMA-SK75",
       "Description": "Dyneema SK75 0.5mm braided line, 2m — cargo winch spool line",
       "Category": "Cargo",
@@ -1005,45 +966,6 @@
       "Notes": "0.15mm / 40% gyroid / 4 walls; SCAD: serenity/stl/s_neck_intake_frame.scad; REQUIRES REGEN for 55mm intake area (Rev R1); bond with West System 105/206; cure 24h before foam-fill"
     },
     {
-      "Ref": "PRINT-AFT-PLENUM",
-      "Description": "s_aft_edf_plenum.stl — PETG plenum manifold (55mm EDF inlet + 4 RCS bleed taps) — Phase 11 DEFERRED",
-      "Category": "Printed Part",
-      "Qty": "0",
-      "Unit_Mass_g": "50",
-      "Total_Mass_g": "0",
-      "Supplier": "In-house 3D print",
-      "Supplier_PN_or_Search": "PETG — see FIL-PETG",
-      "Est_Unit_Price_USD": "0.00",
-      "Est_Total_Price_USD": "0.00",
-      "Notes": "*** PHASE 11 DEFERRED — 55mm rear EDF plenum with 4 RCS bleed taps (~15% flow); REQUIRES REGEN (outlet 120mm->55mm + RCS taps, Rev R1); not printed/installed in Phases 5-10 ***"
-    },
-    {
-      "Ref": "PRINT-EDF-MOTOR-MOUNT",
-      "Description": "s_edf_55_motor_mount.stl — CF-PETG 55mm EDF motor mount spider — Phase 11 DEFERRED",
-      "Category": "Printed Part",
-      "Qty": "0",
-      "Unit_Mass_g": "25",
-      "Total_Mass_g": "0",
-      "Supplier": "In-house 3D print",
-      "Supplier_PN_or_Search": "CF-PETG + hardened nozzle — see FIL-CF-PETG",
-      "Est_Unit_Price_USD": "0.00",
-      "Est_Total_Price_USD": "0.00",
-      "Notes": "*** PHASE 11 DEFERRED — 3-arm spider motor mount for 55mm rear EDF; REQUIRES REGEN (120mm->55mm, Rev R1); not printed in Phases 5-10 ***"
-    },
-    {
-      "Ref": "PRINT-THRUST-TUBE",
-      "Description": "s_edf_55_thrust_tube.stl — PETG 55mm EDF thrust tube — Phase 11 DEFERRED",
-      "Category": "Printed Part",
-      "Qty": "0",
-      "Unit_Mass_g": "20",
-      "Total_Mass_g": "0",
-      "Supplier": "In-house 3D print",
-      "Supplier_PN_or_Search": "PETG — see FIL-PETG",
-      "Est_Unit_Price_USD": "0.00",
-      "Est_Total_Price_USD": "0.00",
-      "Notes": "*** PHASE 11 DEFERRED — inner duct for 55mm rear EDF; REQUIRES REGEN (120mm->55mm, Rev R1); not printed in Phases 5-10 ***"
-    },
-    {
       "Ref": "PRINT-WINGS",
       "Description": "s_wings_both_shell24.stl — Wing pair (SUPERSEDED by PRINT-WINGS-S1223 in Rev O)",
       "Category": "Printed Part",
@@ -1302,58 +1224,6 @@
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
       "Notes": "*** RETIRED Rev U (2026-11-07): gear-train nozzle drive deleted; the nozzle is servo-driven. Qty 0 keeps the row traceable; the 50 mm design is frozen in archives/rev-T-frozen.tar.gz and the earlier note follows. Two-boss mount for the idler gear shaft; RENDER_PART=\"bracket\" of nacelle_nozzle_idler.scad"
-    },
-    {
-      "Ref": "PRINT-REAR-NOZZLE",
-      "Description": "rear_nozzle_canonical.stl — Fixed canonical elliptical tail nozzle (2.06x1.76 in exit) — Phase 11 DEFERRED",
-      "Category": "Printed Part",
-      "Qty": "0",
-      "Unit_Mass_g": "30",
-      "Total_Mass_g": "0",
-      "Supplier": "In-house 3D print",
-      "Supplier_PN_or_Search": "CF-PETG — see FIL-CF-PETG",
-      "Est_Unit_Price_USD": "0.00",
-      "Est_Total_Price_USD": "0.00",
-      "Notes": "*** PHASE 11 DEFERRED — fixed canonical Serenity tail nozzle (52.3x44.7mm elliptical exit, ~1836 mm2); NO iris, NO servo; blends into hull outer mold line; REQUIRES GEN (Rev R1, supersedes old iris rear_nozzle_frame/petal); not printed in Phases 5-10 ***"
-    },
-    {
-      "Ref": "PRINT-RCS-THRUSTER",
-      "Description": "rcs_thruster_nozzle.stl — RCS bleed-air jet nozzle — Phase 11 DEFERRED",
-      "Category": "Printed Part",
-      "Qty": "0",
-      "Unit_Mass_g": "8",
-      "Total_Mass_g": "0",
-      "Supplier": "In-house 3D print",
-      "Supplier_PN_or_Search": "CF-PETG — see FIL-CF-PETG",
-      "Est_Unit_Price_USD": "0.00",
-      "Est_Total_Price_USD": "0.00",
-      "Notes": "*** PHASE 11 DEFERRED — 4 per aircraft; EDF-fed bleed jet for pitch/yaw attitude; REQUIRES GEN (Rev R1); not printed in Phases 5-10 ***"
-    },
-    {
-      "Ref": "PRINT-RCS-MANIFOLD",
-      "Description": "rcs_distribution_manifold.stl — 4-way RCS bleed manifold off EDF plenum — Phase 11 DEFERRED",
-      "Category": "Printed Part",
-      "Qty": "0",
-      "Unit_Mass_g": "25",
-      "Total_Mass_g": "0",
-      "Supplier": "In-house 3D print",
-      "Supplier_PN_or_Search": "PETG — see FIL-PETG",
-      "Est_Unit_Price_USD": "0.00",
-      "Est_Total_Price_USD": "0.00",
-      "Notes": "*** PHASE 11 DEFERRED — splits ~15% EDF mass flow to the 4 RCS valves; REQUIRES GEN (Rev R1); not printed in Phases 5-10 ***"
-    },
-    {
-      "Ref": "PRINT-RCS-VALVE-BRACKET",
-      "Description": "rcs_valve_bracket.stl — SG90-class proportional valve mount — Phase 11 DEFERRED",
-      "Category": "Printed Part",
-      "Qty": "0",
-      "Unit_Mass_g": "10",
-      "Total_Mass_g": "0",
-      "Supplier": "In-house 3D print",
-      "Supplier_PN_or_Search": "CF-PETG — see FIL-CF-PETG",
-      "Est_Unit_Price_USD": "0.00",
-      "Est_Total_Price_USD": "0.00",
-      "Notes": "*** PHASE 11 DEFERRED — 4 per aircraft; one per RCS bleed jet; REQUIRES GEN (Rev R1); not printed in Phases 5-10 ***"
     },
     {
       "Ref": "PRINT-FEET",
@@ -1783,32 +1653,6 @@
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
       "Notes": "Rev P new (PR #21 2026-05-30); mirrors door servo bracket; drives cradle pull-wire release; 2mm PTFE guide tube for wire; 0.15mm / 40% gyroid / 4 walls Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 10.6 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
-    },
-    {
-      "Ref": "PRINT-DRV8833-TRAY",
-      "Description": "cargo_drv8833_tray.stl — DRV8833 breakout tray, PETG",
-      "Category": "Printed Part",
-      "Qty": "0",
-      "Unit_Mass_g": "8",
-      "Total_Mass_g": "0",
-      "Supplier": "In-house 3D print",
-      "Supplier_PN_or_Search": "PETG — see FIL-PETG",
-      "Est_Unit_Price_USD": "0.00",
-      "Est_Total_Price_USD": "0.00",
-      "Notes": "RETIRED 2026-09-21 -- the door/release servos are driven by CAN-PERIPH-GW-DOOR (docs/CARGO_DOOR_GATEWAY_SPEC.md D-GW-1/D-GW-3); no local H-bridge. Qty 0, row kept for the record. Original note: Rev P new (PR #21 2026-05-30); 23x19mm PCB pocket; 4x snap tabs; JST-PH 2mm cutout; 3mm thermal clearance; 0.20mm / 25% gyroid"
-    },
-    {
-      "Ref": "PRINT-CARGO-CRADLE",
-      "Description": "cargo_cradle_autolatch.stl — Cargo auto-latch cradle, PETG",
-      "Category": "Printed Part",
-      "Qty": "0",
-      "Unit_Mass_g": "80.6",
-      "Total_Mass_g": "0",
-      "Supplier": "In-house 3D print",
-      "Supplier_PN_or_Search": "PETG — see FIL-PETG",
-      "Est_Unit_Price_USD": "0.00",
-      "Est_Total_Price_USD": "0.00",
-      "Notes": "*** WEIGHT PASS 2026-10-19 (13.0 lbm): qty -> 0, stowed payload held by the winch ratchet over latched doors *** Rev P new (PR #21 2026-05-30); press-to-lock latch 5N hold; 0.5mm SS spring wire; pull-wire release from SERVO-CARGO Ch-B; 50x50x30mm+ payload footprint; 0.20mm / 40% gyroid [Rev T MASS_AUDIT correction (docs/MASS_AUDIT_CARGO_WING_ROOT.md section 5, measured 2026-08-30): BOM mass 18 g/ea -> measured 80.6 g/ea from the published STL.]"
     },
     {
       "Ref": "PRINT-GPS-RETENTION",

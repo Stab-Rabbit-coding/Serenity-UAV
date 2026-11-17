@@ -420,7 +420,7 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] Update REVN_BUILD_GUIDE_24IN.md bay layout table
 - [ ] Regenerate cargo_sect_shell24.stl
 - [ ] Add DRV8833-tray boss locations to cargo_sect_shell24.scad
-- [ ] Add SG90 bell-crank boss to inner face of each door panel for p…
+- [x] (superseded 2026-11-16 by TEDF-10: the cargo doors are fused into the skin and the belly service panel with captive fasteners replaces them, plan 002 KD5 and R12) Add SG90 bell-crank boss to inner face of each door panel for p…
 - [x] Cargo winch Rev B spec — STS3215, both-ends spool, ratchet
 - [x] N20 winch train scrubbed from active files (Rev A withdrawn)
 - [x] New winch hardware specified — 6 STLs + 7 BOM ref
@@ -456,9 +456,9 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] Simon bay — define avionics bay in the MIDDLE section (moved he…
 - [ ] Flight Engineer room — PDB + battery bay, middle VENTRAL (2026-06-13).
 - [ ] Avionics-bay interior name marks (DEFERRED, 2026-06-13).
-- [ ] Phase 11 — aft EDF intake scoop cuts
-- [ ] neck_intake_frame.stl (Phase 11)
-- [ ] aft_edf_plenum.stl
+- [x] (superseded 2026-11-16, TEDF-01) Phase 11 — aft EDF intake scoop cuts
+- [x] (superseded 2026-11-16, TEDF-01) neck_intake_frame.stl (Phase 11)
+- [x] (superseded 2026-11-16, TEDF-01) aft_edf_plenum.stl
 - [x] middle_canonical_shell24.stl
 - [ ] Mount ant-collision strobe on belly of middle section in accord…
 - [ ] Mount ant-collision steady white tail light on upper pod of rea…
@@ -476,25 +476,26 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] HULL-LEAK-04 Belly service hatch gasket (was the cargo door seam; doors fused, TEDF-10) (S52)
 - [ ] LG-AFT-BOLT-01 Aft-port gear bolt driver access vs wing
 - [ ] HULL-FUSE-02 Fuse other bonded mounts into one-piece print
-- [x] COOL-01 Rear-fan cooling: superseded by TEDF-01..16
-- [ ] TEDF-01 Tail EDF: record and reference repair (S42)
+- [x] COOL-01 Rear-fan cooling: superseded by TEDF-01..17
+- [ ] TEDF-01 Tail EDF: record, references, ledger gaps (S42)
 - [ ] TEDF-02 Tail EDF: thermal model refresh (S45)
 - [ ] TEDF-03 Tail EDF flow tool: thrust, stall margin (S43)
 - [ ] TEDF-04 Hover trim and RCS tool, CG window (S43)
 - [ ] TEDF-05 Rear-cone layout: QX pusher, RCS exhausts (S44)
 - [ ] TEDF-06 Cargo duct layout: FE box forward, hatch (S44)
-- [ ] TEDF-07 Head layout: GNSS, ballast pocket, inlets (S44)
+- [ ] TEDF-07 Head layout: GNSS trade, ballast, inlets (S45)
 - [ ] ★ TEDF-08 Gate G1 Owner Decision Brief (OD-22) (S46)
 - [ ] TEDF-09 Aft hull provisions: ring, tube, RCS (S47)
-- [ ] TEDF-10 Forward hull: ramp louvres, fused doors (S48)
+- [ ] TEDF-10 Forward hull: ramp, fused doors, belly panel (S48)
 - [ ] TEDF-11 Separate parts: shroud, valves, covers (S49)
 - [ ] TEDF-12 CFD case, still air and cruise (S50)
 - [ ] TEDF-13 Coupled cooling, thrust and trim analysis (S51)
 - [ ] TEDF-14 Mass, CG, bench balance, gate G2 (OD-23) (S52)
 - [ ] TEDF-15 Seal and aperture gate (S52)
-- [ ] TEDF-16 Specifications, build guide, closeout (S53)
+- [ ] TEDF-16 Specifications, build guide, closeout (S54)
+- [ ] TEDF-17 Control figures: mixer and tilt PID gains (S53)
 - [ ] OSESC-TAIL-1 Fifth OSESC controller for the tail EDF (S49)
-- [ ] OSESC-TAIL-2 Tail EDF controller fault behaviour spec (S53)
+- [ ] OSESC-TAIL-2 Tail EDF controller fault behaviour spec (S54)
 #### 1.1.2 — Wings
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.2
 
@@ -1090,7 +1091,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase7
 
 - [ ] Bond cargo gondola shell into belly void at 4× M3 hard points (…
-- [ ] Install 3mm CF door hinge pins; attach clamshell door halves (s…
+- [x] (superseded 2026-11-16 by TEDF-10: the cargo doors are fused into the skin and the belly service panel with captive fasteners replaces them, plan 002 KD5 and R12) Install 3mm CF door hinge pins; attach clamshell door halves (s…
 - [ ] Install SPT5425LV/LibreServo v2 winch + twin-pedestal spool + ratchet; wind Dy…
 - [ ] Install SG90 door-actuator servo (spring-assist open, servo pul…
 - [ ] Install SG90 payload-release servo; connect to DRV8833 IN1/IN2…
@@ -1150,9 +1151,9 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 
 > **2026-11-16:** the tail EDF, its speed controller and the RCS moved into the first build (TEDF-01..16, `airframe/fuselage-mid/WBS.md` §1.1.1.4.0). The items below are the pre-shift record; TEDF-01 closes or rewrites them.
 
-- [ ] Scoop windows must be re-sized for the 55 mm EDF (reduced area).
-- [ ] Remove temporary window covers from existing neck shell, or swa…
-- [ ] Regenerate
+- [x] (superseded 2026-11-16, TEDF-01) Scoop windows must be re-sized for the 55 mm EDF (reduced area).
+- [x] (superseded 2026-11-16, TEDF-01) Remove temporary window covers from existing neck shell, or swa…
+- [x] (superseded 2026-11-16, TEDF-01) Regenerate
 - [x] (superseded 2026-11-16, TEDF-01) Regenerate
 - [ ] Generate
 - [ ] Generate
@@ -1160,13 +1161,13 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [x] (superseded 2026-11-16, TEDF-01) Dry-fit neck_intake_frame.stl into the resized scoop windows; r…
 - [ ] Verify aerodynamic orientation: intake lips face forward (−Y /…
 - [ ] Apply structural epoxy to tongues + shoulder flanges; press fra…
-- [ ] Fillet all gaps between flange and hull; cure 2h.
+- [x] (superseded 2026-11-16, TEDF-01) Fillet all gaps between flange and hull; cure 2h.
 - [x] (superseded 2026-11-16, TEDF-01) Dry-fit aft_edf_plenum.stl; verify intake arm alignment and 55m…
 - [x] (superseded 2026-11-16, TEDF-01) Bond plenum forward arms to intake frame exits; fillet joints;…
 - [x] (superseded 2026-11-16, TEDF-01) Bond rcs_distribution_manifold.stl to the 4 plenum bleed taps;…
 - [x] (superseded 2026-11-16, TEDF-01) Pressure-test: seal EDF face with tape; cover all but one scoop…
-- [ ] Bench-test 55mm EDF (correct rotation, no vibration).
-- [ ] Install EDF retaining ring at station ~430mm inside Panel F; bo…
+- [x] (superseded 2026-11-16, TEDF-01) Bench-test 55mm EDF (correct rotation, no vibration).
+- [x] (superseded 2026-11-16, TEDF-01) Install EDF retaining ring at station ~430mm inside Panel F; bo…
 - [x] (superseded 2026-11-16, TEDF-01) Seat EDF in plenum 55mm inlet; press forward to retaining lip;…
 - [ ] Route motor leads through Panel F to 50A ESC; route signal lead…
 - [ ] Install 50A ESC in Panel F bay; foam tape + cable tie. Cure 2h…

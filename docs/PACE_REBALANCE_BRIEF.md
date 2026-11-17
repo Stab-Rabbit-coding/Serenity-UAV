@@ -3,6 +3,8 @@
 **Owner / engineer of record:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **Drafted by:** Claude (Anthropic), 2026-11-14, at the owner's direction of the same day: "re-compute PACE based on node capabilities and loading, balancing loading with fallback capacity. No single point of failure and no node having a single PACE tasking."
 **License:** CC BY-SA 4.0 — see LICENSES/CC-BY-SA-4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
+
+> **Update 2026-11-16 (owner).** Two roles are to be added to this matrix: tail EDF and RCS control, and thrust monitor and trim compensation (plan `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md` R41, WBS item NFP-TEDF-5). Four roles on four stacks make a Latin square; six roles on four levels cannot, so the rules are revised: every role keeps a Primary, Alternative, Contingency and Emergency holder on four different stacks, every stack holds every level at least once, and River keeps Flight Control Primary. `tools/pace_balance.py` is extended to score six roles, and the assignment is an owner decision at gate G1 (OD-22). The brief below is the four-role assignment of OD-19.
 **Tool:** `tools/pace_balance.py` (scores every legal assignment; prints its inputs with `--show`)
 
 ## Why it has to change

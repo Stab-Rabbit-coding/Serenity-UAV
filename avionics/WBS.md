@@ -1185,6 +1185,18 @@ customer. Plan and sprints S34–S41:
     OD-19 still holds. Brought to the owner in OD-22 (S46, after the 2026-11-16 S45/S46 swap).
 - [ ] **NFP-TEDF-3** — [STD] The cooling-fan drive output on the stern board has no fan to
     drive. Remove it or repurpose it, and record which (S36 or S41).
+- [ ] **NFP-TEDF-4** — [ADV] Tail thrust monitor node and independent nacelle trim logic (owner
+    direction 2026-11-16, plan 002 R39, R40, KD21): an independent sensor (candidates: thrust-tube
+    pressure, rotor speed tach, speed-controller lead current) with its own microcontroller, converter
+    and fused power branch, broadcasting the measured tail thrust fraction and a loss flag, signed, to
+    every controller; independent trim logic in the nacelle tilt-drive controller that moves both
+    nacelles to the moment-balance tilt. Specified in S54 (plan U16,
+    `docs/TAIL_EDF_FAULT_COMPENSATION_SPEC.md`); board and firmware design after G1.
+- [ ] **NFP-TEDF-5** — [ADV] Extend `tools/pace_balance.py` and `docs/PACE_REBALANCE_BRIEF.md` to six
+    roles (the four existing, plus tail EDF and RCS control, and thrust monitor and trim
+    compensation): revise the Latin-square rules (every role has P, A, C, E on four different stacks;
+    every stack holds every level at least once; River keeps Flight Control P), score the options,
+    and bring them to G1 with NFP-TEDF-2. (S45)
 - [ ] **NFP-FW-IF** — Hand Theme F the host-link and device-tree interface (S41).
 
 ## §1.8 — Names
@@ -1482,14 +1494,14 @@ REFERENCES.md Removed/Superseded Citations).
     - [ ] **Nacelle gateway BOM rows.** Found while adding `CAN-PERIPH-GW-DOOR`: no BOM row
         exists for the two nacelle gateway boards (GW-PORT / GW-STBD, `N_STACKS=4`) either —
         add them with a weighed mass once a populated board exists.
-- [ ] **`GW-RCS` — Phase 11 RCS bleed-valve gateway, SPECIFIED ONLY (2026-09-21).**
+- [ ] **`GW-RCS` — RCS valve gateway, SPECIFIED ONLY (2026-09-21); first build since 2026-11-16 (plan 002, TEDF-10/TEDF-11, G1 valve concept and failsafe decisions).**
     `docs/CARGO_DOOR_GATEWAY_SPEC.md` §9 / `CAN-PERIPH-GW-1.md` Deployment 5: second
     gateway instance in the rear engine cone for the 4 `SERVO-RCS-VALVE` (osc-native chain at
     `N_STACKS=1`, or `N_STACKS=2` for four hardware timer channels with stock PWM — attitude
     effectors need loop-rate command, no bit-banging); fail-CLOSED on heartbeat/MAC loss;
-    `RCS_COMMAND ≥ 50 Hz` — per-frame CMAC signing latency to be measured on the door
-    gateway first. Replaces the Phase 11 wording that maps the valves onto FC2's local PWM
-    (contradicts U1). Not to be built before Phase 11; tracked in `deferred/WBS.md` §Phase11.
+    `RCS_COMMAND ≥ 50 Hz` — per-frame CMAC signing latency to be measured on the repurposed
+    `N_STACKS=1` gateway board (the door gateway is retired). Replaces the Phase 11 wording that maps the valves onto FC2's local PWM
+    (contradicts U1). First build since 2026-11-16 (the earlier "not before Phase 11" is superseded); its placement depends on the G1 valve concept; tracked in `deferred/WBS.md` §Phase11 and plan 002.
 - [x] **`ENC-NACELLE-1` DRC — fixed, 2026-07-26.** Found and fixed a genuine
     short (+3V3/ENC_CSN via-to-track contact) plus several clearance
     violations from a congested prior reroute, by moving the conflicting
