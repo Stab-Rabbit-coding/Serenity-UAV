@@ -1170,11 +1170,9 @@ customer. Plan and sprints S34–S41:
     −40 to +85 °C; 0.7 g; rail at least 0.8 A. Variant 453-00046 (MHF4) approved by the owner 2026-11-14.
     Needed for the USB order code, strapping, temperature rating and mass (S35). Owner to
     rule whether a login-gated data sheet passes the sourcing rule.
-- [ ] **NFP-OD22** — ★ Owner: AX88772E is sold only at 0 to 70 C (fleet needs −40 to +85).
-    ASIX data sheet v1.03 §7 lists one part, AX88772EQF, "Commercial temperature range: 0 to
-    70°C". It is the ring-port-2 NIC on every Pilot and on NoNFO-Pilot-PB2 (OD-4, Pilot pattern).
-    Options for the owner: an industrial USB NIC, a qualification test of the commercial part,
-    or a different second ring port. Found in S35 (SecureControllers finding F3).
+- [x] **NFP-OD22** — ★ Owner: AX88772E is sold only at 0 to 70 C.
+    **CLOSED 2026-11-17 (owner):** no specification requires an industrial temperature rating;
+    the agent had inferred one from the PB2-I's grade. The AX88772EQF stays.
 - [x] **NFP-OD23** — ★ Owner: logging medium; `avionics/AGENTS.md` requires microSD.
     **DECIDED 2026-11-17 (owner): microSD on the USB hub.** The hub becomes the Microchip
     USB2641i (built-in SD reader on its third port); the write-block PLD drives its SD_WP.
