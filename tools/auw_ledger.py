@@ -372,7 +372,7 @@ EXCLUDED = {
     "CF-TUBE-12MM": "12 mm spar tube, superseded by SPAR-CF-20X16 (Rev T1)",
     "PRINT-PYLON": "Rev O pylon, superseded by the Rev T1 fixed spar + trunnion; "
                    "no source in tree",
-    "PRINT-NECK-INTAKE-FRAME": "Phase 11 rear-EDF intake (deferred/aft-edf)",
+    "PRINT-NECK-INTAKE-FRAME": "former Phase 11 aft-EDF intake (superseded 2026-11-16)",
     "PRINT-PUSHROD-CRANK": "Option B nozzle crank, retired Rev S1g (MASS_AUDIT SS7)",
     "PUSHROD-BALL-M3": "Option B nozzle pushrod, superseded by the KST X06 servo drive",
     "BALLSTUD-M3": "Option B nozzle pushrod, superseded by the KST X06 servo drive",

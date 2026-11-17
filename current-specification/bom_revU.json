@@ -44,7 +44,7 @@
     },
     {
       "Ref": "SERVO-RCS-VALVE",
-      "Description": "RCS bleed-jet proportional valve servo — SG90 class, OpenServoCore control board — Phase 11 DEFERRED",
+      "Description": "RCS bleed-jet proportional valve servo — SG90 class, OpenServoCore control board — first build; Qty 0 until the G1 valve concept fixes the part",
       "Category": "Servo",
       "Qty": "0",
       "Unit_Mass_g": "9",
@@ -53,7 +53,7 @@
       "Supplier_PN_or_Search": "SG90 9g micro servo 1.8kg",
       "Est_Unit_Price_USD": "3.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "*** PHASE 11 DEFERRED — 4 per aircraft; modulates the 4 EDF-fed RCS bleed jets for pitch/yaw attitude authority; replaces the deleted iris rear-nozzle servo (canonical nozzle is fixed) *** 2026-08-02: SG90-class micro servos standardise on the OpenServoCore \"OSC SG90 M007\" swap board (REFERENCES.md REF-SENSOR-015) when this phase is implemented — inherits the same pre-production-hardware caveat as SERVO-CARGO below."
+      "Notes": "*** FIRST BUILD (plan 2026-11-15-002 KD8) — Qty 0 until the G1 valve concept and TEDF-11 fix the part and TEDF-14 enters it in the ledger; 4 per aircraft; modulates the 4 RCS jets for pitch/yaw attitude authority; the tail nozzle is fixed *** 2026-08-02: SG90-class micro servos standardise on the OpenServoCore \"OSC SG90 M007\" swap board (REFERENCES.md REF-SENSOR-015) when the part is fixed — inherits the same pre-production-hardware caveat as SERVO-CARGO below."
     },
     {
       "Ref": "SERVO-CARGO",

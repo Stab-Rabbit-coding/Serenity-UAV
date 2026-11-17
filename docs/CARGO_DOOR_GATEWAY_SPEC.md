@@ -23,7 +23,7 @@ Two things, in one document:
 | § | Item | Status |
 |---|---|---|
 | 1–8 | **GW-CARGO-DOOR** — one `SKIPPER-CAN-PERIPH-GW-PCB` (`N_STACKS=1`) that hosts the SG90-class cargo-bay **door** servos (port, starboard) and the payload **release** servo, mounted on a printed card-edge tray at the forward rim of the clamshell aperture | **Specified, wired in, mount points cut** (this revision) |
-| 9 | **GW-RCS** — a second gateway for the four SG90-class RCS bleed-valve servos of the deferred aft EDF (Phase 11) | **Specified only** — not implemented; `deferred/WBS.md` §Phase11 |
+| 9 | **GW-RCS** — a second gateway for the four SG90-class RCS bleed-valve servos of the deferred aft EDF (former Phase 11) | **Specified only** — not implemented; `deferred/WBS.md` §Phase11 |
 
 What this closes: the SG90 cargo servos were declared bus-networked on 2026-09-20
 (`avionics/WBS.md` §1.9.2, XO board-area fix: "the winch and SG90 door servos are
@@ -211,7 +211,7 @@ plane (Z < 8.7) or the hoist lines.
 | `docs/POWER_DISTRIBUTION.md` §3.3 | door servo row 1 → 2; gateway 0.10 A on RAIL-2 noted |
 | `docs/CARGO_SECTION_LAYOUT.md` §1, §8 | tray row; open items |
 | `docs/CARGO_WINCH_SPECIFICATION.md` item 13 | closed by D-GW-1 |
-| `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` | Deployment 4 (this) and 5 (GW-RCS, Phase 11) |
+| `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` | Deployment 4 (this) and 5 (GW-RCS, former Phase 11) |
 | `REFERENCES.md` | REF-ACT-003 (TowerPro SG90); REF-SENSOR-015 re-read note; verification rows |
 | `airframe/fuselage-mid/WBS.md`, `avionics/WBS.md`, `deferred/WBS.md` → TODOs | items in §8 |
 
@@ -233,15 +233,15 @@ plane (Z < 8.7) or the hoist lines.
 
 ---
 
-## 9. GW-RCS — Phase 11 RCS bleed-valve gateway (SPECIFIED, NOT IMPLEMENTED)
+## 9. GW-RCS — RCS valve gateway (first build since 2026-11-16; SPECIFIED, NOT IMPLEMENTED)
 
 Per `deferred/DEFERRED_ITEM_TEMPLATE.md` fields:
 
 - **Title / revision:** GW-RCS — RCS bleed-valve servo gateway, Rev A concept (2026-09-21).
-- **Status:** Phase 11 (deferred with the aft EDF).
+- **Status:** first build since 2026-11-16 (plan 2026-11-15-002 KD8; TEDF-10/TEDF-11); not yet built. The G1 valve concept and failsafe decisions apply.
 - **Scope.** Host the four SG90-class proportional bleed-valve servos (`SERVO-RCS-VALVE`,
   ×4, OpenServoCore per REF-SENSOR-015) that modulate the 4 RCS jets fed by the 55 mm aft
-  EDF, as a TPM-signed node on the isolated CAN-FD/RS-485 trunks — replacing the Phase 11
+  EDF (now the QX 64 mm tail EDF), as a TPM-signed node on the isolated CAN-FD/RS-485 trunks — replacing the former Phase 11
   WBS wording that maps the valves onto FC2's local PWM/mixer, which contradicts
   `avionics/WBS.md` U1 (retire local PWM headers; every actuator is a trunk node).
 - **Technical approach.**
@@ -264,16 +264,16 @@ Per `deferred/DEFERRED_ITEM_TEMPLATE.md` fields:
     the attitude mixer must treat RCS authority as absent when `RCS_STATUS` stops.
   - **Location:** rear engine cone, Panel F bay, beside the 50 A ESC (`deferred/WBS.md`
     §Phase11 "Install 50A ESC in Panel F bay") — next to the four `rcs_valve_bracket.stl`
-    stations so the four pigtails stay short. Tray: a Phase 11 re-parameterisation of
+    stations so the four pigtails stay short. Tray: a former Phase 11 re-parameterisation of
     `gateway_door_tray.scad` (`GW_PCB_L` → the N=2 length; the rail/slot design is unchanged)
-    on bosses to be cut into the rear-cone shell when Phase 11 resumes (the rear section's
+    on bosses to be cut into the rear-cone shell when former Phase 11 resumes (the rear section's
     Blender source still carries MESH-01 and cannot be regenerated yet — `airframe/WBS.md`
     §1.1.0).
   - **Power:** `J_PWR` from the aft 5 V avionics feed that reaches Simon's / the aft ESC
     bay; valve servos on a fused branch of the 6 V servo rail (4 × SG90, `POWER_DISTRIBUTION.md`
     §3.3 already budgets them at 700 mA stall each). Trunk extension: the CAN-FD and RS-485
     daisy chains continue aft through the middle inner neck (`airframe/WBS.md` §2.3 conduits).
-- **Dependencies.** Phase 11 aft-EDF hardware (plenum bleed taps, `rcs_valve_bracket.stl`
+- **Dependencies.** Former Phase 11 aft-EDF hardware (plenum bleed taps, `rcs_valve_bracket.stl`
   ×4, manifold); GW-DOOR-2 (OpenServoCore physical layer / maturity) to pick (a) or (b);
   rear-cone shell regeneration (MESH-01) for the tray bosses; `avionics/WBS.md` U1/U6.
 - **Blockers / risks.** Per-frame signing latency vs attitude-loop rate (measure on the
@@ -282,11 +282,11 @@ Per `deferred/DEFERRED_ITEM_TEMPLATE.md` fields:
   control-systems question to answer before the mixer is written.
 - **Estimated effort.** Board instance: reuse (0 new design, one generator run + tray
   re-parameterisation); firmware: `RCS_COMMAND/STATUS` + fail-closed — comparable to the
-  door gateway's; integration: Phase 11 bench items already listed in `deferred/WBS.md`.
-- **Integration date:** Phase 11.
+  door gateway's; integration: former Phase 11 bench items already listed in `deferred/WBS.md`.
+- **Integration date:** Former Phase 11.
 - **Owner / next reviewer:** Steve Griffing, PE(CSE) — with the aft-EDF phase.
-- **Mass (Phase 11 budget):** ~6 g (N=1) or ~10 g (N=2) board + ~7 g tray + ~10 g harness
-  ≈ +23 g (0.051 lbm) at the rear cone — add to the Phase 11 "~127 g" rear-propulsion line
+- **Mass (former Phase 11 budget):** ~6 g (N=1) or ~10 g (N=2) board + ~7 g tray + ~10 g harness
+  ≈ +23 g (0.051 lbm) at the rear cone — add to the former Phase 11 "~127 g" rear-propulsion line
   in the root `WBS.md` overview table when the phase is re-baselined.
 
 ---

@@ -215,9 +215,9 @@ those two numbers. Build this instance from the DRC-clean `N_STACKS=1` layout in
 `CAN-PERIPH-GW-1-backups/CAN-PERIPH-GW-1_N1_2026-07-26.kicad_pcb` (the live
 `.kicad_pcb` is the user-packed 2-lane nacelle board).
 
-### 5. RCS bleed-valve gateway (GW-RCS, Phase 11 — SPECIFIED ONLY, not built)
+### 5. RCS bleed-valve gateway (GW-RCS — first build since 2026-11-16; SPECIFIED ONLY, not built)
 
-The four SG90-class RCS valve servos of the deferred aft EDF (`SERVO-RCS-VALVE`
+The four RCS valve servos of the tail EDF (`SERVO-RCS-VALVE`
 ×4) get a second instance in the rear engine cone: `N_STACKS=1` on one
 osc-native chain if OpenServoCore ships, otherwise `N_STACKS=2` (`END_TO_END`)
 so that two lanes' `FLEX_PWM_IO` + `FLEX_BSHOT_IO` give the four **hardware**
@@ -446,7 +446,7 @@ REF-SENSOR-010 and "Removed / Superseded Citations".
    specified and its shell mount points are cut (`docs/CARGO_DOOR_GATEWAY_SPEC.md`
    §8 GW-DOOR-1..7): build the `N_STACKS=1` instance, resolve the OpenServoCore
    physical layer (`FLEX_TTL_GPIO` role) and the PWM-fallback bench items before
-   wiring `J_FLEX`. The Phase 11 RCS instance (Deployment 5) is specification only.
+   wiring `J_FLEX`. The RCS instance (Deployment 5, first build) is specification only until TEDF-11 and the G1 valve concept.
 8. **SLB9672 → OPTIGA™ Trust M (added 2026-08-06), not resolved.** See the
    callout in "Section-by-section design" §C above and REF-SENSOR-016.
    Blocked on primary-datasheet access (network egress) and `kicad-cli`

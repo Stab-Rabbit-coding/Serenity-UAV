@@ -134,3 +134,39 @@ A software-in-the-loop (SITL) simulator shall support:
 - Synthetic telemetry generation (normal and fault scenarios)
 - Command verification without actual hardware
 - Operator interface testing
+
+## Operator Certification and Message Verification
+
+Moved verbatim from `gcs/AGENTS.md` on 2026-11-17 (AGENTS.md review, Q6).
+
+### Operator Certification
+
+Each operator must possess:
+
+- A valid operator certificate (stored on a hardware security key if possible)
+- Permission tokens for specific command classes (e.g., "may arm", "may disarm", "may deploy payload")
+- A revocation status that is checked on every command
+
+### Message Verification
+
+Skipper verifies every received message:
+
+- Signature valid (matches the transmitter's certificate)
+- Sequence number in order (detects replay attacks)
+- Timestamp within acceptable skew (detects old messages)
+- Checksum correct (detects transmission errors)
+- Sender is authorized for that message type
+
+### Responsibilities
+
+- **Command and Control (C2):** Send verified, cryptographically signed commands to all onboard nodes
+- **Telemetry Reception:** Receive, verify, and display real-time sensor data and system status
+- **Mission Planning:** Design and upload flight missions with autonomous execution capability
+- **Failover Management:** Override automatic failover decisions if needed (with audit logging)
+- **Data Logging:** Archive all telemetry, commands, and responses for post-flight analysis
+- **Security:** Enforce authentication for all operator actions and verify all received telemetry
+
+All channels support full command and control capability in both directions. Channel selection is
+automatic based on signal quality and command priority. All transactions are logged (commands
+sent, ACKs received, execution results, unsolicited telemetry) to local storage and optionally
+uploaded after flight for forensic analysis.

@@ -47,7 +47,7 @@ Each node runs a **PocketBeagle2 Industrial (PB2-I) SBC** carrying:
 - **Pilot** cape: flight control + sensor interface (Cape-A-2)
 - **TACCO** cape: comms/logging/payload interface (Cape-B-2). "XO" is a legacy/internal working
   name still present in some script and file names (e.g. `gen_xo_sch.py`) — TACCO is the
-  canonical current name; see `avionics/AGENTS.md` "Cape Naming and Revision History."
+  canonical current name; see `avionics/AGENTS.md` "Boards".
 - **Commo** (49 MHz + SiK transceivers). Rev S was a PB2-I cape in River's Room (Bay C) and
   Simon's Medbay (Bay D). **Rev T (approved 2026-09-29)** replaces both with one standalone
   MCU node at the antennas, reachable by all four stacks; see `avionics/AGENTS.md`.

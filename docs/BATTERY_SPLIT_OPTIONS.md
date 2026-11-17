@@ -66,7 +66,7 @@ Rough hover endurance scales as capacity × AUW^-1.5. On that basis S1 is about
 
 ## 5. How it leverages the Flight Engineer plan
 
-The deferred Phase 12 range-extender plan (`deferred/WBS.md` §Phase12) already
+The deferred Phase 11 range-extender plan (`deferred/WBS.md` §Phase12) already
 adds a `J_BATT2` input and an ideal-diode / current-share combiner
 (LTC4359- or LTC4370-class) to the Flight Engineer, plus a second-pack context
 in `pwr_fault`. The split main pack uses that same combiner for its two halves.
@@ -92,7 +92,7 @@ in `pwr_fault`. The split main pack uses that same combiner for its two halves.
 - **Head pack:** swapped through the head belly access panel (160 × 65 mm,
   `BATTERY_MOUNT.md` §3.3). The pack's 116 × 38.5 mm face passes through it.
 - **Third pack:** clips into the payload box on the Observer hooks and is
-  jettisonable, per the Phase 12 plan.
+  jettisonable, per the Phase 11 plan.
 
 ## 7. Open before build
 

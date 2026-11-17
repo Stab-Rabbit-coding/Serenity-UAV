@@ -30,7 +30,7 @@
 > | **Observer** node firmware | this file, §4.6 |
 > | Payload/winch control firmware (Simon = payload-primary) | [avionics/firmware/TODO.md](../firmware/TODO.md) §4.2 / §4.3 |
 > | Physical assembly & install | [graphical-build-guide/flight-phases/TODO.md](../../graphical-build-guide/flight-phases/TODO.md) Phase 7 |
-> | Range-extender battery in the cargo bay (deferred) | [deferred/TODO.md](../../deferred/TODO.md) Phase 12 |
+> | Range-extender battery in the cargo bay (deferred) | [deferred/TODO.md](../../deferred/TODO.md) Phase 11 |
 
 ---
 
