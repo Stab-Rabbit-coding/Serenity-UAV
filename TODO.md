@@ -105,6 +105,14 @@
 - [ ] Search KiCad GitLab for a duplicate before filing
 - [ ] File at gitlab.com/kicad/code/kicad/-/issues, attach repro zip
 
+### 0.14 — Thermal Tool Reference Verification (2026-11-17, TEDF-01)
+→ detail: `REFERENCES.md` REF-HT-001, REF-MAT-009; `tools/node_thermal_forced_air.py`
+
+- [ ] REF-HT-001 edition and sections — read the heat-transfer text
+- [ ] Brass thermal conductivity — the 70 Btu/(hr ft F) (121.2 W/m-K)…
+- [ ] Three tests fail on main before and after TEDF-01 and are NOT…
+- [ ] Delta ASB02505SHA-AY6B datasheet [REF-FAN-001, never catalogued]
+
 ### 0.13 — Joint-Torque Standards Section Verification (2026-11-02)
 → detail: `REFERENCES.md` REF-FAA-005, REF-NASA-004, REF-STD-BOLT-001, REF-STD-BOLT-002; plan `docs/plans/2026-11-02-001-feat-build-guide-joint-torque-and-sequence-plan.md`
 
@@ -218,7 +226,6 @@
 - [ ] HULL-LEAK-04 Belly service hatch gasket (was the cargo door seam
 - [ ] LG-AFT-BOLT-01 Aft-port gear bolt driver access vs wing
 - [ ] HULL-FUSE-02 Fuse other bonded mounts into one-piece print
-- [ ] TEDF-01 Tail EDF: record, references, ledger gaps (S42)
 - [ ] TEDF-02 Tail EDF: thermal model refresh (S45)
 - [ ] TEDF-03 Tail EDF flow tool: thrust, stall margin (S43)
 - [ ] TEDF-04 Hover trim and RCS tool, CG window (S43)

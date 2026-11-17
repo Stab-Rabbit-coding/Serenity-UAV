@@ -1,48 +1,48 @@
 {
  "configs": {
   "cargo_2800_payload": {
-   "I_pitch_gmm2": 70183907.841539,
-   "T_W": 1.418709,
+   "I_pitch_gmm2": 75748532.752609,
+   "T_W": 1.403357,
    "cg": [
-    -0.090072,
-    350.29057,
-    156.939769
+    -0.110802,
+    347.43026,
+    157.704891
    ],
-   "k_pitch_mm": 102.48522,
-   "mass_g": 6682.132371
+   "k_pitch_mm": 105.89296,
+   "mass_g": 6755.228525
   },
   "heaviest_4000_payload": {
-   "I_pitch_gmm2": 70559802.278389,
-   "T_W": 1.397997,
+   "I_pitch_gmm2": 76102894.375172,
+   "T_W": 1.383088,
    "cg": [
-    -0.088757,
-    349.829369,
-    157.407827
+    -0.109201,
+    347.015291,
+    158.156906
    ],
-   "k_pitch_mm": 102.006434,
-   "mass_g": 6781.132371
+   "k_pitch_mm": 105.371047,
+   "mass_g": 6854.228525
   },
   "hover_4000": {
-   "I_pitch_gmm2": 70361329.88627,
-   "T_W": 1.446372,
+   "I_pitch_gmm2": 75883752.205279,
+   "T_W": 1.430419,
    "cg": [
-    -0.091829,
-    349.598544,
-    158.387365
+    -0.112938,
+    346.69071,
+    159.151274
    ],
-   "k_pitch_mm": 103.610266,
-   "mass_g": 6554.332371
+   "k_pitch_mm": 107.004458,
+   "mass_g": 6627.428525
   },
   "hover_twin_2200": {
-   "I_pitch_gmm2": 79243366.562954,
-   "T_W": 1.44241,
+   "I_pitch_gmm2": 84410024.11671,
+   "T_W": 1.426545,
    "cg": [
-    -0.091577,
-    340.165733,
-    158.66657
+    -0.112632,
+    337.369531,
+    159.425339
    ],
-   "k_pitch_mm": 109.804895,
-   "mass_g": 6572.332371
+   "k_pitch_mm": 112.70301,
+   "mass_g": 6645.428525
   }
  },
  "cooling_airflow": {
@@ -90,6 +90,12 @@
   "PRINT-NOZ64-FLAP-SEAL": 3.45,
   "PRINT-NOZ64-RING": 8.28,
   "PRINT-NOZ64-THROAT": 26.29
+ },
+ "pitch_inertia": {
+  "I_kg_m2": 0.08441,
+  "I_lbm_in2": 288.443798,
+  "config": "hover_twin_2200",
+  "k_pitch_in": 4.437126
  },
  "rows_hover": [
   {
@@ -139,6 +145,66 @@
    "name": "twin_pack_sled",
    "ref": "PRINT-TWIN-PACK-SLED",
    "source": "MEASURED mesh x DuraForm PA CF 1.11 g/cc; station ESTIMATE: two sleds in the tray lanes, Y 163-283 (BATTERY_TRIM_ENDURANCE_OPTIONS 6)"
+  },
+  {
+   "cg": [
+    0.0,
+    96.6,
+    210.5
+   ],
+   "kind": "PRINT",
+   "mass_g": 25.54,
+   "name": "bay_a_cn1_drawer",
+   "ref": "PRINT-BAY-A-DRAWER",
+   "source": "MEASURED mesh x DuraForm PA CF 1.11 g/cc (hull frame)"
+  },
+  {
+   "cg": [
+    0.0,
+    121.5,
+    207.5
+   ],
+   "kind": "PRINT",
+   "mass_g": 0.29,
+   "name": "bay_a_cn1_gate",
+   "ref": "PRINT-BAY-A-GATE",
+   "source": "MEASURED mesh x DuraForm PA CF 1.11 g/cc (hull frame)"
+  },
+  {
+   "cg": [
+    -0.0,
+    117.7,
+    229.5
+   ],
+   "kind": "PRINT",
+   "mass_g": 10.14,
+   "name": "bay_a_fc1_shelf",
+   "ref": "PRINT-BAY-A-SHELF",
+   "source": "MEASURED mesh x DuraForm PA CF 1.11 g/cc (hull frame)"
+  },
+  {
+   "cg": [
+    -0.0,
+    98.5,
+    264.5
+   ],
+   "kind": "PRINT",
+   "mass_g": 13.76,
+   "name": "bay_a_hatch_cover",
+   "ref": "PRINT-BAY-A-HATCH-COVER",
+   "source": "MEASURED mesh x DuraForm PA CF 1.11 g/cc (hull frame)"
+  },
+  {
+   "cg": [
+    -0.1,
+    119.4,
+    255.1
+   ],
+   "kind": "PRINT",
+   "mass_g": 6.97,
+   "name": "bay_a_hatch_flange",
+   "ref": "PRINT-BAY-A-HATCH-FLANGE",
+   "source": "MEASURED mesh x DuraForm PA CF 1.11 g/cc (hull frame)"
   },
   {
    "cg": [
@@ -2134,6 +2200,66 @@
   },
   {
    "cg": [
+    8.5,
+    20.3,
+    209.4
+   ],
+   "kind": "GAP",
+   "mass_g": 5.0,
+   "name": "Nose camera module (port pod)",
+   "ref": "GAP",
+   "source": "ASSUMED 5 g, the remote-head figure of docs/CG_RELOCATION_STUDY.md sec 5.2 row 3; the module is not selected (head_layout_fit CAM_FOV_DEG); head_layout_fit 'camera pod (port)' envelope centroid"
+  },
+  {
+   "cg": [
+    -8.5,
+    20.3,
+    209.4
+   ],
+   "kind": "GAP",
+   "mass_g": 5.0,
+   "name": "Nose ToF module (stbd pod)",
+   "ref": "GAP",
+   "source": "ASSUMED 5 g, the TFmini-S manual weight [REF-SENSOR-002] as a placeholder only; that part fails AGENTS.md sec 5 and is to be re-selected; head_layout_fit 'ToF pod (stbd)' envelope centroid"
+  },
+  {
+   "cg": [
+    -0.0,
+    20.3,
+    209.4
+   ],
+   "kind": "GAP",
+   "mass_g": 1.4,
+   "name": "Nose laser module (centreline)",
+   "ref": "GAP",
+   "source": "ASSUMED upper bound: solid aluminium, 6 mm dia x 18 mm (head_layout_fit LASER_D/L) x 2.70 g/cc; no part is selected (REFERENCES.md Observer laser item); head_layout_fit 'laser module' envelope centroid"
+  },
+  {
+   "cg": [
+    -8.4,
+    47.3,
+    222.2
+   ],
+   "kind": "GAP",
+   "mass_g": 2.0,
+   "name": "Pitot hose, barb clamp and static line",
+   "ref": "GAP",
+   "source": "ASSUMED 2 g -- weigh at build; the tube and nipple are already in the hull mesh; head_layout_fit 'pitot hose' envelope centroid"
+  },
+  {
+   "cg": [
+    -43.0,
+    24.5,
+    209.9
+   ],
+   "kind": "GAP",
+   "mass_g": 3.0,
+   "name": "Pitot probe (owner-built, starboard dish post)",
+   "ref": "GAP",
+   "source": "ASSUMED 3 g -- the probe is owner-built (head_layout_fit PITOT-01); weigh at build; head_layout_fit PITOT_TUBE_A (the probe is ~10 mm forward)"
+  },
+  {
+   "cg": [
     0.0,
     356.5,
     223.4
@@ -2171,9 +2297,9 @@
  ],
  "subtotals_hover_g": {
   "BOM": 2386.904,
-  "GAP": 279.5714,
+  "GAP": 295.9714,
   "NACELLE": 1977.876227,
-  "PRINT": 1909.980744
+  "PRINT": 1966.676898
  },
  "thrust_gf": 9480.0,
  "unclassified": []

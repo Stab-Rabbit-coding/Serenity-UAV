@@ -1723,7 +1723,7 @@ FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated fle
 | **Official access** | <https://en.jtcopper.com/c26000-brass.html> (fetched 2026-10-26) |
 | **Section applied** | Mechanical properties table: Annealed 300–400 MPa tensile, 100–150 MPa yield, 55–70 % elongation; Cold Worked H02 450–550 / 350–420 / 15–25 %; H04 550–650 / 480–550 / 5–12 %; density 8.53–8.60 g/cm^3. The page notes the data apply to standard thicknesses and processing states. |
 | **Use limits** | Vendor ranges, not ASTM B134 minimums; used only for the fuse-material TRADE (worst case of each range). A PRC-domiciled vendor: cited as a property source only, never as a supply source (AGENTS.md §5 governs silicon, but supply of any part should follow the owner's sourcing intent). Replace with ASTM B134 / a US mill sheet before any sizing for build. |
-| **Cited in** | `tools/lg_fuse_material.py`; `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md` §6 |
+| **Cited in** | `tools/lg_fuse_material.py`; `tools/cg_mass_reduction_study.py`; `tools/node_thermal_forced_air.py` (density only); `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md` §6 |
 
 ### REF-MAT-010: Elgin Fastener Group (M&W) — "Carbon Steel Grade 1008 Fact Sheet" (1008 annealed)
 
@@ -2084,6 +2084,19 @@ which prints that caveat on every run.
 `airframe/openscad/fuselage/cargo/tilt_brake.scad`,
 `airframe/openscad/fuselage/belly_panel.scad`, `docs/SLS_MIGRATION.md`,
 `docs/SLS_PRINT_ORIENTATION.md`
+
+---
+
+### REF-HT-001: Incropera, DeWitt, Bergman and Lavine — Fundamentals of Heat and Mass Transfer (John Wiley & Sons)
+
+| Field | Value |
+| --- | --- |
+| **Issuing body** | John Wiley & Sons (textbook; authors F. P. Incropera, D. P. DeWitt, T. L. Bergman, A. S. Lavine) |
+| **Edition and URL** | **Edition not recorded and no publisher URL validated — requires verification.** The book is paywalled; no copy is in the repository. |
+| **Section applied** | Three relations are used in `tools/node_thermal_forced_air.py`: (1) average laminar flat-plate convection, Nu_L = 0.664 Re_L^1/2 Pr^1/3 (Re_L < 5e5, Pr >= 0.6); (2) the straight rectangular fin with an insulated tip, efficiency eta = tanh(mL)/(mL), m = sqrt(h/(k t)); (3) the air property row at a 60 C (140 F) film temperature. **Equation, table and chapter numbers are NOT verified.** A public lecture deck based on this text labels relation (1) "Eq. 7.30" ([UMD CHBE 250 notes](https://terpconnect.umd.edu/~nsw/chbe250/BLsimilar-Incropera.pdf)); that is a secondary source and is not accepted as the check. Relations (2) and (3) could not be located in any source read on 2026-11-17. |
+| **Status** | **Requires verification** — TODO §0.14 item `REF-HT-001 edition and sections`. The relations are standard heat-transfer results, but the section numbers must not be quoted until read in the book or the NCEES FE Reference Handbook [REF-NCEES-009 is the dynamics section only]. Every figure that rests on this entry stays PROVISIONAL. |
+
+**Used in:** `tools/node_thermal_forced_air.py` (film coefficient, fin efficiency, air properties)
 
 ---
 
@@ -4019,6 +4032,8 @@ because they were incorrectly attributed, unverifiable, or inapplicable.
 | "LibreServo_v4.1-TC" tilt-controller variant (`LS-TILT-TC`, `TILT-CTL-08`, `TC-BOARD`, `LS-CR-1`) | `docs/TILT_ACTUATOR_SELECTION.md` §4, `docs/TILT_DRIVE_CONTROL_SPEC.md`, `docs/POWER_DISTRIBUTION.md` §3.3a, `docs/CARGO_SECTION_LAYOUT.md`, `current-specification/bom_revS.*`, `WBS.md` | **Superseded by design decision (2026-09-17), not an error.** A LibreServo variant would fork that board away from its upstream and break the attribution chain, for a device that is no longer a servo controller. | REF-ESC-001 — Open-Secure-ESC build `6s/10A/BRUSHED_CAN_485_isolation`; BOM row `OSESC-TILT-TC` |
 | REF-MIL-001 used for CNAF M-3710.7 (ID collision) | `AGENTS.md` §6a, `tools/precommit_doc_wording.py`, `.githooks/pre-commit` (branch `avionics-docs-audit`) | **Duplicate ID.** REF-MIL-001 is MIL-STD-1553C; the CNAF M-3710.7 entry was filed under the same ID. Found while merging `main` 2026-10-05. | REF-MIL-003 (same CNAF entry, renumbered) |
 | Avia Semiconductor HX711 24-bit ADC and the `HX711-LC` breakout module — cargo line-tension ADC | `current-specification/bom_revS.*` (retained as the Rev S snapshot) and `bom_revT.*` (row replaced), `docs/CARGO_WINCH_SPECIFICATION.md`, `docs/POWER_DISTRIBUTION.md` §3.2, `avionics/firmware/fc/tools/governor_cal.py`, `airframe/placeholders/generate_placeholders.py` | **Superseded by owner decision (2026-10-20), not a citation error.** Page 1 of the HX711 datasheet prints Avia's contact as "(P. R. China)", which fails the component-sourcing rule in `AGENTS.md` §5; the BOM entry also named no manufacturer for the module. The datasheet stays at `avionics/datasheets/avia-semiconductor/hx711.pdf` pending the owner's decision to delete it. | REF-SENSOR-063 (TI ADS1231) |
+| [REF-FAN-001] Delta ASB02505SHA-AY6B fan datasheet (P-Q curve, mass, power) | `tools/node_thermal_forced_air.py`, `tools/rear_cone_layout_fit.py` | **Never catalogued, and superseded by design decision (2026-11-16, TEDF-01).** No REF-FAN-001 entry ever existed in this file, so the citation could not resolve. The 25 mm fan is replaced by the tail EDF (plan 002). The thermal tool's citation is removed in U1; its fan figures leave with the fan in TEDF-02; the layout tool's leave in TEDF-05. | None — fan removed. Tail EDF figures cite REF-EDF-003. |
+| `[REF-MAT-008]` used for C26000 brass density | `tools/node_thermal_forced_air.py` | **Incorrect attribution.** REF-MAT-008 is ASTM A228 music wire (Gibbs Wire); C26000 brass is REF-MAT-009. Found 2026-11-17. | REF-MAT-009 (density 8.53 g/cm^3; it gives no thermal conductivity — see TODO §0.14) |
 
 ---
 

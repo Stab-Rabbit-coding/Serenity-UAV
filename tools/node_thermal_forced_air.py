@@ -5,7 +5,8 @@ node: one rear fan pulling a single stream from bow inlets to the tail, with
 2026-11-01).
 
 AIR PATH (owner, 2026-11-01).  One fan, Delta ASB02505SHA-AY6B (25 x 25 x
-10 mm, 5 VDC) [REF-FAN-001], sits in the REAR cone and PULLS outside air:
+10 mm, 5 VDC; SUPERSEDED by plan 002, figures unverified), sits in the REAR
+cone and PULLS outside air:
   bow inlets beside the sensor bay -> inlet duct into CN1's side channels
   (Bay A) -> FC1 -> under/around the twin pack tray -> chin nodes CN2/CN3 ->
   aft nodes FC2/FC3 -> cargo/middle collar -> past the Flight Engineer can ->
@@ -18,8 +19,9 @@ The fan motor heat leaves downstream of every node.
 
 METHOD (mechanical-engineering skill: plane-wall conduction, convection,
 series/parallel resistances; Darcy-Weisbach minor losses; the fin rule).
-  1. Fan operating point: the datasheet P-Q curve [REF-FAN-001 p.4,
-     digitized] meets the system curve, the sum over the stream stations of
+  1. Fan operating point: the digitized P-Q curve (superseded fan concept;
+     datasheet never catalogued, figures unverified -- leaves with the fan in
+     TEDF-02) meets the system curve, the sum over the stream stations of
      K * rho/2 * (Q/A)^2.  A is the free area MEASURED at each station (hull
      cavity minus every equipment section); K = 1.0 (sudden expansion) after
      each restriction, 1.5 at the inlets (entry + expansion), 1.0 at the
@@ -40,7 +42,8 @@ series/parallel resistances; Darcy-Weisbach minor losses; the fin rule).
 
 ASSUMED inputs are labelled; any PASS resting on one is PROVISIONAL.
 Brass: C26000 cartridge brass, k 70 Btu/(hr ft F) (121.2 W/m-K), density
-0.308 lbm/in^3 (8.53 g/cm^3) at 68 F [REF-MAT-008].  16 ga = 0.0508 in
+0.308 lbm/in^3 (8.53 g/cm^3) at 68 F [REF-MAT-009, density only; the k figure
+is not in that source -- requires verification, TODO 0.14].  16 ga = 0.0508 in
 (1.29 mm), B&S gauge (verify against the purchased sheet).
 
 Run:
@@ -62,7 +65,7 @@ import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-# --- fan [REF-FAN-001] -------------------------------------------------------
+# --- fan (superseded, unverified; removed in TEDF-02) ---------------------
 FAN_MPN = "Delta Electronics ASB02505SHA-AY6B"
 FAN_W = 0.60  # rated power, W
 FAN_G = 5.6  # mass, g (datasheet §3-5, "REF.")
@@ -72,12 +75,12 @@ FAN_PQ = ((0.000, 8.13), (0.025, 6.1), (0.050, 3.6), (0.065, 2.75), (0.075, 2.5)
           (0.100, 1.7), (0.122, 0.0))
 MMH2O_PA = 9.80665
 
-# --- air [REF-HT-001 air table; requires verification] ------------------------
+# --- air [REF-HT-001 air table; requires verification, TODO 0.14] -----------
 CP_AIR = 1007.0  # J/kg-K
 K_AIR, NU_AIR, PR_AIR = 0.02808, 1.896e-5, 0.7202  # at a 60 C film temperature
 R_AIR = 287.05  # J/kg-K, ideal gas
 
-# --- brass [REF-MAT-008] -------------------------------------------------------
+# --- brass [REF-MAT-009 density; k requires verification] --------------------
 K_BRASS = 121.2  # W/m-K
 RHO_BRASS = 8530.0  # kg/m^3
 T_16GA = 0.0508 * 0.0254  # m

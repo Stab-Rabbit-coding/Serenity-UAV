@@ -1,4 +1,16 @@
 flake8
+mypy
+pytest
+numpy
+scipy
+shapely
+types-shapely
+matplotlib
+manifold3d
 trimesh
+rtree
 networkx
+Pillow
+sympy
+scikit-image
 clang-format==22.1.8

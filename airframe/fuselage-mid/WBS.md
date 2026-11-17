@@ -1287,9 +1287,19 @@ forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
   or **[ADV]** (needs an advanced model: physics derivation, CFD diagnosis, cross-domain
   trade, or an owner brief). Any item escalates to ADV when a gate fails twice.
 
-- [ ] **TEDF-01** — [STD] Record and reference repair: `deferred/` Phase 11 items into the
+- [x] **TEDF-01** — [STD] Record and reference repair: `deferred/` Phase 11 items into the
     first build, reference faults, `requirements-dev.txt`, ledger gaps (nose pods, pitot parts,
-    Bay A drawer, cell BOM row, one pitch inertia). Plan U1. (S42)
+    Bay A drawer, cell BOM row, one pitch inertia). Plan U1. (S42, closed 2026-11-17.
+    Already done by the 2026-11-16 review and confirmed: the COOL-01 rewrite, the Phase 11
+    moves, the `AGENTS.md` §1 propulsion paragraph, the superseded note on plan 001, the TODO
+    generator and the zero-quantity BOM row removal. Done in S42: `REF-HT-001` added and marked
+    requires-verification, the brass citation moved to `REF-MAT-009`, the fan citation removed
+    from the thermal tool, `requirements-dev.txt`, the three failing tests recorded (root
+    `WBS.md` §0.14), the ledger gaps closed with stated ESTIMATE rows for the sensor and pitot
+    parts, BOM rows for the Bay A drawer, gate, shelf, hatch cover and flange and for the
+    twin-pack cells, and one pitch inertia published in `auw_ledger.json`. With the gaps closed
+    the `hover_twin_2200` CG is 2.0 mm forward of the tilt pivot, outside the 1.0 to 3.9 mm aft
+    window the plan quotes: U4 starts from that figure.)
 - [ ] **TEDF-02** — [STD] Thermal model refresh: closed-cavity fix, ramp and bow branches,
     EDF flow input, tail speed controller and motor as limited nodes, minimum cooling throttle.
     The stern stack step needs NFP-THERM. Plan U2. (S45; swapped with S46 on 2026-11-16)
