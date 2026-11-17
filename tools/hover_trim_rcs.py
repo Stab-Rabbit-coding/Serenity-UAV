@@ -490,7 +490,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--case", choices=("ledger", "plan", "projected"), default="ledger")
     ap.add_argument("--louvre-k", type=float, default=tf.Inputs.k_louvre)
     a = ap.parse_args(argv)
-    case = {"plan": plan_case, "projected": projected_case}.get(a.case, ledger_case)()
+    if a.case == "plan":
+        case = plan_case()
+    elif a.case == "projected":
+        case = projected_case()
+    else:
+        case = ledger_case()
     return report(case, Setup(tf.Inputs(k_louvre=a.louvre_k)))
 
 
