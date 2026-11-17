@@ -40,7 +40,10 @@ python3 "$TOPDIR/tools/check_datum_drift.py" || exit 1
 python3 "$TOPDIR/tools/check_agents_size.py" || exit 1
 
 # Every TODO.md matches its WBS.md (TODO.md is generated, never hand-edited; root AGENTS.md §10)
-python3 "$TOPDIR/tools/gen_todo_from_wbs.py" --check >/dev/null || { echo "TODO.md drift: run python3 tools/gen_todo_from_wbs.py"; exit 1; }
+python3 "$TOPDIR/tools/gen_todo_from_wbs.py" --check >/dev/null || {
+    echo "TODO.md drift: run python3 tools/gen_todo_from_wbs.py"
+    exit 1
+}
 
 # Update indexes
 python3 "$TOPDIR/tools/precommit_index.py" || exit 1
