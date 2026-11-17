@@ -15962,6 +15962,13 @@
       ],
       "archived": false
     },
+    "tools/hover_trim_rcs.py": {
+      "description": "hover_trim_rcs.py -- hover pitch trim, RCS jet authority, CG window and the tilt-vectoring",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/hull_datums.py": {
       "description": "Serenity UAV -- the aircraft datum (frame R2), defined ONCE.",
       "tags": [
@@ -16651,6 +16658,14 @@
       ],
       "archived": false
     },
+    "tools/tail_edf_flow.py": {
+      "description": "tail_edf_flow.py -- installed thrust, flow, flow split and pressure margin of the",
+      "tags": [
+        "build-tooling",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "tools/tail_strike_requirement.py": {
       "description": "tail_strike_requirement.py -- 4 ft drop tail strike on the aft skids, and the",
       "tags": [
@@ -16714,6 +16729,13 @@
       ],
       "archived": false
     },
+    "tools/tests/test_hover_trim_rcs.py": {
+      "description": "Tests for tools/hover_trim_rcs.py (plan 002 U4, TEDF-04).",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/tests/test_joint_register.py": {
       "description": "Tests for tools/joint_register.py (plan 2026-11-02-001 U1).",
       "tags": [
@@ -16764,6 +16786,14 @@
       "description": "Tests for tools/sync_operators_manual.py (WBS 0.10.3, OM-5).",
       "tags": [
         "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_tail_edf_flow.py": {
+      "description": "Tests for tools/tail_edf_flow.py (plan 002 U3, TEDF-03).",
+      "tags": [
+        "build-tooling",
+        "propulsion"
       ],
       "archived": false
     },
@@ -19018,8 +19048,10 @@
       "tools/nozzle_servo_linkage.py",
       "tools/nozzle_servo_linkage_64.py",
       "tools/prep_nacelle_64_bake.py",
+      "tools/tail_edf_flow.py",
       "tools/tests/test_nacelle_esc_service.py",
-      "tools/tests/test_nozzle_servo_linkage.py"
+      "tools/tests/test_nozzle_servo_linkage.py",
+      "tools/tests/test_tail_edf_flow.py"
     ],
     "sensors-vision": [
       "airframe/blender-scripts/merge_head_sensor_bay.py",
@@ -20919,6 +20951,7 @@
       "tools/generate_lg_a1b_housing.py",
       "tools/generate_lg_bays.py",
       "tools/head_layout_fit.py",
+      "tools/hover_trim_rcs.py",
       "tools/hull_datums.py",
       "tools/import-specctra-ses.py",
       "tools/joint_register.py",
@@ -21010,6 +21043,7 @@
       "tools/spar_bundle_fit.py",
       "tools/stitch_vias.py",
       "tools/sync_operators_manual.py",
+      "tools/tail_edf_flow.py",
       "tools/tail_strike_requirement.py",
       "tools/tests/test_allowables.py",
       "tools/tests/test_auw_ledger_cooling.py",
@@ -21019,6 +21053,7 @@
       "tools/tests/test_check_hull_tarballs.py",
       "tools/tests/test_esc80_cooptimize.py",
       "tools/tests/test_export_pcb_step.py",
+      "tools/tests/test_hover_trim_rcs.py",
       "tools/tests/test_joint_register.py",
       "tools/tests/test_nacelle64_assembly_check.py",
       "tools/tests/test_nacelle_esc_service.py",
@@ -21026,6 +21061,7 @@
       "tools/tests/test_nozzle_servo_linkage.py",
       "tools/tests/test_pace_balance.py",
       "tools/tests/test_sync_operators_manual.py",
+      "tools/tests/test_tail_edf_flow.py",
       "tools/tests/test_tail_strike_requirement.py",
       "tools/tests/test_wbs_burndown.py",
       "tools/tilt_actuator_options.py",

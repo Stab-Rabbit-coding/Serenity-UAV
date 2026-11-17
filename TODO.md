@@ -111,6 +111,9 @@
 - [ ] REF-HT-001 edition and sections — read the heat-transfer text
 - [ ] Brass thermal conductivity — the 70 Btu/(hr ft F) (121.2 W/m-K)…
 - [ ] Three tests fail on main before and after TEDF-01 and are NOT…
+- [ ] TEDF-03 step 8 — recalibrate `tools/tail_edf_flow.py` to the owner's…
+- [ ] Momentum-theory / actuator-disc source for `tools/tail_edf_flow.py`…
+- [ ] TEDF-04 — price the plan's forward moves (Flight Engineer box, speed…
 - [ ] Delta ASB02505SHA-AY6B datasheet [REF-FAN-001, never catalogued]
 
 ### 0.13 — Joint-Torque Standards Section Verification (2026-11-02)
@@ -227,8 +230,6 @@
 - [ ] LG-AFT-BOLT-01 Aft-port gear bolt driver access vs wing
 - [ ] HULL-FUSE-02 Fuse other bonded mounts into one-piece print
 - [ ] TEDF-02 Tail EDF: thermal model refresh (S45)
-- [ ] TEDF-03 Tail EDF flow tool: thrust, stall margin (S43)
-- [ ] TEDF-04 Hover trim and RCS tool, CG window (S43)
 - [ ] TEDF-05 Rear-cone layout: QX pusher, RCS exhausts (S44)
 - [ ] TEDF-06 Cargo duct layout: FE box forward, hatch (S44)
 - [ ] TEDF-07 Head layout: GNSS trade, ballast, inlets (S45)

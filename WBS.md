@@ -261,6 +261,9 @@ as-drafted record are in docs/WBS.md §0.10.3; the manual is
 - [ ] REF-HT-001 edition and sections — read the heat-transfer text; record the edition, the equation numbers for the average laminar flat-plate Nusselt number and the insulated-tip fin efficiency, and the air property table; add a validated publisher URL
 - [ ] Brass thermal conductivity — the 70 Btu/(hr ft F) (121.2 W/m-K) figure in `tools/node_thermal_forced_air.py` is not in [REF-MAT-009] (density only); cite a verified C26000 source (CDA or ASTM B19/B36 data) or flag it ASSUMED
 - [ ] Three tests fail on main before and after TEDF-01 and are NOT skipped or edited (reported 2026-11-17, `tools/tests`, full dev requirements installed): `test_nacelle_esc_service.py::NacelleEscServiceTest::test_committed_board_envelope_is_measured` and `::test_unknown_height_data_is_not_silently_resolved` (both read the owner's local Open-Secure-ESC checkout at an absolute path into the owner's home directory that does not exist in CI or the cloud build); `test_tail_strike_requirement.py::test_gear_tool_regression_at_13_lbm` (the gear tool's spring wire diameter is 4.23 mm where the test expects 4.00 mm within 0.5 %)
+- [ ] TEDF-03 step 8 — recalibrate `tools/tail_edf_flow.py` to the owner's pre-G1 bench run (`docs/bench/tail_edf_coupon_<date>.json`); required before U8
+- [ ] Momentum-theory / actuator-disc source for `tools/tail_edf_flow.py` and `tools/hover_trim_rcs.py` — cite a verified textbook or NASA page (the NASA Glenn host was not reachable from the 2026-11-17 session, so no reference was added); also the ISA sea-level air properties
+- [ ] TEDF-04 — price the plan's forward moves (Flight Engineer box, speed controller, RCS servos, QX unit) into the ledger so the `hover_twin_2200` CG can be checked against the R23 window
 - [ ] Delta ASB02505SHA-AY6B datasheet [REF-FAN-001, never catalogued] — the fan leaves the thermal tool in TEDF-02; confirm no figure from it survives
 
 ---
@@ -490,8 +493,8 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [x] COOL-01 Rear-fan cooling: superseded by TEDF-01..17
 - [x] TEDF-01 Tail EDF: record, references, ledger gaps (S42, closed 2026-11-17)
 - [ ] TEDF-02 Tail EDF: thermal model refresh (S45)
-- [ ] TEDF-03 Tail EDF flow tool: thrust, stall margin (S43)
-- [ ] TEDF-04 Hover trim and RCS tool, CG window (S43)
+- [x] TEDF-03 Tail EDF flow tool: thrust, stall margin (S43, closed 2026-11-17)
+- [x] TEDF-04 Hover trim and RCS tool, CG window (S43, closed 2026-11-17)
 - [ ] TEDF-05 Rear-cone layout: QX pusher, RCS exhausts (S44)
 - [ ] TEDF-06 Cargo duct layout: FE box forward, hatch (S44)
 - [ ] TEDF-07 Head layout: GNSS trade, ballast, inlets (S45)
