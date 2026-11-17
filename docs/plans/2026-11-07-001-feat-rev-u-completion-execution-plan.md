@@ -151,7 +151,7 @@ shape, each with a picture and vectors where loads or motion are involved (owner
 | OD-5 | Hover ground-clearance margin / mandatory gear height | LG-HOVER-01 | S12 |
 | OD-6 | Bay A forward thermal tier — **overtaken 2026-11-16: the tail EDF supplies the airflow (Theme C); the sustained transmit limit is re-stated from S51** | BAYA-FWD-T1 | S21 |
 | OD-7 | Nozzle strike during a full ductile-fuse arrest | LG-28 | S12 |
-| OD-8 | Nozzle-servo gateway variant | D-NZ-1 | S5 |
+| OD-8 | Nozzle-servo gateway variant (with D-SV-1/D-SV-2 of the nozzle-servo plan, indexed as S5.0–S5.6) | D-NZ-1 | S5 |
 | OD-9 | Wing SPAR-25-5 decision (§1.1.3.1) | SPAR-25-5 | S6 |
 | OD-10 | Commo RF: 1553 coupling, 49 MHz channel list, re-baselined RF current, antenna-shell bond | avionics "Owner:" items | S16 |
 | OD-11 | TPM path: SLB9672 vs OPTIGA Trust M on gateway + FE | avionics §1.9.2 | S18 |
@@ -166,6 +166,8 @@ shape, each with a picture and vectors where loads or motion are involved (owner
 | OD-17 | WA-R10 power crossing: A clock-spring / B enclosed loop / C slip ring / D joint 0.91 in (23 mm) outboard — brief `docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md` — **DECIDED 2026-11-11: D + aft fairing + rounded end plate with fillets; 22.8° taper kept** | WA-R10 | S2 |
 | OD-22 | Tail EDF cooling gate G1: aft CG window; RCS exhaust outlines, scoop and passage shapes, 50° ventral spacing and 25° cant; RCS valve concept; drive arrangement; louvre form and the minimum R27 pressure margin; GNSS antenna placement; thrust monitor sensor, pitch-excursion limit and trim authority bound; command node (NFP-TEDF-2) and the PACE assignment of the two added roles; minimum credited hover height; response to a tail EDF, RCS or intake-blockage fault and the GW-RCS failsafe state; payload-release servo; headline ledger configuration; Cargo Observer subject; hover endurance estimate — brief `docs/FUSELAGE_COOLING_LAYOUT_BRIEF.md` | TEDF-08 | S47 |
 | OD-23 | Tail EDF cooling gate G2: hover CG outside the OD-22 window on mesh-derived masses | TEDF-14 | S53 |
+| OD-24 | OD-17 follow-on: wires exit check, fairing CFD hold, unbound wires, fairing skin — **DECIDED 2026-11-11** (renumbered 2026-11-16 from a colliding "OD-18"; brief `docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md`) | WA-R10, OD17-FAIR-CFD, NAC-64-WIRE-QUAL | S2 |
+| OD-25 | SLS minimum-wall rule — **DECIDED 2026-11-11: option A** (renumbered 2026-11-16 from a colliding "OD-19"; `docs/SLS_MIN_WALL_THICKNESS.md`, `AGENTS.md` §7) | airframe OD-25 | S2 |
 | OD-16 | First-flight decisions D1–D4 and D6 (scope, nozzle datum, 3.0 in gear, hover T/W floor, XO board area; D5 decided) — D2 overlaps OD-9, D3 closes OD-5 | `docs/plans/2026-09-15-001-first-flight-readiness-plan.md` | S3 (D4 sets the T/W target), P4 |
 
 ## 6. Agent sprints
@@ -198,6 +200,11 @@ inserts, open mouth.)
   centreline bend radius ≥ 3 × wire OD (the repo's NASA-STD-8739.4A citation; verify the clause, per
   `REFERENCES.md`) at every bend. Both WA-R10 entries closed. −3.
 - Est. 1 / 2 / 3.
+- **Status 2026-11-16:** route built and WA-R10 closed 2026-11-11; the exit was amended by the owner
+  (OD-24 item 1) to the `--stage wires` check, since option D fans the four wires out
+  after the bend. Open in S2: the 2026-11-16 brief review close-out (OD17-FAIR-BORE capped-bore run,
+  OD17-FALLBACK-CLR, NAC-64-WIRE-TWIST, OD17-JUNC-RETEST, OD17-CFD-BLOCKAGE) and the owner bench test
+  NAC-64-WIRE-QUAL. The 2026-11-11 handoff is superseded.
 
 **S3 — Pivot, gates and re-bake.** Needs OD-4.
 - NAC-64-PIVOT-RC, NAC-64-GEOM-05 (port the trunnion/ESC-bay/mass gates to the 64 mm wrapper),
@@ -214,6 +221,11 @@ inserts, open mouth.)
 - Est. 1 / 1 / 2.
 
 **S5 — Nozzle servo drive implementation.** Needs OD-8.
+- **Indexed 2026-11-16 (owner):** `docs/plans/2026-11-16-001-feat-nozzle-servo-selection-osc-integration-plan.md`
+  runs as S5's sub-sprints **S5.0–S5.6** (its U1–U7, Sprints 0–6) and goes first. Its D-SV-1 (servo) and
+  D-SV-2 (nozzle rail voltage) gate the geometry units below; its KTD4 (osc-native command path in place
+  of PWM) is the proposed answer to OD-8 (gateway variant), confirmed or reopened at its U3 gate. Its U2
+  (nozzle tools on a servo table) absorbs this sprint's "servo linkage + schedule tool" item.
 - Servo linkage + schedule tool (U2), ring stops/spring seat/slotted pull (U3), servo mount + pod
   pocket + flush cover (U4), BOM + REFERENCES (U7), NAC-MOULD-01, Makefile follow-up,
   `serenity_assembly.py` deleted-part placements, ASM-04 coverage (flaps, linkage, bearings).

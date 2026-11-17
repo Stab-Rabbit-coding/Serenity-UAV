@@ -730,9 +730,27 @@ def report(r: dict) -> None:
             print("  ", ref)
 
 
+def _round(v: object) -> object:
+    """Round floats to 6 decimals, recursively.
+
+    The mesh volumes behind the ledger (trimesh/manifold3d) differ in the last bits between machines
+    and library builds, so an exact text compare made --check fail with no real mass change
+    (2026-11-16: every diff was below 1e-9 g). 1e-6 of a gram or millimetre is far below any
+    quantity the ledger is used for.
+    """
+    if isinstance(v, float):
+        return round(v, 6)
+    if isinstance(v, dict):
+        return {k: _round(x) for k, x in v.items()}
+    if isinstance(v, (list, tuple)):
+        return [_round(x) for x in v]
+    return v
+
+
 def strip(r: dict) -> dict:
-    return {k: v for k, v in r.items() if k != "rows_hover"} | {
+    out = {k: v for k, v in r.items() if k != "rows_hover"} | {
         "rows_hover": r["rows_hover"]}
+    return _round(out)  # type: ignore[return-value]
 
 
 def main(argv: list[str] | None = None) -> int:

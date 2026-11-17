@@ -23,6 +23,12 @@ the bore.  That put a solid, flat-faced tail block where the real part has an op
 drag about 66 % above the end-plate body that was an artefact of the wrong body.  Corrected 2026-11-12.
 
 Usage:  python3 geom_asbuilt.py S        (then: python3 mkcase.py S asbuilt ; run.sh S/cfd/asbuilt)
+        python3 geom_asbuilt.py S --cap  (writes S/cfd/asbuilt_capped.stl)
+
+--cap (finding 1 of the 2026-11-16 brief review, OD17-FAIR-BORE isolation): fill the open bore pocket
+with a solid r 28 mm cylinder from the collar end to the fairing's outboard end, so the only difference
+from the plain as-built body is the pocket.  The drag difference between the two runs is then the bore's
+share of the 23 % rise; the rest is the printing allowances and the real collar/trunnion/spar detail.
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note: Written by Claude (Anthropic) under the author's direction, 2026-11-12.
@@ -40,9 +46,10 @@ import nacelle64_assembly_check as a  # noqa: E402
 import nacelle64_optD_concept as d  # noqa: E402
 import nacelle64_wing_fairing as wf  # noqa: E402
 
-if len(sys.argv) != 2:
-    sys.exit('usage: geom_asbuilt.py S')
+if len(sys.argv) not in (2, 3) or (len(sys.argv) == 3 and sys.argv[2] != '--cap'):
+    sys.exit('usage: geom_asbuilt.py S [--cap]')
 S = sys.argv[1]
+CAP = len(sys.argv) == 3
 X_FLANK = 48.0          # geom.py's X0: the nacelle flank, where the CFD domain starts
 h2l = a.hull_to_local('stbd')
 
@@ -61,6 +68,12 @@ fairing = wf.Builder(wing, pin).part()                    # printed outer shape,
 collar = m.Manifold.cylinder(collar_end - X_FLANK, wf.R_BORE, wf.R_BORE, 160).rotate(
     [0, 90, 0]).translate([X_FLANK, 0, wf.PZ])
 solid = collar + fairing + wing
+if CAP:
+    fair_x1 = float(a.to_trimesh(fairing).bounds[1, 0])
+    plug = m.Manifold.cylinder(fair_x1 - collar_end, wf.R_BORE, wf.R_BORE, 160).rotate(
+        [0, 90, 0]).translate([collar_end, 0, wf.PZ])
+    solid = solid + plug
+    print(f'cap: bore filled X {collar_end:.1f}..{fair_x1:.1f} mm')
 for k in ('trunnion', 'spar', 'pinion'):
     solid = solid + a.to_man(parts[k])
 clip = m.Manifold.cube([165.0 - 40.0, 400, 400]).translate([40.0, -200, -100])
@@ -72,4 +85,4 @@ print(f'collar r {wf.R_BORE} mm to X {collar_end:.1f}; trunnion X {parts["trunni
       f'fairing X {a.to_trimesh(fairing).bounds[:, 0].round(1)}; wing tip face X {a.WING_TIP_FACE:.1f}')
 os.makedirs(f'{S}/cfd', exist_ok=True)
 t.apply_scale(0.001)
-t.export(f'{S}/cfd/asbuilt.stl')
+t.export(f'{S}/cfd/asbuilt_capped.stl' if CAP else f'{S}/cfd/asbuilt.stl')

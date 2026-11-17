@@ -307,7 +307,7 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     removed; `ARCHIVE_INDEX.md` section "airframe/archive/FreeCAD-scripts/" added.
     The canonical `SerenityAssembly.FCStd` was left in place in `airframe/freecad/assembly/`.
 
-- [x] **OD-19 — Owner: adopt the SLS minimum-wall rule?** (2026-11-11) **DECIDED 2026-11-11: option A**,
+- [x] **OD-25 — Owner: adopt the SLS minimum-wall rule?** (2026-11-11) **DECIDED 2026-11-11: option A**,
     adopted into `AGENTS.md` §7 (2.0 mm where category or orientation is not stated). Text below is the
     original brief; the current table is `docs/SLS_MIN_WALL_THICKNESS.md`.
     The 0.079 in (2.0 mm) `AGENTS.md` §7 wall came from FDM CF-PETG. `docs/SLS_MIN_WALL_THICKNESS.md`
@@ -338,7 +338,7 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     `tools/sls_dfm_audit.py` (MIN_WALL_MM 1.0) still cites p. 15. Get the bureau's minimum wall for
     DuraForm PA CF, then fix the audit constant and its citation.
 - [ ] **SLS-WALL-STIFF — 2.0 mm SLS load-bearing skins, unfixed orientation**
-    Finding from OD-19: a 2.0 mm PA CF skin whose print orientation is not fixed has about 37 % of
+    Finding from OD-25: a 2.0 mm PA CF skin whose print orientation is not fixed has about 37 % of
     the bending stiffness (E t³, Z modulus factor 0.35 from 33 % CF-PA12 proxy data; 52 % under the
     old 0.5 assumption) of the 2.0 mm CF-PETG skin the existing hull, collar and pod analyses
     assumed. Review each load-bearing SLS shell: fix its orientation on the drawing, thicken it
