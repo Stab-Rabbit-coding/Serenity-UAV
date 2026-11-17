@@ -21,7 +21,17 @@
 
 **Goal:** CN1+FC1 (Shepherd's room / Bay A) and CN2+FC2 (Inara's shuttle / Bay B) installed and operational — first flight achieved.
 
-> **Aft EDF not installed** (Phase 11). The 4 nacelle XFly Galaxy X5 EDFs (1240g each, 90%
+> **Design shift, 2026-11-16** (`airframe/fuselage-mid/WBS.md` §1.1.1.4.0,
+> `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`): the tail EDF (QX 64 mm), its
+> speed controller and the four RCS jets are part of the first build and flight-critical in hover,
+> so a nacelle-only first hover is no longer the plan. TEDF-16 brings their installation into
+> Phase 5. The Galaxy X5 nacelle units and the ~2,768 g AUW below are pre-shift figures; the
+> planning estimate
+> for the hover mass is 15.08 lbm (6,840 g) with twin 2200 mAh cells and the tail hardware added (plan 002); the
+> ledger baseline without the tail hardware is 14.49 lbm (6,572 g), `hover_twin_2200` in
+> `current-specification/auw_ledger.json`, and gains the tail hardware under TEDF-14.
+
+> **Pre-shift record — Aft EDF not installed** (Phase 11). The 4 nacelle XFly Galaxy X5 EDFs (1240g each, 90%
 > additive via stator = 2232g/nacelle × 2 = 4464g total) deliver T/W ≈ **1.61** at the
 > Phase 5–10 AUW of ~2,768g — **full VTOL hover is achievable from Phase 5**. Phase 11
 > adds the 55mm rear EDF for **forward-flight (cruise) thrust and RCS attitude authority** — it
@@ -35,7 +45,7 @@
 
 - [ ] Install 2× 40A BLHeli32 ESCs in bay C (port + stbd nacelle fore EDF = FC1; aft EDF = FC2).
 
-- [ ] **Phase 11 only:** Install 50A ESC in Panel F for 55mm rear EDF (FC2 PRU Ch.2) — skip for Phase 5.
+- [ ] **Phase 11 only:** Install 50A ESC in Panel F for 55mm rear EDF (FC2 PRU Ch.2) — skip for Phase 5. *(Superseded 2026-11-16: the tail EDF's fifth Open-Secure-ESC is installed forward in the cargo duct in Phase 5, OSESC-TAIL-1 / TEDF-16.)*
 
 - [ ] Install 5V/5A BEC; verify 5.00V ±0.05V under 1A bench load.
 
@@ -51,7 +61,7 @@
 | ESC2 | EDF2 (aft) | Port | FC2 Pilot PRU Ch.0 |
 | ESC3 | EDF1 (fore) | Stbd | FC1 Pilot PRU Ch.1 |
 | ESC4 | EDF2 (aft) | Stbd | FC2 Pilot PRU Ch.1 |
-| ESC5 | 55mm rear | Fuselage | **DEFERRED — Phase 11** |
+| ESC5 | QX 64 mm tail EDF (OSESC-NAC) | Fuselage, forward in the cargo duct | Per the G1 command-node decision (NFP-TEDF-2); installed in Phase 5 (TEDF-16, OSESC-TAIL-1) |
 
 **CN1+FC1 installation — Shepherd's room (Bay A, nose) — XO / Pilot (v2 EM-hardened):**
 > Shepherd's room (Bay A) is the CAN FD / RS-485 / 1553B bus start termination node.  Use XO (ADM2795E
@@ -300,7 +310,7 @@ Array A (hosted by FC3, River's room / Bay C):
 
 - [ ] Bond cargo gondola shell into belly void at 4× M3 hard points (installed Phase 1). Cure 24h.
 
-- [ ] Install 3mm CF door hinge pins; attach clamshell door halves (spring-loaded to open).
+- [x] (superseded 2026-11-16 by TEDF-10: the cargo doors are fused into the skin and the belly service panel with captive fasteners replaces them, plan 002 KD5 and R12) Install 3mm CF door hinge pins; attach clamshell door halves (spring-loaded to open).
 
 - [ ] Install the STS3215 winch train: both winch pedestals, the Ø4 mm fixed axle,
     the spool (2× MR84ZZ) and its ratchet ring, the pawl + spring + catch solenoid.
@@ -309,19 +319,19 @@ Array A (hosted by FC3, River's room / Bay C):
     (`docs/CARGO_WINCH_SPECIFICATION.md` §3.6). Bench-calibrate the pawl spring to an
     8.0 N ± 1.0 N slip threshold before flight. (DRV8833 stays for the door/release servos.)
 
-- [ ] Install SG90 door-actuator servo (spring-assist open, servo pull-close via bell-crank).
+- [x] (superseded 2026-11-16 by TEDF-10: the belly service panel with captive fasteners replaces the doors, plan 002) Install SG90 door-actuator servo (spring-assist open, servo pull-close via bell-crank).
 
-- [ ] Install SG90 payload-release servo; connect to DRV8833 IN1/IN2 via PWM→resistor divider→GPIO.
+- [ ] Install SG90 payload-release servo; connect to DRV8833 IN1/IN2 via PWM→resistor divider→GPIO. *(2026-11-16: whether the release servo survives the fused doors is G1 question OQ10 of plan 002; the DRV8833 breakout row was removed from the BOM.)*
 
 - [ ] Route control leads through PWR conduit belly tap to CN master (CN1 or CN2 — winner of CN master election).
 
 - [ ] Seal gondola-hull perimeter with 3M foam gasket tape.
 
-- [ ] Configure CN master GPIO: door open/close, winch deploy/retract, payload latch status (microswitched).
+- [ ] Configure CN master GPIO: winch deploy/retract, payload latch status (microswitched). *(The door open/close output is superseded 2026-11-16 by TEDF-10.)*
 
 **Phase 7 pass criteria:**
 
-- [ ] Door open/close × 10: no binding
+- [x] (superseded 2026-11-16 by TEDF-10: the cargo doors are fused into the skin and the belly service panel with captive fasteners replaces them, plan 002 KD5 and R12) Door open/close × 10: no binding
 
 - [ ] Winch deploy 1.5m: straight descent, line clear
 

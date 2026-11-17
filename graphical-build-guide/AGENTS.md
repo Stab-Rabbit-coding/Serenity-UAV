@@ -31,7 +31,17 @@ matures; do not record them in any `AGENTS.md`. Read them in `airframe/README.md
 
 **Scope:** The current phase builds the capability for full vertical-takeoff-and-landing (VTOL) hover, networked avionics, autonomous command and control, redundant communications, and secure logging. Each phase guide shall state the as-built capability it verifies, with measured values taken from the descriptive documents.
 
-**Excluded from the current phase** — the rear fuselage EDF, the RCS thrusters, the aft EDF
+> **Design shift, 2026-11-16** (`airframe/fuselage-mid/WBS.md` §1.1.1.4.0,
+> `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`): the tail EDF (QX 64 mm), its
+> speed controller and the four RCS jets are part of the first build and flight-critical in hover,
+> so a nacelle-only first hover is no longer the plan. TEDF-16 brings their installation into
+> Phase 5. The Galaxy X5 nacelle units and the ~2,768 g AUW below are pre-shift figures; the
+> planning estimate
+> for the hover mass is 15.08 lbm (6,840 g) with twin 2200 mAh cells and the tail hardware added (plan 002); the
+> ledger baseline without the tail hardware is 14.49 lbm (6,572 g), `hover_twin_2200` in
+> `current-specification/auw_ledger.json`, and gains the tail hardware under TEDF-14.
+
+**Excluded from the current phase (pre-shift record)** — the rear fuselage EDF, the RCS thrusters, the aft EDF
 intake scoops into the middle-section inner neck, and advanced autonomous maneuvers requiring
 forward propulsion. Those are described in `deferred/AGENTS.md` "Phase 11"; do not restate them
 here.

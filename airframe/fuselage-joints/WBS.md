@@ -262,7 +262,7 @@ and baked to hull frame.  SCAD fuselage shell files are secondary references onl
             unaffected by the SCAD bug).  Extending `merge_cargo_interior.py` to merge
             the now-fixed GPS/FPV/River-bay cuts (and the new Observer bosses below) into the
             real printed mesh is a follow-on task, not yet started.
-        - [ ] **Door-servo pads, latch-catch lips, belly ribs, hinge-pin blocks — SAME
+        - [x] (superseded 2026-11-16 by TEDF-10: the cargo doors are fused into the skin and the belly service panel with captive fasteners replaces them, plan 002 KD5 and R12) **Door-servo pads, latch-catch lips, belly ribs, hinge-pin blocks — SAME
             axis bug found (2026-07-03), NOT yet fixed.**  `BELLY_INT_Y = -413` is used
             as the position's Y-component in `servo_mount_pad`/`belly_rib`/
             `latch_catch_lip` exactly like the now-fixed `AVINICS_DORSAL_Y` bug — i.e.

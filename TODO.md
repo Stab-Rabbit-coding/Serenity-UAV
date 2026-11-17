@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Last updated:** 2026-11-16
+**Last updated:** 2026-11-17
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -180,7 +180,6 @@
 - [ ] Update REVN_BUILD_GUIDE_24IN.md bay layout table
 - [ ] Regenerate cargo_sect_shell24.stl
 - [ ] Add DRV8833-tray boss locations to cargo_sect_shell24.scad
-- [ ] Add SG90 bell-crank boss to inner face of each door panel for p…
 - [ ] ★ Bench-verify SPT5425LV stall current + pin-removal procedure…
 - [ ] RS-485 gateway integration for LibreServo v2 bus (J_FLEX has no…
 - [ ] ★ WINCH-PKG-01 — Rev C1 stack doesn't fit the hull: owner pick
@@ -207,9 +206,6 @@
 - [ ] Simon bay — define avionics bay in the MIDDLE section (moved he…
 - [ ] Flight Engineer room — PDB + battery bay, middle VENTRAL (2026-06-13).
 - [ ] Avionics-bay interior name marks (DEFERRED, 2026-06-13).
-- [ ] Phase 11 — aft EDF intake scoop cuts
-- [ ] neck_intake_frame.stl (Phase 11)
-- [ ] aft_edf_plenum.stl
 - [ ] Mount ant-collision strobe on belly of middle section in accord…
 - [ ] Mount ant-collision steady white tail light on upper pod of rea…
 - [ ] BAYA-FWD-05 Verify hatch seams vs full-res QMx Sheet Six
@@ -219,27 +215,28 @@
 - [ ] BAYA-FWD-09 Assembly/build guide: hatch hull + new parts
 - [ ] BAYA-FWD-10 Hatch seal + cover PGND bond decision
 - [ ] BAYA-FWD-11 Place TACCO antennas; cut MMCX coax to length
-- [ ] HULL-LEAK-04 Cargo door hinge-edge seam seal
+- [ ] HULL-LEAK-04 Belly service hatch gasket (was the cargo door seam
 - [ ] LG-AFT-BOLT-01 Aft-port gear bolt driver access vs wing
 - [ ] HULL-FUSE-02 Fuse other bonded mounts into one-piece print
-- [ ] TEDF-01 Tail EDF: record and reference repair (S42)
-- [ ] TEDF-02 Tail EDF: thermal model refresh (S46)
+- [ ] TEDF-01 Tail EDF: record, references, ledger gaps (S42)
+- [ ] TEDF-02 Tail EDF: thermal model refresh (S45)
 - [ ] TEDF-03 Tail EDF flow tool: thrust, stall margin (S43)
 - [ ] TEDF-04 Hover trim and RCS tool, CG window (S43)
 - [ ] TEDF-05 Rear-cone layout: QX pusher, RCS exhausts (S44)
 - [ ] TEDF-06 Cargo duct layout: FE box forward, hatch (S44)
-- [ ] TEDF-07 Head layout: GNSS, ballast pocket, inlets (S44)
-- [ ] ★ TEDF-08 Gate G1 Owner Decision Brief (OD-22) (S45)
+- [ ] TEDF-07 Head layout: GNSS trade, ballast, inlets (S45)
+- [ ] ★ TEDF-08 Gate G1 Owner Decision Brief (OD-22) (S46)
 - [ ] TEDF-09 Aft hull provisions: ring, tube, RCS (S47)
-- [ ] TEDF-10 Forward hull: ramp louvres, fused doors (S48)
+- [ ] TEDF-10 Forward hull: ramp, fused doors, belly panel (S48)
 - [ ] TEDF-11 Separate parts: shroud, valves, covers (S49)
 - [ ] TEDF-12 CFD case, still air and cruise (S50)
 - [ ] TEDF-13 Coupled cooling, thrust and trim analysis (S51)
 - [ ] TEDF-14 Mass, CG, bench balance, gate G2 (OD-23) (S52)
 - [ ] TEDF-15 Seal and aperture gate (S52)
-- [ ] TEDF-16 Specifications, build guide, closeout (S53)
+- [ ] TEDF-16 Specifications, build guide, closeout (S54)
+- [ ] TEDF-17 Control figures: mixer and tilt PID gains (S53)
 - [ ] OSESC-TAIL-1 Fifth OSESC controller for the tail EDF (S49)
-- [ ] OSESC-TAIL-2 Tail EDF controller fault behaviour spec (S53)
+- [ ] OSESC-TAIL-2 Tail EDF controller fault behaviour spec (S54)
 
 #### 1.1.2 — Wings
 → detail: `airframe/wings-nacelles/WBS.md` §1.1.2
@@ -431,7 +428,7 @@
 - [ ] ★ BAYA-FWD-T1 BLOCKER: CN1 sustained TX peak vs thermal cap
 - [ ] BAYA-FWD-T2 Confirm design ambient (104 °F assumed)
 - [ ] BAYA-FWD-T3 Cite/bench-measure Bay A thermal inputs
-- [ ] BAYA-FWD-T4 Bay A vent + fan geometry (after T1)
+- [ ] BAYA-FWD-T4 Bay A bow-inlet geometry (no fan) (S44)
 - [ ] BAYA-FWD-B1 Cite CAN-FD/RS-485 stub limits
 - [ ] BAYA-FWD-B2 Airspeed sensor footprint at pitot hose turn
 - [ ] BAYA-FWD-B3 Re-check bus lengths with routed Bay A runs
@@ -645,7 +642,6 @@
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase7
 
 - [ ] Bond cargo gondola shell into belly void at 4× M3 hard points (…
-- [ ] Install 3mm CF door hinge pins; attach clamshell door halves (s…
 - [ ] Install SPT5425LV/LibreServo v2 winch + twin-pedestal spool + ratchet
 - [ ] Install SG90 door-actuator servo (spring-assist open, servo pul…
 - [ ] Install SG90 payload-release servo; connect to DRV8833 IN1/IN2…
@@ -703,24 +699,11 @@
 ### Phase11 — Aft EDF Integration (Deferred)
 → detail: `deferred/WBS.md` §Phase11
 
-- [ ] Scoop windows must be re-sized for the 55 mm EDF (reduced area).
-- [ ] Remove temporary window covers from existing neck shell, or swa…
-- [ ] Regenerate
-- [ ] Regenerate
 - [ ] Generate
 - [ ] Generate
 - [ ] Run mesh watertightness verification on all regenerated STLs; r…
-- [ ] Dry-fit neck_intake_frame.stl into the resized scoop windows; r…
 - [ ] Verify aerodynamic orientation: intake lips face forward (−Y /…
 - [ ] Apply structural epoxy to tongues + shoulder flanges; press fra…
-- [ ] Fillet all gaps between flange and hull; cure 2h.
-- [ ] Dry-fit aft_edf_plenum.stl; verify intake arm alignment and 55m…
-- [ ] Bond plenum forward arms to intake frame exits; fillet joints;…
-- [ ] Bond rcs_distribution_manifold.stl to the 4 plenum bleed taps;…
-- [ ] Pressure-test: seal EDF face with tape; cover all but one scoop…
-- [ ] Bench-test 55mm EDF (correct rotation, no vibration).
-- [ ] Install EDF retaining ring at station ~430mm inside Panel F; bo…
-- [ ] Seat EDF in plenum 55mm inlet; press forward to retaining lip;…
 - [ ] Route motor leads through Panel F to 50A ESC; route signal lead…
 - [ ] Install 50A ESC in Panel F bay; foam tape + cable tie. Cure 2h…
 - [ ] Fixed — no moving petals.
@@ -736,7 +719,6 @@
 - [ ] Verify all 5 ESC heartbeats on CAN FD; confirm FC2 cross-drive…
 - [ ] Bench-test RCS attitude authority; then forward-flight thrust t…
 - [ ] All regenerated rear-EDF STLs pass mesh watertightness verifica…
-- [ ] Intake frame tongues fully seated in the resized scoop windows
 - [ ] Plenum + RCS manifold pressure-test passed (draft at EDF inlet…
 - [ ] EDF seated at station ~430mm, centerline ±2mm; rotation verifie…
 - [ ] 50A ESC installed; ESC5 signal routed to FC2 PRU Ch.2

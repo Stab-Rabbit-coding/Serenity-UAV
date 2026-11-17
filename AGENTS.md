@@ -344,8 +344,10 @@ renamed. The former-name/inspiration table and the full renaming record live in
 `docs/attribution_and_licensing.md` §6 (also `docs/WBS.md` §0.9) — historical only; never use a
 former name in new work.
 
-Flight Engineer's room sits in the middle-section inner neck (open ventral face of the horseshoe ring),
-minimizing power-run length to all four nacelles/stacks/battery. Observer is a standalone board
+Flight Engineer's box sits forward in the sealed cargo duct (TEDF-06, plan
+`docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`, 2026-11-16), where its mass recovers
+hover trim; the middle-section inner neck is now the open air passage to the tail EDF. (Pre-shift it sat
+in the inner neck, minimizing power-run length to all four nacelles/stacks/battery.) Observer is a standalone board
 (not a PB2-I cape) — `avionics/AGENTS.md` "Observer — Cargo-Handling System and Nose/Cargo-Bay
 Vision, ToF & Laser Board" owns its install sites and interfaces. **Observer's laser-indicator
 specs (class, spread angle, per-site optics) change as the design matures — do not restate them
@@ -360,6 +362,8 @@ here; canonical source is `docs/OBSERVER_LASER_ANALYSIS.md` (current revision) a
 | Inara | C | E | A | P |
 | River | E | A | P | C |
 | Simon | P | C | E | A |
+
+Two roles are being added to this matrix (owner direction 2026-11-16, plan `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md` R41, NFP-TEDF-5): tail EDF and RCS control, and thrust monitor and trim compensation. The matrix rules are revised for six roles and the assignment is decided at gate G1 (OD-22); the table below is the four-role record until then.
 
 Re-balanced 2026-11-14 (owner, OD-19, option B) for the seven-node fleet: Simon is one PB2-I plus a
 trust-module MCU, so it takes the lightest Primary and Flight Control E. Every role has four distinct
@@ -382,7 +386,8 @@ Per-stack tasking:
 - Inara: payload and cargo control (Observer, winch, cameras and external sensors) + alternate
   flight control.
 - River: forward EDF + nacelle tilt sync + primary flight control + alternate comms.
-- Simon: aft EDF + primary watchdog/fault-detect/failover/authentication (the trust-module MCU
+- Simon: aft EDF (provisional: which node commands the now flight-critical tail EDF and RCS valves is
+  open under NFP-TEDF-2 / OD-22) + primary watchdog/fault-detect/failover/authentication (the trust-module MCU
   keeps its bus presence through a host reboot) + alternate payload.
 
 ## 10. Workflow

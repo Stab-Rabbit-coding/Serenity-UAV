@@ -1,7 +1,7 @@
 {
  "configs": {
   "cargo_2800_payload": {
-   "I_pitch_gmm2": 70183907.861162,
+   "I_pitch_gmm2": 70183907.841539,
    "T_W": 1.418709,
    "cg": [
     -0.090072,
@@ -12,7 +12,7 @@
    "mass_g": 6682.132371
   },
   "heaviest_4000_payload": {
-   "I_pitch_gmm2": 70559802.29796,
+   "I_pitch_gmm2": 70559802.278389,
    "T_W": 1.397997,
    "cg": [
     -0.088757,
@@ -23,7 +23,7 @@
    "mass_g": 6781.132371
   },
   "hover_4000": {
-   "I_pitch_gmm2": 70361329.90577,
+   "I_pitch_gmm2": 70361329.88627,
    "T_W": 1.446372,
    "cg": [
     -0.091829,
@@ -34,7 +34,7 @@
    "mass_g": 6554.332371
   },
   "hover_twin_2200": {
-   "I_pitch_gmm2": 79243366.581959,
+   "I_pitch_gmm2": 79243366.562954,
    "T_W": 1.44241,
    "cg": [
     -0.091577,
@@ -44,6 +44,43 @@
    "k_pitch_mm": 109.804895,
    "mass_g": 6572.332371
   }
+ },
+ "cooling_airflow": {
+  "basis": "plan 002 finding 30, 2026-11-16; replaced by plan U2/U13",
+  "esc_min_stable_throttle": 0.1,
+  "full_throttle_lps": [
+   140.0,
+   116.0
+  ],
+  "governing_node": "CN2/CN3 chin (0.31 in / 8 mm spreader room per side)",
+  "heat_sources_w": {
+   "CN node avg / peak": [
+    3.0,
+    8.3
+   ],
+   "FC node": 1.25,
+   "Flight Engineer box": 3.0,
+   "tail speed controller": "21.7 W at 50 A, x (I/50)^2 (tools/nacelle_esc_thermal.py)"
+  },
+  "idle_throttle": [
+   0.1,
+   0.1
+  ],
+  "need_lps": {
+   "avg_chin_3000mm2": [
+    4.9,
+    6.4
+   ],
+   "avg_no_guides": [
+    18.8,
+    24.8
+   ],
+   "peak_chin_3000mm2": [
+    37.3,
+    49.3
+   ]
+  },
+  "status": "PROVISIONAL -- ASSUMED heat loads, film coefficients and fan model"
  },
  "nacelle_printed_unit_g": {
   "PRINT-NAC64-CARTRIDGE": 65.12,
