@@ -11980,6 +11980,15 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-11-16-001-feat-nozzle-servo-selection-osc-integration-plan.md": {
+      "description": "Nozzle Servo Selection and Secure Servo Integration - Plan",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "security"
+      ],
+      "archived": false
+    },
     "docs/references/108090023_STS3215-C001_Datasheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -17271,6 +17280,7 @@
       "docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md",
       "docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md",
       "docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md",
+      "docs/plans/2026-11-16-001-feat-nozzle-servo-selection-osc-integration-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/AC_43.13-1B_w-chg1.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
@@ -17815,6 +17825,7 @@
       "docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md",
       "docs/plans/2026-11-11-001-sprint-2-handoff.md",
       "docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md",
+      "docs/plans/2026-11-16-001-feat-nozzle-servo-selection-osc-integration-plan.md",
       "docs/solutions/conventions/one-limits-list-drives-the-printout-and-the-exit-code.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
@@ -18935,6 +18946,7 @@
       "docs/plans/2026-10-19-001-baseline-r1/nacelle_esc_bay_fit.py.txt",
       "docs/plans/2026-10-19-001-baseline-r1/nozzle_linkage_check.py.txt",
       "docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md",
+      "docs/plans/2026-11-16-001-feat-nozzle-servo-selection-osc-integration-plan.md",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/1.jpg",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/2.jpg",
