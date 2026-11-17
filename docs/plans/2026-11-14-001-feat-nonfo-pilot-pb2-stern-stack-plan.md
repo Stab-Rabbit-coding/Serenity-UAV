@@ -22,7 +22,7 @@ execution: code
 - **Objective.** Take NoNFO-Pilot-PB2 from ideation to fab-ready: ERC 0, DRC 0, schematic parity 0, unconnected 0, Gerbers generated, on KiCad 9.0.2. It becomes the stern (Simon) control stack of Serenity Rev U.
 - **Product authority.** Owner (Stab-Rabbit-coding). Sprint order is a recommendation; each owner-decision gate needs the owner's word.
 - **Mode.** Governed. This plan creates no second task list. Board items live in `SecureControllers:TODO.md` §5; airframe items live in `avionics/WBS.md` §1.11; sprints S34 to S41 are indexed in Theme A of `docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md`.
-- **Owner decisions in force (2026-11-14):** architecture B+; BBE-Black outline; mass minimised, not floored; PACE option B; Wi-Fi Ezurio Sterling-LWB5+ 453-00046 (USB, MHF4).
+- **Owner decisions in force (2026-11-14):** architecture B+; BBE-Black outline; mass minimised, not floored; PACE option B; Wi-Fi Ezurio Sterling-LWB5+ 453-00046 (USB, MHF4); logging microSD on the USB2641i hub.
 - **Stop conditions.** A sprint does not start if its owner decision is open. A fit or mass gate that still fails after the one pre-authorised re-run without GNSS stops layout and goes to the owner as an Owner Decision Brief (`docs/DOC_TEMPLATES.md`).
 - **Out of scope.** The BBE-hosted variant. Firmware (Theme F). Any change to the three full stacks.
 
@@ -258,7 +258,7 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 
 ### U2. S35 — Parts sourced, footprints verified
 
-**Status 2026-11-17: in progress.** BOM (53 lines), sourcing gate, and three OEM-drawn footprints done; findings F1 to F7 in SecureControllers `kicad/NoNFO-Pilot/PB2/NONFO_PB2_FOOTPRINT_VERIFICATION.md`. Open: Nano-Fit and KMR2 drawings, OD-22 (AX88772E temperature), OD-23 (logging medium), logic-zone courtyard 82 % (to S38).
+**Status 2026-11-17: in progress.** BOM (53 lines), sourcing gate, and three OEM-drawn footprints done; findings F1 to F7 in SecureControllers `kicad/NoNFO-Pilot/PB2/NONFO_PB2_FOOTPRINT_VERIFICATION.md`. OD-23 decided 2026-11-17: logging microSD on the hub (USB2641i). Open: Nano-Fit and KMR2 drawings, OD-22 (AX88772E temperature), logic-zone courtyard 89 % (to S38).
 
 **Goal:** Every part chosen, sourced and footprint-verified before it enters the schematic.
 

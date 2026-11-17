@@ -1175,7 +1175,10 @@ customer. Plan and sprints S34–S41:
     70°C". It is the ring-port-2 NIC on every Pilot and on NoNFO-Pilot-PB2 (OD-4, Pilot pattern).
     Options for the owner: an industrial USB NIC, a qualification test of the commercial part,
     or a different second ring port. Found in S35 (SecureControllers finding F3).
-- [ ] **NFP-OD23** — ★ Owner: logging medium; `avionics/AGENTS.md` requires microSD.
+- [x] **NFP-OD23** — ★ Owner: logging medium; `avionics/AGENTS.md` requires microSD.
+    **DECIDED 2026-11-17 (owner): microSD on the USB hub.** The hub becomes the Microchip
+    USB2641i (built-in SD reader on its third port); the write-block PLD drives its SD_WP.
+    The same fix serves TACCO's unhosted slot.
     The PB2-I header carries no SD bus, so a cape microSD slot has no host (TACCO's is unhosted
     too). NoNFO-Pilot-PB2 logs to NOR flash behind the write-block PLD and the PB2-I eMMC.
     Found in S35 (finding F5).
