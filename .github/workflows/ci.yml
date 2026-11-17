@@ -140,7 +140,7 @@ jobs:
         run: python3 tools/sync_operators_manual.py --check
       - name: Verify every AGENTS.md is within its size cap (owner decision 2026-11-17)
         run: python3 tools/check_agents_size.py
-      - name: Verify every TODO.md is regenerated from its WBS.md
+      - name: Verify every generated open-items list matches its WBS.md
         run: python3 tools/gen_todo_from_wbs.py --check
       - name: Verify PROJECT_INDEX.md / ARCHIVE_INDEX.md / index_tags.json are in sync
         run: |
