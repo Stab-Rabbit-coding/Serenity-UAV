@@ -91,6 +91,7 @@
 ## §6.5 — Rev U Checkpoint
 → full detail: `WBS.md` §6.5
 
+- [ ] PHASE-RENUMBER — (owner, 2026-11-17) The rear-EDF "Phase 11" is…
 - [ ] REVU-RELABEL — At the Rev U close, stamp every active component's…
 
 ---

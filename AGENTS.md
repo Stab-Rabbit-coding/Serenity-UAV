@@ -40,7 +40,7 @@ Shepherd, Inara and River are full stacks (Pilot cape + PB2-I and TACCO cape + P
 is one PB2-I plus a trust-module MCU (`avionics/WBS.md` §1.11, OD-19 option B). Commo
 (49 MHz + SiK) is one standalone MCU node at the antennas, reachable by every stack over
 CAN FD / RS-485 / MIL-STD-1553C (no Ethernet). Onboard buses: CAN FD, MIL-STD-1553C, RS-485,
-Ethernet, 5 kV galvanic isolation at every PB2-I node. External C2, all five usable for command
+Ethernet, galvanic isolation at every bus terminal on every PCB (5 kV at PB2-I nodes). External C2, all five usable for command
 and control: Wi-Fi 5 GHz, ZigBee 2.4 GHz and mLRS on every TACCO cape; SiK 915 MHz and AX.25
 49 MHz (47 CFR Part 15 §15.235, unlicensed, **not** Part 95 RCRS [REF-FCC-003]) via Commo.
 S-Bus is not a C2 channel. As-built state: `avionics/README.md` and each board's `.md`.

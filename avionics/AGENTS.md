@@ -12,8 +12,9 @@ Terms (node, cape, stack, bay): `CONCEPTS.md`.
 
 Board-level rules not stated in root:
 
-- **Bus isolation:** CAN FD, RS-485, Ethernet, and MIL-STD-1553C are galvanically isolated at
-  every Pilot and TACCO node. CAN FD and RS-485 reach every PCB, actuator, and sensor; Observer
+- **Bus isolation:** every bus terminal on every PCB (Pilot, TACCO, Commo, Observer, Flight
+  Engineer, Bus-Gateway) is galvanically isolated, for CAN FD, RS-485, Ethernet, and
+  MIL-STD-1553C alike. CAN FD and RS-485 reach every PCB, actuator, and sensor; Observer
   also has Ethernet. 1553C does not extend to non-SBC nodes, with one exception: Commo is a
   1553C remote terminal (no Ethernet).
 - **Security element:** every PB2-I cape (Pilot, TACCO) carries a TPM; every other PCB

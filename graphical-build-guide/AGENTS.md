@@ -12,9 +12,8 @@ This table is the one home for the phase plan.
 | --- | --- | --- | --- |
 | **1–4** | Fuselage, landing gear, wing attachment | Physical airframe | Archived/prototype |
 | **5–10** | Avionics stacks, nacelles, battery, power distribution, tail EDF + speed controller + RCS | Full VTOL hover | **Current** |
-| **11** | Pre-shift record only (rear EDF + RCS, now Phase 5) | — | Superseded |
-| **12** | Cargo-bay range-extender battery module | Endurance | Deferred |
-| **13+** | Autonomous mission system and other speculative items | — | Unscoped |
+| **11** | Cargo-bay range-extender battery module | Endurance | Deferred |
+| **12+** | Autonomous mission system and other speculative items | — | Unscoped |
 
 - The tail EDF and RCS are flight-critical in hover, so a nacelle-only first hover is not the
   plan (`airframe/fuselage-mid/WBS.md` §1.1.1.4.0; TEDF-16 brings their installation into
