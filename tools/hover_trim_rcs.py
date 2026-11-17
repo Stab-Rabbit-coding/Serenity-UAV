@@ -26,7 +26,8 @@ pressure through a scoop (recovery fraction ASSUMED 1.0) with path loss K (ASSUM
 jets add exit area and lower the nozzle speed.
 
 CASES: `ledger` (default) takes mass, CG and inertia from the ledger as it stands, with the plan's
-forward moves NOT yet applied (their masses are not in the ledger); `plan` is the plan's
+forward and aft moves NOT yet applied (their masses are not in the ledger); `projected` applies
+the plan's own CG deltas to the ledger (table values, not recomputed); `plan` is the plan's
 planning scenario (6,840 g, CG 2.3 mm aft of the pivot, inertia 225 lbm.in^2) for regression.
 
 One limits list (`limits()`) drives the printout and the exit code.
@@ -97,6 +98,10 @@ class Case:
         return (TAIL_Z - PIVOT_Z) / 1e3
 
 
+def ht_pivot() -> float:
+    return PIVOT_Y
+
+
 def ledger_case() -> Case:
     with open(LEDGER, encoding="utf-8") as fh:
         led = json.load(fh)
@@ -104,6 +109,24 @@ def ledger_case() -> Case:
     return Case("ledger hover_twin_2200", c["mass_g"], c["cg"][1], c["cg"][2],
                 led["pitch_inertia"]["I_kg_m2"],
                 "auw_ledger.json; plan moves not applied; nose parts ESTIMATE")
+
+
+# The plan's own CG chain (plan 002 "Corrected mass baseline"): baseline 0.8 mm aft of the pivot,
+# QX unit + speed controller + RCS servos 8.4 mm aft, plus the Flight Engineer box forward 2.3 mm
+# aft; mass 6,572 g -> 6,840 g.  The deltas are TAKEN FROM THAT TABLE, not recomputed.
+PLAN_ADDS_DELTA_MM = 8.4 - 0.8
+PLAN_FE_DELTA_MM = 2.3 - 8.4
+PLAN_ADDS_G = 6840.0 - 6572.3
+
+
+def projected_case(fe_fraction: float = 1.0) -> Case:
+    """The corrected ledger with the plan's own deltas applied (fe_fraction of the FE-box move).
+    Inertia is the ledger's single value, the moves not priced (flagged, ASSUMED)."""
+    base = ledger_case()
+    return replace(base, name=f"ledger + plan deltas (FE box move {fe_fraction:.0%})",
+                   mass_g=base.mass_g + PLAN_ADDS_G,
+                   cg_y=base.cg_y + PLAN_ADDS_DELTA_MM + PLAN_FE_DELTA_MM * fe_fraction,
+                   source="ledger with the plan's own CG deltas (table values, not recomputed)")
 
 
 def plan_case() -> Case:
@@ -327,7 +350,9 @@ def limits(case: Case, su: Setup) -> list[tuple[str, float, float, bool, str]]:
                 lo <= case.d <= hi, "mm"))
     for label, v in VOLTAGES:
         sv = Setup(voltage_inputs(su.flow, v), su.jm, su.jets)
-        th = throttle_for_thrust(sv, required_tail_thrust(case))
+        f_req = required_tail_thrust(case)
+        # A CG at or forward of the pivot needs no tail thrust and none can trim it: unreachable.
+        th = throttle_for_thrust(sv, f_req) if f_req > 0.0 else math.inf
         out.append((f"throttle for the couple trim, {label}", th, 1.0, th <= 1.0, ""))
         use = trim_point(case, sv, min(th, 1.0))["use"] if math.isfinite(th) else math.inf
         out.append((f"R30 trim use at that throttle, {label}", use, R30_USE_MAX,
@@ -372,8 +397,10 @@ def report(case: Case, su: Setup) -> int:
                                  if f_star <= 0 else ""))
     for label, v in VOLTAGES:
         sv = Setup(voltage_inputs(su.flow, v), su.jm, su.jets)
-        th = throttle_for_thrust(sv, f_star)
-        print(f"  {label}: throttle {'unreachable (>100 %)' if math.isinf(th) else f'{th:.0%}'}")
+        th = throttle_for_thrust(sv, f_star) if f_star > 0.0 else math.inf
+        why = "no tail thrust trims a CG at or forward of the pivot" if f_star <= 0.0 \
+            else "unreachable (>100 %)"
+        print(f"  {label}: throttle {why if math.isinf(th) else f'{th:.0%}'}")
     lo, hi = cg_window(case, su, HOVER_THROTTLE, 1.0)
     lo6, hi6 = cg_window(case, su, 0.6, 1.0)
     print(f"CG window for trim use <= {R30_USE_MAX:.0%}: {lo / IN_M:+.2f} to {hi / IN_M:+.2f} in "
@@ -441,6 +468,14 @@ def report(case: Case, su: Setup) -> int:
               " 12.9 deg at 2.92 / 1.89 / 1.06 / 0.47 / 0 lbf.")
     else:
         print("\nRun --case plan --louvre-k 0 to compare with the plan's trim table.")
+    if case.name.startswith("ledger + plan deltas"):
+        lo_mm = lo * 1e3
+        base = ledger_case()
+        frac = (base.cg_y - ht_pivot() + PLAN_ADDS_DELTA_MM - lo_mm) / -PLAN_FE_DELTA_MM
+        short = lo_mm - case.d * 1e3
+        print(f"  CG shortfall to the window's lower edge: {short:+.1f} mm. Limiting "
+              f"the Flight Engineer box move to about {max(0.0, min(1.0, frac)):.0%} of the plan's "
+              "reaches that edge (linear, ESTIMATE; owner/G1 decision).")
     print("\nLimits (one list; the exit code uses it):")
     ok_all = True
     for name, val, lim, ok, unit in limits(case, su):
@@ -452,10 +487,10 @@ def report(case: Case, su: Setup) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
-    ap.add_argument("--case", choices=("ledger", "plan"), default="ledger")
+    ap.add_argument("--case", choices=("ledger", "plan", "projected"), default="ledger")
     ap.add_argument("--louvre-k", type=float, default=tf.Inputs.k_louvre)
     a = ap.parse_args(argv)
-    case = plan_case() if a.case == "plan" else ledger_case()
+    case = {"plan": plan_case, "projected": projected_case}.get(a.case, ledger_case)()
     return report(case, Setup(tf.Inputs(k_louvre=a.louvre_k)))
 
 

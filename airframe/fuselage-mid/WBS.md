@@ -1298,8 +1298,10 @@ forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
     `WBS.md` §0.14), the ledger gaps closed with stated ESTIMATE rows for the sensor and pitot
     parts, BOM rows for the Bay A drawer, gate, shelf, hatch cover and flange and for the
     twin-pack cells, and one pitch inertia published in `auw_ledger.json`. With the gaps closed
-    the `hover_twin_2200` CG is 2.0 mm forward of the tilt pivot, outside the 1.0 to 3.9 mm aft
-    window the plan quotes: U4 starts from that figure.)
+    the `hover_twin_2200` CG is 1.5 mm forward of the tilt pivot (it was 0.8 mm aft), outside the
+    1.0 to 3.9 mm aft window the plan quotes. The Bay A hatch cover was first counted twice (it is
+    inside the merged hull's mass) and was removed on 2026-11-17. On the plan's own deltas the
+    final CG projects to about 0.0 mm: S43 and G1 start from that, not from the plan's +2.3 mm.)
 - [ ] **TEDF-02** — [STD] Thermal model refresh: closed-cavity fix, ramp and bow branches,
     EDF flow input, tail speed controller and motor as limited nodes, minimum cooling throttle.
     The stern stack step needs NFP-THERM. Plan U2. (S45; swapped with S46 on 2026-11-16)
@@ -1312,13 +1314,16 @@ forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
     root `WBS.md` §0.14.)
 - [x] **TEDF-04** — [ADV] Hover trim and RCS tool: trim use, jet sizing, CG window, louvre-loss
     bound, independent trim schedule, degraded-mode time history and yaw. Plan U4. (S43,
-    closed 2026-11-17: `tools/hover_trim_rcs.py`, 20 tests, one limits list. Checked against a
+    closed 2026-11-17: `tools/hover_trim_rcs.py`, 21 tests, one limits list. Checked against a
     hand moment balance about the pivot and the CG. Plan scenario reproduces the plan table
     within a few percentage points (regression note). **Finding:** on the ledger as it stands
-    (plan moves not applied) the CG is 2.0 mm forward of the pivot and the run FAILS R23 and
-    R30 (trim use 146 % at full throttle); the plan's forward moves must be priced into the
-    ledger before the window can be met. Open for U13/U17: closed-loop recovery and the
-    minimum credited hover height; OQ11 pitch-excursion limit; unmeasured tilt lag, dead time
+    (plan moves not applied) the CG is 1.5 mm forward of the pivot and the run FAILS R23 and R30
+    (trim use 131 % at full throttle). Applying the plan's own CG deltas to the corrected ledger
+    (`--case projected`) leaves the CG at about 0.0 mm, 1.4 mm short of this tool's window edge
+    (+1.3 mm); limiting the Flight Engineer box move to about 77 % reaches the edge (linear,
+    ESTIMATE). The plan's final +2.3 mm rested on a baseline that lacked the Bay A parts, the
+    nose sensor bodies and the pitot parts. Owner/G1 decision; items in root `WBS.md` §0.14.
+    Open for U13/U17: closed-loop recovery and the minimum credited hover height; OQ11 pitch-excursion limit; unmeasured tilt lag, dead time
     and backlash.)
 - [ ] **TEDF-05** — [ADV] Rear-cone layout: QX pusher unit, RCS scoops at Y 628 with structure at the
     shroud joint, ventral exhausts at 245° and 295° canted 25° aft, trapezoidal exhausts on the canon

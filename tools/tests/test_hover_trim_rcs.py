@@ -197,3 +197,15 @@ def test_every_limit_is_printed_and_enforced(capsys):
     out = capsys.readouterr().out
     assert all(name in out for name, *_ in rows)
     assert ht.report(replace(PLAN, cg_y=ht.PIVOT_Y - 5.0), PLAIN) == 2
+
+
+def test_the_plans_own_deltas_on_the_corrected_ledger_leave_the_cg_outside_the_window(capsys):
+    """The plan's moves, applied to the ledger with its gaps closed, miss the R23 window."""
+    c = ht.projected_case()
+    lo, hi = ht.cg_window(c, DESIGN, ht.HOVER_THROTTLE, 1.0)
+    assert c.d < lo
+    assert ht.main(["--case", "projected"]) == 2
+    out = capsys.readouterr().out
+    assert "CG shortfall" in out and "Flight Engineer box move" in out
+    # moving the FE box less (a smaller forward move) brings the CG back toward the window
+    assert ht.projected_case(0.5).d > c.d

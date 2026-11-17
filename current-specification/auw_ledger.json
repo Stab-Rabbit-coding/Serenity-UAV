@@ -1,48 +1,48 @@
 {
  "configs": {
   "cargo_2800_payload": {
-   "I_pitch_gmm2": 75748532.752609,
-   "T_W": 1.403357,
+   "I_pitch_gmm2": 74728987.578096,
+   "T_W": 1.406221,
    "cg": [
-    -0.110802,
-    347.43026,
-    157.704891
+    -0.110972,
+    347.938203,
+    157.487005
    ],
-   "k_pitch_mm": 105.89296,
-   "mass_g": 6755.228525
+   "k_pitch_mm": 105.285172,
+   "mass_g": 6741.471123
   },
   "heaviest_4000_payload": {
-   "I_pitch_gmm2": 76102894.375172,
-   "T_W": 1.383088,
+   "I_pitch_gmm2": 75087552.050935,
+   "T_W": 1.385869,
    "cg": [
-    -0.109201,
-    347.015291,
-    158.156906
+    -0.109365,
+    347.515048,
+    157.943083
    ],
-   "k_pitch_mm": 105.371047,
-   "mass_g": 6854.228525
+   "k_pitch_mm": 104.77097,
+   "mass_g": 6840.471123
   },
   "hover_4000": {
-   "I_pitch_gmm2": 75883752.205279,
-   "T_W": 1.430419,
+   "I_pitch_gmm2": 74873464.18328,
+   "T_W": 1.433395,
    "cg": [
-    -0.112938,
-    346.69071,
-    159.151274
+    -0.113116,
+    347.20693,
+    158.932187
    ],
-   "k_pitch_mm": 107.004458,
-   "mass_g": 6627.428525
+   "k_pitch_mm": 106.400254,
+   "mass_g": 6613.671123
   },
   "hover_twin_2200": {
-   "I_pitch_gmm2": 84410024.11671,
-   "T_W": 1.426545,
+   "I_pitch_gmm2": 83463117.88885,
+   "T_W": 1.429504,
    "cg": [
-    -0.112632,
-    337.369531,
-    159.425339
+    -0.112809,
+    337.865013,
+    159.207415
    ],
-   "k_pitch_mm": 112.70301,
-   "mass_g": 6645.428525
+   "k_pitch_mm": 112.185263,
+   "mass_g": 6631.671123
   }
  },
  "cooling_airflow": {
@@ -92,10 +92,10 @@
   "PRINT-NOZ64-THROAT": 26.29
  },
  "pitch_inertia": {
-  "I_kg_m2": 0.08441,
-  "I_lbm_in2": 288.443798,
+  "I_kg_m2": 0.083463,
+  "I_lbm_in2": 285.208054,
   "config": "hover_twin_2200",
-  "k_pitch_in": 4.437126
+  "k_pitch_in": 4.416743
  },
  "rows_hover": [
   {
@@ -180,18 +180,6 @@
    "mass_g": 10.14,
    "name": "bay_a_fc1_shelf",
    "ref": "PRINT-BAY-A-SHELF",
-   "source": "MEASURED mesh x DuraForm PA CF 1.11 g/cc (hull frame)"
-  },
-  {
-   "cg": [
-    -0.0,
-    98.5,
-    264.5
-   ],
-   "kind": "PRINT",
-   "mass_g": 13.76,
-   "name": "bay_a_hatch_cover",
-   "ref": "PRINT-BAY-A-HATCH-COVER",
    "source": "MEASURED mesh x DuraForm PA CF 1.11 g/cc (hull frame)"
   },
   {
@@ -2299,7 +2287,7 @@
   "BOM": 2386.904,
   "GAP": 295.9714,
   "NACELLE": 1977.876227,
-  "PRINT": 1966.676898
+  "PRINT": 1952.919496
  },
  "thrust_gf": 9480.0,
  "unclassified": []

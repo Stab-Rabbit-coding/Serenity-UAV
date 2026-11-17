@@ -192,11 +192,12 @@ PRINTED = [
      ("st", (X_CL, 223.0, 172.0),
       "ESTIMATE: two sleds in the tray lanes, Y 163-283 (BATTERY_TRIM_ENDURANCE_OPTIONS 6)")),
     # Bay A forward node mounts (tools/gen_bay_a_fwd_mounts.py), published in the hull frame.
-    # TEDF-01 (2026-11-17): they were in the head layout gate but not in this ledger.
+    # TEDF-01 (2026-11-17): they were in the head layout gate but not in this ledger.  The hatch
+    # cover is NOT listed: it is the roof panel of the published merged hull (section check
+    # 2026-11-17: 100 % inside that hull), whose mass already carries it.
     ("PRINT-BAY-A-DRAWER", "fuselage/head/bay_a_cn1_drawer.stl", 1, "hull"),
     ("PRINT-BAY-A-GATE", "fuselage/head/bay_a_cn1_gate.stl", 1, "hull"),
     ("PRINT-BAY-A-SHELF", "fuselage/head/bay_a_fc1_shelf.stl", 1, "hull"),
-    ("PRINT-BAY-A-HATCH-COVER", "fuselage/head/bay_a_hatch_cover.stl", 1, "hull"),
     ("PRINT-BAY-A-HATCH-FLANGE", "fuselage/head/bay_a_hatch_flange.stl", 1, "hull"),
     ("PRINT-TWIN-PACK-GATE", "fuselage/head/twin_pack_gate.stl", 1,
      ("st", (X_CL, 285.0, 190.0), "ESTIMATE: hinged aft gate at the aft end of the pack band")),
@@ -380,6 +381,8 @@ EXCLUDED = {
                     "(CF_PLATE_PARTS)",
     "BATT-6S-2800": "alternate pack; the configurations pick ONE battery",
     "BATT-6S-4000": "the configurations pick ONE battery",
+    "PRINT-BAY-A-HATCH-COVER": "the roof panel is inside the published merged hull's mass "
+                               "(the hatch opening is cut only in the separate _hatch mesh)",
     "CELL-6S-2200": "the two twin-pack cells; priced from this row by twin_pack_items() in "
                     "hover_twin_2200 only (the other configurations pick one pack)",
     "BRG-MF104ZZ": "50 mm pivot bearing, superseded by the trunnion (Rev T4)",
