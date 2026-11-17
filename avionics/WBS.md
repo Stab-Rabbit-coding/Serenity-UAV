@@ -1170,6 +1170,21 @@ customer. Plan and sprints S34–S41:
     −40 to +85 °C; 0.7 g; rail at least 0.8 A. Variant 453-00046 (MHF4) approved by the owner 2026-11-14.
     Needed for the USB order code, strapping, temperature rating and mass (S35). Owner to
     rule whether a login-gated data sheet passes the sourcing rule.
+- [ ] **NFP-OD22** — ★ Owner: AX88772E is sold only at 0 to 70 C (fleet needs −40 to +85).
+    ASIX data sheet v1.03 §7 lists one part, AX88772EQF, "Commercial temperature range: 0 to
+    70°C". It is the ring-port-2 NIC on every Pilot and on NoNFO-Pilot-PB2 (OD-4, Pilot pattern).
+    Options for the owner: an industrial USB NIC, a qualification test of the commercial part,
+    or a different second ring port. Found in S35 (SecureControllers finding F3).
+- [ ] **NFP-OD23** — ★ Owner: logging medium; `avionics/AGENTS.md` requires microSD.
+    The PB2-I header carries no SD bus, so a cape microSD slot has no host (TACCO's is unhosted
+    too). NoNFO-Pilot-PB2 logs to NOR flash behind the write-block PLD and the PB2-I eMMC.
+    Found in S35 (finding F5).
+- [ ] **NFP-TACCO-FP** — TACCO footprint defects found in S35 (fix on TACCO's next pass).
+    F1: `TPS6303x_VSON-10_2p5` is a guessed 3-2-3-2 pattern; TI DSK0010A is 5 + 5 pads
+    (SecureControllers `kicad/NoNFO-Pilot/PB2/kicads/NoNFO-PB2.pretty` has the corrected one).
+    F2: W25Q128JVSIQ is package code S, SOIC 208-mil; TACCO uses the 150-mil footprint.
+    F4: Nexperia PRTR5V0U2X fails the sourcing rule (Wingtech, PRC) and is a 5 V part on
+    RS-485.
 - [ ] **NFP-QA** — Track fastener, connector and harness mass and CG per board.
     Owner direction 2026-11-14 (PR #289). Starts with the stern stack (S34, S41); the same
     lines are owed for Pilot, TACCO, Commo, Flight Engineer, gateway and Observer.

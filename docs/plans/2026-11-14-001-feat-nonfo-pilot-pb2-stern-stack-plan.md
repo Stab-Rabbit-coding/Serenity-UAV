@@ -258,6 +258,8 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 
 ### U2. S35 — Parts sourced, footprints verified
 
+**Status 2026-11-17: in progress.** BOM (53 lines), sourcing gate, and three OEM-drawn footprints done; findings F1 to F7 in SecureControllers `kicad/NoNFO-Pilot/PB2/NONFO_PB2_FOOTPRINT_VERIFICATION.md`. Open: Nano-Fit and KMR2 drawings, OD-22 (AX88772E temperature), OD-23 (logging medium), logic-zone courtyard 82 % (to S38).
+
 **Goal:** Every part chosen, sourced and footprint-verified before it enters the schematic.
 
 **Requirements:** R6 to R9, R11, R12, R15. Needs OD-20.
