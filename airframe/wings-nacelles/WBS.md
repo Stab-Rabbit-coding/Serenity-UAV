@@ -1427,7 +1427,7 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
 
 - [x] **[CLOSED 2026-11-11 — WA-R10] The 4 × 10 AWG route is drawn in the pod SCAD
     and clearance-proven on fresh renders.** *(Sprint 2. The published pod STL is the pre-shift bake
-    until S3 NAC-64-REBAKE; owner confirmation OD-18 pending; see below.)* **2026-11-07 (measured, NAC-64-ASM-03, Claude Opus 5.5): on the live
+    until S3 NAC-64-REBAKE; owner confirmation OD-24 pending; see below.)* **2026-11-07 (measured, NAC-64-ASM-03, Claude Opus 5.5): on the live
     x1.06 hollowed pod the route does NOT exist.** The spar-bore mouth (X 1.489 in (37.81 mm))
     is ~0.04 in (1 mm) from the cartridge/duct wall; the largest free sphere on the mouth
     is 0.06 in (1.5 mm) radius vs 0.26 in (6.64 mm) for the bundle (0.32 in (8.14 mm)
@@ -1465,7 +1465,7 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     pair; the aft pair's bend plane is now tilted 12°. **Exit reinterpreted** (plan: one route at 0.32 in
     (8.14 mm) radius): the decided geometry fans four wires out in a 0.35 in (9 mm) annulus, so the exit is
     the `wires` stage; the old `cable` stage still reports no single-bundle route. Owner confirmation:
-    OD-18 in the brief. Weight: fairing 0.080 lbm (36.4 g) per side; joint +0.046 lbm (+20.8 g) pod
+    OD-24 in the brief. Weight: fairing 0.080 lbm (36.4 g) per side; joint +0.046 lbm (+20.8 g) pod
     (measured) + 0.009 lbm (+3.9 g) spar (ESTIMATE) per nacelle; hover AUW 6,403 → 6,525 g, T/W 1.48 → 1.45.
     Not done here: wing-side harness run, WIREOD datasheet, pod re-bake (S3 NAC-64-REBAKE: the published
     pod STL is still the pre-shift bake). **At the re-bake, delete the `OD-17 joint extension` rows in
@@ -2717,11 +2717,14 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     80 g). Also: the BOM previously named XT30 connectors on this wire; XT30 class is about 30 A,
     below the 44 A design current, and the drawn route ends at M3 stud ring terminals in the bay.
     Settle the Flight Engineer-end termination with the fuse study (NAC-64-FUSE-COORD).
-- [ ] **NAC-64-WIRE-QUAL** — Owner OD-18 item 3 (2026-11-11): the four feed wires run **unbound**.
+- [ ] **NAC-64-WIRE-QUAL** — Owner OD-24 item 3 (2026-11-11): the four feed wires run **unbound**.
     Qualify the chosen 10 AWG wire by a cycle test on the real spar length: 140 deg twist per tilt
     cycle **plus the installed 0.65 in (16.5 mm) centreline channel bend**, to the service life. Ask
     Daburn for 2617/10's minimum bend radius first. If the test fails, redraw the channel to about
     0.73 in (18.5 mm) centreline so the inside radius meets 3 x OD (check the bend chamber has room).
+    **2026-11-16 (brief review finding 5, owner: "run the test"):** the brief now says the route "fits
+    geometrically; qualification pending" this test. It is an owner bench test (plan §7 physical
+    build block); the fallback needs about +2 mm more joint shift (OD17-FALLBACK-CLR).
 - [ ] **NAC-64-FEED-THERM** — Owner decision 2026-11-11 (ESC wire report review,
     `reports/UAV ESC wire market survey.md` Decision 1): **test the current spar first.** Load-bank the
     four 10 AWG feed conductors in the spar at 44 A and 38 A sustained with a thermocouple on the spar
@@ -2826,9 +2829,9 @@ and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
 ## Findings 2026-11-11 (code review of the OD-17 tools, Claude Opus 5.5)
 
 - [ ] **OD17-FAIR-WALL — Fairing thickened 0.08 in (2 mm) per side** for
-    the minimum wall (CFD body had zero wall at the collar bore); drag not re-run (OD-18 item 2).
+    the minimum wall (CFD body had zero wall at the collar bore); drag not re-run (OD-24 item 2).
     **Owner 2026-11-11: CFD re-run first** — see OD17-FAIR-CFD.
-- [x] **OD17-FAIR-CFD — DONE 2026-11-12** (results in `docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md`, "As-built fairing CFD": the as-built assembly is 0.181 lbf (0.806 N) against 0.147 lbf (0.652 N) for the idealised end plate, +23 %, mainly from the open 2.20 in (56 mm) bore beyond the collar; see OD17-FAIR-BORE). Original item: Owner OD-18 item 2 (2026-11-11): re-run the junction drag CFD on the as-built
+- [x] **OD17-FAIR-CFD — DONE 2026-11-12** (results in `docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md`, "As-built fairing CFD": the as-built assembly is 0.181 lbf (0.806 N) against 0.147 lbf (0.652 N) for the idealised end plate, +23 %, mainly from the open 2.20 in (56 mm) bore beyond the collar; see OD17-FAIR-BORE). Original item: Owner OD-24 item 2 (2026-11-11): re-run the junction drag CFD on the as-built
     fairing** (outer half-thickness bore + 2.0 mm at the tilt axis, trailing edge cut at 2.0 mm) and
     compare with the zero-wall body that gave 14 % less drag than the 1.50 in glove
     (`od17_junction_cfd/`). Hold release of the fairing outer shape until done. If the drag penalty
@@ -2846,7 +2849,7 @@ and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
     in the end-plate fillet toe, which tapers onto the wing and is bonded. **Skin is open to the owner
     (OD17-FAIR-SKIN below).**
 - [x] **OD17-FAIR-SKIN — Owner: fairing skin 2.0 mm (§7) or 1.0 mm (SLS min)?** **DECIDED 2026-11-11
-    (OD-18 item 4): 1.5 mm under OD-19 option A.** Rebuilt: 20.7 g shell + 0.5 g foam per side, 5.0 g
+    (OD-24 item 4): 1.5 mm under OD-25 option A.** Rebuilt: 20.7 g shell + 0.5 g foam per side, 5.0 g
     saved per aircraft; BOM and ledger synced. The 1.0 mm figure below was a mis-citation
     (SLS-WALL-FLOOR). Original brief:
     `AGENTS.md` §7 sets exterior shells at 2.0 mm; the SLS process minimum is 1.0 mm [REF-MFG-001 p. 15].
@@ -2861,6 +2864,42 @@ and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
     the bore past the collar (the idealised end plate approximates the result); or move the end plate
     inboard. Not decided and not changed. Needs an Owner Decision Brief with the six checks before any
     change, and a CFD run of the chosen variant.
+    **2026-11-16:** the "mainly the open bore" cause is a hypothesis (brief review finding 1). An
+    isolating run (`geom_asbuilt.py S --cap`: the pocket filled with a solid r 28 mm cylinder from the
+    collar end to the fairing end, nothing else changed) is running with a same-machine repeat of the
+    plain as-built case; their difference is the bore's share of the +23 %. The Owner Decision Brief
+    waits on that result. The fairing outer shape stays HELD (finding 2).
+- [ ] **OD17-FALLBACK-CLR — Fallback channel needs +2 mm shift (2026-11-16).**
+    Finding 6 of the 2026-11-16 brief review; owner chose "study first". If NAC-64-WIRE-QUAL fails and
+    the channel is redrawn to the 0.73 in (18.5 mm) centreline fallback, the aft pair's wire-to-duct gap
+    falls from 0.088 in (2.24 mm) to 0.014 in (0.36 mm) at the present joint (duct outer r 34.5 mm,
+    wire envelope 5.5 mm; `nacelle64_optD_concept.pod_side_path`, sweep of R and extra shift run
+    2026-11-16 by Claude Opus 5.5). Restoring the as-built margin needs about +0.08 in (2 mm) more joint
+    shift (25 mm total: gap 0.091 in (2.32 mm)); +1 mm gives 0.053 in (1.34 mm). At 3 x OD to the
+    inside of the bend on the Daburn 5.30 mm nominal (centreline 18.65 mm) the +2 mm gap is 0.086 in.
+    No minimum wire-to-duct gap is set in the repo. Not done: the bend-chamber and channel overlap
+    check on a re-rendered pod at 25 mm, spar-root moment at 25 mm, the canonical-shape effect. Owner
+    decides (Owner Decision Brief) only if NAC-64-WIRE-QUAL fails; until then OD-17 stands at 23 mm.
+- [ ] **NAC-64-WIRE-TWIST — Verify the in-spar twist (2026-11-16).** Finding 11 of
+    the brief review (owner: qualify the wording and log this item). The brief's "the bundle takes the
+    tilt as twist in the spar bore" is a design intent. Not verified: the twist length available in the
+    real spar bore (the model uses 2.76 in (70 mm)), the torque the four 10 AWG wires exert at the 140 deg
+    stroke (it adds to the tilt-drive load), their torsional fatigue life, and the wing-side exit from
+    the spar, which is not drawn. Done when each is computed or measured and cited; the fatigue part
+    shares the bench rig of NAC-64-WIRE-QUAL.
+- [ ] **OD17-JUNC-RETEST — End plate vs glove on as-built (2026-11-16).** Finding 3
+    of the brief review (owner: keep the end-plate decision, add a dated caveat, retest). The 14 % drag
+    advantage of the rounded end plate over the 1.50 in glove compared two idealised zero-wall bodies.
+    Re-run both on as-built geometry (printed wall, bore treatment as decided under OD17-FAIR-BORE) with
+    `tools/od17_junction_cfd/`. Done when the brief's OD-17 junction basis cites the as-built
+    comparison; if the glove then wins, it returns to the owner.
+- [ ] **OD17-CFD-BLOCKAGE — Check the strip CFD for blockage (2026-11-16).** Finding
+    14 (owner: correct the far field and check blockage). The domain's slip far-field walls are 4.7 in
+    (120 mm) above and below the tilt axis (`mkcase.py`), not 1.8 in as the brief said. Measured
+    blockage (frontal area of the body over the domain cross-section, 2026-11-16): 15.4 % as-built,
+    16.1 % capped-bore. That is high for a solid-wall-like boundary, so absolute drag is inflated.
+    Re-run one case with the far field doubled (Y +-0.24 m) and report the change in strip drag and in
+    the as-built/idealised ratio. Done when the brief's limits state the measured sensitivity.
 - [ ] **OD17-TOOLS-01 — One fairing module.** The NACA section, TE line,
     loft and cap code is copied in `nacelle64_optD_aft_fairing.py`, `nacelle64_optD_glove.py`
     and `od17_junction_cfd/geom.py`, and the copies differ: the TE half-thickness floor is 0.039 in (1.0 mm)
