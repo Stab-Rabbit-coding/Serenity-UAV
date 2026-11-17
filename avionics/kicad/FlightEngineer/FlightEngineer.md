@@ -6,6 +6,10 @@
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Revision:** R (Rev R baseline; carried forward from Rev A, 2026-06-07; no design changes)
 **Date:** 2026-10-07 (status re-verified; Rev R design content dated 2026-06-11)
+**Location (status note 2026-11-17):** the box sits forward in the sealed cargo duct (TEDF-06,
+`docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`, 2026-11-16), where its mass recovers
+hover trim; the middle-section inner neck is now the open air passage to the tail EDF. Pre-shift it sat
+in the inner neck, adjacent to Simon's Medbay, to minimize power-run length.
 **Status check 2026-10-07:** unchanged since the 2026-09-20 rebuild below except for the 2026-10-05
 schematic fixes (TLV62569 EN/FB divider; PRTR5V0U2X relink). ERC 0; DRC still 29–31 hard
 violations (D_OR1/D_OR2 and U_RS485 placement); not routed; no Gerbers. The planned 6 V servo

@@ -5,7 +5,7 @@
 
 This directory holds the KiCad projects, generator scripts, and status files for every Serenity
 avionics board. **Each board's own `.md` file is the authoritative as-built status**
-(`avionics/AGENTS.md`, "Cape Naming and Revision History"); the table below is a dated
+(`avionics/AGENTS.md`, "Boards"); the table below is a dated
 snapshot, so confirm against the board file before relying on it for fabrication or integration.
 KiCad files keep KiCad board coordinates (a documented exception to the hull-frame standard,
 see root `AGENTS.md`).

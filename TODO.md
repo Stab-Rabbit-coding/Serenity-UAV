@@ -874,6 +874,11 @@
 
 - [ ] Delete stale feature branches
 
+### 6.5 — Rev U Checkpoint (2026-11-03)
+→ detail: `docs/WBS.md` §6.5
+
+- [ ] REVU-RELABEL — stamp every component Rev U at the Rev U close
+
 ---
 
 *"Get on with it, Pilot." — Capt. Skipper Reynolds*

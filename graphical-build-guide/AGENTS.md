@@ -1,86 +1,44 @@
 # Graphical Build Guide — Agent Instructions
 
-> *See the root `AGENTS.md` for project-wide policies. This file provides specific guidance for the phased build process and fabrication documentation.*
+Adds build-guide rules to root `AGENTS.md`, which wins wherever it speaks. Scope: illustrated
+build guides, assembly sequences, fabrication checklists, and troubleshooting, organized by
+build phase. Each phase adds capability while keeping earlier phases testable.
 
-## Scope
+## Phases
 
-This folder contains illustrated build guides, assembly sequences, fabrication checklists, and troubleshooting documentation for constructing a Serenity-UAV. The guides are organized by build phase and provide step-by-step instructions with graphics, material lists, and verification checkpoints.
+This table is the one home for the phase plan.
 
-## Phased Build Approach
-
-Serenity-UAV is constructed in sequential **phases**, each adding specific capabilities while maintaining the ability to test and verify previous phases. This approach allows:
-
-- Early detection of integration problems
-- Incremental verification of avionics and flight control
-- Parallel work on future phases while earlier phases are in flight testing
-- Clear handoff points for documentation and team coordination
-
-### Phases Overview
-
-| Phase | What's Built | Goal | Status |
+| Phase | What's built | Goal | Status |
 | --- | --- | --- | --- |
 | **1–4** | Fuselage, landing gear, wing attachment | Physical airframe | Archived/prototype |
-| **5–10** | Avionics (4 stacks), nacelles, battery, power dist | Full VTOL hover | **Current** |
-| **11+** | Rear EDF + RCS, autonomous mission system | Cruise + hover | Deferred |
+| **5–10** | Avionics stacks, nacelles, battery, power distribution, tail EDF + speed controller + RCS | Full VTOL hover | **Current** |
+| **11** | Pre-shift record only (rear EDF + RCS, now Phase 5) | — | Superseded |
+| **12** | Cargo-bay range-extender battery module | Endurance | Deferred |
+| **13+** | Autonomous mission system and other speculative items | — | Unscoped |
 
-Thrust-to-weight and other measured performance figures are descriptive and change as the design
-matures; do not record them in any `AGENTS.md`. Read them in `airframe/README.md`,
-`current-specification/README.md`, and `docs/WBS.md` §0.10.1.
+- The tail EDF and RCS are flight-critical in hover, so a nacelle-only first hover is not the
+  plan (`airframe/fuselage-mid/WBS.md` §1.1.1.4.0; TEDF-16 brings their installation into
+  Phase 5).
+- Measured performance figures (mass, thrust-to-weight) do not belong in any AGENTS.md; read
+  them in `current-specification/auw_ledger.json`, `airframe/README.md`, and
+  `current-specification/README.md`.
+- Each phase guide shall state the as-built capability it verifies, with measured values taken
+  from those documents.
 
-### Current Build Phase (5–10)
+## Guide Structure
 
-**Scope:** The current phase builds the capability for full vertical-takeoff-and-landing (VTOL) hover, networked avionics, autonomous command and control, redundant communications, and secure logging. Each phase guide shall state the as-built capability it verifies, with measured values taken from the descriptive documents.
+`graphical-build-guide/BUILD_GUIDE_TEMPLATE.md` is the authoritative template for every phase
+guide: introduction fields, the step format, material lists, the fabrication-standards block,
+verification checklists, tests, troubleshooting, sign-off, and the illustration and graphics
+guidelines. Follow it.
 
-> **Design shift, 2026-11-16** (`airframe/fuselage-mid/WBS.md` §1.1.1.4.0,
-> `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`): the tail EDF (QX 64 mm), its
-> speed controller and the four RCS jets are part of the first build and flight-critical in hover,
-> so a nacelle-only first hover is no longer the plan. TEDF-16 brings their installation into
-> Phase 5. The Galaxy X5 nacelle units and the ~2,768 g AUW below are pre-shift figures; the
-> planning estimate
-> for the hover mass is 15.08 lbm (6,840 g) with twin 2200 mAh cells and the tail hardware added (plan 002); the
-> ledger baseline without the tail hardware is 14.49 lbm (6,572 g), `hover_twin_2200` in
-> `current-specification/auw_ledger.json`, and gains the tail hardware under TEDF-14.
+## Work Tracking
 
-**Excluded from the current phase (pre-shift record)** — the rear fuselage EDF, the RCS thrusters, the aft EDF
-intake scoops into the middle-section inner neck, and advanced autonomous maneuvers requiring
-forward propulsion. Those are described in `deferred/AGENTS.md` "Phase 11"; do not restate them
-here.
+When creating or updating a phase guide:
 
-## Build Guide Structure and Checklists
-
-**`graphical-build-guide/BUILD_GUIDE_TEMPLATE.md`** is the authoritative template for every
-phase guide: the phase-introduction fields, the eight-part step format, the material-list/BOM
-template, the fabrication-standards reference block, the assembly-verification checklist, the
-per-phase test and verification steps, the troubleshooting catalog (print issues, assembly
-problems, flight-test issues), and the Phase 5–10 completion sign-off checklist. Follow it
-whenever you author or revise a phase guide in this folder.
-
-## Illustrations and Graphics
-
-### Acceptable Formats
-
-- **CAD screenshots:** FreeCAD or Blender rendered views showing part placement
-- **Assembly photos:** High-resolution images of completed subassemblies
-- **Exploded diagrams:** 3D renderings showing how parts fit together
-- **Wiring diagrams:** Schematic or labeled photos of electrical connections
-- **Dimension drawings:** Technical drawings with key measurements
-
-### Graphics Guidelines
-
-- Use clear, well-lit photographs (outdoor natural light preferred)
-- Include a **reference object** (ruler, coin, or part with known size) for scale
-- Label key features and critical dimensions
-- Add arrows and annotations to highlight assembly sequence or proper orientation
-- Ensure text is readable (minimum 10-point font)
-- Provide both overview and detail views for complex assemblies
-
-## Work Tracking and Documentation
-
-When creating or updating a build guide phase:
-
-1. Test the procedure yourself or with a technical reviewer (no untested instructions)
-2. Include all necessary figures and dimensions in the guide
-3. If standards citations are needed (e.g., fastener grades), use REF-IDs from `REFERENCES.md`
-4. If the guide references deferred work, link to `TODO.md` items
-5. Archive superseded build guides (older phasing, obsolete components) to `archives/`; index
-   and archive upkeep (`PROJECT_INDEX.md`, `ARCHIVE_INDEX.md`) follows root `AGENTS.md` §10
+1. Test the procedure yourself or with a technical reviewer; no untested instructions.
+2. Include every necessary figure and dimension.
+3. Cite standards (e.g., fastener grades) by REF-ID from `REFERENCES.md`.
+4. Link deferred work to its `deferred/WBS.md` item.
+5. Archive superseded guides under `archives/`; record open work in
+   `graphical-build-guide/WBS.md` (root §10 federation).

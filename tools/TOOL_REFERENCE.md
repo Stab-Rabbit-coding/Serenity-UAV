@@ -226,7 +226,7 @@ Before committing any generated files:
 **For KiCad files:**
 
 - [ ] Electrical Rules Checker (ERC) passes
-- [ ] Design Rules Checker (DRC) passes (or violations are documented in TODO.md)
+- [ ] Design Rules Checker (DRC) passes (or violations are recorded in the owning WBS.md)
 - [ ] Gerber files are production-ready
 - [ ] Schematics and PCB are in sync
 

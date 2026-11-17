@@ -2,9 +2,10 @@
 
 Shared domain vocabulary for this project — entities, named processes, and status concepts with project-specific meaning. Seeded with core domain vocabulary, then accretes as ce-compound and ce-compound-refresh process learnings; direct edits are fine. Glossary only, not a spec or catch-all.
 
-## Hull Frame
+## Aircraft Datum
 
-The single coordinate system every airframe design artifact (SCAD source, generated STL, FreeCAD assembly) is authored or baked into: X positive toward port, Y positive toward aft, Z positive dorsal (up), with the origin at the full-assembly world origin. A part's own local modelling frame is distinct from hull frame until it has been explicitly baked into it — a raw generator output is not assumed to already be in hull frame.
+The single coordinate system for the whole aircraft: origin on the centreline, at the nose tip, on the static ground plane; X positive toward port, Y positive toward aft, Z positive up. Every design artifact (SCAD source, generated STL or STEP, FreeCAD assembly, generator, document) is authored or baked into it at its installed position; only a PCB, while being designed in KiCad, keeps its own board coordinates. A part's own local modelling frame is distinct from the aircraft datum until it has been explicitly baked into it. The datum is named **frame R2**; the earlier hull frame, with its origin at the FreeCAD assembly world origin, is **frame R1**. Frame names are not revision labels.
+*Avoid: hull frame (for frame R2), Rev R2 (for the datum)*
 
 ## Fuselage Section
 
@@ -60,9 +61,27 @@ Because the driven parts ride the tilting nacelle, a passive tilt drive must tak
 
 The per-side bus device that closes the tilt actuator's inner loop: it drives the gearmotor, reads the actuator-shaft sensor, holds and releases the Tilt Brake, and receives the nacelle's absolute angle from the gateway over the fleet bus. It is an instance of the project's own Open-Secure-ESC platform (a brushed-DC build), not a servo controller, so its identity is a build folder in that repository rather than a board of its own.
 
-## Control Node
+## Node
 
-One of the four PocketBeagle 2 Industrial single-board computers that fly the aircraft, each with exactly one cape stacked on its two 0.1 in rails and each carrying a point of presence on all four wired buses (MIL-STD-1553B, CAN-FD, RS-485, Ethernet) so any node can take over any role. Flight-control nodes carry the Pilot cape; comms nodes carry the TACCO cape (formerly called XO). Nodes are spread through the airframe — a Faraday tray in the nose, Faraday pouches in the cargo section, and a saddle in the middle ring — and sit in a different orientation at each station, so a cape's outline is bounded by the node envelope at every station it occupies, not just one. That is why a node is one cape, never a stack of two, and why a cape's board size is never changed without re-proving every station that carries it.
+One compute unit on the aircraft's wired buses: a PocketBeagle 2 Industrial (PB2-I) single-board computer, or a standalone microcontroller board such as Commo. The aircraft has seven PB2-I nodes. Each PB2-I carries exactly one cape stacked on its two 0.1 in rails — Pilot (flight control) or TACCO (comms, formerly called XO) — and a point of presence on every wired bus (MIL-STD-1553C, CAN-FD, RS-485, Ethernet), so any node can take over a role its PACE level assigns. Nodes sit in a different orientation at each station, so a cape's outline is bounded by the node envelope at every station it occupies; a cape's board size is never changed without re-proving every station that carries it.
+*Avoid: control node (for every node), board (for a node)*
+
+## Cape
+
+A PCB that mounts on a PB2-I's stacking rails and is powered and hosted by it: Pilot or TACCO. A board that does not mount on a PB2-I header (Commo, Observer, Flight Engineer, Bus-Gateway) is a standalone board, never a cape.
+
+## Stack
+
+The nodes that serve one avionics bay as a unit. Shepherd, Inara and River are full stacks (a Pilot node and a TACCO node); Simon is one PB2-I plus a trust-module MCU. PACE levels are assigned per stack (`avionics/PACE.md`).
+
+## Avionics Bay
+
+One of the four hull compartments that house a stack: Shepherd's Room (Bay A, forward), Inara's Shuttle (Bay B, port), River's Room (Bay C, starboard), Simon's Medbay (Bay D, aft). Distinct from a landing-gear bay at a Bay Station.
+
+## Tail EDF
+
+The fuselage-mounted EDF in the rear section that draws its air through the fuselage interior, cools the avionics, supplies the RCS bleed-air thrusters, and exhausts through the fixed canonical tail nozzle. It is part of the first build and the only hover pitch trim.
+*Avoid: rear EDF, aft EDF, fuselage EDF*
 
 ## Cape Usable Band
 

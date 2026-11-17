@@ -140,7 +140,8 @@
     "CONCEPTS.md": {
       "description": "Concepts",
       "tags": [
-        "documentation"
+        "documentation",
+        "redundancy-failover"
       ],
       "archived": false
     },
@@ -17632,6 +17633,7 @@
     "redundancy-failover": [
       "AGENTS.md",
       "CLAUDE-MEMORY.md",
+      "CONCEPTS.md",
       "README.md",
       "airframe/SPEC_VERIFICATION_0.6.1.md",
       "airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad",

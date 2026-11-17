@@ -1227,4 +1227,11 @@ Gerbers, firmware Phase 7, STL re-exports after the TACCO change, cargo-shell me
 winch STLs, rear/Phase 11 EDF (`deferred/AGENTS.md`), the `serenity-rev-s.jsx` viewer, and the
 BOM lag items above.
 
-*No open items — baseline complete; retained for traceability.*
+**Single project-wide letter (owner decision 2026-11-17, ADR `docs/adr/0001-single-project-revision-letter.md`).**
+Board-level letters (Commo Rev T, avionics Rev S1/S2, and similar) are frozen historical labels;
+no new board-level letter is started. Design-generation names that are part of file names (R6, S4c,
+H2/H3) stay as names, not revisions.
+
+- [ ] **REVU-RELABEL** — At the Rev U close, stamp every active component's revision field Rev U
+    (board `.md` headers, KiCad title blocks, spec headers) per root `AGENTS.md` §8, and rename
+    remaining "Rev R2" datum references to "frame R2".

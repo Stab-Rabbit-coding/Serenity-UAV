@@ -1176,7 +1176,8 @@ customer. Plan and sprints S34–S41:
 - [ ] **NFP-THERM** — Thermal load check for the stern stack at peak electrical load (S40).
 - [ ] **NFP-LEDGER** — Enter the stern stack in the AUW ledger and BOM (S41).
 - [ ] **NFP-SADDLE** — Couple the Simon saddle to the new outline in CI (S41).
-- [ ] **NFP-POLICY** — Update root `AGENTS.md` §1 and §9 to seven nodes (S41).
+- [x] **NFP-POLICY** — Update root `AGENTS.md` §1 and §9 to seven nodes (S41). *(done 2026-11-17:
+    root §1 roster, §9 Commo row, `avionics/AGENTS.md`, `avionics/PACE.md`, `CONCEPTS.md` "Node".)*
 - [ ] **NFP-TEDF-1** — [STD] Tail EDF cooling design shift (2026-11-15, `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`): the
     stern stack sits in the tail EDF's intake stream. NFP-THERM shall use that airflow, and
     its result gates TEDF-02 (S45, after the 2026-11-16 S45/S46 swap). Do it in S40.
@@ -2042,7 +2043,7 @@ REFERENCES.md Removed/Superseded Citations).
         - [ ] Pilot + TACCO DTS: hold the unused second ball of every dual-ball header pin
             (P1-2/4/6/10/12/26/28/33/36, P2-1/3/5/7/9/11/29/31) as a GPIO input with no pull
             (PB2I_AM625_HEADER_CAPABILITIES.md §2 CAUTION).
-    - [ ] FLEET sourcing audit (AGENTS.md §5 "Component sourcing and openness", owner
+    - [ ] FLEET sourcing audit (`docs/SOURCING_POLICY.md`, gate in AGENTS.md §5, owner
         2026-10-17): check every board's ICs / semiconductors / modules for manufacturer
         domicile/control in a restricted country and for NDA-only datasheets — TACCO, XO, Commo,
         Observer, Flight Engineer, CAN-PERIPH-GW-1, ESC / servo boards. Nexperia parts

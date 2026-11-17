@@ -45,6 +45,14 @@
 - **Modular sections:** Four fuselage sections (head, cargo bay, middle neck/horseshoe ring,
   rear) plus wings and tilting nacelles allow field disassembly for transport and maintenance
 
+### Section roles (moved from `airframe/AGENTS.md` "Geometry Reference Points", 2026-11-17)
+
+- **Head** — forwardmost; tapers to a narrow nose (most negative Y extent)
+- **Cargo** — immediately aft of head; largest cross-section; wing attachment flanges on upper outer edges; since 2026-11-16 a sealed duct for the tail EDF: doors fused into the skin, one belly service hatch, louvred forward ramp intake (pre-shift: bay door opens toward −Z, ventral)
+- **Middle** — narrow horseshoe-ring neck between cargo and rear; open at −Z (ventral); the inner-neck tube is the open air passage from the cargo duct to the tail EDF (2026-11-16, `airframe/fuselage-mid/WBS.md` §1.1.1.4.0); the Flight Engineer box moves forward into the cargo duct and the Phase 11 intake scoops are retired
+- **Rear** — aftmost; houses engine room, dorsal pod, and two landing skids extending aft
+- **Wings** attach to the cargo section lateral walls; **nacelles** are at the pylon tips, outboard of the wings, stored in forward-flight attitude, and tilt to vertical thrust in hover
+
 ## Coordinate Standard (Rev R1)
 
 All design artifacts (SCAD, STL, Blender/FreeCAD scripts) use the **hull frame** coordinate
