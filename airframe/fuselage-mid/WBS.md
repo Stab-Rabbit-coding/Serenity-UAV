@@ -1298,8 +1298,10 @@ forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
     `WBS.md` §0.14), the ledger gaps closed with stated ESTIMATE rows for the sensor and pitot
     parts, BOM rows for the Bay A drawer, gate, shelf, hatch cover and flange and for the
     twin-pack cells, and one pitch inertia published in `auw_ledger.json`. With the gaps closed
-    the `hover_twin_2200` CG is 2.0 mm forward of the tilt pivot, outside the 1.0 to 3.9 mm aft
-    window the plan quotes: U4 starts from that figure.)
+    the `hover_twin_2200` CG is 1.5 mm forward of the tilt pivot (it was 0.8 mm aft), outside the
+    1.0 to 3.9 mm aft window the plan quotes. The Bay A hatch cover was first counted twice (it is
+    inside the merged hull's mass) and was removed on 2026-11-17. On the plan's own deltas the
+    final CG projects to about 0.0 mm: S43 and G1 start from that, not from the plan's +2.3 mm.)
 - [ ] **TEDF-02** — [STD] Thermal model refresh: closed-cavity fix, ramp and bow branches,
     EDF flow input, tail speed controller and motor as limited nodes, minimum cooling throttle.
     The stern stack step needs NFP-THERM. Plan U2. (S45; swapped with S46 on 2026-11-16)
