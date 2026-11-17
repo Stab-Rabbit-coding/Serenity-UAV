@@ -1,6 +1,6 @@
 <!-- SYNC-STAMP
-parent commit: d452109
-source digest: cd84ef0a09a4
+parent commit: f2064fa
+source digest: 081428c0e864
 current-specification/auw_ledger.json: ab89097ce6
 current-specification/flight_limits.json: 25167e891e
 docs/CARGO_WINCH_SPECIFICATION.md: c8b91d0380
@@ -9,7 +9,7 @@ docs/POWER_DISTRIBUTION.md: 08f6a9aca5
 docs/failsafe_thresholds.md: 6af0586b02
 docs/flight_envelope.md: 443a73762d
 graphical-build-guide/flight-phases/WBS.md: 3abb1d8652
-tools/auw_ledger.py: 92e5ac8f3f
+tools/auw_ledger.py: 2443247a3f
 tools/flight_envelope_endurance.py: d178eaa242
 -->
 <!-- markdownlint-disable MD033 MD036 MD041 -->
