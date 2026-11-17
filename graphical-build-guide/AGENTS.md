@@ -11,8 +11,8 @@ This table is the one home for the phase plan.
 | Phase | What's built | Goal | Status |
 | --- | --- | --- | --- |
 | **1–4** | Fuselage, landing gear, wing attachment | Physical airframe | Archived/prototype |
-| **5–10** | Avionics stacks, nacelles, battery, power distribution, tail EDF + speed controller + RCS | Full VTOL hover | **Current** |
-| **11** | Cargo-bay range-extender battery module | Endurance | Deferred |
+| **5–10** | Avionics stacks, nacelles, battery, power distribution, tail EDF + speed controller + RCS (installation in Phase 5; forward-thrust schedule in Phase 9) | Full VTOL hover | **Current** |
+| **11** | Cargo-bay range-extender battery module | Endurance | Promoted into the active build 2026-10-26 (plans 2026-10-26-001/002) |
 | **12+** | Autonomous mission system and other speculative items | — | Unscoped |
 
 - The tail EDF and RCS are flight-critical in hover, so a nacelle-only first hover is not the

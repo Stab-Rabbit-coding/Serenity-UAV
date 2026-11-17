@@ -121,6 +121,36 @@
 
 - [ ] Configure forensic log mount in `/etc/fstab` (noexec, nodev, nosuid, ro) on CN1 and CN2.
 
+**Tail EDF, speed controller and RCS installation** *(moved here 2026-11-17 from `deferred/WBS.md` §Phase11: these are first-build steps, not an add-on after Phase 10; owner direction, plan `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`. The steps are copied as written. Figures from the pre-shift design (55 mm EDF, 50A ESC, Panel F stations, ESC5/PRU channel, plenum, PETG) are not current: TEDF-05/09/11 restate the parts and TEDF-16 restates this procedure. Build to the TEDF-16 build guide, not to those figures.)*:
+
+- [ ] **Generate** `rear_nozzle_canonical.scad`: fixed canonical elliptical tail nozzle, exit 2.06×1.76 in (52.3×44.7 mm, ~1,836 mm²), hull-matched outer surface; print `rear_nozzle_canonical.stl` (CF-PETG, 0.15mm, 30%, 4 walls). **No iris, no servo.**
+
+- [ ] **Generate** `rcs_distribution_manifold.scad` + `rcs_thruster_nozzle.scad` + `rcs_valve_bracket.scad`; print `rcs_distribution_manifold.stl` (×1, PETG), `rcs_thruster_nozzle.stl` (×4, CF-PETG), `rcs_valve_bracket.stl` (×4, CF-PETG).
+
+- [ ] Run mesh watertightness verification on all regenerated STLs; report findings here and resolve.
+
+- [ ] Bench-test 55mm EDF (correct rotation, no vibration).
+
+- [ ] Install EDF retaining ring at station ~430mm inside Panel F; bond; cure 1h.
+
+- [ ] Route motor leads through Panel F to 50A ESC; route signal lead forward via MAIN-PWR conduit to Inara's shuttle (Bay B, FC2 PRU Ch.2).
+
+- [ ] Install 50A ESC in Panel F bay; foam tape + cable tie. Cure 2h before applying thrust.
+
+- [ ] Bond `rear_nozzle_canonical.stl` to the tail-cone exit (Panel F aft end), blending into the canonical hull outer mold line. **Fixed — no moving petals.**
+
+- [ ] Install 4× `rcs_thruster_nozzle.stl` at their RCS stations; connect each to its bleed duct.
+
+- [ ] Install 4× SG90-class proportional valves on `rcs_valve_bracket.stl`; link each valve to its RCS bleed duct.
+
+- [ ] Calibrate RCS valves: 0% = closed (no bleed); 100% = full bleed jet. Map 2 jets to pitch, 2 to yaw.
+
+- [ ] Bond permanent aft 49 MHz (Part 15 §15.235) wire post to top of the canonical tail nozzle (5-min epoxy).
+
+- [ ] Remove temporary aft post from station ~580mm.
+
+- [ ] Restring 49MHz top wire (~470mm) from forward post to nozzle aft post with ~20g tension.
+
 **Software configuration:**
 
 - [ ] Flash serenity-cn Phase 6 daemon to CN1 and CN2.
@@ -134,6 +164,12 @@
 - [ ] Configure MAVLink routing (mavlink-router) on elected FC master → SiK 915MHz on CN master.
 
 - [ ] Install the 49 MHz (Part 15 §15.235) daemon on CN1 and CN2 (select channel per 47 CFR §15.235; not §95.623, which does not apply to this band).
+
+- [ ] Enable ESC5 in FC2 firmware (PRU Ch.2); configure BDSHOT governor for the 55mm EDF.
+
+- [ ] **GW-RCS — build the RCS valve gateway** *(first build since 2026-11-16, TEDF-10/TEDF-11 and the G1 valve-concept and failsafe decisions of plan 002; latency is measured on the repurposed `N_STACKS=1` board, not on the retired door gateway; the placement depends on the valve concept, not Panel F by default)* (specified 2026-09-21, `docs/CARGO_DOOR_GATEWAY_SPEC.md` §9; `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` Deployment 5): one `SKIPPER-CAN-PERIPH-GW-PCB` in the Panel F bay beside the 50 A ESC — `N_STACKS=1` on an osc-native chain if OpenServoCore has shipped (GW-DOOR-2), else `N_STACKS=2` `END_TO_END` for four hardware timer channels; tray = `gateway_door_tray.scad` re-parameterised (`GW_PCB_L`) on bosses cut into the rear-cone shell (blocked on its MESH-01 regeneration); `J_PWR` from the aft 5 V feed, valves on a fused 6 V branch; trunks extended aft through the inner neck. ~+23 g to the Phase 11 mass line.
+
+- [ ] Add the 4 RCS proportional-valve channels to the attitude-control mixer **as signed `RCS_COMMAND` frames to GW-RCS (≥ 50 Hz, fail-CLOSED on heartbeat/MAC loss — RCS authority absent when `RCS_STATUS` stops)**, not as FC2 local PWM (`avionics/WBS.md` U1); measure the per-frame signing latency on the repurposed `N_STACKS=1` gateway board (the door gateway is retired); calibrate pitch/yaw authority via `governor_cal.py`.
 
 **Ground tests:**
 
@@ -158,6 +194,10 @@
 - [ ] Nav lights: 6-position ICAO cycle (RED port, GREEN stbd, WHITE tail, WHITE belly strobe).
 
 - [ ] **Apply FAA registration number** (14 CFR Part 48 — replaces N00000 placeholder on airframe).
+
+- [ ] Verify all 5 ESC heartbeats on CAN FD; confirm FC2 cross-drive capability for ESC5.
+
+- [ ] Bench-test RCS attitude authority.
 
 **First flight sequence (per REVN_BUILD_GUIDE_24IN.md §Phase 5):**
 
@@ -190,6 +230,20 @@
 - [ ] Node failover: standby assumes within 100ms of master power-kill
 
 - [ ] Flight log on both CN μSDs; CPLD write-block verified
+
+- [ ] All regenerated tail-EDF STLs pass mesh watertightness verification
+
+- [ ] Plenum + RCS manifold pressure-test passed (draft at EDF inlet and all 4 RCS jets; no leakage)
+
+- [ ] EDF seated at station ~430mm, centerline ±2mm; rotation verified before sealing
+
+- [ ] 50A ESC installed; ESC5 signal routed to FC2 PRU Ch.2
+
+- [ ] Canonical nozzle bonded flush to hull outer mold line; exit 2.06×1.76 in verified
+
+- [ ] All 4 RCS valves calibrated; pitch/yaw authority confirmed on bench
+
+- [ ] 49MHz aft wire post on canonical nozzle; top wire re-strung at full ~470mm span
 
 ---
 
@@ -382,6 +436,10 @@ safe flight envelope beyond the minimum parameters established in Phase 5.
 
 - [ ] **Extended autonomous mission** — 5-waypoint GPS mission, altitude hold, RTL on link loss; verify log integrity on all 4 CN μSDs.
 
+- [ ] Add tail EDF to the forward-thrust (cruise) schedule — NOT the hover lift mixer.
+
+- [ ] Forward-flight thrust test with the tail EDF at 60% throttle.
+
 **Phase 9 pass criteria:**
 
 - [ ] T/W measured ≥1.10 (nacelles only) on thrust stand
@@ -393,6 +451,10 @@ safe flight envelope beyond the minimum parameters established in Phase 5.
 - [ ] Endurance ≥8 min at hover (6S 4000mAh baseline)
 
 - [ ] Logs on all 4 CN nodes; write-block verified
+
+- [ ] Forward-thrust test passed; tail EDF's forward thrust NOT counted toward hover lift (it is the hover pitch trim); ESC temps ≤70°C
+
+- [ ] All 5 ESC telemetry visible on CAN FD; ESC temps ≤70°C at cruise power
 
 ---
 

@@ -10,8 +10,9 @@ evaluated but not selected.
   (Phase 5, flight-critical in hover; root `AGENTS.md` §1). The old "Phase 11 — Aft EDF" records
   in this folder are pre-shift history until TEDF-01 rewrites them — **do not apply them** as
   requirements. There is no longer a rear-EDF phase.
-- **Phase 11** is the cargo-bay range-extender battery module (still titled "Phase 12" in
-  `deferred/WBS.md` §Phase12 until PHASE-RENUMBER lands).
+- **Phase 11** is the cargo-bay range-extender battery module, promoted into the active build on
+  2026-10-26 (still titled "Phase 12" in `deferred/WBS.md` §Phase12 until PHASE-RENUMBER lands).
+  The tail EDF and RCS open steps moved to build Phases 5 and 9 on 2026-11-17.
 - **Phase 12+** items are speculative and unscoped.
 - Phase descriptions, status, and work items: `deferred/README.md` and `deferred/WBS.md`. The
   phase table is owned by `graphical-build-guide/AGENTS.md` "Phases".

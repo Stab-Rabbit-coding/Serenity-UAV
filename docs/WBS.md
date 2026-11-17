@@ -1236,10 +1236,9 @@ H2/H3) stay as names, not revisions.
     the battery module becomes Phase 11 (speculative items Phase 12+). `graphical-build-guide/AGENTS.md`
     and `deferred/AGENTS.md` are done. Sweep the remaining documents (`deferred/README.md`,
     `deferred/WBS.md` §Phase11/§Phase12, `graphical-build-guide/REVN_BUILD_GUIDE_24IN.md`,
-    `docs/POWER_DISTRIBUTION.md`, `docs/CARGO_DOOR_GATEWAY_SPEC.md`, board `.md` files). Caution:
-    `deferred/WBS.md` §Phase11 still holds open tail-EDF work (`rear_nozzle_canonical`, RCS manifold,
-    mesh verification); move those items under the TEDF branch of `airframe/fuselage-mid/WBS.md`
-    before retiring the section, and leave dated plans and handoffs unchanged.
+    `docs/POWER_DISTRIBUTION.md`, `docs/CARGO_DOOR_GATEWAY_SPEC.md`, board `.md` files). The open
+    tail-EDF and RCS steps already moved to `graphical-build-guide/flight-phases/WBS.md` §Phase5/§Phase9
+    (2026-11-17); leave dated plans and handoffs unchanged.
 - [ ] **REVU-RELABEL** — At the Rev U close, stamp every active component's revision field Rev U
     (board `.md` headers, KiCad title blocks, spec headers) per root `AGENTS.md` §8, and rename
     remaining "Rev R2" datum references to "frame R2".
