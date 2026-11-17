@@ -69,7 +69,14 @@ STERN_STACK_Y1 = 500.0  # aft face of the stern stack (tools/middle_layout_fit.p
 STATIC_GAP = 2.0  # mm, static part to fixed hull (cargo_layout_fit convention)
 # QX-Motor 64 mm unit [REF-EDF-003]: shroud diameters 77 / 72.4 / 67.2 / 66.4 mm, shroud 45 mm,
 # motor can 27.8 mm, overall motor 68.7 mm, body to mount face 58.0 mm, shaft 3.0 mm, 140 g.
-QX_LIP_OD, QX_BODY_OD, QX_SHROUD_L = 77.0, 72.4, 45.0
+QX_LIP_OD = 77.0  # QX shroud lip OD: the printed inlet bellmouth is held to the same OD
+# Printed pusher shroud and stator from the nacelle 64 mm geometry (KTD6;
+# airframe/openscad/nacelles/edf_motor_mount_64mm.scad): bore 64.0 mm (BORE_R 32.0), wall 2.5 mm,
+# motor plate 3.0 mm (PLATE_T), rotor hub 1.0 mm from the plate (P64_GAP), rotor 10.7 mm long
+# (rotor 2 at nacelle Z 104.2..114.9), 11 stator vanes of 18 mm chord on the plate.
+SHROUD_OD = 64.0 + 2 * 2.5
+PLATE_T, ROTOR_GAP, ROTOR_L, VANE_CHORD, N_VANES = 3.0, 1.0, 10.7, 18.0, 11
+VANE_HUB_R, ROTOR_TIP_R = 14.3, 32.0
 MOTOR_D, MOTOR_BODY_L, MOTOR_OVERALL_L, SHAFT_D = 27.8, 58.0, 68.7, 3.0
 MOTOR_G = 140.0
 KV, V_NOM, V_FULL = 2300.0, 22.2, 25.2  # rpm/V; 6S nominal and full pack (unloaded speed)
@@ -86,13 +93,18 @@ WALL_MIN_PRINT = 1.0  # mm, "keep all features above 1mm thickness" [REF-MFG-001
 
 # --- ASSUMED, labelled on every run ---------------------------------------------------------
 ROTOR_G = 20.0  # g, rotor (ledger NACELLE note "20 g ASSUMED, weigh")
-LIP_L = 8.0  # mm, axial length of the 77 mm lip; the rest of the shroud is the 72.4 mm body
-ROTOR_FROM_LIP = 12.0  # mm, rotor plane aft of the shroud's forward (lip) face
+LIP_L = 8.0  # mm, axial length of the inlet bellmouth at the 77 mm lip OD
+SHROUD_AFT_OF_ROTOR = 1.0  # mm, shroud bore aft of the rotor's aft face, to the shroud joint
+SHROUD_FWD_OF_MOTOR = 5.0  # mm, inlet lip ahead of the motor's forward end
 SHAFT_E = 200e9  # Pa, steel shaft
 SHAFT_RHO = 7850.0  # kg/m^3, steel shaft
 BEARING_SPAN = 20.0  # mm, between the motor's two bearings (not on the drawing)
 BEARING_SET_IN = 3.0  # mm, front bearing inside the mount face
-ROTOR_CG_OUT = 5.0  # mm, rotor CG beyond the mount face
+# Rotor CG beyond the motor mount face: through the 3 mm plate, the 1 mm gap, half the rotor.
+ROTOR_CG_OUT = PLATE_T + ROTOR_GAP + ROTOR_L / 2.0
+STOCK_CG_OUT = ROTOR_L / 2.0  # the stock QX unit: rotor straight on the motor face (comparison)
+MOTOR_EFF = 0.85  # ASSUMED, as the nacelle stator note (edf_motor_mount_64mm.scad)
+SPEED_FRACTION = 0.85  # loaded speed = 0.85 x KV x V x throttle (the nacelle tools' rule, ASSUMED)
 CRIT_MARGIN_MIN = 1.25  # first critical over the top running speed
 EXT_SHAFT_D = 4.0  # mm, the separate-shaft option (plan 002 "Shaft critical speed")
 TUBE_R627 = 64.8 / 2.0  # mm, tube bore radius at Y 627 (plan 002 "RCS intake station")
@@ -251,47 +263,71 @@ def inscribed_at(mesh, y):
     return d
 
 
-def shroud_profile_od(y, y0):
-    """OD of the shroud at station y for a shroud whose forward (lip) face is at y0."""
-    if y < y0 or y > y0 + QX_SHROUD_L:
+SHROUD_JOINT_Y = SCOOP_Y - 1.0  # shroud ends at the joint just forward of the scoops (KD20)
+
+
+EXIT_STATOR_L = 1.0 + VANE_CHORD + 1.0  # an exit stator of the nacelle's vane chord, 1 mm gaps
+
+
+def pusher_stack(joint_y=SHROUD_JOINT_Y, exit_stator=False) -> dict[str, float]:
+    """The pusher stack, aft to forward, from the shroud joint (KD10, KTD6): rotor at the aft
+    end, then the motor plate with its stator vanes, then the motor ahead, inside the shroud.
+    exit_stator=True puts an exit stator (11 vanes, 18 mm chord) between the rotor and the
+    joint, the G1 option that removes the rotor-exit swirl before the scoops."""
+    rotor_y1 = joint_y - (EXIT_STATOR_L if exit_stator else SHROUD_AFT_OF_ROTOR)
+    rotor_y0 = rotor_y1 - ROTOR_L
+    plate_y1 = rotor_y0 - ROTOR_GAP
+    plate_y0 = plate_y1 - PLATE_T
+    motor_y1 = plate_y0  # the motor's mount face bears on the plate; its shaft points aft
+    motor_y0 = motor_y1 - MOTOR_BODY_L
+    return {"rotor_y0": rotor_y0, "rotor_y1": rotor_y1, "rotor_y": 0.5 * (rotor_y0 + rotor_y1),
+            "plate_y0": plate_y0, "plate_y1": plate_y1, "motor_face_y": motor_y1,
+            "motor_y0": motor_y0, "vanes_y0": plate_y0 - VANE_CHORD, "vanes_y1": plate_y0,
+            "shroud_y0": motor_y0 - SHROUD_FWD_OF_MOTOR, "shroud_y1": joint_y}
+
+
+def shroud_profile_od(y, y0, y1):
+    """OD of the shroud at station y: the inlet bellmouth at the lip OD, then the bore wall."""
+    if y < y0 or y > y1:
         return 0.0
-    return QX_LIP_OD if y < y0 + LIP_L else QX_BODY_OD
+    return QX_LIP_OD if y < y0 + LIP_L else SHROUD_OD
 
 
-def shroud_gap(mesh, y0, step=1.0):
-    """Smallest radial gap, shroud to hull, along a shroud with its lip face at y0: (gap, Y)."""
+def shroud_gap(mesh, y0, y1, step=1.0):
+    """Smallest radial gap, shroud to hull, along the shroud from y0 to y1: (gap, Y)."""
     best = (1e9, None)
-    for y in np.arange(y0, y0 + QX_SHROUD_L + 0.01, step):
-        g = (inscribed_at(mesh, y) - shroud_profile_od(y, y0)) / 2.0
+    for y in np.arange(y0, y1 + 0.01, step):
+        g = (inscribed_at(mesh, y) - shroud_profile_od(y, y0, y1)) / 2.0
         if g < best[0]:
             best = (g, float(y))
     return best
 
 
-SHROUD_JOINT_Y = SCOOP_Y - 1.0  # shroud ends at the joint just forward of the scoops (KD20)
-
-
-def place_shroud(mesh, y_lo=560.0):
-    """Lip-face station: the shroud ends at the shroud joint (Y 627) unless the hull holds it
-    only further forward; returns (station, aftmost station that fits)."""
-    fit = None
-    for y0 in np.arange(y_lo, SHROUD_JOINT_Y - QX_SHROUD_L + 0.01, 1.0):
-        if shroud_gap(mesh, float(y0), step=1.0)[0] >= STATIC_GAP:
-            fit = float(y0)
-    return fit, fit
-
-
-def layout(meas, y0) -> dict[str, float]:
-    exit_y = meas["exit_y"]
-    rotor_y = y0 + ROTOR_FROM_LIP
-    face_y = rotor_y - ROTOR_CG_OUT  # motor mount face toward the rotor (pusher)
+def layout(meas, exit_stator=False) -> dict[str, float]:
+    st = pusher_stack(exit_stator=exit_stator)
+    face_y = st["motor_face_y"]
     return {
-        "z_axis": meas["z_axis"], "exit_y": exit_y,
-        "shroud_y0": y0, "shroud_y1": y0 + QX_SHROUD_L, "rotor_y": rotor_y,
-        "motor_face_y": face_y, "motor_y0": face_y - MOTOR_BODY_L,
-        "ring_y0": face_y - 10.0, "ring_y1": face_y,  # ring at the motor mount plane
-        "tube_y0": y0 + QX_SHROUD_L, "tube_y1": exit_y,
+        "z_axis": meas["z_axis"], "exit_y": meas["exit_y"], **st,
+        "ring_y0": face_y - 10.0, "ring_y1": face_y,  # fused ring at the motor plate plane
+        "tube_y0": st["shroud_y1"], "tube_y1": meas["exit_y"],
     }
+
+
+def rotor_swirl(theta=0.8):
+    """Swirl at the rotor exit with no exit stator (the pusher's stator vanes sit AHEAD of the
+    rotor, on the motor plate, so they do not straighten its exit swirl).  Euler: the total-
+    pressure rise dp = rho U V_theta at the mean radius; axial speed = Q / annulus area.
+    Uses tail_edf_flow.py's operating point (PROVISIONAL)."""
+    import tail_edf_flow as tf
+    r = tf.operate(tf.Inputs(), theta)
+    rpm = SPEED_FRACTION * KV * V_NOM * theta
+    r_m = 0.5 * (VANE_HUB_R + ROTOR_TIP_R) / 1e3
+    u = rpm * 2.0 * math.pi / 60.0 * r_m
+    v_t = r.dp_fan_pa / (tf.Inputs().rho * u)
+    area = math.pi * ((ROTOR_TIP_R / 1e3) ** 2 - (VANE_HUB_R / 1e3) ** 2)
+    v_a = r.flow_m3s / area
+    return {"theta": theta, "rpm": rpm, "u_m": u, "v_theta": v_t, "v_axial": v_a,
+            "swirl_deg": math.degrees(math.atan2(v_t, v_a)), "dp_fan": r.dp_fan_pa}
 
 
 def tube_outer_r(y, az_deg, exit_y):
@@ -337,6 +373,10 @@ def top_rpm():
 
 def default_overhang():
     return BEARING_SET_IN + ROTOR_CG_OUT
+
+
+def stock_overhang():
+    return BEARING_SET_IN + STOCK_CG_OUT
 
 
 def max_overhang(shaft_d_mm, margin=CRIT_MARGIN_MIN):
@@ -534,7 +574,7 @@ def jet_check(L, az_deg, cant_deg, y=EXHAUST_Y, half_deg=JET_HALF, reach=JET_REA
 # --- mass and CG of the aft hardware (an envelope estimate, U9 replaces it) ----------------
 def aft_parts(L) -> list[tuple[str, float, float, str]]:
     rho = sls.rho_g_mm3(sls.PA_CF)
-    shroud = math.pi * (QX_BODY_OD - 2.0) * 2.0 * QX_SHROUD_L * rho
+    shroud = math.pi * (SHROUD_OD - 2.5) * 2.5 * (L["shroud_y1"] - L["shroud_y0"]) * rho
     ring = math.pi * (RING_OD - 3.0) * 3.0 * 10.0 * rho
     tube_l = L["tube_y1"] - L["tube_y0"]
     tube = math.pi * 2.0 * (TUBE_R627 + (NOZZLE_A + NOZZLE_B) / 8.0) * TUBE_WALL * tube_l * rho
@@ -544,6 +584,8 @@ def aft_parts(L) -> list[tuple[str, float, float, str]]:
         ("printed pusher shroud", shroud, (L["shroud_y0"] + L["shroud_y1"]) / 2.0,
          "envelope x PA CF"),
         ("mounting ring (fused)", ring, (L["ring_y0"] + L["ring_y1"]) / 2.0, "envelope"),
+        ("motor plate + 11 stator vanes", 8.0, (L["vanes_y0"] + L["plate_y1"]) / 2.0,
+         "ASSUMED 8 g"),
         ("thrust tube + nozzle (fused)", tube, (L["tube_y0"] + L["tube_y1"]) / 2.0, "envelope"),
         ("4 scoops + passages + valves", 4 * 5.0, SCOOP_Y + 3.0, "ASSUMED 5 g each"),
     ]
@@ -562,13 +604,16 @@ def cg_shift(plist):
 def evaluate() -> dict[str, Any]:
     mesh = load_aft_hull()
     meas = measure(mesh)
-    y0, _ = place_shroud(mesh)
-    if y0 is None:
-        raise SystemExit("[rear_cone_layout_fit] no station holds the QX shroud with the gap")
-    L = layout(meas, y0)
-    gap, gap_y = shroud_gap(mesh, y0)
+    L = layout(meas)
+    gap, gap_y = shroud_gap(mesh, L["shroud_y0"], L["shroud_y1"])
     rows, ring_last = ring_room(mesh, meas)
     crit = critical_rpm(SHAFT_D, BEARING_SPAN, default_overhang(), ROTOR_G)
+    crit_stock = critical_rpm(SHAFT_D, BEARING_SPAN, stock_overhang(), ROTOR_G)
+    swirl = {th: rotor_swirl(th) for th in (0.8, 1.0)}
+    Lx = layout(meas, exit_stator=True)
+    gap_x = shroud_gap(mesh, Lx["shroud_y0"], Lx["shroud_y1"])
+    variant = {"layout": Lx, "gap": gap_x, "cg": cg_shift(aft_parts(Lx) + [
+        ("exit stator, 11 vanes", 8.0, Lx["rotor_y1"] + EXIT_STATOR_L / 2.0, "ASSUMED 8 g")])}
     jets = {n: jet_check(L, az, cant) for n, az, cant in JETS}
     radial = jet_check(L, 245.0, 0.0, y=634.0)  # plan check: a radial ventral jet at Y 634
     sweep = {h: {n: jet_check(L, az, cant, half_deg=h)["clear"] for n, az, cant in JETS}
@@ -581,7 +626,8 @@ def evaluate() -> dict[str, Any]:
     band = ventral_clear_map(L)
     plist = aft_parts(L)
     r = {"meas": meas, "layout": L, "gap": (gap, gap_y), "ring_rows": rows,
-         "ring_last": ring_last, "crit_rpm": crit, "top_rpm": top_rpm(),
+         "ring_last": ring_last, "crit_rpm": crit, "crit_stock_rpm": crit_stock,
+         "swirl": swirl, "exit_stator_variant": variant, "top_rpm": top_rpm(),
          "nom_rpm": KV * V_NOM, "max_overhang_3": max_overhang(SHAFT_D),
          "max_overhang_4": max_overhang(EXT_SHAFT_D), "jets": jets, "radial": radial,
          "sweep": sweep, "joints": joints, "exhaust": exh, "passages": pas,
@@ -601,7 +647,9 @@ def limits(r) -> list[tuple[str, float, str, float, str]]:
         ("shroud aft end forward of the scoops", SCOOP_Y - L["shroud_y1"], ">=", 0.0, "mm"),
         ("motor clear of the stern stack", L["motor_y0"] - STERN_STACK_Y1, ">=",
          STATIC_GAP, "mm"),
-        ("rotor forward of the nozzle exit", L["exit_y"] - L["rotor_y"], ">=", 0.0, "mm"),
+        ("pusher order: motor plate ahead of the rotor", L["rotor_y0"] - L["plate_y1"], ">=",
+         ROTOR_GAP, "mm"),
+        ("rotor forward of the nozzle exit", L["exit_y"] - L["rotor_y1"], ">=", 0.0, "mm"),
         ("mounting ring ends where the hull still holds it",
          (r["ring_last"] or 0.0) - L["ring_y1"], ">=", 0.0, "mm"),
         ("first critical speed over the top running speed", r["crit_rpm"] / r["top_rpm"],
@@ -633,24 +681,46 @@ def passed(limit):
 def report(r):
     L, m = r["layout"], r["meas"]
     print("REAR CONE LAYOUT, tail EDF (plan 002 U5), frame R2, mm.  PROVISIONAL.")
-    print("ASSUMED: rotor 20 g; lip 8 mm; rotor 12 mm aft of the lip; bearing span 20 mm, set in "
-          "3 mm; rotor CG 5 mm out; steel shaft E 200 GPa; tube wall 1.6 mm; exhaust at Y 632, "
-          "10 mm long; jet half-angle 12 deg; scoop lip 3.5 mm.")
+    print("ASSUMED: rotor 20 g; inlet lip 8 mm at 77 mm OD; bearing span 20 mm, set in 3 mm; steel "
+          "shaft E 200 GPa; tube wall 1.6 mm; exhaust at Y 632, 10 mm long; jet half-angle 12 deg; "
+          "scoop lip 3.5 mm; loaded speed 0.85 KV V; motor efficiency 0.85.")
     print(f"  thrust axis Z {m['z_axis']:.1f}; nozzle exit plane Y {L['exit_y']:.0f}; skid "
           f"crossbar aft face Y {m['crossbar_aft_y']}")
-    print(f"  shroud (QX, {QX_LIP_OD:.0f} mm lip / {QX_BODY_OD} mm body, {QX_SHROUD_L:.0f} mm) "
-          f"Y {L['shroud_y0']:.0f}..{L['shroud_y1']:.0f}; min gap {r['gap'][0]:.1f} mm "
+    print(f"  pusher shroud (nacelle 64 mm bore, {SHROUD_OD:.0f} mm OD, {QX_LIP_OD:.0f} mm inlet "
+          f"lip) Y {L['shroud_y0']:.1f}..{L['shroud_y1']:.1f}; min gap {r['gap'][0]:.1f} mm "
           f"({r['gap'][0] / 25.4:.2f} in) at Y {r['gap'][1]:.0f}")
-    print(f"  rotor plane Y {L['rotor_y']:.0f}; motor (pusher, ahead) Y {L['motor_y0']:.0f}.."
-          f"{L['motor_face_y']:.0f}; ring Y {L['ring_y0']:.0f}..{L['ring_y1']:.0f}; tube Y "
+    print(f"  stack, forward to aft (air flows aft): motor Y {L['motor_y0']:.1f}.."
+          f"{L['motor_face_y']:.1f}; stator vanes Y {L['vanes_y0']:.1f}..{L['vanes_y1']:.1f} "
+          f"(on the plate, AHEAD of the rotor); plate Y {L['plate_y0']:.1f}..{L['plate_y1']:.1f};"
+          f" rotor Y {L['rotor_y0']:.1f}..{L['rotor_y1']:.1f}; shroud joint Y "
+          f"{L['shroud_y1']:.0f}; ring Y {L['ring_y0']:.0f}..{L['ring_y1']:.0f}; tube Y "
           f"{L['tube_y0']:.0f}..{L['tube_y1']:.0f}")
+    for th, sw in r["swirl"].items():
+        print(f"  ISSUE, rotor-exit swirl at {th:.0%} throttle with no exit stator: "
+              f"{sw['swirl_deg']:.0f} deg (V_theta {sw['v_theta']:.0f} m/s on {sw['v_axial']:.0f} "
+              f"m/s axial, {sw['rpm']:,.0f} rpm, Euler from dp {sw['dp_fan'] / 1e3:.1f} kPa) "
+              f"reaches the scoops {SCOOP_Y - L['rotor_y1']:.0f} mm downstream; the reused "
+              "stator straightens nothing in the pusher.")
     print("  room outside the mounting ring (OD 82.6 mm): " + ", ".join(
         f"Y {y:.0f} {room:+.1f}" for y, room in r["ring_rows"]) +
         f" mm; last station with room Y {r['ring_last']}")
-    print(f"  first critical speed {r['crit_rpm']:,.0f} rpm, rotor on the 3 mm motor shaft, "
-          f"overhang {default_overhang():.0f} mm; top speed {r['top_rpm']:,.0f} rpm "
-          f"(unloaded, 25.2 V; {r['nom_rpm']:,.0f} at 22.2 V); margin "
-          f"{r['crit_rpm'] / r['top_rpm']:.2f}")
+    print(f"  first critical speed {r['crit_rpm']:,.0f} rpm, rotor on the 3 mm motor shaft "
+          f"through the plate, overhang {default_overhang():.2f} mm; top speed "
+          f"{r['top_rpm']:,.0f} rpm (unloaded, 25.2 V; {r['nom_rpm']:,.0f} at 22.2 V); margin "
+          f"{r['crit_rpm'] / r['top_rpm']:.2f}.  Stock QX (rotor on the motor face, overhang "
+          f"{stock_overhang():.2f} mm): {r['crit_stock_rpm']:,.0f} rpm, margin "
+          f"{r['crit_stock_rpm'] / r['top_rpm']:.2f}")
+    loaded = SPEED_FRACTION * KV * V_FULL
+    print(f"  the same critical against the plan's 51,000 rpm: {r['crit_rpm'] / 51000.0:.2f}; "
+          f"against the loaded full-pack speed {loaded:,.0f} rpm: {r['crit_rpm'] / loaded:.2f}. "
+          "The four nacelle units use the same plate stack: if the bearing positions "
+          "(ASSUMED here) hold, they carry the same margin; measure them (NAC-64-FIT-02).")
+    vx = r["exit_stator_variant"]
+    Lx = vx["layout"]
+    print(f"  G1 option, exit stator between rotor and joint: rotor Y {Lx['rotor_y0']:.1f}.."
+          f"{Lx['rotor_y1']:.1f}, motor Y {Lx['motor_y0']:.1f}..{Lx['motor_face_y']:.1f}, shroud "
+          f"Y {Lx['shroud_y0']:.1f}..{Lx['shroud_y1']:.1f}, min gap {vx['gap'][0]:.1f} mm, aft "
+          f"hardware CG {vx['cg']['dy']:+.1f} mm; straightens the swirl before the scoops.")
     print(f"  longest overhang for margin {CRIT_MARGIN_MIN}: 3 mm shaft "
           f"{r['max_overhang_3']:.1f} mm; separate 4 mm shaft {r['max_overhang_4']:.1f} mm. "
           "Default: rotor on the motor shaft (owner decides at G1).")

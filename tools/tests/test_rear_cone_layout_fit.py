@@ -100,9 +100,41 @@ def test_the_shroud_ends_at_the_joint_forward_of_the_scoops(ev):
 
 def test_the_motor_and_rotor_stay_inside_the_hull_and_forward_of_the_nozzle_exit(ev):
     L = ev["layout"]
-    assert rc.STERN_STACK_Y1 < L["motor_y0"] < L["motor_face_y"] < L["rotor_y"] < L["exit_y"]
+    assert rc.STERN_STACK_Y1 < L["motor_y0"] < L["motor_face_y"] < L["rotor_y0"]
+    assert L["rotor_y1"] < L["exit_y"]
     for start in ("motor clear of the stern stack", "rotor forward of the nozzle exit"):
         assert all(rc.passed(x) for x in _row(ev, start))
+
+
+def test_the_pusher_stack_runs_motor_then_plate_then_rotor_aft_with_the_rotor_at_the_joint():
+    """KD10 / KTD6: the motor is ahead of the rotor; the rotor is at the aft end of the shroud,
+    just forward of the shroud joint and the Y 628 scoops."""
+    st = rc.pusher_stack()
+    assert st["motor_y0"] < st["motor_face_y"] == st["plate_y0"] < st["plate_y1"]
+    assert st["plate_y1"] + rc.ROTOR_GAP == st["rotor_y0"] < st["rotor_y1"]
+    assert st["rotor_y1"] == rc.SHROUD_JOINT_Y - rc.SHROUD_AFT_OF_ROTOR < rc.SCOOP_Y
+    assert st["vanes_y1"] <= st["rotor_y0"]  # the plate's stator vanes are AHEAD of the rotor
+
+
+def test_the_exit_stator_option_moves_the_stack_forward_by_its_length():
+    a, b = rc.pusher_stack(), rc.pusher_stack(exit_stator=True)
+    shift = rc.EXIT_STATOR_L - rc.SHROUD_AFT_OF_ROTOR
+    assert math.isclose(a["rotor_y1"] - b["rotor_y1"], shift)
+    assert math.isclose(a["motor_y0"] - b["motor_y0"], shift)
+
+
+def test_the_rotor_exit_swirl_is_reported_and_grows_with_pressure_rise():
+    """Euler: V_theta = dp / (rho U); with no exit stator it reaches the scoops."""
+    lo, hi = rc.rotor_swirl(0.8), rc.rotor_swirl(1.0)
+    assert lo["swirl_deg"] > 30.0 and hi["v_theta"] > lo["v_theta"]
+    import tail_edf_flow as tf
+    assert math.isclose(lo["v_theta"], lo["dp_fan"] / (tf.Inputs().rho * lo["u_m"]))
+
+
+def test_the_plate_stack_overhang_is_longer_than_the_stock_rotor_mounting():
+    assert rc.default_overhang() - rc.stock_overhang() == rc.PLATE_T + rc.ROTOR_GAP
+    assert (rc.critical_rpm(3.0, rc.BEARING_SPAN, rc.default_overhang(), rc.ROTOR_G)
+            < rc.critical_rpm(3.0, rc.BEARING_SPAN, rc.stock_overhang(), rc.ROTOR_G))
 
 
 def test_scoops_at_y628_and_ventral_exhausts_at_or_aft_of_it(ev):

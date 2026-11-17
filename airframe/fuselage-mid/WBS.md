@@ -1343,6 +1343,23 @@ forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
       mapped (rib bands near 0-9, 56-65, 115-124, 170-180, 236-245, 295-304 deg); each exhaust
       reports its joint shift. Aft hardware cross-check: about 220 g, CG +7.8 mm, agreeing with
       the plan's +7.6 mm delta.
+    - 2026-11-17, pusher correction (owner review): the first rewrite put the rotor at the
+      forward lip, a tractor. Corrected per KD10 / KTD6: motor ahead, plate, rotor at the aft
+      end of the shroud, 1 mm forward of the shroud joint (Y 627) and the Y 628 scoops
+      (shroud Y 548.3-627.0, gap 8.6 mm; motor 553.3-611.3, stator vanes 593.3-611.3 ahead of
+      the rotor, rotor 615.3-626.0; 25 tests). New findings for G1: (4) the reused 11-vane
+      stator sits UPSTREAM of the rotor in the pusher, so the rotor-exit swirl (Euler,
+      about 53 deg at 80-100 % throttle) reaches the scoops 2 mm downstream; an exit stator
+      (20 mm) moves the rotor to Y 596-607 (reported as a variant); (5) first critical speed
+      with the plate stack (12.35 mm overhang, bearing span and set-in ASSUMED) is 46,900 rpm
+      against 57,960 rpm, margin 0.81 (FAIL; the stock 5.35 mm overhang gives 1.28); the
+      nacelle units use the same plate stack, so measure the QF2822 bearing positions
+      (NAC-64-FIT-02) before either flies; (6) aft hardware about 253 g, CG +9.4 mm
+      (envelope estimate) against the plan's +7.6 mm. `tools/hover_trim_rcs.py` now carries
+      per-jet station, radius, scoop recovery and swirl (`--jets tedf05|plan`, `--plot`):
+      the clear 255/285 pair at Y 638 gives 2.25 lbf.in nose-down against 2.06 for 245/295;
+      15 deg of swirl leaves 0.61 lbf.in of ventral-pair yaw; an 80 % port scoop leaves
+      0.19 lbf.in of upper-pair yaw and cuts nose-up capacity about 10 %.
 - [ ] **TEDF-06** — [STD] Cargo duct layout: Flight Engineer box forward, belly panel, fairlead
     under the pivot, screen, flow guides, line guard, pre-G1 bench fixtures, aft balance allowance.
     Plan U6. (S44)

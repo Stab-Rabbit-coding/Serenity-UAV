@@ -209,3 +209,56 @@ def test_the_plans_own_deltas_on_the_corrected_ledger_leave_the_cg_outside_the_w
     assert "CG shortfall" in out and "Flight Engineer box move" in out
     # moving the FE box less (a smaller forward move) brings the CG back toward the window
     assert ht.projected_case(0.5).d > c.d
+
+
+def test_a_radial_jet_force_is_minus_the_exhaust_direction_and_unit_length():
+    for j in ht.DEFAULT_JETS + ht.PLAN_JETS:
+        f = ht.unit_force(j)
+        assert math.isclose(math.sqrt(sum(c * c for c in f)), 1.0, rel_tol=1e-12)
+    down = ht.unit_force(ht.Jet(270.0, 0.0))  # exhaust straight down pushes the tail up
+    assert math.isclose(down[2], 1.0) and abs(down[0]) < 1e-12 and abs(down[1]) < 1e-12
+
+
+def test_jet_moments_match_a_hand_cross_product_about_the_cg():
+    j = ht.Jet(255.0, 25.0, 638.0, 39.3)
+    f = ht.unit_force(j)
+    a = math.radians(j.az_deg)
+    r = (j.r * math.cos(a) / 1e3, (j.y - PLAN.cg_y) / 1e3,
+         (ht.TAIL_Z + j.r * math.sin(a) - PLAN.cg_z) / 1e3)
+    m = ht.jet_moments(PLAN, j, 1.0)
+    assert math.isclose(m["pitch"], r[2] * f[1] - r[1] * f[2], rel_tol=1e-9)
+    assert math.isclose(m["yaw"], r[0] * f[1] - r[1] * f[0], rel_tol=1e-9)
+    assert math.isclose(m["roll"], r[2] * f[0] - r[0] * f[2], rel_tol=1e-9)
+
+
+def test_a_mirrored_pair_with_equal_scoops_leaves_no_yaw_or_roll():
+    for pair in (ht.VENTRAL, ht.UPPER):
+        c = ht.pair_capacity(PLAN, PLAIN, 1.0, pair)
+        assert abs(c["pair_yaw"]) < 1e-12 and abs(c["pair_roll"]) < 1e-12
+
+
+def test_unequal_scoop_recovery_leaves_a_yaw_and_cuts_the_pitch_capacity():
+    lop = tuple(replace(j, scoop=0.8) if math.cos(math.radians(j.az_deg)) > 0 else j
+                for j in ht.DEFAULT_JETS)
+    su = ht.Setup(PLAIN.flow, ht.JetModel(), lop)
+    a = ht.pair_capacity(PLAN, PLAIN, 1.0, ht.UPPER)
+    b = ht.pair_capacity(PLAN, su, 1.0, ht.UPPER)
+    assert abs(b["pair_yaw"]) > 0.0 and abs(b["pitch"]) < abs(a["pitch"])
+
+
+def test_swirl_turns_the_force_tangentially_and_leaves_a_pair_yaw():
+    sw = tuple(replace(j, swirl_deg=15.0) for j in ht.DEFAULT_JETS)
+    su = ht.Setup(PLAIN.flow, ht.JetModel(), sw)
+    assert abs(ht.pair_capacity(PLAN, su, 1.0, ht.VENTRAL)["pair_yaw"]) > 0.0
+
+
+def test_the_clear_ventral_pair_gives_more_nose_down_than_the_plan_pair():
+    plan = ht.Setup(PLAIN.flow, ht.JetModel(), ht.PLAN_JETS)
+    assert (-ht.pair_capacity(PLAN, PLAIN, 1.0, ht.VENTRAL)["pitch"]
+            > -ht.pair_capacity(PLAN, plan, 1.0, ht.VENTRAL)["pitch"])
+
+
+def test_the_vector_diagram_is_written(tmp_path):
+    out = tmp_path / "jets.png"
+    ht.plot_vectors(PLAN, str(out))
+    assert out.stat().st_size > 10_000

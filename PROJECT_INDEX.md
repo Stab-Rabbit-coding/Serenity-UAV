@@ -3334,7 +3334,7 @@ precommit_sanitize.py — Pre-commit sanitization and delinting hook for Serenit
 prep_nacelle_64_bake.py — Stage the 64 mm nacelle parts, in NACELLE-LOCAL frame, for the hull bake. [build-tooling, propulsion]
 purge_stale_fcstd_objects.py — Remove superseded geometry from the archived FreeCAD assembly (LG-10.7). [build-tooling, cad-mesh]
 README.md — Serenity UAV — Build Tools & Validation Scripts [build-tooling, documentation]
-rear_cone_layout_fit.py — rear_cone_layout_fit.py -- rear-cone layout of the tail EDF (QX-Motor 64 mm, QF2822 [build-tooling]
+rear_cone_layout_fit.py — Python script [build-tooling]
 scad_flatten.py — scad_flatten.py -- flatten an OpenSCAD file that layers parameter overrides on a base file. [build-tooling, cad-mesh]
 shift_baked_stl.py — Translate an already hull-frame-baked binary STL along hull X, in place. [build-tooling]
 skid_failure_mode_study.py — skid_failure_mode_study.py -- how does a rear skid fail, and in which material? [build-tooling]

@@ -16570,7 +16570,7 @@
       "archived": false
     },
     "tools/rear_cone_layout_fit.py": {
-      "description": "rear_cone_layout_fit.py -- rear-cone layout of the tail EDF (QX-Motor 64 mm, QF2822",
+      "description": "Python script",
       "tags": [
         "build-tooling"
       ],
