@@ -1328,6 +1328,21 @@ forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
 - [ ] **TEDF-05** — [ADV] Rear-cone layout: QX pusher unit, RCS scoops at Y 628 with structure at the
     shroud joint, ventral exhausts at 245° and 295° canted 25° aft, trapezoidal exhausts on the canon
     plate pattern, 3D jet check, the three RCS valve concepts for G1. Plan U5. (S44)
+    - 2026-11-17, tool rewritten: `tools/rear_cone_layout_fit.py` (QX pusher, 21 tests). It exits 1 on
+      three findings for G1, not tool faults: (1) the planned ventral pair at 245/295 deg strikes
+      the skid pods at every exhaust station from Y 632 to Y 641 (3D jet from the bore, 12 deg
+      half-angle ASSUMED, also blocked at 8 and 16 deg); a ventral exhaust clears both pods and
+      crossbar only at Y 635 or aft and 255 deg or inboard (the 255/285 pair, about 7 % more
+      vertical moment than 245/295), with the scoops kept at 245/295 per KD20; (2) the exhausts
+      at Y 632 put the bore's forward edge over the crossbar (aft face Y 627.5); (3) 45 deg
+      passage sectors give 245 mm2 ventral and 213-219 mm2 upper against the 255 mm2 exhaust;
+      47 deg ventral and 52-53 deg upper meet it. Passing: shroud Y 582-627 with a 6.9 mm gap,
+      first critical 77,600 rpm against 57,960 rpm (margin 1.34; bearing span ASSUMED; overhang
+      limit 8.5 mm on the 3 mm shaft, 13.9 mm on a separate 4 mm shaft), scoop blockage 7.7 %,
+      ventral web 2.9 mm, mounting ring ends forward of Y 625, upper jets clear. Plate joints
+      mapped (rib bands near 0-9, 56-65, 115-124, 170-180, 236-245, 295-304 deg); each exhaust
+      reports its joint shift. Aft hardware cross-check: about 220 g, CG +7.8 mm, agreeing with
+      the plan's +7.6 mm delta.
 - [ ] **TEDF-06** — [STD] Cargo duct layout: Flight Engineer box forward, belly panel, fairlead
     under the pivot, screen, flow guides, line guard, pre-G1 bench fixtures, aft balance allowance.
     Plan U6. (S44)

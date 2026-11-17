@@ -16570,7 +16570,7 @@
       "archived": false
     },
     "tools/rear_cone_layout_fit.py": {
-      "description": "rear_cone_layout_fit.py -- gate G1 layout of the fuselage cooling fan and the tail EDF",
+      "description": "rear_cone_layout_fit.py -- rear-cone layout of the tail EDF (QX-Motor 64 mm, QF2822",
       "tags": [
         "build-tooling"
       ],
@@ -16817,6 +16817,13 @@
       "tags": [
         "build-tooling",
         "redundancy-failover"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_rear_cone_layout_fit.py": {
+      "description": "Tests for tools/rear_cone_layout_fit.py (plan 002 U5, TEDF-05).",
+      "tags": [
+        "build-tooling"
       ],
       "archived": false
     },
@@ -21106,6 +21113,7 @@
       "tools/tests/test_nonfo_simon_fit.py",
       "tools/tests/test_nozzle_servo_linkage.py",
       "tools/tests/test_pace_balance.py",
+      "tools/tests/test_rear_cone_layout_fit.py",
       "tools/tests/test_sync_operators_manual.py",
       "tools/tests/test_tail_edf_flow.py",
       "tools/tests/test_tail_strike_requirement.py",

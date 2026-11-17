@@ -1892,7 +1892,9 @@ and Claude Opus 5.5 read and translated it.
 **Where it is applied:** `tools/nacelle_axial_fit.py`, `tools/tests/test_nacelle_axial_fit.py`,
 `airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad`,
 `docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`,
-`airframe/wings-nacelles/WBS.md` §1.1.4 NAC-64-SERVO-01 / NAC-64-FIT-01 / NAC-64-FIT-02.
+`airframe/wings-nacelles/WBS.md` §1.1.4 NAC-64-SERVO-01 / NAC-64-FIT-01 / NAC-64-FIT-02;
+tail EDF (plan 002): `tools/tail_edf_flow.py`, `tools/hover_trim_rcs.py`,
+`tools/rear_cone_layout_fit.py` (shroud diameters, motor drawing, shaft, 140 g).
 ---
 
 
@@ -2080,6 +2082,7 @@ which prints that caveat on every run.
 | **Limitation** | General SLS-nylon guidance from 2019. It predates DuraForm PA CF (2023) and gives no material allowables. |
 
 **Used in:** `tools/sls_dfm_audit.py`, `tools/sls_print_orientation.py`,
+`tools/rear_cone_layout_fit.py` (p. 15, 1 mm minimum feature: the ventral passage web),
 `airframe/openscad/nacelles/nacelle_nozzle_fixed.scad`,
 `airframe/openscad/fuselage/cargo/tilt_brake.scad`,
 `airframe/openscad/fuselage/belly_panel.scad`, `docs/SLS_MIGRATION.md`,
@@ -4031,7 +4034,7 @@ because they were incorrectly attributed, unverifiable, or inapplicable.
 | "LibreServo_v4.1-TC" tilt-controller variant (`LS-TILT-TC`, `TILT-CTL-08`, `TC-BOARD`, `LS-CR-1`) | `docs/TILT_ACTUATOR_SELECTION.md` §4, `docs/TILT_DRIVE_CONTROL_SPEC.md`, `docs/POWER_DISTRIBUTION.md` §3.3a, `docs/CARGO_SECTION_LAYOUT.md`, `current-specification/bom_revS.*`, `WBS.md` | **Superseded by design decision (2026-09-17), not an error.** A LibreServo variant would fork that board away from its upstream and break the attribution chain, for a device that is no longer a servo controller. | REF-ESC-001 — Open-Secure-ESC build `6s/10A/BRUSHED_CAN_485_isolation`; BOM row `OSESC-TILT-TC` |
 | REF-MIL-001 used for CNAF M-3710.7 (ID collision) | `AGENTS.md` §6a, `tools/precommit_doc_wording.py`, `.githooks/pre-commit` (branch `avionics-docs-audit`) | **Duplicate ID.** REF-MIL-001 is MIL-STD-1553C; the CNAF M-3710.7 entry was filed under the same ID. Found while merging `main` 2026-10-05. | REF-MIL-003 (same CNAF entry, renumbered) |
 | Avia Semiconductor HX711 24-bit ADC and the `HX711-LC` breakout module — cargo line-tension ADC | `current-specification/bom_revS.*` (retained as the Rev S snapshot) and `bom_revT.*` (row replaced), `docs/CARGO_WINCH_SPECIFICATION.md`, `docs/POWER_DISTRIBUTION.md` §3.2, `avionics/firmware/fc/tools/governor_cal.py`, `airframe/placeholders/generate_placeholders.py` | **Superseded by owner decision (2026-10-20), not a citation error.** Page 1 of the HX711 datasheet prints Avia's contact as "(P. R. China)", which fails the component-sourcing rule in `AGENTS.md` §5; the BOM entry also named no manufacturer for the module. The datasheet stays at `avionics/datasheets/avia-semiconductor/hx711.pdf` pending the owner's decision to delete it. | REF-SENSOR-063 (TI ADS1231) |
-| [REF-FAN-001] Delta ASB02505SHA-AY6B fan datasheet (P-Q curve, mass, power) | `tools/node_thermal_forced_air.py`, `tools/rear_cone_layout_fit.py` | **Never catalogued, and superseded by design decision (2026-11-16, TEDF-01).** No REF-FAN-001 entry ever existed in this file, so the citation could not resolve. The 25 mm fan is replaced by the tail EDF (plan 002). The thermal tool's citation is removed in U1; its fan figures leave with the fan in TEDF-02; the layout tool's leave in TEDF-05. | None — fan removed. Tail EDF figures cite REF-EDF-003. |
+| [REF-FAN-001] Delta ASB02505SHA-AY6B fan datasheet (P-Q curve, mass, power) | `tools/node_thermal_forced_air.py`, `tools/rear_cone_layout_fit.py` | **Never catalogued, and superseded by design decision (2026-11-16, TEDF-01).** No REF-FAN-001 entry ever existed in this file, so the citation could not resolve. The 25 mm fan is replaced by the tail EDF (plan 002). The thermal tool's citation is removed in U1; its fan figures leave with the fan in TEDF-02; the layout tool's were removed with the fan in TEDF-05 (2026-11-17, `tools/rear_cone_layout_fit.py` rewritten for the QX unit). | None — fan removed. Tail EDF figures cite REF-EDF-003. |
 | `[REF-MAT-008]` used for C26000 brass density | `tools/node_thermal_forced_air.py` | **Incorrect attribution.** REF-MAT-008 is ASTM A228 music wire (Gibbs Wire); C26000 brass is REF-MAT-009. Found 2026-11-17. | REF-MAT-009 (density 8.53 g/cm^3; it gives no thermal conductivity — see TODO §0.14) |
 
 ---
