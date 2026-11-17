@@ -31,11 +31,11 @@
 > ledger baseline without the tail hardware is 14.49 lbm (6,572 g), `hover_twin_2200` in
 > `current-specification/auw_ledger.json`, and gains the tail hardware under TEDF-14.
 
-> **Pre-shift record — Aft EDF not installed** (Phase 11). The 4 nacelle XFly Galaxy X5 EDFs (1240g each, 90%
+> **Pre-shift record — Aft EDF not installed** (former Phase 11). The 4 nacelle XFly Galaxy X5 EDFs (1240g each, 90%
 > additive via stator = 2232g/nacelle × 2 = 4464g total) deliver T/W ≈ **1.61** at the
-> Phase 5–10 AUW of ~2,768g — **full VTOL hover is achievable from Phase 5**. Phase 11
+> Phase 5–10 AUW of ~2,768g — **full VTOL hover is achievable from Phase 5**. Former Phase 11
 > adds the 55mm rear EDF for **forward-flight (cruise) thrust and RCS attitude authority** — it
-> exhausts aft through the canonical nozzle and is not counted in hover (Phase 11 hover T/W ≈ 1.43).
+> exhausts aft through the canonical nozzle and is not counted in hover (former Phase 11 hover T/W ≈ 1.43).
 
 **Dependency:** Pilot (×2) and TACCO (×2) PCB assemblies received from JLCPCB.
 
@@ -45,7 +45,7 @@
 
 - [ ] Install 2× 40A BLHeli32 ESCs in bay C (port + stbd nacelle fore EDF = FC1; aft EDF = FC2).
 
-- [ ] **Phase 11 only:** Install 50A ESC in Panel F for 55mm rear EDF (FC2 PRU Ch.2) — skip for Phase 5. *(Superseded 2026-11-16: the tail EDF's fifth Open-Secure-ESC is installed forward in the cargo duct in Phase 5, OSESC-TAIL-1 / TEDF-16.)*
+- [x] (superseded 2026-11-16, TEDF-16) **Phase 11 only:** Install 50A ESC in Panel F for 55mm rear EDF (FC2 PRU Ch.2) — skip for Phase 5. *(Superseded 2026-11-16: the tail EDF's fifth Open-Secure-ESC is installed forward in the cargo duct in Phase 5, OSESC-TAIL-1 / TEDF-16.)*
 
 - [ ] Install 5V/5A BEC; verify 5.00V ±0.05V under 1A bench load.
 
@@ -121,35 +121,35 @@
 
 - [ ] Configure forensic log mount in `/etc/fstab` (noexec, nodev, nosuid, ro) on CN1 and CN2.
 
-**Tail EDF, speed controller and RCS installation** *(moved here 2026-11-17 from `deferred/WBS.md` §Phase11: these are first-build steps, not an add-on after Phase 10; owner direction, plan `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`. The steps are copied as written. Figures from the pre-shift design (55 mm EDF, 50A ESC, Panel F stations, ESC5/PRU channel, plenum, PETG) are not current: TEDF-05/09/11 restate the parts and TEDF-16 restates this procedure. Build to the TEDF-16 build guide, not to those figures.)*:
+**Tail EDF, speed controller and RCS installation** *(moved here 2026-11-17 from `deferred/WBS.md` §Phase11: first-build steps, not an add-on after Phase 10; owner direction. Updated 2026-11-17 to plan `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`: the QX 64 mm unit, an aft hull with the nozzle, mounting ring, scoops and exhausts built in (TEDF-09), the OSESC-TAIL-1 controller forward in the cargo duct, and the valve concept chosen at G1. TEDF-16 restates this procedure in the build guide.)*:
 
-- [ ] **Generate** `rear_nozzle_canonical.scad`: fixed canonical elliptical tail nozzle, exit 2.06×1.76 in (52.3×44.7 mm, ~1,836 mm²), hull-matched outer surface; print `rear_nozzle_canonical.stl` (CF-PETG, 0.15mm, 30%, 4 walls). **No iris, no servo.**
+- [ ] **Build the fixed tail nozzle into the one-piece aft hull** (TEDF-09, `tools/aft_edf_provisions.py`): open the tail at the nozzle and fair it into the measured skin. Exit 2.06×1.76 in (52.3×44.7 mm, ~1,836 mm² = 2.85 in²). **Fixed — no iris, no servo.** There is no separate nozzle part.
 
-- [ ] **Generate** `rcs_distribution_manifold.scad` + `rcs_thruster_nozzle.scad` + `rcs_valve_bracket.scad`; print `rcs_distribution_manifold.stl` (×1, PETG), `rcs_thruster_nozzle.stl` (×4, CF-PETG), `rcs_valve_bracket.stl` (×4, CF-PETG).
+- [ ] **Print the separate RCS parts** (TEDF-11): the valve for the concept the owner chooses at G1 (sliding shutter, hinged skin-plate flap, or servos aft at Y 23.2–23.6 in (590–600 mm)), its cable guides, and the servo and gateway mounts, in the material root `AGENTS.md` §7 sets. The scoops, passages and trapezoidal exhausts are cut into the aft hull (TEDF-09), so there is no separate manifold, thruster nozzle or bleed tap.
 
-- [ ] Run mesh watertightness verification on all regenerated STLs; report findings here and resolve.
+- [ ] Run `python3 tools/validate_stls.py` on every regenerated hull and part STL (root `AGENTS.md` §7); report findings here and resolve.
 
-- [ ] Bench-test 55mm EDF (correct rotation, no vibration).
+- [ ] Bench-test the QX-Motor 64 mm tail EDF (QF2822 2300 KV motor, 12-blade rotor, the same part numbers as the nacelle EDFs) on its speed controller: correct rotation, no vibration.
 
-- [ ] Install EDF retaining ring at station ~430mm inside Panel F; bond; cure 1h.
+- [ ] Seat the pusher shroud, stator and motor mount in the aft-hull mounting ring (the ring ends forward of Y 24.6 in (625 mm)), motor ahead of the rotor, with the stated static gap to the hull. The owner chooses the drive (rotor on the motor shaft, or a short shaft) at G1 (TEDF-11).
 
-- [ ] Route motor leads through Panel F to 50A ESC; route signal lead forward via MAIN-PWR conduit to Inara's shuttle (Bay B, FC2 PRU Ch.2).
+- [ ] Route the motor leads forward to the tail speed controller (lead length and gauge are reported for G1, TEDF-06). Route its signal and CAN FD leads to the node the G1 PACE assignment names (NFP-TEDF-2 / OD-22).
 
-- [ ] Install 50A ESC in Panel F bay; foam tape + cable tie. Cure 2h before applying thrust.
+- [ ] Install the tail EDF speed controller (OSESC-TAIL-1, the fifth Open-Secure-ESC) forward in the cargo duct at its TEDF-06 station, with its cooling air. Complete its bench qualification at about 80 % continuous duty (P3 bench phase) before applying thrust.
 
-- [ ] Bond `rear_nozzle_canonical.stl` to the tail-cone exit (Panel F aft end), blending into the canonical hull outer mold line. **Fixed — no moving petals.**
+- [ ] Verify the fixed tail nozzle in the printed aft hull: the exit measures 2.06×1.76 in (52.3×44.7 mm) within tolerance and fairs flush into the canonical outer mold line. **Fixed — no moving petals.**
 
-- [ ] Install 4× `rcs_thruster_nozzle.stl` at their RCS stations; connect each to its bleed duct.
+- [ ] Check the four RCS jets in the printed aft hull: scoop at Y 24.7 in (628 mm) in the thrust-tube wall, a passage to each trapezoidal exhaust on the canon plate pattern, exhausts at 245° and 295° (canted 25° aft) and 45° and 135° (radial); each exhaust open from scoop to skin, with its flow area within tolerance.
 
-- [ ] Install 4× SG90-class proportional valves on `rcs_valve_bracket.stl`; link each valve to its RCS bleed duct.
+- [ ] Install the four RCS valves and their servos for the G1 valve concept (TEDF-11): each valve, closed, blocks its scoop and, open, passes the design area. Cables, not pushrods, run from the forward servos.
 
-- [ ] Calibrate RCS valves: 0% = closed (no bleed); 100% = full bleed jet. Map 2 jets to pitch, 2 to yaw.
+- [ ] Calibrate each RCS valve: 0% = closed; 100% = full jet. Map the jets to pitch and yaw per the RCS mixer matrix (TEDF-17); the RCS gives pitch authority in both directions about the trim point, and yaw (R31).
 
-- [ ] Bond permanent aft 49 MHz (Part 15 §15.235) wire post to top of the canonical tail nozzle (5-min epoxy).
+- [ ] Bond permanent aft 49 MHz (Part 15 §15.235) wire post to top of the tail nozzle (5-min epoxy).
 
-- [ ] Remove temporary aft post from station ~580mm.
+- [ ] Remove temporary aft post from station ~22.8 in (580 mm).
 
-- [ ] Restring 49MHz top wire (~470mm) from forward post to nozzle aft post with ~20g tension.
+- [ ] Restring 49 MHz top wire (~18.5 in (470 mm)) from forward post to nozzle aft post with ~0.7 ozf (20 gf) tension.
 
 **Software configuration:**
 
@@ -165,7 +165,7 @@
 
 - [ ] Install the 49 MHz (Part 15 §15.235) daemon on CN1 and CN2 (select channel per 47 CFR §15.235; not §95.623, which does not apply to this band).
 
-- [ ] Enable ESC5 in FC2 firmware (PRU Ch.2); configure BDSHOT governor for the 55mm EDF.
+- [ ] Enable the tail EDF speed controller (OSESC-TAIL-1) on the node the G1 PACE assignment names (NFP-TEDF-2 / OD-22); configure the BDSHOT governor for the QX 64 mm unit. Hold the minimum cooling throttle (R7) as ground idle, and keep the tail EDF inhibited until the Bay A hatch is closed (R25).
 
 - [ ] **GW-RCS — build the RCS valve gateway** *(first build since 2026-11-16, TEDF-10/TEDF-11 and the G1 valve-concept and failsafe decisions of plan 002; latency is measured on the repurposed `N_STACKS=1` board, not on the retired door gateway; the placement depends on the valve concept, not Panel F by default)* (specified 2026-09-21, `docs/CARGO_DOOR_GATEWAY_SPEC.md` §9; `avionics/kicad/CAN-PERIPH-GW-1/CAN-PERIPH-GW-1.md` Deployment 5): one `SKIPPER-CAN-PERIPH-GW-PCB` in the Panel F bay beside the 50 A ESC — `N_STACKS=1` on an osc-native chain if OpenServoCore has shipped (GW-DOOR-2), else `N_STACKS=2` `END_TO_END` for four hardware timer channels; tray = `gateway_door_tray.scad` re-parameterised (`GW_PCB_L`) on bosses cut into the rear-cone shell (blocked on its MESH-01 regeneration); `J_PWR` from the aft 5 V feed, valves on a fused 6 V branch; trunks extended aft through the inner neck. ~+23 g to the Phase 11 mass line.
 
@@ -178,8 +178,6 @@
 - [ ] Motor spin test (5% throttle 2s): all 5 motors spin in correct directions.
 
 - [ ] Tilt servo calibration: 0° = nacelle horizontal (cruise) ±0.5°, 90° = vertical (hover) ±0.5°; range −5° to +135°.
-
-- [ ] Rear nozzle servo endpoints verified.
 
 - [ ] Static CG: **190mm from nose** (adjust battery position on rail).
 
@@ -195,9 +193,9 @@
 
 - [ ] **Apply FAA registration number** (14 CFR Part 48 — replaces N00000 placeholder on airframe).
 
-- [ ] Verify all 5 ESC heartbeats on CAN FD; confirm FC2 cross-drive capability for ESC5.
+- [ ] Verify all 5 ESC heartbeats (four nacelle, one tail) on CAN FD; confirm the cross-drive capability of the nodes the G1 PACE assignment names for the tail ESC.
 
-- [ ] Bench-test RCS attitude authority.
+- [ ] Bench-test RCS attitude authority: pitch in both directions about the trim point, and yaw (R31).
 
 **First flight sequence (per REVN_BUILD_GUIDE_24IN.md §Phase 5):**
 
@@ -231,19 +229,19 @@
 
 - [ ] Flight log on both CN μSDs; CPLD write-block verified
 
-- [ ] All regenerated tail-EDF STLs pass mesh watertightness verification
+- [ ] All regenerated hull and part STLs pass `tools/validate_stls.py`
 
-- [ ] Plenum + RCS manifold pressure-test passed (draft at EDF inlet and all 4 RCS jets; no leakage)
+- [ ] Seal and aperture gate passed (TEDF-15): the only openings are the ramp, the bow inlets, the nozzle, the RCS exhausts, the belly panel seal, the Bay A hatch seal, the fairlead and the Observer orifices
 
-- [ ] EDF seated at station ~430mm, centerline ±2mm; rotation verified before sealing
+- [ ] Tail EDF seated in the aft-hull mounting ring, centerline ±0.08 in (2 mm); rotation verified before sealing
 
-- [ ] 50A ESC installed; ESC5 signal routed to FC2 PRU Ch.2
+- [ ] OSESC-TAIL-1 installed forward in the cargo duct; its signal routed to the node the G1 PACE assignment names
 
-- [ ] Canonical nozzle bonded flush to hull outer mold line; exit 2.06×1.76 in verified
+- [ ] Fixed tail nozzle flush with the hull outer mold line; exit 2.06×1.76 in (52.3×44.7 mm) verified
 
 - [ ] All 4 RCS valves calibrated; pitch/yaw authority confirmed on bench
 
-- [ ] 49MHz aft wire post on canonical nozzle; top wire re-strung at full ~470mm span
+- [ ] 49 MHz aft wire post on the tail nozzle; top wire re-strung at full ~18.5 in (470 mm) span
 
 ---
 
@@ -436,7 +434,7 @@ safe flight envelope beyond the minimum parameters established in Phase 5.
 
 - [ ] **Extended autonomous mission** — 5-waypoint GPS mission, altitude hold, RTL on link loss; verify log integrity on all 4 CN μSDs.
 
-- [ ] Add tail EDF to the forward-thrust (cruise) schedule — NOT the hover lift mixer.
+- [ ] Add the tail EDF's forward thrust to the cruise schedule, not the hover lift mixer. In hover its throttle follows pitch trim and RCS authority (about 80 %, R8).
 
 - [ ] Forward-flight thrust test with the tail EDF at 60% throttle.
 

@@ -1501,8 +1501,8 @@ REFERENCES.md Removed/Superseded Citations).
     `N_STACKS=1`, or `N_STACKS=2` for four hardware timer channels with stock PWM — attitude
     effectors need loop-rate command, no bit-banging); fail-CLOSED on heartbeat/MAC loss;
     `RCS_COMMAND ≥ 50 Hz` — per-frame CMAC signing latency to be measured on the repurposed
-    `N_STACKS=1` gateway board (the door gateway is retired). Replaces the Phase 11 wording that maps the valves onto FC2's local PWM
-    (contradicts U1). First build since 2026-11-16 (the earlier "not before Phase 11" is superseded); its placement depends on the G1 valve concept; tracked in `deferred/WBS.md` §Phase11 and plan 002.
+    `N_STACKS=1` gateway board (the door gateway is retired). Replaces the former Phase 11 wording that maps the valves onto FC2's local PWM
+    (contradicts U1). First build since 2026-11-16 (the earlier "not before former Phase 11" is superseded); its placement depends on the G1 valve concept; tracked in `deferred/WBS.md` §Phase11 and plan 002.
 - [x] **`ENC-NACELLE-1` DRC — fixed, 2026-07-26.** Found and fixed a genuine
     short (+3V3/ENC_CSN via-to-track contact) plus several clearance
     violations from a congested prior reroute, by moving the conflicting

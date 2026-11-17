@@ -10,6 +10,7 @@
 `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`, 2026-11-16), where its mass recovers
 hover trim; the middle-section inner neck is now the open air passage to the tail EDF. Pre-shift it sat
 in the inner neck, adjacent to Simon's Medbay, to minimize power-run length.
+**ESC5 note (2026-11-17):** the DNP ESC5 branch (J_ESC5, F_ESC5, J_SHLD_ESC5) serves the tail EDF, which is first-build since 2026-11-16. "Former Phase 11" below means that pre-shift deferral. The ratings shown for ESC5 are the pre-shift 120 mm EDF values; TEDF-14 and the OSESC-TAIL-1 specification restate them.
 **Status check 2026-10-07:** unchanged since the 2026-09-20 rebuild below except for the 2026-10-05
 schematic fixes (TLV62569 EN/FB divider; PRTR5V0U2X relink). ERC 0; DRC still 29–31 hard
 violations (D_OR1/D_OR2 and U_RS485 placement); not routed; no Gerbers. The planned 6 V servo
@@ -110,9 +111,9 @@ requirements.
 | J_ESC2 | Amass XT30PW-F | 30 A continuous / 60 A burst | Port Aft  (EDF1) |
 | J_ESC3 | Amass XT30PW-F | 30 A continuous / 60 A burst | Stbd Fwd  (EDF2) |
 | J_ESC4 | Amass XT30PW-F | 30 A continuous / 60 A burst | Stbd Aft  (EDF3) |
-| J_ESC5 | DNP (Amass XT60PW-F footprint, unpopulated Phase 5–10) | 80 A / 110 A | Fuse 120 mm (EDF4, Phase 11) |
+| J_ESC5 | DNP (Amass XT60PW-F footprint, unpopulated Phase 5–10) | 80 A / 110 A | Fuse 120 mm (EDF4, former Phase 11) |
 | J_SHLD_ESC1–4 | M3 × 6 mm PCB-mount threaded brass insert (×4, one adjacent to each J_ESCn) | ESC cable braid/foil shield drain → chassis PGND |
-| J_SHLD_ESC5 | M3 × 6 mm PCB-mount threaded brass insert (DNP, adjacent to J_ESC5 footprint) | Phase 11 ESC5 cable shield drain (unpopulated) |
+| J_SHLD_ESC5 | M3 × 6 mm PCB-mount threaded brass insert (DNP, adjacent to J_ESC5 footprint) | Former Phase 11 ESC5 cable shield drain (unpopulated) |
 
 ### BEC Outputs
 
@@ -186,7 +187,7 @@ VBAT rail:
         ├── F_ESC2 → J_ESC2
         ├── F_ESC3 → J_ESC3
         ├── F_ESC4 → J_ESC4
-        ├── F_ESC5 → J_ESC5 (DNP, Phase 11)
+        ├── F_ESC5 → J_ESC5 (DNP, former Phase 11)
         ├── 5 V BEC section (see below)
         └── 6 V BEC section (see below)
 
@@ -385,7 +386,7 @@ prevents conducted EMI on the high-current power cable from corrupting the DSHOT
 | D_OR1, D_OR2 | MBRD1045CT (Dual Schottky 10 A / 45 V) | BEC OR-diode pair | 863-MBRD1045CTCT-ND |
 | F1 | Littelfuse 0297150.ZXNV (150 A MAXI blade) | Main bus fuse | 576-0297150.ZXNV-ND |
 | F_ESC1–F_ESC4 | Littelfuse 0297040.WXNV (40 A mini blade, ×4) | Per-ESC branch fuse | 576-0297040.WXNV-ND |
-| F_ESC5 | DNP (footprint: Littelfuse MIDI 100 A) | Phase 11 aft EDF fuse (unpopulated) | — |
+| F_ESC5 | DNP (footprint: Littelfuse MIDI 100 A) | Former Phase 11 aft EDF fuse (unpopulated) | — |
 | RS_MAIN | Bourns CSS2H-2512K-1L00F (1 mΩ, 3 W, Kelvin 2512) | Main bus shunt | SRR2H-5-ND |
 | RS1–RS4 | Bourns CSS2H-2512K-1L00F (1 mΩ, 3 W, ×4) | Per-ESC shunt | SRR2H-5-ND |
 | CM1 | Würth 7440640500 (10 A, 2×100 µH CMC) | Input CM choke (battery lead) | 732-7440640500-ND |
@@ -396,7 +397,7 @@ prevents conducted EMI on the high-current power cable from corrupting the DSHOT
 | J_BATT | Amass XT60PW-F (PCB-mount XT60 female) | Battery input | AliExpress / GetFPV |
 | J_BAL | JST XH-7P, 2.54 mm, right-angle through-hole | 6S balance lead | B07X6JCRZS (Amazon) |
 | J_ESC1–J_ESC4 | Amass XT30PW-F (PCB-mount XT30 female, ×4) | ESC power outputs | AliExpress |
-| J_ESC5 | DNP (XT60PW-F footprint) | Phase 11 aft EDF output | — |
+| J_ESC5 | DNP (XT60PW-F footprint) | Former Phase 11 aft EDF output | — |
 | J_5V | Molex Nano-Fit 4-pin (2.50 mm, RA) | 5 V avionics bus output | WM1720-ND |
 | J_6V | Molex Nano-Fit 4-pin (2.50 mm, RA) | 6 V servo bus output | WM1720-ND |
 | J_I2C | JST-GH SM04B-GHS-TB(LF)(SN) 4-pin, 1.25 mm | PDB I2C to Pilot; shielded cable, drain to J_SHLD_I2C | Mouser 440-SM04B-GHS-TB |
@@ -415,7 +416,7 @@ prevents conducted EMI on the high-current power cable from corrupting the DSHOT
 | CM_ESC1–CM_ESC4 | Würth 7440640500 (10 A, 2 × 100 µH CMC, through-hole, ×4) | Per-ESC output CM choke (Layer 3 noise isolation) | 732-7440640500-ND |
 | J_PGND_BATT | M3 × 6 mm PCB-mount threaded brass insert + M3 ring terminal lug (×1) | Battery cable shield/braid drain → chassis PGND | McMaster-Carr 94459A120 |
 | J_SHLD_ESC1–4 | M3 × 6 mm PCB-mount threaded brass insert + M3 ring terminal lug (×4) | Per-ESC cable shield/braid drain → chassis PGND | McMaster-Carr 94459A120 |
-| J_SHLD_ESC5 | M3 × 6 mm PCB-mount threaded brass insert (DNP; Phase 11) | Phase 11 ESC5 cable shield drain (unpopulated) | McMaster-Carr 94459A120 |
+| J_SHLD_ESC5 | M3 × 6 mm PCB-mount threaded brass insert (DNP; former Phase 11) | Former Phase 11 ESC5 cable shield drain (unpopulated) | McMaster-Carr 94459A120 |
 | FERRITE-PWR | Würth 7427122 (25 mm ID, 31 Ω @ 25 MHz, ×14) | Snap-on ferrite chokes for power cables: 2 per cable end (J_BATT + J_ESC1–4 + J_5V + J_6V) | 732-7427122-ND |
 | FERRITE-SIG | Würth 7427120 (7 mm ID, 80 Ω @ 25 MHz, ×6) | Snap-on ferrite chokes for signal cables: 2 per cable end (J_I2C + J_ALERT + J_NTC) | 732-7427120-ND |
 | CM2 | Würth 7440640500 (10 A, 2 × 100 µH CMC) | Second-stage main bus CM choke (series with CM1; two-stage filter for 500 W/m² CS114) | 732-7440640500-ND |
@@ -708,9 +709,9 @@ not connect to the FlightEngineer.  They are documented here for completeness.
 
 ---
 
-## Phase 11 ESC5 Population
+## Former Phase 11 ESC5 Population
 
-When Phase 11 is ready, populate the following DNP components on the Flight Engineer:
+When former Phase 11 is ready, populate the following DNP components on the Flight Engineer:
 
 1. J_ESC5 (XT60PW-F PCB-mount female)
 2. F_ESC5 (100 A MIDI blade fuse, Littelfuse 0299100.ZXNV, MIDI holder)

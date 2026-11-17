@@ -539,7 +539,6 @@
 
 - [ ] Mount XT90 PDB at keel sta 130mm; solder 14AWG main leads to ES…
 - [ ] Install 2× 40A BLHeli32 ESCs in bay C (port + stbd nacelle fore…
-- [ ] Phase 11 only:
 - [ ] Install 5V/5A BEC; verify 5.00V ±0.05V under 1A bench load.
 - [ ] Pull motor phase leads through conduit to ESCs; solder (verify…
 - [ ] CAN FD termination: 120Ω SOLDERED to CN1 TACCO at Shepherd's r…
@@ -576,7 +575,6 @@
 - [ ] ESC calibration (full throttle power-on → drop to zero).
 - [ ] Motor spin test (5% throttle 2s): all 5 motors spin in correct…
 - [ ] Tilt servo calibration: 0° = nacelle horizontal ±0.5°, 90° = vertical…
-- [ ] Rear nozzle servo endpoints verified.
 - [ ] 190mm from nose
 - [ ] GPS lock: HDOP ≤1.5 on both FC nodes; positions agree within 2m.
 - [ ] Radio checks: MAVLink heartbeat in QGC (SiK + LoRa backup); 49…
@@ -857,7 +855,7 @@
 ### 6.5 — Rev U Checkpoint (2026-11-03)
 → detail: `docs/WBS.md` §6.5
 
-- [ ] PHASE-RENUMBER — rear-EDF Phase 11 dissolved
+- [ ] PHASE-RENUMBER-RESIDUAL — SCAD and generator comment labels
 - [ ] REVU-RELABEL — stamp every component Rev U at the Rev U close
 
 ---

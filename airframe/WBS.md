@@ -391,7 +391,7 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
     BOM entries added to `current-specification/bom_revR.csv`.
     **⚠ MASS NOTICE: Faraday aircraft system now 364 g (0.80 lbm) after
     ferrite reduction to 4/cage and 1 bond strap/cage. Full Rev R1 weight
-    reduction pass (Phase 11 deferrals, wiring gauge, PCB consolidation,
+    reduction pass (former Phase 11 deferrals, wiring gauge, PCB consolidation,
     head infill, CF plates) brings cumulative T/W to ~1.19 without battery
     swap; T/W ~1.25 with BATT-6S-2800. See §1.1.5 mass budget.**
     *(done 2026-06-13)*

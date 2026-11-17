@@ -1,4 +1,4 @@
-# Aft Fuselage EDF — Deferred to Phase 11
+# Aft Fuselage EDF — Pre-shift Design Record (former Phase 11; superseded 2026-11-16)
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
@@ -6,7 +6,7 @@
 
 > **Status note, 2026-11-16 (design shift).** The tail EDF, its speed controller and the RCS are
 > no longer deferred: they are part of the first build (owner, 2026-11-15). The tail EDF is the
-> QX-Motor 64 mm nacelle unit, not a 55 mm unit. The Phase 11 items below are kept as written until
+> QX-Motor 64 mm nacelle unit, not a 55 mm unit. The former Phase 11 items below are kept as written until
 > WBS item TEDF-01 rewrites them. Authority: `airframe/fuselage-mid/WBS.md` §1.1.1.4.0 and
 > `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
 
@@ -21,7 +21,7 @@
 > was a **55 mm 6S unit** feeding a **fixed** elliptical exit nozzle
 > (2.06 in × 1.76 in / 52.3 mm × 44.7 mm — explicitly NOT an iris) plus 4 RCS bleed-air thrusters
 > tapping ~15% of EDF mass flow. The OpenSCAD/STL files below have not yet been regenerated for
-> this spec; see TODO.md §Phase 11 (`rear_nozzle_canonical.stl`, `rcs_thruster_nozzle.stl`,
+> this spec; see TODO.md §former Phase 11 (`rear_nozzle_canonical.stl`, `rcs_thruster_nozzle.stl`,
 > `rcs_distribution_manifold.stl`, `rcs_valve_bracket.stl`) for the replacement file list and
 > required changes. Do not treat the 120 mm/iris description below as current.
 
@@ -80,11 +80,11 @@ performance.
 
 ---
 
-## Build Sequence (Phase 11)
+## Build Sequence (former Phase 11)
 
-See the full Phase 11 build instructions in:
-- `TODO.md` — Phase 11 section
-- `docs/REVN_BUILD_GUIDE_24IN.md` — Phase 11 section
+See the full former Phase 11 build instructions in:
+- `TODO.md` — former Phase 11 section
+- `docs/REVN_BUILD_GUIDE_24IN.md` — former Phase 11 section
 
 ### High-level steps
 
@@ -98,11 +98,10 @@ See the full Phase 11 build instructions in:
 6. Bench-test 120 mm EDF (correct rotation, no vibration); install in plenum outlet.
 7. Wire 80 A ESC in Panel F; route signal lead to FC2 PRU Ch.2.
 8. Install `rear_nozzle_frame.stl` + 8 petals + piano wire link ring.
-9. Install SG90 rear nozzle servo; calibrate: 0° = closed, ~90° = fully open.
-10. Install aft 49 MHz (Part 15 §15.235) wire post on top of nozzle frame; extend 49 MHz top wire to aft hook.
-11. Verify T/W with all 5 EDFs; commission full VTOL hover.
+9. Install aft 49 MHz (Part 15 §15.235) wire post on top of nozzle frame; extend 49 MHz top wire to aft hook.
+10. Verify T/W with all 5 EDFs; commission full VTOL hover.
 
-### Procurement (Phase 11)
+### Procurement (former Phase 11)
 
 | Item | Qty | Approx. Cost |
 |------|-----|-------------|
@@ -119,14 +118,14 @@ See the full Phase 11 build instructions in:
 - The **hull neck shell** (`rear_neck_intake_shell24.stl`) still needs to be printed in Phase 0
   as it is a structural hull section.  The 4 scoop windows should be covered with temporary
   flat-plate covers (cut from 3 mm PETG sheet) and sealed with removable silicone for Phases 0–10.
-  The covers are removed in Phase 11 when the intake frame is installed.
+  The covers are removed in former Phase 11 when the intake frame is installed.
 - The **49 MHz (Part 15 §15.235) aft wire post** (normally bonded to the top of `rear_nozzle_frame.stl`)
   is temporarily omitted.  For Phases 0–10 the 49 MHz antenna is a shorter end-fed wire from
   the forward post to a temporary hook bonded to the aft dorsal hull skin near station ~580 mm.
   The antenna performance is reduced; field strength must still be re-verified against the
   47 CFR Part 15 §15.235 limit (≈30 µW / −15.2 dBm EIRP-equivalent — not Part 95, which does
   not cover 49 MHz; see REF-FCC-003) with the shortened wire.
-- The **Panel F bay** remains empty of EDF/ESC hardware until Phase 11.  Panel F still serves
+- The **Panel F bay** remains empty of EDF/ESC hardware until former Phase 11.  Panel F still serves
   as an access panel; keep the bay clean and free of debris.
 
 ---

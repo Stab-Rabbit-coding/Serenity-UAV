@@ -102,7 +102,7 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-SENSOR-012: STS3215 Digital Servo Motor — Cargo Winch Control (SUPERSEDED)](#ref-sensor-012-sts3215-serial-bus-servo--cargo-winch-drive-superseded)
     - [REF-ACT-001: Pololu 20D mm Metal Gearmotors](#ref-act-001-pololu--20d-mm-metal-gearmotors-datasheet--dimension-diagram)
     - [REF-ACT-002: Pololu 25D mm Metal Gearmotors](#ref-act-002-pololu--25d-mm-metal-gearmotors-datasheet-rev-20--dimension-diagram)
-    - [REF-ACT-003: TowerPro SG90 — 9 g Micro Servo (cargo door / release; RCS valves Phase 11)](#ref-act-003-towerpro-sg90--9-g-micro-servo-cargo-door--release-rcs-valves-phase-11)
+    - [REF-ACT-003: TowerPro SG90 — 9 g Micro Servo (cargo door / release; RCS valves, first build)](#ref-act-003-towerpro-sg90--9-g-micro-servo-cargo-door--release-rcs-valves-first-build)
     - [REF-ESC-001: Open-Secure-ESC — 6S/10A brushed build, the nacelle-tilt controller](#ref-esc-001-open-secure-esc--6s10a-brushed-build-the-nacelle-tilt-controller)
     - [REF-SENSOR-013: SPT Servo SPT5425LV — 25 kgf·cm Analog/Digital PWM Servo (fleet-standard high-torque body)](#ref-sensor-013-spt-servo-spt5425lv--25-kgfcm-analogdigital-pwm-servo-fleet-standard-high-torque-body)
     - [REF-SENSOR-014: LibreServo v2 (stab-rabbit-coding fork) — Open-Source Smart-Servo Control Board](#ref-sensor-014-libreservo-v2-stab-rabbit-coding-fork--open-source-smart-servo-control-board)
@@ -2598,8 +2598,7 @@ servo/board combinations, and gives every one of them the signed-serial-bus tele
 STS3215 winch conversion was chasing in the first place — without the STS3215's own
 never-resolved datasheet-verification gate (REF-SENSOR-012 above), since the SPT5425LV's
 envelope, torque and mass are all published COTS figures (REF-SENSOR-013). Separately, the
-SG90 micro servos (cargo door, payload release; RCS bleed-valve servos are Phase 11
-deferred) are standardised on **OpenServoCore** (REF-SENSOR-015), an SG90/MG90-class
+SG90 micro servos (cargo door, payload release; RCS valve servos are first-build items) are standardised on **OpenServoCore** (REF-SENSOR-015), an SG90/MG90-class
 open-source swap board — not LibreServo, whose smallest documented target is a
 standard-size (40 mm class) servo, not the 23 mm SG90 body.
 
@@ -2734,8 +2733,8 @@ Items").
 
 **Applied to:** `SERVO-CARGO` (port door ×1, starboard door ×1, payload release ×1 — qty 3
 since 2026-09-21, `docs/CARGO_DOOR_GATEWAY_SPEC.md` D-GW-2), hosted by `CAN-PERIPH-GW-DOOR`;
-RCS bleed-jet proportional valve servos (`SERVO-RCS-VALVE`, ×4, Phase 11 deferred) are the
-same SG90 class and inherit this note when that phase is implemented (hosted by the Phase 11
+RCS bleed-jet proportional valve servos (`SERVO-RCS-VALVE`, ×4, first build, Qty 0 until the G1 valve concept fixes the part) are the
+same SG90 class and inherit this note when the part is fixed (hosted by the first-build
 `GW-RCS` gateway specified in that document §9), but are not otherwise touched here.
 
 **Used in:** `current-specification/bom_revS.json`, `current-specification/bom_revS.csv`,
@@ -2935,7 +2934,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Status** | Trade-study record only from Rev T5e (2026-09-16): the Ø25 body cannot clear the Ø42 worm wheel for any worm that clears the battery cradle (finding T5d-1, `docs/CARGO_SECTION_LAYOUT.md` §4); superseded for the build by REF-ACT-001. |
 | **Caveat** | Overall length of the encoder version is not read from the drawing (the diagram covers motors without encoders). No axial-load rating for the output shaft is published. |
 
-### REF-ACT-003: TowerPro SG90 — 9 g Micro Servo (cargo door / release; RCS valves Phase 11)
+### REF-ACT-003: TowerPro SG90 — 9 g Micro Servo (cargo door / release; RCS valves, first build)
 
 | Field | Value |
 |---|---|

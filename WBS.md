@@ -30,7 +30,7 @@
 | Nacelles | Radially enlarged, QMx-proportioned shell around 2x64mm tandem EDFs, interstage stator, servo variable nozzle; axial length held | Rev U: the 64 mm nacelle is current and the 50 mm Rev S4c/S4d geometry is archived; NAC-64-SERVO-01: servo nozzle drive designed and fit-closed 2026-10-04, uniform x1.06 enlargement wired through a single source 2026-10-05 (pivot, CFD, mass/CG and bench gates open) |
 | Nacelle EDFs | 2x QX-Motor 64mm EDF per nacelle, QF2822-2300KV (83.60 ozf / 2,370 gf at 24 V, 57.0 A; 80 A ESC, owner 2026-11-02); nominal 64mm thrust tube; QX 4xM3/16mm spider mounts | Rev U: the 64 mm QX configuration is current. Open item: complete the 64 mm fit, power, mass and thrust verification (the 50 mm XFly configuration is archived) |
 | Landing gear | Sponson-mounted bays, canonical 1.5in leg (extended 3.0in variant retained) | Rev T (component design generation "R6" retained as its own permanent name): sponson wells CLOSED, leg length derived from nozzle clearance not belly height |
-| Rear propulsion | 55mm 6S EDF, reduced-area neck intake, fixed canonical elliptical tail nozzle (2.06x1.76 in / 52.3x44.7 mm) + 4 RCS bleed-air thrusters | *2026-11-16 design shift (`airframe/fuselage-mid/WBS.md` §1.1.1.4.0, `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`):* the QX 64 mm tail EDF (QF2822 2300 KV, fifth Open-Secure-ESC) flies from the first build as a pusher, drawing all its air through the fuselage interior; flight-critical in hover (pitch trim couple and the four RCS jets); not counted in hover T/W. Pre-shift: 55 mm, DEFERRED to Phase 11 |
+| Tail propulsion | QX-Motor 64 mm tail EDF (QF2822 2300 KV, 12-blade rotor, pusher; fifth Open-Secure-ESC), ramp intake through the sealed cargo duct, fixed elliptical tail nozzle (2.06x1.76 in / 52.3x44.7 mm) + 4 RCS jets | *2026-11-16 design shift (`airframe/fuselage-mid/WBS.md` §1.1.1.4.0, `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`):* the QX 64 mm tail EDF (QF2822 2300 KV, fifth Open-Secure-ESC) flies from the first build as a pusher, drawing all its air through the fuselage interior; flight-critical in hover (pitch trim couple and the four RCS jets); not counted in hover T/W. Pre-shift: 55 mm, deferred to former Phase 11 |
 | Cargo bay | *2026-11-16 design shift (`airframe/fuselage-mid/WBS.md` §1.1.1.4.0, `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`):* a sealed duct for the tail EDF: doors fused into the skin, one bolted belly service hatch, louvred and screened forward ramp intake, floor winch with the fairlead under the tilt pivot, external sling only. Pre-shift: clamshell doors + SG90 servos (OpenServoCore) + DRV8833 + SPT5425LV/LibreServo v2 winch + Dyneema + auto-latch + GPS ring + FPV bezel | N20 winch train retired Rev S; STS3215 winch servo superseded 2026-08-02 by SPT5425LV+LibreServo v2 (envelope gate resolved, 6 winch STLs still unimplemented — see WBS §1.1.1.2.1); other cargo STLs generated; gondola shell open |
 | PCBs | 8 nodes each carry a Pilot + TACCO cape pair; Flight Engineer is the PDB; one standalone Commo node (Rev T) at the antennas; Observer is a standalone vision/ToF/laser board | Rev T 2026-10-07: Pilot (120/120 placed) and TACCO (163 placed, 60 x 35 mm) are ERC 0 / DRC 0 / parity 0 before routing on corrected 4.80 mm PB2 rails; routing and Gerbers open on both. Flight Engineer DRC items open; Observer PCB resync not started; Commo Rev T in design; Bus-Gateway ~84% routed |
 | Firmware | 8-node cooperative flight, PID governor, OA, cargo, logging | serenity-cn Phase 6 done; serenity-fc Phase 6 stub only; all Phase 7 items open |
@@ -456,8 +456,8 @@ wings/nacelles at Rev S1g/S4c — see `docs/WBS.md` §6.4)
 - [ ] Simon bay — define avionics bay in the MIDDLE section (moved he…
 - [ ] Flight Engineer room — PDB + battery bay, middle VENTRAL (2026-06-13).
 - [ ] Avionics-bay interior name marks (DEFERRED, 2026-06-13).
-- [x] (superseded 2026-11-16, TEDF-01) Phase 11 — aft EDF intake scoop cuts
-- [x] (superseded 2026-11-16, TEDF-01) neck_intake_frame.stl (Phase 11)
+- [x] (superseded 2026-11-16, TEDF-01) Former Phase 11 — aft EDF intake scoop cuts
+- [x] (superseded 2026-11-16, TEDF-01) neck_intake_frame.stl (former Phase 11)
 - [x] (superseded 2026-11-16, TEDF-01) aft_edf_plenum.stl
 - [x] middle_canonical_shell24.stl
 - [ ] Mount ant-collision strobe on belly of middle section in accord…
@@ -988,7 +988,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 
 - [ ] Mount XT90 PDB at keel sta 130mm; solder 14AWG main leads to ES…
 - [ ] Install 2× 40A BLHeli32 ESCs in bay C (port + stbd nacelle fore…
-- [ ] Phase 11 only:
+- [x] (superseded 2026-11-16, TEDF-16) Phase 11 only: 50A ESC in Panel F
 - [ ] Install 5V/5A BEC; verify 5.00V ±0.05V under 1A bench load.
 - [ ] Pull motor phase leads through conduit to ESCs; solder (verify…
 - [ ] CAN FD termination: 120Ω SOLDERED to CN1 TACCO at Shepherd's r…
@@ -1025,7 +1025,6 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [ ] ESC calibration (full throttle power-on → drop to zero).
 - [ ] Motor spin test (5% throttle 2s): all 5 motors spin in correct…
 - [ ] Tilt servo calibration: 0° = nacelle horizontal ±0.5°, 90° = vertical…
-- [ ] Rear nozzle servo endpoints verified.
 - [ ] 190mm from nose
 - [ ] GPS lock: HDOP ≤1.5 on both FC nodes; positions agree within 2m.
 - [ ] Radio checks: MAVLink heartbeat in QGC (SiK + LoRa backup); 49…
@@ -1182,7 +1181,7 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 - [x] (superseded 2026-11-16, TEDF-01) Seat EDF in plenum 55mm inlet; press forward to retaining lip;…
 - [x] (superseded 2026-11-16, TEDF-01) Intake frame tongues fully seated in the resized scoop windows
 
-### Phase12 — Cargo-bay Range-Extender Battery Module (PROMOTED 2026-10-26)
+### Phase12 — Cargo-bay Range-Extender Battery Module (PROMOTED 2026-10-26; now Phase 11 — anchor keeps its old ID)
 → detail: `deferred/WBS.md` §Phase12 (superseded)
 
 - [x] Promoted to the active build (owner 2026-10-26): the split main pack needs the multi-input combiner. Now `docs/plans/2026-10-26-001-feat-split-battery-head-rail-plan.md` (cells, rail, optional third cell, head audit) and `docs/plans/2026-10-26-002-feat-fe-multi-battery-pdb-plan.md` (FE PDB, harnesses)
@@ -1419,7 +1418,8 @@ BOM tables (not checkbox tasks) — referenced, not duplicated here:
 
 ### 6.5 — Rev U Checkpoint (2026-11-03)
 → detail: `docs/WBS.md` §6.5
-- [ ] PHASE-RENUMBER — rear-EDF Phase 11 dissolved; battery module is Phase 11
+- [x] PHASE-RENUMBER — rear-EDF Phase 11 dissolved; battery is Phase 11
+- [ ] PHASE-RENUMBER-RESIDUAL — SCAD and generator comment labels
 - [ ] REVU-RELABEL — stamp every component Rev U at the Rev U close
 
 ---

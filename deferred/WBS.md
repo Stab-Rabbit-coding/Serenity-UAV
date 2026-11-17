@@ -7,7 +7,7 @@
 > **Status note, 2026-11-16 (design shift).** The tail EDF, its speed controller and the RCS are
 > no longer deferred: they are part of the first build (owner, 2026-11-15). The tail EDF is the
 > QX-Motor 64 mm nacelle unit, not a 55 mm unit. The neck-scoop, plenum and bleed-tap items below are closed as
-> superseded (2026-11-16 document review); the remaining Phase 11 items stay as written until
+> superseded (2026-11-16 document review); the remaining former Phase 11 items stay as written until
 > WBS item TEDF-01 rewrites them. Authority: `airframe/fuselage-mid/WBS.md` §1.1.1.4.0 and
 > `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
 
@@ -26,17 +26,17 @@
 
 | Master § | Branch | Open | First flight |
 |----------|--------|-----:|:------------:|
-| §Phase11 | Phase 11 — Aft EDF Integration (dissolved 2026-11-17) | 0 | — |
-| §Phase12 | Phase 12 — Cargo-bay Range-Extender Battery Module (promoted 2026-10-26) | 0 | — |
+| §Phase11 | Former Phase 11 — Aft EDF Integration (dissolved 2026-11-17) | 0 | — |
+| §Phase12 | Phase 11 — Cargo-bay Range-Extender Battery Module (promoted 2026-10-26; anchor keeps its old ID §Phase12) | 0 | — |
 | | **Total open (this subsystem)** | **0** | |
 
 ---
 
 
-> **Phase 12 (Range-Extender Battery Module)** rides in the cargo bay on the same Observer hooks/release and adds a `J_BATT2` input to Flight Engineer — a cruise-range, not hover, enhancement. See the Observer cross-cutting map in [avionics/kicad/Observer/observer/TODO.md](../avionics/kicad/Observer/observer/TODO.md).
+> **Phase 11 (Range-Extender Battery Module, anchor §Phase12)** rides in the cargo bay on the same Observer hooks/release and adds a `J_BATT2` input to Flight Engineer — a cruise-range, not hover, enhancement. See the Observer cross-cutting map in [avionics/kicad/Observer/observer/TODO.md](../avionics/kicad/Observer/observer/TODO.md).
 
 
-## §Phase11 — Aft EDF Integration (Deferred)
+## §Phase11 — Former Phase 11: Aft EDF Integration (dissolved 2026-11-17)
 
 *(root `WBS.md` §Phase11)*
 
@@ -58,7 +58,7 @@
 - [x] (superseded 2026-11-16 by TEDF-01: no neck scoops, plenum or bleed taps; the QX 64 mm tail EDF draws through the sealed cargo duct and the RCS jets are apertures in the thrust tube, plan 002) Intake frame tongues fully seated in the resized scoop windows
 
 
-## §Phase12 — Cargo-bay Range-Extender Battery Module (PROMOTED 2026-10-26)
+## §Phase12 — Phase 11: Cargo-bay Range-Extender Battery Module (PROMOTED 2026-10-26; anchor keeps its old ID)
 
 *(root `WBS.md` §Phase12)*
 

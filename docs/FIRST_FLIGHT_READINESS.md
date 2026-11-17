@@ -10,7 +10,8 @@ carried two stale-warning banners since 2026-08-22.
 
 > **First flight = master WBS Phase 5, "Minimum Viable Flyer."** CN1+FC1 (Shepherd's
 > room / Bay A) and CN2+FC2 (Inara's shuttle / Bay B) installed and flying — a 4-node VTOL
-> hover, then the Phase 5 test ladder. The aft EDF (Phase 11), the remaining 4 nodes
+> hover, then the Phase 5 test ladder. The tail EDF and RCS are first-flight items since 2026-11-16 (flight-critical in hover, plan
+> 2026-11-15-002); the remaining 4 nodes
 > (Phase 6), the cargo winch mechanism (Phase 7) and Observer vision (Phase 6+) are
 > **not** first-flight gates. The cargo *doors* are (plan 2026-08-25-002 KTD2).
 >

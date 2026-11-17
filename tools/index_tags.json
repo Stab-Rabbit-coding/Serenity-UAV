@@ -9867,7 +9867,7 @@
       "archived": false
     },
     "deferred/aft-edf/README.md": {
-      "description": "Aft Fuselage EDF \u2014 Deferred to Phase 11",
+      "description": "Aft Fuselage EDF \u2014 Pre-shift Design Record (former Phase 11; superseded 2026-11-16)",
       "tags": [
         "deferred-future",
         "documentation",
@@ -15659,7 +15659,7 @@
       "archived": false
     },
     "tools/auw_ledger.py": {
-      "description": "Serenity UAV -- bottom-up all-up-weight, CG, pitch inertia and hover T/W.",
+      "description": "Python script",
       "tags": [
         "build-tooling"
       ],

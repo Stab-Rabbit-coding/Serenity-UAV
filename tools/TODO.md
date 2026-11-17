@@ -38,7 +38,7 @@ Close them in `WBS.md` there; this list is a read-only convenience view for the 
 - (`airframe/fuselage-mid/WBS.md` §1.1.1) **cargo_sect_shell24.stl** — regenerate from `serenity/stl/cargo_sect_shell24.scad`
 - (`airframe/fuselage-mid/WBS.md` §1.1.1) **Regenerate `cargo_sect_shell24.stl`** from the current Rev S SCAD source
 - (`airframe/fuselage-mid/WBS.md` §1.1.1) **Slicer verification** — open baked `middle_shell24_2mm_repaired.stl`
-- (`airframe/fuselage-mid/WBS.md` §1.1.1) **neck_intake_frame.stl (Phase 11)**
+- (`airframe/fuselage-mid/WBS.md` §1.1.1) **neck_intake_frame.stl (former Phase 11)**
 - (`airframe/fuselage-mid/WBS.md` §1.1.1) **aft_edf_plenum.stl**
 - (`airframe/landing-gear/WBS.md` §1.1.4) **LG-10 Finalize the 4 corner post placements**
 - (`airframe/landing-gear/WBS.md` §1.1.4) **Render overview SVGs using FreeCAD TechDraw**

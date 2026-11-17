@@ -129,7 +129,7 @@
             posts.**
         - [ ] Bond River's forward post to the port flank at sta 120 mm; dress wire aft to River's Commo J2
         - [ ] Bond Simon's forward post to the starboard flank at sta 120 mm; dress wire aft to Simon's Commo J2
-        - [ ] Install both temporary aft posts (port + starboard) at sta 580 mm; remove and replace with integrated mounts in Phase 11
+        - [ ] Install both temporary aft posts (port + starboard) at sta 580 mm; remove and replace with the permanent post on the tail nozzle in Phase 5
 
 ##### 1.1.1.1 *Head*
 
@@ -738,7 +738,7 @@
 
 - [ ] **Update REVN_BUILD_GUIDE_24IN.md bay layout table** to reflect revised avionics stack
     positions (Inara + River in cargo section dorsal band; Shepherd Book in head section forward;
-    Simon in rear cone pre-Phase 11, middle ring post-Phase 11). Current guide Bays A–E are from an
+    Simon in the rear cone before the aft-EDF phase, in the middle ring after; pre-shift record). Current guide Bays A–E are from an
     older layout that does not match the cargo-section dorsal placement in Rev S (formerly
     Rev R — the axis-bug fix in §1.1.1.0a doesn't change the bay positions this item refers to).
 
@@ -1111,11 +1111,11 @@ It is **ONE printed piece** comprising two distinct structural elements:
     Canonically this is a pressurised passage within the ship; in the UAV context it provides
     structural continuity and a wiring/keel routing path through the narrowest hull section.
 
-> **Superseded 2026-11-16 (design shift, §1.1.1.4.0 and `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`):** the inner neck is now the open air passage from the sealed cargo bay to the tail EDF, which flies from the first build. The Phase 11 intake scoops and the 55 mm sizing are retired, and the Flight Engineer box moves forward into the cargo duct (TEDF-06). Do not seal the neck bore. The text below is the pre-shift record.
+> **Superseded 2026-11-16 (design shift, §1.1.1.4.0 and `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`):** the inner neck is now the open air passage from the sealed cargo bay to the tail EDF, which flies from the first build. The former Phase 11 intake scoops and the 55 mm sizing are retired, and the Flight Engineer box moves forward into the cargo duct (TEDF-06). Do not seal the neck bore. The text below is the pre-shift record.
 
 **Phase 5–10 print state (pre-shift):** inner neck is a closed, uncut tube.
 Aft EDF intake scoops (reduced-area radial openings into the inner neck for the 55 mm EDF airflow)
-are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phase 11.
+were **DEFERRED to former Phase 11** — do not cut or modify the inner neck before former Phase 11. *(Superseded 2026-11-16: see the note above; the hulls are rebuilt under TEDF-09/10.)*
 
 - [x] **Blender canonical source baked** — `middle_shell24_2mm_repaired.stl` (855 328 tri) baked
     2026-06-13; extents X −258.5..−81.6 / Y +130.4..+203.6 / Z +1.3..+166.1 mm. *(done 2026-06-13)*
@@ -1166,15 +1166,15 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
     on a flat boss pad, or smooth the bay wall first). Mechanism is watertight and stays inside the 2 mm
     skin. Scripts: `make_bay_text.py`, `engrave_plaques.py`.
 
-- [x] (superseded 2026-11-16 by TEDF-01/TEDF-09: the tail EDF draws through the open neck from the sealed cargo duct; no neck scoops, and the 55 mm sizing is retired, §1.1.1.4.0) **Phase 11 — aft EDF intake scoop cuts** — at Phase 11, cut the reduced-area radial scoop
+- [x] (superseded 2026-11-16 by TEDF-01/TEDF-09: the tail EDF draws through the open neck from the sealed cargo duct; no neck scoops, and the 55 mm sizing is retired, §1.1.1.4.0) **Former Phase 11 — aft EDF intake scoop cuts** — at former Phase 11, cut the reduced-area radial scoop
     openings (sized for the 55 mm EDF, ~3,090 mm² total capture at 1.3× duct match) into the inner
     neck to match the resized EDF plenum geometry (`deferred/aft-edf/openscad/neck_intake_frame.scad`).
-    These cuts are Phase 11 ONLY — the Phase 5–10 mesh is the closed-neck version.  **Scoop geometry
+    These cuts are former Phase 11 ONLY — the Phase 5–10 mesh is the closed-neck version.  **Scoop geometry
     must be re-derived for the 55 mm fan — the old 4× scoops were sized for the 120 mm EDF.**
 
-- [x] (superseded 2026-11-16 by TEDF-01/TEDF-09: no neck scoops or plenum; the tail EDF draws through the open neck, §1.1.1.4.0) **neck_intake_frame.stl (Phase 11)** — `openscad -o neck_intake_frame.stl deferred/aft-edf/openscad/neck_intake_frame.scad`
+- [x] (superseded 2026-11-16 by TEDF-01/TEDF-09: no neck scoops or plenum; the tail EDF draws through the open neck, §1.1.1.4.0) **neck_intake_frame.stl (former Phase 11)** — `openscad -o neck_intake_frame.stl deferred/aft-edf/openscad/neck_intake_frame.scad`
     - Verify: registration tongues 5 mm depth; intake lips project 6 mm forward
-    - Material: CF-PETG; **DEFERRED — BLOCKS Phase 11 only.** STL at `deferred/aft-edf/stls/`.
+    - Material: CF-PETG; **DEFERRED — BLOCKS former Phase 11 only.** STL at `deferred/aft-edf/stls/`.
     - **Requires regeneration for 55 mm intake area (Rev R1 rear-EDF redesign).**
 
     **Rear intake system (OpenSCAD):**
@@ -1182,7 +1182,7 @@ are **DEFERRED to Phase 11** — do not cut or modify the inner neck before Phas
 - [x] (superseded 2026-11-16 by TEDF-01/TEDF-09: no neck scoops or plenum; the tail EDF draws through the open neck, §1.1.1.4.0) **aft_edf_plenum.stl** — `openscad -o aft_edf_plenum.stl deferred/aft-edf/openscad/aft_edf_plenum.scad`
     - Verify: intake arms feed a 55 mm circular EDF inlet; **add 4 RCS bleed taps (~15% flow split)**
         on the discharge side to the RCS distribution manifold; no self-intersection
-    - **DEFERRED — BLOCKS Phase 11 only.** **Requires regeneration: outlet 120 mm → 55 mm and RCS
+    - **DEFERRED — BLOCKS former Phase 11 only.** **Requires regeneration: outlet 120 mm → 55 mm and RCS
         bleed taps added (Rev R1 rear-EDF redesign).** Old STL at `deferred/aft-edf/stls/aft_edf_plenum.stl` is superseded.
 
     **Canonical middle shell (OpenSCAD — belly restored, no belly scoop):**
@@ -1282,12 +1282,12 @@ forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
   Decisions.
 - **Affected.** Both hull halves; the cargo bay layout; the winch, door gateway and RCS
   gateway specifications; the stern stack (`avionics/WBS.md` §1.11); a fifth
-  Open-Secure-ESC controller; root `AGENTS.md` §1; `deferred/` Phase 11 items.
+  Open-Secure-ESC controller; root `AGENTS.md` §1; `deferred/` former Phase 11 items.
 - **Model tier.** Each item carries **[STD]** (a standard model can do it from the plan)
   or **[ADV]** (needs an advanced model: physics derivation, CFD diagnosis, cross-domain
   trade, or an owner brief). Any item escalates to ADV when a gate fails twice.
 
-- [ ] **TEDF-01** — [STD] Record and reference repair: `deferred/` Phase 11 items into the
+- [ ] **TEDF-01** — [STD] Record and reference repair: `deferred/` former Phase 11 items into the
     first build, reference faults, `requirements-dev.txt`, ledger gaps (nose pods, pitot parts,
     Bay A drawer, cell BOM row, one pitch inertia). Plan U1. (S42)
 - [ ] **TEDF-02** — [STD] Thermal model refresh: closed-cavity fix, ramp and bow branches,

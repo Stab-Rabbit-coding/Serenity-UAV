@@ -9,9 +9,9 @@ AIR PATH (owner, 2026-11-01).  One fan, Delta ASB02505SHA-AY6B (25 x 25 x
   bow inlets beside the sensor bay -> inlet duct into CN1's side channels
   (Bay A) -> FC1 -> under/around the twin pack tray -> chin nodes CN2/CN3 ->
   aft nodes FC2/FC3 -> cargo/middle collar -> past the Flight Engineer can ->
-  Simon stack CN4/FC4 (middle neck) -> rear cone -> fan -> the Phase 11 fixed
+  Simon stack CN4/FC4 (middle neck) -> rear cone -> fan -> the former Phase 11 fixed
   elliptical tail nozzle exit, 2.06 x 1.76 in (52.3 x 44.7 mm)
-  (deferred/WBS.md Phase 11; outline per QMx [REF-CAD-003] / Henning
+  (deferred/WBS.md former Phase 11; outline per QMx [REF-CAD-003] / Henning
   [REF-CAD-002]).
 Every node sees the inlet air plus the heat of every node upstream of it.
 The fan motor heat leaves downstream of every node.
@@ -115,7 +115,7 @@ STREAM = (("INLET", None, 1.5), ("CN1", 91.0, 1.0), ("FC1", 117.0, 1.0),
           ("FE", 467.7, 1.0), ("SIMON", 494.7, 1.0), ("EXIT", None, 1.0))
 NODE_STATION = {"CN1": "CN1", "FC1": "FC1", "CN2": "CHIN", "CN3": "CHIN", "FC2": "AFT",
                 "FC3": "AFT", "CN4": "SIMON", "FC4": "SIMON"}
-NOZZLE_A, NOZZLE_B = 52.3, 44.7  # mm, Phase 11 fixed elliptical exit (deferred/WBS.md)
+NOZZLE_A, NOZZLE_B = 52.3, 44.7  # mm, former Phase 11 fixed elliptical exit (deferred/WBS.md)
 NOZZLE_AREA_M2 = math.pi / 4 * NOZZLE_A * NOZZLE_B * 1e-6
 # CN1 is ducted: the inlet duct delivers the bow air into the two side
 # channels beside the CN1 drawer, where its spreader runs.  (|X| >=, Z0, Z1)
