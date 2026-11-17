@@ -43,7 +43,7 @@ series/parallel resistances; Darcy-Weisbach minor losses; the fin rule).
 ASSUMED inputs are labelled; any PASS resting on one is PROVISIONAL.
 Brass: C26000 cartridge brass, k 70 Btu/(hr ft F) (121.2 W/m-K), density
 0.308 lbm/in^3 (8.53 g/cm^3) at 68 F [REF-MAT-009, density only; the k figure
-is not in that source -- requires verification, TODO 0.14].  16 ga = 0.0508 in
+is not in that source -- requires verification, WBS 0.14].  16 ga = 0.0508 in
 (1.29 mm), B&S gauge (verify against the purchased sheet).
 
 Run:
@@ -75,7 +75,7 @@ FAN_PQ = ((0.000, 8.13), (0.025, 6.1), (0.050, 3.6), (0.065, 2.75), (0.075, 2.5)
           (0.100, 1.7), (0.122, 0.0))
 MMH2O_PA = 9.80665
 
-# --- air [REF-HT-001 air table; requires verification, TODO 0.14] -----------
+# --- air [REF-HT-001 air table; requires verification, WBS 0.14] -----------
 CP_AIR = 1007.0  # J/kg-K
 K_AIR, NU_AIR, PR_AIR = 0.02808, 1.896e-5, 0.7202  # at a 60 C film temperature
 R_AIR = 287.05  # J/kg-K, ideal gas
