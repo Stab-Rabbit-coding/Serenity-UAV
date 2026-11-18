@@ -1384,6 +1384,18 @@ forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
       screw, head aft, self-tightens under start-up torque; threadlocker and a witness mark for
       braking torque); first critical speed: measure first (NAC-64-FIT-02 bearing positions,
       shaft, rotor mass, bench vibration sweep) before any EDF spins on its plate.
+    - 2026-11-18, owner decision (brief 3, option B): one ventral RCS jet at 270 deg, canted
+      25 deg aft, exhaust sides on the centre belly panel's port and starboard joints (245.5 /
+      294.5 deg), Y 635-649, measured 0.66 in2 (428 mm2), 1.40 in wide forward to 0.98 in aft;
+      KD16 and R32 amended. One jet table (`tools/rcs_jets.py`) now feeds both tools and the
+      layout tool gates it (code review #1): ventral passage 563 / 486 mm2 at Y 631 / Y 635,
+      3D path clear, both ventral sides probed. Trim: nose-down 1.83 lbf.in (0.207 N.m) at
+      full throttle, R30 use 29 % at 80 % (plan case). Review fixes in the same change: rows
+      that could not fail moved to a printed design-rules block (#2); `--json` writes (#3);
+      vacuous tests replaced (#4, #5); hub fairing is a straight cone (#7); passage areas use
+      the trapezoid rule, about 2.2 % lower than before (#8); docstring, view titles and the
+      missing-nozzle guard (#9-#11); the hull mesh must be watertight. Upper passages at 45
+      deg still fail (need 54 / 56 deg; brief 4 open).
 - [ ] **TEDF-06** — [STD] Cargo duct layout: Flight Engineer box forward, belly panel, fairlead
     under the pivot, screen, flow guides, line guard, pre-G1 bench fixtures, aft balance allowance.
     Plan U6. (S44)

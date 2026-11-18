@@ -75,11 +75,13 @@ def test_a_cg_outside_the_window_exits_nonzero(capsys):
 def test_the_window_edges_are_on_the_r30_boundary():
     lo, hi = ht.cg_window(PLAN, PLAIN, 0.8, 1.0)
     assert lo < hi
-    for d, ok in ((lo + 0.0005, True), (hi - 0.0005, True)):
+    for d in (lo + 0.0005, hi - 0.0005):
         c = replace(PLAN, cg_y=ht.PIVOT_Y + d * 1e3)
         use = max(ht.trim_point(c, PLAIN, t)["use"] for t in (0.8, 0.9, 1.0))
-        assert (use <= ht.R30_USE_MAX + 1e-9) is ok
+        assert use <= ht.R30_USE_MAX + 1e-9
     c = replace(PLAN, cg_y=ht.PIVOT_Y + (hi + 0.002) * 1e3)
+    assert max(ht.trim_point(c, PLAIN, t)["use"] for t in (0.8, 0.9, 1.0)) > ht.R30_USE_MAX
+    c = replace(PLAN, cg_y=ht.PIVOT_Y + (lo - 0.002) * 1e3)
     assert max(ht.trim_point(c, PLAIN, t)["use"] for t in (0.8, 0.9, 1.0)) > ht.R30_USE_MAX
 
 
@@ -165,7 +167,9 @@ def test_the_end_of_hover_voltage_case_fails_the_run_when_it_needs_more_than_ful
     rows = {n: (v, ok) for n, v, _, ok, _ in ht.limits(PLAN, DESIGN)}
     end = [k for k in rows if k.startswith("throttle for the couple trim, end of hover")][0]
     assert not rows[end][1]  # the low-loss louvre design case cannot hold the couple at 19.8 V
-    assert ht.limits(PLAN, PLAIN)  # and the plain ramp case holds it (checked via main below)
+    plain = {n: ok for n, _, _, ok, _ in ht.limits(PLAN, PLAIN)}
+    row = [k for k in plain if k.startswith("throttle for the couple trim, end of hover")][0]
+    assert plain[row]  # the plain screened ramp holds the couple at 19.8 V
     assert ht.main(["--case", "plan", "--louvre-k", "1.0"]) == 2
 
 
@@ -252,10 +256,27 @@ def test_swirl_turns_the_force_tangentially_and_leaves_a_pair_yaw():
     assert abs(ht.pair_capacity(PLAN, su, 1.0, ht.VENTRAL)["pair_yaw"]) > 0.0
 
 
-def test_the_clear_ventral_pair_gives_more_nose_down_than_the_plan_pair():
-    plan = ht.Setup(PLAIN.flow, ht.JetModel(), ht.PLAN_JETS)
-    assert (-ht.pair_capacity(PLAN, PLAIN, 1.0, ht.VENTRAL)["pitch"]
-            > -ht.pair_capacity(PLAN, plan, 1.0, ht.VENTRAL)["pitch"])
+def test_one_jet_at_270_beats_the_245_295_pair_of_the_same_total_area():
+    """Same open area and station, so the same jet force in total: the jet straight down puts
+    cos(25) of it vertical, the 25-deg-off pair only cos(25) cos(25)."""
+    pair = ht.PLAN_JETS
+    one = (replace(pair[0], az_deg=270.0, area_ratio=2.0),) + pair[2:]
+    a = ht.pair_capacity(PLAN, ht.Setup(PLAIN.flow, ht.JetModel(), pair), 1.0, ht.VENTRAL)
+    b = ht.pair_capacity(PLAN, ht.Setup(PLAIN.flow, ht.JetModel(), one), 1.0, ht.VENTRAL)
+    assert -b["pitch"] > -a["pitch"]
+
+
+def test_the_flown_jets_come_from_the_shared_table():
+    import rcs_jets as rj
+    assert len(ht.DEFAULT_JETS) == len(rj.JETS)
+    for j, t in zip(ht.DEFAULT_JETS, rj.JETS):
+        assert (j.az_deg, j.cant_deg, j.y, j.r) == (t.az_deg, t.cant_deg, t.y, t.r_mm)
+        assert math.isclose(j.area_ratio * rj.BORE_AREA_MM2, t.area_mm2)
+
+
+def test_an_open_jet_adds_its_own_area_to_the_duct_exit():
+    jm = ht.JetModel()
+    assert math.isclose(jm.a_eff([1.0, 1.68]), 2.68 * jm.area / math.sqrt(1.0 + jm.k_total))
 
 
 def test_the_vector_diagram_is_written(tmp_path):

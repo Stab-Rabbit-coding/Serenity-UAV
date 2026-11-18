@@ -15994,7 +15994,7 @@
       "archived": false
     },
     "tools/hover_trim_rcs.py": {
-      "description": "Geometry, hull frame mm (plan \"Hover trim and control limits\"; rear-cone fit).",
+      "description": "Python script",
       "tags": [
         "build-tooling"
       ],
@@ -16570,7 +16570,7 @@
       "archived": false
     },
     "tools/rear_cone_layout_fit.py": {
-      "description": "Python script",
+      "description": "rear_cone_layout_fit.py -- rear-cone layout of the tail EDF (QX-Motor 64 mm, QF2822",
       "tags": [
         "build-tooling"
       ],

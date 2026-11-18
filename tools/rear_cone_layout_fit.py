@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """rear_cone_layout_fit.py -- rear-cone layout of the tail EDF (QX-Motor 64 mm, QF2822
-2300 KV, 12-blade rotor, pusher), the fused thrust tube, the nozzle and the four RCS jets
+2300 KV, 12-blade rotor, pusher), the fused thrust tube, the nozzle and the RCS jets
 on the Rev U one-piece aft hull (plan 002 U5, TEDF-05; R16-R18, R22, R32, R33, R37, R38,
 R42; KTD6, KTD8).  Rewritten 2026-11-17 for plan 002: the Delta fan, its adapter, the rear
 bell intakes and the baffle of the superseded fan plan are gone.
@@ -12,9 +12,11 @@ What it does
   2. PLACES the QX shroud as far aft as the hull holds it with the static gap, the rotor in
      it, the motor ahead of it (pusher, KD10), the mounting ring, the tube and the nozzle.
   3. CHECKS the rotor's first critical speed with the overhung rotor, the RCS scoops at
-     Y 628 (KD20), the passage areas in the tube-to-skin gap, the scoop blockage, the
-     printed web between the ventral passages, a 3D spreading-jet check of each jet at its
-     azimuth and aft cant (R17, R32), and each exhaust against the plate joints (KD19).
+     Y 628 (KD20), the passage areas in the tube-to-skin gap at the scoop run and at each
+     exhaust's forward edge, the scoop blockage, the printed webs between passages, a 3D
+     spreading-jet check of each jet at its azimuth and aft cant (R17, R32), and each exhaust
+     against the plate joints (KD19).  The jets come from tools/rcs_jets.py, the table
+     hover_trim_rcs.py also flies (owner option B, 2026-11-18).
   4. Prints one table.  ONE limits list (`limits()`) drives the printout and the exit code.
 
 Nothing here cuts or writes a mesh.  It is the proposal the owner decides at gate G1.
@@ -34,7 +36,7 @@ Needs trimesh, shapely, rtree and numpy.  The aft hull is read from its tarball.
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note: Written by Claude (Anthropic) under the author's direction, 2026-11-15; rewritten for
-         plan 002 U5 by Claude (model: Claude Opus 5.5) 2026-11-17, per AGENTS.md section 3.
+         plan 002 U5 by Claude (Anthropic) 2026-11-17 and 2026-11-18, per AGENTS.md section 3.
 License: CERN-OHL-W-2.0 -- see LICENSES/CERN-OHL-W 2.0 (SPDX-License-Identifier: CERN-OHL-W-2.0)
 """
 
@@ -57,6 +59,7 @@ REPO = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 
 import hull_datums as hd  # noqa: E402
+import rcs_jets as rj  # noqa: E402
 import sls_materials as sls  # noqa: E402
 
 AFT_HULL = os.path.join(REPO, "airframe", "stls", "fuselage",
@@ -83,11 +86,12 @@ KV, V_NOM, V_FULL = 2300.0, 22.2, 25.2  # rpm/V; 6S nominal and full pack (unloa
 SCOOP_Y = 628.0  # RCS scoops, owner direction 2026-11-16 (KD20, R42)
 VENTRAL_MIN_Y = 628.0  # KD16: ventral jets at Y 628 or further aft
 RING_OD = 82.6  # mm, fan mounting ring OD 3.25 in (plan 002 "RCS plumbing")
-BORE = 0.71 * 25.4  # mm, RCS jet bore (plan 002 RCS sizing)
-JETS = (  # (name, azimuth deg from +X, aft cant deg): R32, KD20
-    ("ventral 245", 245.0, 25.0), ("ventral 295", 295.0, 25.0),
-    ("upper 45", 45.0, 0.0), ("upper 135", 135.0, 0.0))
-SECTOR_DEG = 45.0  # passage sector per jet (plan 002 hand estimate)
+BORE = rj.BORE_MM  # mm, RCS jet bore (plan 002 RCS sizing)
+# The jet table is shared with hover_trim_rcs.py (tools/rcs_jets.py): owner option B
+# (2026-11-18), one ventral jet at 270 deg on the centre belly panel, upper pair at 45/135.
+JETS = rj.JETS
+PLAN_JETS = rj.PLAN_JETS  # the plan's 245/295 pair, checked for comparison only
+VENTRAL_CLEAR_Y = 635.0  # ventral exhausts clear the crossbar only from here aft (measured map)
 JET_REACH = 150.0  # mm, 5.9 in: a jet shall meet no structure within this distance (R17)
 WALL_MIN_PRINT = 1.5  # mm, interim SLS floor (owner option A 2026-11-11, AGENTS.md section 7,
 # docs/SLS_MIN_WALL_THICKNESS.md); REF-MFG-001's 1.0 mm was superseded for this powder
@@ -113,8 +117,7 @@ TUBE_WALL = 1.6  # mm, gives the plan's 34.0 mm outer radius at Y 628
 SIDE_WALL = 1.5  # mm, passage side walls (plan 002 hand estimate)
 SCOOP_LIP_H = 3.5  # mm, inward scoop lip (plan: 3 to 4 mm)
 BLOCKAGE_MAX = 0.08  # of the tube area (plan 002: "about 8 %")
-EXHAUST_Y = 632.0  # jets leave the skin from about Y 632 (plan 002 KD20 text)
-EXHAUST_L = 10.0  # mm, axial length of each trapezoidal exhaust
+PLAN_EXHAUST_Y = 632.0  # the plan's jets left the skin at about Y 632 (KD20 text)
 JET_HALF = 12.0  # deg, free-jet spread half angle; swept 8 to 16 in the report
 OWN_SKIN_DAZ, OWN_SKIN_DY, OWN_SKIN_DR = 30.0, 20.0, 1.0  # hits near the exhaust on the skin
 GROOVE_DEPTH = 0.2  # mm, a dip in the outer radius deeper than this is a plate joint
@@ -143,6 +146,11 @@ def load_aft_hull():
         with tarfile.open(AFT_HULL + ".tar.gz") as tz:
             member = tz.getmembers()[0]
             m = trimesh.load(io.BytesIO(tz.extractfile(member).read()), file_type="stl")
+    # Ray casts and section containment are only meaningful on a closed solid
+    # (docs/solutions/logic-errors/mesh-boolean-layout-proofs-silent-zero-volumes-...).
+    if not m.is_watertight or not m.volume > 0.0:
+        raise SystemExit(f"aft hull mesh is not a closed solid (watertight {m.is_watertight}, "
+                         f"volume {m.volume:.0f} mm3): the jet and section checks would be wrong")
     _MESH["m"] = m
     return m
 
@@ -342,11 +350,13 @@ NACELLE_SOLIDITY = VANE_CHORD * N_VANES / (math.pi * (VANE_HUB_R + ROTOR_TIP_R))
 
 
 def hub_r(y, y0, y_end):
-    """Hub fairing radius: the rotor hub radius from y0, tapering (half-ellipse, ASSUMED) to a
-    point at y_end."""
-    if y < y0 or y >= y_end:
-        return 0.0 if y >= y_end else VANE_HUB_R
-    return VANE_HUB_R * math.sqrt(max(0.0, 1.0 - (y - y0) / (y_end - y0)))
+    """Hub fairing radius: the rotor hub radius at y0, tapering as a straight cone (ASSUMED) to
+    a point at y_end, so its half-angle is exactly the boat-tail angle the report prints."""
+    if y < y0:
+        return VANE_HUB_R
+    if y >= y_end:
+        return 0.0
+    return VANE_HUB_R * (1.0 - (y - y0) / (y_end - y0))
 
 
 def tube_free_ratio(y, exit_y, st, taper_y0=TAPER_Y0):
@@ -473,46 +483,58 @@ def max_overhang(shaft_d_mm, margin=CRIT_MARGIN_MIN):
 
 
 # --- RCS: passages, scoops, plate joints, 3D jet ------------------------------------------
-def passage_area(mesh, L, az_deg, y=SCOOP_Y + 3.0, n=46):
-    """Passage area (mm^2) in a SECTOR_DEG sector of the tube-to-skin gap at station y, less
-    two side walls."""
+def passage_area(mesh, L, a0, a1, y=SCOOP_Y + 3.0, n=46):
+    """Passage area (mm^2) in the sector a0..a1 (deg) of the tube-to-skin gap at station y,
+    less two side walls; trapezoid rule over n azimuth samples."""
     s = section_solid(mesh, y)
-    half = SECTOR_DEG / 2.0
     area, gaps = 0.0, []
-    da = math.radians(SECTOR_DEG / (n - 1))
+    da = math.radians((a1 - a0) / (n - 1))
     for k in range(n):
-        az = az_deg - half + SECTOR_DEG * k / (n - 1)
+        az = a0 + (a1 - a0) * k / (n - 1)
         r_in = skin_radii(s, L["z_axis"], az)[0]
         r_t = tube_outer_r(y, az, L["exit_y"], L.get("taper_y0", TAPER_Y0))
         g = max(0.0, r_in - r_t)
         gaps.append(g)
-        area += 0.5 * (r_in ** 2 - r_t ** 2) * da if g > 0 else 0.0
+        w = 0.5 if k in (0, n - 1) else 1.0
+        area += w * 0.5 * (r_in ** 2 - r_t ** 2) * da if g > 0 else 0.0
     side = 2.0 * SIDE_WALL * statistics.mean(gaps)
     return max(0.0, area - side), min(gaps), max(gaps)
 
 
-def sector_needed(mesh, L, az_deg):
-    """Smallest passage sector (deg) whose area reaches the exhaust area."""
-    global SECTOR_DEG
-    need = math.pi / 4.0 * BORE ** 2
-    keep = SECTOR_DEG
-    try:
-        for sec in np.arange(40.0, 90.1, 1.0):
-            SECTOR_DEG = float(sec)
-            if passage_area(mesh, L, az_deg)[0] >= need:
-                return float(sec)
-        return math.inf
-    finally:
-        SECTOR_DEG = keep
+def passage_stations(jet):
+    """Stations where a jet's passage must carry its exhaust area: the scoop-to-exhaust run
+    (Y 631) and the exhaust's forward edge, where the whole jet flow still runs axially."""
+    return (SCOOP_Y + 3.0, jet.y0)
+
+
+def jet_passages(mesh, L, jet, sector=None):
+    """{station: (area, gap min, gap max)} for the jet's passage sector."""
+    a0, a1 = sector or jet.sector
+    return {y: passage_area(mesh, L, a0, a1, y=y) for y in passage_stations(jet)}
+
+
+def sector_needed(mesh, L, jet):
+    """Smallest passage sector (deg), grown evenly about the jet's sector centre, whose area
+    reaches the exhaust area at every passage station."""
+    mid = 0.5 * (jet.sector[0] + jet.sector[1])
+    for sec in np.arange(20.0, 140.1, 1.0):
+        half = float(sec) / 2.0
+        if all(a >= jet.area_mm2 for a, _, _ in
+               jet_passages(mesh, L, jet, (mid - half, mid + half)).values()):
+            return float(sec)
+    return math.inf
 
 
 VENTRAL_MAP_Y = (632.0, 635.0, 638.0, 641.0)
-VENTRAL_MAP_AZ = (245.0, 250.0, 255.0, 260.0, 265.0, 270.0)
+# both sides probed: the hull and the skid pods are not an exact mirror (learning
+# docs/solutions/design-patterns/probe-the-published-hull-and-change-the-placement-class...)
+VENTRAL_MAP_AZ = (245.0, 250.0, 255.0, 260.0, 265.0, 270.0, 275.0, 280.0, 285.0, 290.0,
+                  295.0)
 
 
 def ventral_clear_map(L, cant=25.0):
-    """{(exhaust Y, azimuth): nearest obstacle or None} for the 245 side (295 mirrors): where a
-    ventral exhaust clears both the skid crossbar and the skid pods."""
+    """{(exhaust Y, azimuth): nearest obstacle or None}: where a bore-size ventral exhaust
+    clears both the skid crossbar and the skid pods, port and starboard."""
     out = {}
     for y in VENTRAL_MAP_Y:
         for az in VENTRAL_MAP_AZ:
@@ -533,23 +555,34 @@ def classify_hit(hit):
 def annulus_gaps(mesh, L):
     """Tube-to-skin gap (mm) at each jet azimuth from Y 628 to Y 634."""
     out = {}
-    for name, az, _ in JETS:
-        out[name] = {float(y): skin_radii(section_solid(mesh, float(y)), L["z_axis"], az)[0]
-                     - tube_outer_r(float(y), az, L["exit_y"]) for y in (628, 630, 632, 634)}
+    for j in JETS:
+        out[j.name] = {float(y): skin_radii(section_solid(mesh, float(y)), L["z_axis"],
+                                            j.az_deg)[0]
+                       - tube_outer_r(float(y), j.az_deg, L["exit_y"])
+                       for y in (628, 630, 632, 634)}
     return out
 
 
-def ventral_web_mm(L):
-    """Printed web between the two ventral passages, at the tube's outer radius."""
-    az = [a for n, a, _ in JETS if n.startswith("ventral")]
-    gap_deg = abs(az[1] - az[0]) - SECTOR_DEG
-    return math.radians(gap_deg) * tube_outer_r(SCOOP_Y, 270.0, L["exit_y"])
+def passage_webs(L, jets=None):
+    """Printed web between neighbouring passages at the tube's outer radius, at the scoop
+    station: [(jet a, jet b, web mm)] around the tube, smallest first."""
+    jets = list(jets or JETS)
+    ordered = sorted(jets, key=lambda j: j.sector[0] % 360.0)
+    out = []
+    for a, b in zip(ordered, ordered[1:] + ordered[:1]):
+        gap = (b.sector[0] - a.sector[1]) % 360.0
+        mid = (a.sector[1] + gap / 2.0) % 360.0
+        out.append((a.name, b.name, math.radians(gap) * tube_outer_r(SCOOP_Y, mid,
+                                                                     L["exit_y"])))
+    return sorted(out, key=lambda w: w[2])
 
 
 def scoop_blockage(L):
-    """Four inward scoop lips (height x bore width) over the tube area at the scoop station."""
+    """Inward scoop lips over the tube area at the scoop station: each lip SCOOP_LIP_H tall and
+    as wide as the bore scaled by its exhaust area (ASSUMED proportional sizing)."""
     r_bore = TUBE_R627
-    return 4 * SCOOP_LIP_H * BORE / (math.pi * r_bore ** 2)
+    mouths = sum(SCOOP_LIP_H * BORE * j.area_mm2 / rj.BORE_AREA_MM2 for j in JETS)
+    return mouths / (math.pi * r_bore ** 2)
 
 
 def plate_joints(mesh, z_axis, y):
@@ -575,29 +608,64 @@ def plate_joints(mesh, z_axis, y):
     return joints
 
 
-def exhaust_fit(mesh, L, joints, name, az_deg):
-    """Trapezoidal exhaust of the bore's area: arc width from the required area over
-    EXHAUST_L, centred on the jet azimuth; the joint shift each side edge needs."""
-    s = section_solid(mesh, EXHAUST_Y)
-    r_out = skin_radii(s, L["z_axis"], az_deg)[1]
-    area = math.pi / 4.0 * BORE ** 2
-    width = area / EXHAUST_L
+def _ang(d):
+    return ((d + 180.0) % 360.0) - 180.0
+
+
+def exhaust_fit(mesh, L, jet):
+    """The trapezoidal exhaust on the skin (KD19).  A "centred" exhaust is the jet's area over
+    its length, centred on its azimuth, with the joint shift each side edge needs.  A "panel"
+    exhaust has its sides on the plate joints bounding the jet's panel at every station (owner
+    option B): its area is measured by integrating the skin arc between the joints."""
+    z = L["z_axis"]
+    if jet.edges == "panel":
+        ys = np.arange(jet.y0, jet.y1 + 0.01, 0.5)
+        lo, hi = [], []
+        for y in ys:
+            js = plate_joints(mesh, z, float(y))
+            near = [min(js, key=lambda j: abs(_ang(j - p)), default=math.nan) for p in jet.panel]
+            ok = [not math.isnan(n) and abs(_ang(n - p)) <= 4.0 for n, p in zip(near, jet.panel)]
+            lo.append(near[0] if ok[0] else math.nan)
+            hi.append(near[1] if ok[1] else math.nan)
+        lo_a, hi_a = np.array(lo), np.array(hi)
+        for arr, p in ((lo_a, jet.panel[0]), (hi_a, jet.panel[1])):
+            good = ~np.isnan(arr)  # a transverse rib station has no azimuthal dip: interpolate
+            arr[:] = np.interp(ys, ys[good], arr[good]) if good.any() else p
+        widths = []
+        for y, a, b in zip(ys, lo_a, hi_a):
+            s = section_solid(mesh, float(y))
+            az = np.linspace(a, b, 25)
+            rs = [skin_radii(s, z, float(t))[1] for t in az]
+            widths.append(float(np.trapezoid(rs, np.radians(az))))
+        area = float(np.trapezoid(widths, ys))
+        return {"name": jet.name, "area_mm2": area, "width_mm": float(np.mean(widths)),
+                "width_fwd": widths[0], "width_aft": widths[-1], "r_out": jet.r_mm,
+                "edges": (float(lo_a.mean()), float(hi_a.mean())),
+                "joint_span": (float(lo_a.min()), float(lo_a.max()), float(hi_a.min()),
+                               float(hi_a.max())),
+                "shifts": [], "kind": "panel"}
+    s = section_solid(mesh, jet.y)
+    r_out = skin_radii(s, z, jet.az_deg)[1]
+    width = jet.area_mm2 / (jet.y1 - jet.y0)
     half_deg = math.degrees(width / 2.0 / r_out)
-    edges = (az_deg - half_deg, az_deg + half_deg)
+    edges = (jet.az_deg - half_deg, jet.az_deg + half_deg)
+    joints = plate_joints(mesh, z, jet.y)
     shifts = []
     for e in edges:
-        d = min(((j - e + 180.0) % 360.0) - 180.0 for j in joints) if joints else math.nan
-        near = min(joints, key=lambda j: abs(((j - e + 180.0) % 360.0) - 180.0)) \
-            if joints else math.nan
-        dd = ((near - e + 180.0) % 360.0) - 180.0
+        if not joints:
+            shifts.append((e, math.nan, math.nan, math.nan))
+            continue
+        near = min(joints, key=lambda j: abs(_ang(j - e)))
+        dd = _ang(near - e)
         shifts.append((e, near, dd, math.radians(abs(dd)) * r_out))
-        del d
-    return {"name": name, "area_mm2": area, "width_mm": width, "r_out": r_out,
-            "edges": edges, "shifts": shifts}
+    return {"name": jet.name, "area_mm2": jet.area_mm2, "width_mm": width,
+            "width_fwd": width, "width_aft": width, "r_out": r_out, "edges": edges,
+            "shifts": shifts, "kind": "centred"}
 
 
-def jet_rays(L, az_deg, cant_deg, y, half_deg, nrad=3, nth=24):
-    """Ray origins and directions of a spreading jet that leaves the skin as the bore."""
+def jet_rays(L, az_deg, cant_deg, y, half_deg, bore=BORE, nrad=3, nth=24):
+    """Ray origins and directions of a spreading jet that leaves the skin as a disc of
+    diameter `bore` (for a panel exhaust: its widest width, the conservative lateral extent)."""
     mesh = load_aft_hull()
     s = section_solid(mesh, y)
     r = skin_radii(s, L["z_axis"], az_deg)[1]
@@ -614,7 +682,7 @@ def jet_rays(L, az_deg, cant_deg, y, half_deg, nrad=3, nth=24):
         for k in range(nth):
             th = 2.0 * math.pi * k / nth
             w = math.cos(th) * u + math.sin(th) * v
-            origins.append(p + f * BORE / 2.0 * w)
+            origins.append(p + f * bore / 2.0 * w)
             d = math.cos(h) * e + math.sin(h) * w
             dirs.append(d / np.linalg.norm(d))
     return np.array(origins), np.array(dirs)
@@ -632,11 +700,13 @@ def own_skin(L, hit, az_jet, y_jet):
     return math.hypot(x - hd.X_CL, z - L["z_axis"]) <= r_out + OWN_SKIN_DR
 
 
-def jet_check(L, az_deg, cant_deg, y=EXHAUST_Y, half_deg=JET_HALF, reach=JET_REACH):
-    """3D spreading-jet check: rays from the bore at the skin, out to `reach`; the first hit of
-    each ray that is not the jet's own skin is an obstacle.  Returns the nearest obstacle."""
+def jet_check(L, az_deg, cant_deg, y=PLAN_EXHAUST_Y, half_deg=JET_HALF, reach=JET_REACH,
+              bore=BORE):
+    """3D spreading-jet check: rays from the exhaust disc at the skin, out to `reach`; the
+    first hit of each ray that is not the jet's own skin is an obstacle.  Returns the nearest
+    obstacle."""
     mesh = load_aft_hull()
-    o, d = jet_rays(L, az_deg, cant_deg, y, half_deg)
+    o, d = jet_rays(L, az_deg, cant_deg, y, half_deg, bore=bore)
     o = o + d * 0.5
     loc, idx, _ = mesh.ray.intersects_location(o, d, multiple_hits=True)
     nearest = None
@@ -668,7 +738,8 @@ def aft_parts(L) -> list[tuple[str, float, float, str]]:
         ("motor plate + 11 stator vanes", 8.0, (L["vanes_y0"] + L["plate_y1"]) / 2.0,
          "ASSUMED 8 g"),
         ("thrust tube + nozzle (fused)", tube, (L["tube_y0"] + L["tube_y1"]) / 2.0, "envelope"),
-        ("4 scoops + passages + valves", 4 * 5.0, SCOOP_Y + 3.0, "ASSUMED 5 g each"),
+        (f"{len(JETS)} scoops + passages + valves", len(JETS) * 5.0, SCOOP_Y + 3.0,
+         "ASSUMED 5 g each"),
     ] + tube_stator_parts(L, rho)
 
 
@@ -703,16 +774,25 @@ def tube_contour_variant(mesh, L):
         st = tube_stator(L["exit_y"], L["rotor_y1"], taper_y0=float(t0))
         if st and st["solidity"] >= NACELLE_SOLIDITY:
             Lv = {**L, "taper_y0": float(t0)}
-            pas = {n: passage_area(mesh, Lv, az)[0] for n, az, _ in JETS}
+            pas = {j.name: min(a for a, _, _ in jet_passages(mesh, Lv, j).values())
+                   for j in JETS}
             return {"taper_y0": float(t0), "stator": st, "passages": pas,
                     "taper_len": L["exit_y"] - float(t0)}
     return None
 
 
 # --- evaluation -----------------------------------------------------------------------------
+def jet_bore(e):
+    """Disc diameter for the 3D jet check: the bore, or a wider exhaust's widest width."""
+    return max(BORE, e["width_fwd"], e["width_aft"])
+
+
 def evaluate() -> dict[str, Any]:
     mesh = load_aft_hull()
     meas = measure(mesh)
+    if meas["exit_y"] is None:
+        raise SystemExit("nozzle exit plane not found on the aft hull mesh: the tube, stator, "
+                         "passages and jets cannot be placed (FAIL)")
     L = layout(meas)
     gap, gap_y = shroud_gap(mesh, L["shroud_y0"], L["shroud_y1"])
     rows, ring_last = ring_room(mesh, meas)
@@ -722,66 +802,84 @@ def evaluate() -> dict[str, Any]:
     deswirl = {th: scoop_deswirl(th) for th in (0.8, 1.0)}
     L["tube_stator"] = tube_stator(L["exit_y"], L["rotor_y1"])
     contour = tube_contour_variant(mesh, L)
-    jets = {n: jet_check(L, az, cant) for n, az, cant in JETS}
+    exh = {j.name: exhaust_fit(mesh, L, j) for j in JETS}
+    jets = {j.name: jet_check(L, j.az_deg, j.cant_deg, y=j.y, bore=jet_bore(exh[j.name]))
+            for j in JETS}
+    plan_jets = {j.name: jet_check(L, j.az_deg, j.cant_deg) for j in PLAN_JETS if j.ventral}
     radial = jet_check(L, 245.0, 0.0, y=634.0)  # plan check: a radial ventral jet at Y 634
-    sweep = {h: {n: jet_check(L, az, cant, half_deg=h)["clear"] for n, az, cant in JETS}
+    sweep = {h: {j.name: jet_check(L, j.az_deg, j.cant_deg, y=j.y, half_deg=h,
+                                   bore=jet_bore(exh[j.name]))["clear"] for j in JETS}
              for h in (8.0, 16.0)}
     joints = {y: plate_joints(mesh, L["z_axis"], float(y)) for y in (628, 630, 632, 634)}
-    jmap = joints[630]
-    exh = {n: exhaust_fit(mesh, L, jmap, n, az) for n, az, _ in JETS}
-    pas = {n: passage_area(mesh, L, az) for n, az, _ in JETS}
-    need = {n: sector_needed(mesh, L, az) for n, az, _ in JETS}
+    pas = {j.name: jet_passages(mesh, L, j) for j in JETS}
+    need = {j.name: sector_needed(mesh, L, j) for j in JETS}
     band = ventral_clear_map(L)
     plist = aft_parts(L)
     r = {"meas": meas, "layout": L, "gap": (gap, gap_y), "ring_rows": rows,
          "ring_last": ring_last, "crit_rpm": crit, "crit_stock_rpm": crit_stock,
          "swirl": swirl, "deswirl": deswirl, "contour": contour, "top_rpm": top_rpm(),
          "nom_rpm": KV * V_NOM, "max_overhang_3": max_overhang(SHAFT_D),
-         "max_overhang_4": max_overhang(EXT_SHAFT_D), "jets": jets, "radial": radial,
-         "sweep": sweep, "joints": joints, "exhaust": exh, "passages": pas,
+         "max_overhang_4": max_overhang(EXT_SHAFT_D), "jets": jets, "plan_jets": plan_jets,
+         "radial": radial, "sweep": sweep, "joints": joints, "exhaust": exh, "passages": pas,
          "sector_needed": need, "ventral_band": band,
-         "annulus": annulus_gaps(mesh, L), "web": ventral_web_mm(L),
+         "annulus": annulus_gaps(mesh, L), "webs": passage_webs(L),
          "blockage": scoop_blockage(L), "parts": plist, "cg": cg_shift(plist)}
     r["limits"] = limits(r)
+    r["design_rules"] = design_rules(r)
     return r
+
+
+def design_rules(r) -> list[tuple[str, bool]]:
+    """Rules the layout holds by construction (printed, not gated: they cannot fail here)."""
+    L = r["layout"]
+    st = L["tube_stator"]
+    up = [j for j in JETS if not j.ventral]
+    return [
+        ("scoops at Y 628 (KD20)", SCOOP_Y == 628.0),
+        ("shroud ends at the joint, forward of the scoops", L["shroud_y1"] <= SCOOP_Y),
+        ("pusher order: motor plate ahead of the rotor (KD10)",
+         L["rotor_y0"] - L["plate_y1"] >= ROTOR_GAP),
+        ("upper jets mirror port/starboard", len(up) == 2
+         and abs(up[0].az_deg + up[1].az_deg - 180.0) < 1e-9),
+        ("tube stator free area >= margin x nozzle (the search's own filter)",
+         bool(st) and st["ratio"] >= THROAT_MARGIN),
+    ]
 
 
 def limits(r) -> list[tuple[str, float, str, float, str]]:
     """THE limits list: (name, value, comparison, limit, unit)."""
     L = r["layout"]
     out: list[tuple[str, float, str, float, str]] = [
-        ("nozzle exit station found", 0.0 if L["exit_y"] is None else 1.0, ">=", 1.0, ""),
         ("radial gap, shroud to hull", r["gap"][0], ">=", STATIC_GAP, "mm"),
-        ("shroud aft end forward of the scoops", SCOOP_Y - L["shroud_y1"], ">=", 0.0, "mm"),
         ("motor clear of the stern stack", L["motor_y0"] - STERN_STACK_Y1, ">=",
          STATIC_GAP, "mm"),
-        ("pusher order: motor plate ahead of the rotor", L["rotor_y0"] - L["plate_y1"], ">=",
-         ROTOR_GAP, "mm"),
         ("rotor forward of the nozzle exit", L["exit_y"] - L["rotor_y1"], ">=", 0.0, "mm"),
         ("mounting ring ends where the hull still holds it",
          (r["ring_last"] or 0.0) - L["ring_y1"], ">=", 0.0, "mm"),
         ("first critical speed over the top running speed", r["crit_rpm"] / r["top_rpm"],
          ">=", CRIT_MARGIN_MIN, ""),
-        ("ventral exhausts at or aft of Y 628", EXHAUST_Y - VENTRAL_MIN_Y, ">=", 0.0, "mm"),
-        ("scoops at Y 628", -abs(SCOOP_Y - 628.0), ">=", 0.0, "mm"),
-        ("ventral web at least the minimum printed wall", r["web"], ">=", WALL_MIN_PRINT,
-         "mm"),
         ("scoop blockage of the tube", r["blockage"], "<=", BLOCKAGE_MAX, ""),
         ("tube stator found with the vane row clear of the throat",
          0.0 if L["tube_stator"] is None else 1.0, ">=", 1.0, ""),
-        ("tube stator free area over the nozzle area",
-         L["tube_stator"]["ratio"] if L["tube_stator"] else 0.0, ">=", THROAT_MARGIN, ""),
-        ("port and starboard ventral jets mirror", -abs((JETS[0][1] + JETS[1][1]) - 540.0),
-         ">=", 0.0, "deg"),
-        ("port and starboard upper jets mirror", -abs((JETS[2][1] + JETS[3][1]) - 180.0),
-         ">=", 0.0, "deg"),
+        ("narrowest web between passages at least the minimum printed wall",
+         r["webs"][0][2], ">=", WALL_MIN_PRINT, "mm"),
     ]
-    for n, (a, gmin, _) in r["passages"].items():
-        out.append((f"passage area >= exhaust area, {n}", a, ">=",
-                    math.pi / 4.0 * BORE ** 2, "mm2"))
-    for n, j in r["jets"].items():
-        out.append((f"3D jet path clear within {JET_REACH:.0f} mm, {n}",
-                    float(j["blocked"]), "<=", 0.0, "rays"))
+    for j in JETS:
+        e = r["exhaust"][j.name]
+        if j.ventral:
+            out.append((f"ventral exhaust forward edge at or aft of Y {VENTRAL_MIN_Y:.0f} "
+                        f"(KD16), {j.name}", j.y0 - VENTRAL_MIN_Y, ">=", 0.0, "mm"))
+            out.append((f"ventral exhaust forward edge clear of the crossbar (Y "
+                        f"{VENTRAL_CLEAR_Y:.0f}), {j.name}", j.y0 - VENTRAL_CLEAR_Y, ">=", 0.0,
+                        "mm"))
+        if e["kind"] == "panel":
+            out.append((f"exhaust area on the panel matches the jet table, {j.name}",
+                        abs(e["area_mm2"] / j.area_mm2 - 1.0), "<=", 0.03, ""))
+        for y, (a, _, _) in r["passages"][j.name].items():
+            out.append((f"passage area >= exhaust area at Y {y:.0f}, {j.name}", a, ">=",
+                        j.area_mm2, "mm2"))
+        out.append((f"3D jet path clear within {JET_REACH:.0f} mm, {j.name}",
+                    float(r["jets"][j.name]["blocked"]), "<=", 0.0, "rays"))
     return out
 
 
@@ -794,7 +892,7 @@ def report(r):
     L, m = r["layout"], r["meas"]
     print("REAR CONE LAYOUT, tail EDF (plan 002 U5), frame R2, mm.  PROVISIONAL.")
     print("ASSUMED: rotor 20 g; inlet lip 8 mm at 77 mm OD; bearing span 20 mm, set in 3 mm; steel "
-          "shaft E 200 GPa; tube wall 1.6 mm; exhaust at Y 632, 10 mm long; jet half-angle 12 deg; "
+          "shaft E 200 GPa; tube wall 1.6 mm; jet half-angle 12 deg; hub fairing a cone; "
           "scoop lip 3.5 mm; loaded speed 0.85 KV V; motor efficiency 0.85.")
     print(f"  thrust axis Z {m['z_axis']:.1f}; nozzle exit plane Y {L['exit_y']:.0f}; skid "
           f"crossbar aft face Y {m['crossbar_aft_y']}")
@@ -867,16 +965,29 @@ def report(r):
           "Default: rotor on the motor shaft (owner decides at G1).")
     print("  plate joints (outer-radius grooves), deg: " + "; ".join(
         f"Y {y}: {', '.join(f'{a:.0f}' for a in js)}" for y, js in r["joints"].items()))
-    print("  RCS jets (scoops Y 628, exhausts Y 632):")
-    for n, j in r["jets"].items():
-        e = r["exhaust"][n]
-        pa, gmin, gmax = r["passages"][n]
-        sh = ", ".join(f"edge {s[0]:.0f} -> joint {s[1]:.0f} ({s[3]:.1f} mm)"
-                       for s in e["shifts"])
-        print(f"    {n}: {'CLEAR' if j['clear'] else 'BLOCKED'} ({j['blocked']}/{j['rays']} "
-              f"rays; nearest {j['nearest']}); passage {pa:.0f} mm2 (gap {gmin:.1f}-"
-              f"{gmax:.1f} mm) vs exhaust {e['area_mm2']:.0f} mm2; exhaust {e['width_mm']:.1f} "
-              f"mm wide; {sh}")
+    print("  RCS jets (shared table tools/rcs_jets.py; owner option B 2026-11-18; scoops Y 628):")
+    for jt in JETS:
+        n = jt.name
+        j, e = r["jets"][n], r["exhaust"][n]
+        pas = "; ".join(f"Y {y:.0f} {a:.0f} mm2 (gap {g0:.1f}-{g1:.1f})"
+                        for y, (a, g0, g1) in r["passages"][n].items())
+        if e["kind"] == "panel":
+            ed = (f"sides on the panel joints {e['edges'][0]:.1f}/{e['edges'][1]:.1f} deg "
+                  f"(found {e['joint_span'][0]:.0f}-{e['joint_span'][1]:.0f} and "
+                  f"{e['joint_span'][2]:.0f}-{e['joint_span'][3]:.0f}), "
+                  f"{e['width_fwd']:.1f} mm wide forward to {e['width_aft']:.1f} mm aft, "
+                  f"measured area {e['area_mm2']:.0f} mm2 (table {jt.area_mm2:.0f})")
+        else:
+            ed = f"{e['width_mm']:.1f} mm wide; " + ", ".join(
+                f"edge {s[0]:.0f} -> joint {s[1]:.0f} ({s[3]:.1f} mm)" for s in e["shifts"])
+        print(f"    {n}: az {jt.az_deg:.0f}, cant {jt.cant_deg:.0f}, exhaust Y {jt.y0:.0f}-"
+              f"{jt.y1:.0f}; {'CLEAR' if j['clear'] else 'BLOCKED'} ({j['blocked']}/"
+              f"{j['rays']} rays; nearest {j['nearest']}); passage {jt.sector[0]:.1f}-"
+              f"{jt.sector[1]:.1f} deg: {pas}; {ed}")
+    for n, j in r["plan_jets"].items():
+        print(f"  plan comparison, {n} at Y {PLAN_EXHAUST_Y:.0f}: "
+              f"{'CLEAR' if j['clear'] else 'BLOCKED'} ({j['blocked']}/{j['rays']} rays; "
+              f"nearest {classify_hit(j['nearest'])} {j['nearest']})")
     rd = r["radial"]
     print(f"  plan check, radial ventral jet at Y 634: {'CLEAR' if rd['clear'] else 'BLOCKED'} "
           f"({rd['blocked']}/{rd['rays']} rays; nearest {rd['nearest']})")
@@ -886,19 +997,22 @@ def report(r):
     print("  tube-to-skin gap by station (mm): " + "; ".join(
         f"{n}: " + ", ".join(f"Y{y:.0f} {g:.1f}" for y, g in gs.items())
         for n, gs in r["annulus"].items()))
-    print("  passage sector needed for the exhaust area (deg, now 45): " + ", ".join(
-        f"{n} {v:.0f}" for n, v in r["sector_needed"].items()))
-    print("  ventral exhaust map, 245 side (295 mirrors), 25 deg cant: Y by azimuth -> clear "
+    print("  passage sector needed for the exhaust area at every station (deg; now): " +
+          ", ".join(f"{jt.name} {r['sector_needed'][jt.name]:.0f} "
+                    f"({jt.sector[1] - jt.sector[0]:.0f})" for jt in JETS))
+    print("  ventral exhaust map, bore-size jet, 25 deg cant, both sides: Y by azimuth -> clear "
           f"or the obstacle (crossbar aft face Y {r['meas']['crossbar_aft_y']}; skid pods X "
           "+-34 to 56)")
     for y in VENTRAL_MAP_Y:
         cells = []
         for az in VENTRAL_MAP_AZ:
             hit = r["ventral_band"][(y, az)]
-            what = classify_hit(hit)
-            cells.append(f"{az:.0f} {what}")
+            cells.append(f"{az:.0f} {classify_hit(hit)}")
         print(f"    Y {y:.0f}: " + ", ".join(cells))
-    print(f"  ventral web {r['web']:.1f} mm; scoop blockage {r['blockage']:.1%}")
+    print("  webs between passages at the tube (mm): " + ", ".join(
+        f"{a}/{b} {w:.1f}" for a, b, w in r["webs"]) + f"; scoop blockage {r['blockage']:.1%}")
+    print("  design rules (hold by construction; printed, not gated): " + "; ".join(
+        f"{n} {'yes' if ok else 'NO'}" for n, ok in r["design_rules"]))
     print("  valve concepts for the G1 trade (layout only): A sliding shutter in each passage "
           "(axial room = the 6 mm scoop-to-exhaust run); B hinged skin-plate flap over each "
           "exhaust (hinge on a plate joint); C servos aft at Y 590-600 (room outside the ring "
@@ -919,6 +1033,16 @@ def report(r):
     return ok
 
 
+def jsonable(obj):
+    """JSON-safe copy: tuple dict keys (the ventral map's (Y, az)) become "Y/az" strings."""
+    if isinstance(obj, dict):
+        return {("/".join(f"{x:g}" for x in k) if isinstance(k, tuple) else k): jsonable(v)
+                for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [jsonable(v) for v in obj]
+    return obj
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--json", help="write the evaluation to this JSON file")
@@ -926,7 +1050,7 @@ def main(argv=None):
     r = evaluate()
     ok = report(r)
     if args.json:
-        dump = {k: v for k, v in r.items() if k not in ("meas",)}
+        dump = jsonable({k: v for k, v in r.items() if k not in ("meas",)})
         dump["limits"] = [list(x) + [passed(x)] for x in r["limits"]]
         with open(args.json, "w", encoding="utf-8") as f:
             json.dump(dump, f, indent=1, default=str)
