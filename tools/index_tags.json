@@ -16569,6 +16569,13 @@
       ],
       "archived": false
     },
+    "tools/rcs_jets.py": {
+      "description": "The RCS jet table, one source for tools/rear_cone_layout_fit.py (which gates it against the",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/rear_cone_layout_fit.py": {
       "description": "rear_cone_layout_fit.py -- rear-cone layout of the tail EDF (QX-Motor 64 mm, QF2822",
       "tags": [
@@ -21078,6 +21085,7 @@
       "tools/precommit_sanitize.py",
       "tools/prep_nacelle_64_bake.py",
       "tools/purge_stale_fcstd_objects.py",
+      "tools/rcs_jets.py",
       "tools/rear_cone_layout_fit.py",
       "tools/scad_flatten.py",
       "tools/shift_baked_stl.py",
