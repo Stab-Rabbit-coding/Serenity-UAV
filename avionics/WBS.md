@@ -1186,6 +1186,10 @@ customer. Plan and sprints S34–S41:
     F2: W25Q128JVSIQ is package code S, SOIC 208-mil; TACCO uses the 150-mil footprint.
     F4: Nexperia PRTR5V0U2X fails the sourcing rule (Wingtech, PRC) and is a 5 V part on
     RS-485.
+    F8 (2026-11-18, Pilot too): `Serenity-Custom:Molex_NanoFit_1x04_Horizontal` has 1.0 mm
+    drills and no locator holes; Molex SD-105313-100 wants dia 1.20 contacts, a dia 1.60 hole
+    and a 1.75 x 1.60 slot 7.18 behind the row (`avionics/datasheets/molex/`). The corrected
+    land is in `NoNFO-PB2.pretty`. Applies to every 105313-1204 in the fleet.
 - [ ] **NFP-QA** — Track fastener, connector and harness mass and CG per board.
     Owner direction 2026-11-14 (PR #289). Starts with the stern stack (S34, S41); the same
     lines are owed for Pilot, TACCO, Commo, Flight Engineer, gateway and Observer.
