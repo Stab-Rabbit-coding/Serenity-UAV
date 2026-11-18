@@ -262,3 +262,12 @@ def test_the_vector_diagram_is_written(tmp_path):
     out = tmp_path / "jets.png"
     ht.plot_vectors(PLAN, str(out))
     assert out.stat().st_size > 10_000
+
+
+def test_the_scoop_de_swirl_loss_adds_to_the_path_loss_and_lowers_the_jet_capacity():
+    plain = ht.Setup(PLAIN.flow, ht.JetModel(k_deswirl=0.0))
+    vaned = ht.Setup(PLAIN.flow, ht.JetModel(k_deswirl=0.3))
+    assert ht.JetModel(k_deswirl=0.3).k_total == ht.JetModel().k_path + 0.3
+    a = ht.pair_capacity(PLAN, plain, 1.0, ht.VENTRAL)["pitch"]
+    b = ht.pair_capacity(PLAN, vaned, 1.0, ht.VENTRAL)["pitch"]
+    assert abs(b) < abs(a)

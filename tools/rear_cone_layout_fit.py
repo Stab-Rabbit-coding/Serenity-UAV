@@ -89,7 +89,8 @@ JETS = (  # (name, azimuth deg from +X, aft cant deg): R32, KD20
     ("upper 45", 45.0, 0.0), ("upper 135", 135.0, 0.0))
 SECTOR_DEG = 45.0  # passage sector per jet (plan 002 hand estimate)
 JET_REACH = 150.0  # mm, 5.9 in: a jet shall meet no structure within this distance (R17)
-WALL_MIN_PRINT = 1.0  # mm, "keep all features above 1mm thickness" [REF-MFG-001 p. 15]
+WALL_MIN_PRINT = 1.5  # mm, interim SLS floor (owner option A 2026-11-11, AGENTS.md section 7,
+# docs/SLS_MIN_WALL_THICKNESS.md); REF-MFG-001's 1.0 mm was superseded for this powder
 
 # --- ASSUMED, labelled on every run ---------------------------------------------------------
 ROTOR_G = 20.0  # g, rotor (ledger NACELLE note "20 g ASSUMED, weigh")
@@ -117,6 +118,15 @@ EXHAUST_L = 10.0  # mm, axial length of each trapezoidal exhaust
 JET_HALF = 12.0  # deg, free-jet spread half angle; swept 8 to 16 in the report
 OWN_SKIN_DAZ, OWN_SKIN_DY, OWN_SKIN_DR = 30.0, 20.0, 1.0  # hits near the exhaust on the skin
 GROOVE_DEPTH = 0.2  # mm, a dip in the outer radius deeper than this is a plate joint
+# De-swirl (owner direction 2026-11-18): the scoops take the swirl out of the RCS bleed and a
+# stator in the thrust tube takes it out of the main jet.
+SCOOP_LIP_L = 4.0  # mm, ASSUMED axial length of a scoop mouth and its turning vane in the tube
+TUBE_STATOR_SETBACK = 1.0  # mm, ASSUMED gap from the scoop lips to the vane leading edges
+TUBE_VANE_T = WALL_MIN_PRINT  # vanes at the printed-wall floor (thinnest = least blockage)
+HUB_FAIRING_Y0 = 0.5  # mm aft of the rotor: stationary hub fairing carried by the vanes
+THROAT_MARGIN = 1.05  # ASSUMED: free area through the vanes and hub >= 1.05 x the nozzle area,
+# so the vane row does not become the throat that sets the flow in place of the R22 nozzle
+TAPER_Y0 = 627.0  # tube taper starts at the shroud joint (plan 002 planning contour, ASSUMED)
 
 _MESH: dict = {}
 _SEC: dict = {}
@@ -266,15 +276,12 @@ def inscribed_at(mesh, y):
 SHROUD_JOINT_Y = SCOOP_Y - 1.0  # shroud ends at the joint just forward of the scoops (KD20)
 
 
-EXIT_STATOR_L = 1.0 + VANE_CHORD + 1.0  # an exit stator of the nacelle's vane chord, 1 mm gaps
-
-
-def pusher_stack(joint_y=SHROUD_JOINT_Y, exit_stator=False) -> dict[str, float]:
+def pusher_stack(joint_y=SHROUD_JOINT_Y) -> dict[str, float]:
     """The pusher stack, aft to forward, from the shroud joint (KD10, KTD6): rotor at the aft
     end, then the motor plate with its stator vanes, then the motor ahead, inside the shroud.
-    exit_stator=True puts an exit stator (11 vanes, 18 mm chord) between the rotor and the
-    joint, the G1 option that removes the rotor-exit swirl before the scoops."""
-    rotor_y1 = joint_y - (EXIT_STATOR_L if exit_stator else SHROUD_AFT_OF_ROTOR)
+    The rotor-exit swirl is taken out downstream: by the scoops (RCS bleed) and by a stator
+    in the thrust tube (main jet), owner direction 2026-11-18."""
+    rotor_y1 = joint_y - SHROUD_AFT_OF_ROTOR
     rotor_y0 = rotor_y1 - ROTOR_L
     plate_y1 = rotor_y0 - ROTOR_GAP
     plate_y0 = plate_y1 - PLATE_T
@@ -303,8 +310,8 @@ def shroud_gap(mesh, y0, y1, step=1.0):
     return best
 
 
-def layout(meas, exit_stator=False) -> dict[str, float]:
-    st = pusher_stack(exit_stator=exit_stator)
+def layout(meas) -> dict[str, float]:
+    st = pusher_stack()
     face_y = st["motor_face_y"]
     return {
         "z_axis": meas["z_axis"], "exit_y": meas["exit_y"], **st,
@@ -330,12 +337,86 @@ def rotor_swirl(theta=0.8):
             "swirl_deg": math.degrees(math.atan2(v_t, v_a)), "dp_fan": r.dp_fan_pa}
 
 
-def tube_outer_r(y, az_deg, exit_y):
-    """Tube outer radius: the 64.8 mm bore at Y 627 tapering to the nozzle ellipse at the
-    exit plane (ASSUMED straight in the ellipse axes), plus the wall."""
-    t = min(1.0, max(0.0, (y - 627.0) / (exit_y - 627.0)))
-    a = TUBE_R627 + t * (NOZZLE_A / 2.0 - TUBE_R627)
-    b = TUBE_R627 + t * (NOZZLE_B / 2.0 - TUBE_R627)
+NACELLE_SOLIDITY = VANE_CHORD * N_VANES / (math.pi * (VANE_HUB_R + ROTOR_TIP_R))
+# chord / pitch at the mean radius of the nacelle stator, which straightens the same rotor
+
+
+def hub_r(y, y0, y_end):
+    """Hub fairing radius: the rotor hub radius from y0, tapering (half-ellipse, ASSUMED) to a
+    point at y_end."""
+    if y < y0 or y >= y_end:
+        return 0.0 if y >= y_end else VANE_HUB_R
+    return VANE_HUB_R * math.sqrt(max(0.0, 1.0 - (y - y0) / (y_end - y0)))
+
+
+def tube_free_ratio(y, exit_y, st, taper_y0=TAPER_Y0):
+    """Free area at y (bore less hub fairing less vanes) over the nozzle area."""
+    a, b = tube_bore_ab(y, exit_y, taper_y0)
+    rh = hub_r(y, st["hub_y0"], st["hub_y1"])
+    vanes = st["n"] * TUBE_VANE_T * (0.5 * (a + b) - rh) if st["le"] <= y <= st["te"] else 0.0
+    return (math.pi * a * b - math.pi * rh * rh - vanes) / (math.pi / 4.0 * NOZZLE_A * NOZZLE_B)
+
+
+def stator_min_ratio(exit_y, st, taper_y0=TAPER_Y0):
+    """Smallest free-area ratio over the vanes and hub fairing (not the nozzle exit itself)."""
+    end = max(st["te"], st["hub_y1"])
+    ys = np.linspace(SHROUD_JOINT_Y, end, 241)
+    rs = [tube_free_ratio(float(y), exit_y, st, taper_y0) for y in ys]
+    i = int(np.argmin(rs))
+    return rs[i], float(ys[i])
+
+
+def tube_stator(exit_y, rotor_y1, taper_y0=TAPER_Y0, le=None):
+    """The tube stator with the highest solidity that keeps the free area at THROAT_MARGIN x
+    the nozzle: vanes at the printed floor, leading edge just aft of the scoop lips (or `le`),
+    hub fairing from the rotor hub to a point.  Solidity is chord / pitch at the mean radius."""
+    le = SCOOP_Y + SCOOP_LIP_L + TUBE_STATOR_SETBACK if le is None else le
+    r_m = 0.5 * (VANE_HUB_R + TUBE_R627)
+    best = None
+    for n in range(5, 17):
+        for chord in np.arange(4.0, exit_y - 1.0 - le + 0.01, 1.0):
+            for hub_y1 in np.arange(le + 2.0, exit_y + 0.01, 1.0):
+                st = {"n": n, "chord": float(chord), "le": le, "te": le + float(chord),
+                      "hub_y0": rotor_y1 + HUB_FAIRING_Y0, "hub_y1": float(hub_y1)}
+                ratio, y_min = stator_min_ratio(exit_y, st, taper_y0)
+                if ratio < THROAT_MARGIN:
+                    continue
+                sol = float(n * chord / (2.0 * math.pi * r_m))
+                key = (sol, hub_y1)  # prefer the longer (gentler) hub fairing at equal solidity
+                if best is None or key > best[0]:
+                    best = (key, {**st, "solidity": sol, "ratio": ratio, "ratio_y": y_min})
+    if best is None:
+        return None
+    st = best[1]
+    st["boat_tail_deg"] = math.degrees(math.atan2(VANE_HUB_R, st["hub_y1"] - st["hub_y0"]))
+    return st
+
+
+def scoop_deswirl(theta=0.8):
+    """Swirl at the tube wall at the scoops, which each scoop mouth faces and its turning vane
+    takes out.  Free vortex from the rotor's mean radius (V_theta r constant, ASSUMED); axial
+    speed = Q over the bore less the hub fairing at Y 628."""
+    import tail_edf_flow as tf
+    sw = rotor_swirl(theta)
+    r_m = 0.5 * (VANE_HUB_R + ROTOR_TIP_R)
+    v_t = sw["v_theta"] * r_m / TUBE_R627
+    area = math.pi * ((TUBE_R627 / 1e3) ** 2 - (VANE_HUB_R / 1e3) ** 2)
+    v_a = tf.operate(tf.Inputs(), theta).flow_m3s / area
+    return {"theta": theta, "v_theta": v_t, "v_axial": v_a,
+            "yaw_deg": math.degrees(math.atan2(v_t, v_a))}
+
+
+def tube_bore_ab(y, exit_y, taper_y0=TAPER_Y0):
+    """Tube bore semi-axes (a wide, b tall) at y: the 64.8 mm bore held to taper_y0, then
+    tapering straight in the ellipse axes to the nozzle at the exit plane (ASSUMED contour)."""
+    t = min(1.0, max(0.0, (y - taper_y0) / (exit_y - taper_y0)))
+    return (TUBE_R627 + t * (NOZZLE_A / 2.0 - TUBE_R627),
+            TUBE_R627 + t * (NOZZLE_B / 2.0 - TUBE_R627))
+
+
+def tube_outer_r(y, az_deg, exit_y, taper_y0=TAPER_Y0):
+    """Tube outer radius at azimuth az_deg: the bore ellipse plus the wall."""
+    a, b = tube_bore_ab(y, exit_y, taper_y0)
     th = math.radians(az_deg)
     r = a * b / math.hypot(b * math.cos(th), a * math.sin(th))
     return r + TUBE_WALL
@@ -402,7 +483,7 @@ def passage_area(mesh, L, az_deg, y=SCOOP_Y + 3.0, n=46):
     for k in range(n):
         az = az_deg - half + SECTOR_DEG * k / (n - 1)
         r_in = skin_radii(s, L["z_axis"], az)[0]
-        r_t = tube_outer_r(y, az, L["exit_y"])
+        r_t = tube_outer_r(y, az, L["exit_y"], L.get("taper_y0", TAPER_Y0))
         g = max(0.0, r_in - r_t)
         gaps.append(g)
         area += 0.5 * (r_in ** 2 - r_t ** 2) * da if g > 0 else 0.0
@@ -588,7 +669,21 @@ def aft_parts(L) -> list[tuple[str, float, float, str]]:
          "ASSUMED 8 g"),
         ("thrust tube + nozzle (fused)", tube, (L["tube_y0"] + L["tube_y1"]) / 2.0, "envelope"),
         ("4 scoops + passages + valves", 4 * 5.0, SCOOP_Y + 3.0, "ASSUMED 5 g each"),
-    ]
+    ] + tube_stator_parts(L, rho)
+
+
+def tube_stator_parts(L, rho) -> list[tuple[str, float, float, str]]:
+    st = L.get("tube_stator")
+    if not st:
+        return []
+    a, b = tube_bore_ab(0.5 * (st["le"] + st["te"]), L["exit_y"], L.get("taper_y0", TAPER_Y0))
+    vanes = st["n"] * st["chord"] * TUBE_VANE_T * (0.5 * (a + b) - 0.5 * VANE_HUB_R) * rho
+    slant = math.hypot(VANE_HUB_R, st["hub_y1"] - st["hub_y0"])
+    hub = math.pi * VANE_HUB_R * slant * TUBE_VANE_T * rho  # cone shell at the floor
+    return [(f"tube stator, {st['n']} vanes", vanes, 0.5 * (st["le"] + st["te"]),
+             "envelope x PA CF"),
+            ("hub fairing (shell)", hub, st["hub_y0"] + (st["hub_y1"] - st["hub_y0"]) / 3.0,
+             "envelope x PA CF")]
 
 
 def cg_shift(plist):
@@ -598,6 +693,20 @@ def cg_shift(plist):
     dm = sum(p[1] for p in plist)
     dy = sum(p[1] * (p[2] - y0) for p in plist) / (m0 + dm)
     return {"m0": m0, "y0": y0, "dm": dm, "dy": dy}
+
+
+def tube_contour_variant(mesh, L):
+    """G1 trade: hold the 64.8 mm bore through a stator of the nacelle's solidity, then taper.
+    Finds the latest taper start for which a stator reaches NACELLE_SOLIDITY at the margin, and
+    what that costs the RCS passages (narrower tube-to-skin gap)."""
+    for t0 in np.arange(TAPER_Y0, L["exit_y"] - 4.0, 1.0):
+        st = tube_stator(L["exit_y"], L["rotor_y1"], taper_y0=float(t0))
+        if st and st["solidity"] >= NACELLE_SOLIDITY:
+            Lv = {**L, "taper_y0": float(t0)}
+            pas = {n: passage_area(mesh, Lv, az)[0] for n, az, _ in JETS}
+            return {"taper_y0": float(t0), "stator": st, "passages": pas,
+                    "taper_len": L["exit_y"] - float(t0)}
+    return None
 
 
 # --- evaluation -----------------------------------------------------------------------------
@@ -610,10 +719,9 @@ def evaluate() -> dict[str, Any]:
     crit = critical_rpm(SHAFT_D, BEARING_SPAN, default_overhang(), ROTOR_G)
     crit_stock = critical_rpm(SHAFT_D, BEARING_SPAN, stock_overhang(), ROTOR_G)
     swirl = {th: rotor_swirl(th) for th in (0.8, 1.0)}
-    Lx = layout(meas, exit_stator=True)
-    gap_x = shroud_gap(mesh, Lx["shroud_y0"], Lx["shroud_y1"])
-    variant = {"layout": Lx, "gap": gap_x, "cg": cg_shift(aft_parts(Lx) + [
-        ("exit stator, 11 vanes", 8.0, Lx["rotor_y1"] + EXIT_STATOR_L / 2.0, "ASSUMED 8 g")])}
+    deswirl = {th: scoop_deswirl(th) for th in (0.8, 1.0)}
+    L["tube_stator"] = tube_stator(L["exit_y"], L["rotor_y1"])
+    contour = tube_contour_variant(mesh, L)
     jets = {n: jet_check(L, az, cant) for n, az, cant in JETS}
     radial = jet_check(L, 245.0, 0.0, y=634.0)  # plan check: a radial ventral jet at Y 634
     sweep = {h: {n: jet_check(L, az, cant, half_deg=h)["clear"] for n, az, cant in JETS}
@@ -627,7 +735,7 @@ def evaluate() -> dict[str, Any]:
     plist = aft_parts(L)
     r = {"meas": meas, "layout": L, "gap": (gap, gap_y), "ring_rows": rows,
          "ring_last": ring_last, "crit_rpm": crit, "crit_stock_rpm": crit_stock,
-         "swirl": swirl, "exit_stator_variant": variant, "top_rpm": top_rpm(),
+         "swirl": swirl, "deswirl": deswirl, "contour": contour, "top_rpm": top_rpm(),
          "nom_rpm": KV * V_NOM, "max_overhang_3": max_overhang(SHAFT_D),
          "max_overhang_4": max_overhang(EXT_SHAFT_D), "jets": jets, "radial": radial,
          "sweep": sweep, "joints": joints, "exhaust": exh, "passages": pas,
@@ -659,6 +767,13 @@ def limits(r) -> list[tuple[str, float, str, float, str]]:
         ("ventral web at least the minimum printed wall", r["web"], ">=", WALL_MIN_PRINT,
          "mm"),
         ("scoop blockage of the tube", r["blockage"], "<=", BLOCKAGE_MAX, ""),
+        ("tube stator found with the vane row clear of the throat",
+         0.0 if L["tube_stator"] is None else 1.0, ">=", 1.0, ""),
+        ("tube stator free area over the nozzle area",
+         L["tube_stator"]["ratio"] if L["tube_stator"] else 0.0, ">=", THROAT_MARGIN, ""),
+        ("tube stator solidity over the nacelle stator's (same rotor)",
+         L["tube_stator"]["solidity"] / NACELLE_SOLIDITY if L["tube_stator"] else 0.0, ">=",
+         1.0, ""),
         ("port and starboard ventral jets mirror", -abs((JETS[0][1] + JETS[1][1]) - 540.0),
          ">=", 0.0, "deg"),
         ("port and starboard upper jets mirror", -abs((JETS[2][1] + JETS[3][1]) - 180.0),
@@ -696,11 +811,11 @@ def report(r):
           f"{L['shroud_y1']:.0f}; ring Y {L['ring_y0']:.0f}..{L['ring_y1']:.0f}; tube Y "
           f"{L['tube_y0']:.0f}..{L['tube_y1']:.0f}")
     for th, sw in r["swirl"].items():
-        print(f"  ISSUE, rotor-exit swirl at {th:.0%} throttle with no exit stator: "
+        print(f"  rotor-exit swirl at {th:.0%} throttle, before any de-swirl: "
               f"{sw['swirl_deg']:.0f} deg (V_theta {sw['v_theta']:.0f} m/s on {sw['v_axial']:.0f} "
               f"m/s axial, {sw['rpm']:,.0f} rpm, Euler from dp {sw['dp_fan'] / 1e3:.1f} kPa) "
               f"reaches the scoops {SCOOP_Y - L['rotor_y1']:.0f} mm downstream; the reused "
-              "stator straightens nothing in the pusher.")
+              "plate stator is upstream and straightens nothing.")
     print("  room outside the mounting ring (OD 82.6 mm): " + ", ".join(
         f"Y {y:.0f} {room:+.1f}" for y, room in r["ring_rows"]) +
         f" mm; last station with room Y {r['ring_last']}")
@@ -715,12 +830,38 @@ def report(r):
           f"against the loaded full-pack speed {loaded:,.0f} rpm: {r['crit_rpm'] / loaded:.2f}. "
           "The four nacelle units use the same plate stack: if the bearing positions "
           "(ASSUMED here) hold, they carry the same margin; measure them (NAC-64-FIT-02).")
-    vx = r["exit_stator_variant"]
-    Lx = vx["layout"]
-    print(f"  G1 option, exit stator between rotor and joint: rotor Y {Lx['rotor_y0']:.1f}.."
-          f"{Lx['rotor_y1']:.1f}, motor Y {Lx['motor_y0']:.1f}..{Lx['motor_face_y']:.1f}, shroud "
-          f"Y {Lx['shroud_y0']:.1f}..{Lx['shroud_y1']:.1f}, min gap {vx['gap'][0]:.1f} mm, aft "
-          f"hardware CG {vx['cg']['dy']:+.1f} mm; straightens the swirl before the scoops.")
+    print("  DE-SWIRL (owner direction 2026-11-18): the scoops take the swirl out of the RCS "
+          "bleed; a stator in the thrust tube takes it out of the main jet.")
+    for th, d in r["deswirl"].items():
+        print(f"    at {th:.0%} throttle the wall swirl at the scoops is {d['yaw_deg']:.0f} deg "
+              f"(V_theta {d['v_theta']:.0f} m/s, free vortex from the rotor mean radius, on "
+              f"{d['v_axial']:.0f} m/s axial): each scoop mouth yaws that far into the swirl and "
+              "its turning vane takes it out; the yaw sense follows the rotor hand (CW or CCW, "
+              "REF-EDF-003 drawing shows both), not yet chosen.")
+    st = L["tube_stator"]
+    if st:
+        print(f"    tube stator: {st['n']} vanes, {st['chord']:.0f} mm chord at the "
+              f"{TUBE_VANE_T:.1f} mm wall floor, Y {st['le']:.0f}..{st['te']:.0f} (leading edge "
+              f"{TUBE_STATOR_SETBACK:.0f} mm aft of the {SCOOP_LIP_L:.0f} mm scoop lips); hub "
+              f"fairing r {VANE_HUB_R} mm from Y {st['hub_y0']:.1f} to a point at Y "
+              f"{st['hub_y1']:.0f} (boat-tail {st['boat_tail_deg']:.0f} deg); least free area "
+              f"{st['ratio']:.2f} x nozzle at Y {st['ratio_y']:.1f}; solidity "
+              f"{st['solidity']:.2f} against the nacelle stator's {NACELLE_SOLIDITY:.2f} on the "
+              "same rotor.  The tapering tube leaves little area for vanes: further aft the "
+              "vane row would become the throat in place of the R22 nozzle.")
+    else:
+        print("    tube stator: NO vane row fits with the free area at "
+              f"{THROAT_MARGIN} x the nozzle on the planning contour.")
+    cv = r["contour"]
+    if cv:
+        cs = cv["stator"]
+        print(f"    G1 trade, tube contour: holding the 64.8 mm bore to Y {cv['taper_y0']:.0f} "
+              f"(taper {cv['taper_len']:.0f} mm to the nozzle) fits {cs['n']} vanes of "
+              f"{cs['chord']:.0f} mm, solidity {cs['solidity']:.2f}; RCS passage areas then "
+              + ", ".join(f"{n} {a:.0f}" for n, a in cv["passages"].items())
+              + f" mm2 (against {math.pi / 4.0 * BORE ** 2:.0f} needed).")
+    else:
+        print("    G1 trade, tube contour: no taper start reaches the nacelle solidity.")
     print(f"  longest overhang for margin {CRIT_MARGIN_MIN}: 3 mm shaft "
           f"{r['max_overhang_3']:.1f} mm; separate 4 mm shaft {r['max_overhang_4']:.1f} mm. "
           "Default: rotor on the motor shaft (owner decides at G1).")

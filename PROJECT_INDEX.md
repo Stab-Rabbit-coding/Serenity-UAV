@@ -6,7 +6,7 @@
      look, change the generator (tools/precommit_index.py), not this
      file. Machine-readable form: tools/index_tags.json -->
 <!-- Archive contents described in ARCHIVE_INDEX.md. -->
-<!-- Last generated: 2026-11-17 -->
+<!-- Last generated: 2026-11-18 -->
 
 ## Tag Index
 
@@ -3262,7 +3262,7 @@ gen_todo_from_wbs.py — Regenerate a ``TODO.md`` (open work only) from its owni
 generate_lg_a1b_housing.py — Place the LG Option A1b flank-housing envelope at the fore corners. [build-tooling]
 generate_lg_bays.py — Generate the four CONFORMING 3.0 in landing-gear bays (BHD-02, 2026-10-10). [build-tooling, security]
 head_layout_fit.py — Python script [build-tooling]
-hover_trim_rcs.py — hover_trim_rcs.py -- hover pitch trim, RCS jet authority, CG window and the tilt-vectoring [build-tooling]
+hover_trim_rcs.py — Geometry, hull frame mm (plan "Hover trim and control limits"; rear-cone fit). [build-tooling]
 hull_datums.py — Serenity UAV -- the aircraft datum (frame R2), defined ONCE. [build-tooling]
 import-specctra-ses.py — Companion to export-specctra-dsn.py: import a freerouting-produced [build-tooling]
 joint_register.py — Joint register loader and checker for the build-guide torque method. [build-tooling]

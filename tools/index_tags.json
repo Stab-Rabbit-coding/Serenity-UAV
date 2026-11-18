@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-17",
+  "generated": "2026-11-18",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -15994,7 +15994,7 @@
       "archived": false
     },
     "tools/hover_trim_rcs.py": {
-      "description": "hover_trim_rcs.py -- hover pitch trim, RCS jet authority, CG window and the tilt-vectoring",
+      "description": "Geometry, hull frame mm (plan \"Hover trim and control limits\"; rear-cone fit).",
       "tags": [
         "build-tooling"
       ],

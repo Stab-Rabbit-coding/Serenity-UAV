@@ -1360,6 +1360,22 @@ forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
       the clear 255/285 pair at Y 638 gives 2.25 lbf.in nose-down against 2.06 for 245/295;
       15 deg of swirl leaves 0.61 lbf.in of ventral-pair yaw; an 80 % port scoop leaves
       0.19 lbf.in of upper-pair yaw and cuts nose-up capacity about 10 %.
+    - 2026-11-18, owner direction: the scoops de-swirl the RCS bleed and a stator in the thrust
+      tube de-swirls the main jet (the exit-stator option between rotor and joint is dropped).
+      `rear_cone_layout_fit.py` (30 tests): wall swirl at the scoops 45 deg (free vortex from
+      the rotor mean radius, ASSUMED), so each scoop mouth yaws 45 deg into the swirl with a
+      turning vane; the yaw sense follows the rotor hand (CW or CCW, not yet chosen). Tube
+      stator on the planning contour (straight taper from Y 627): 12 vanes, 7 mm chord, at the
+      1.5 mm printed floor, Y 633-640, with a hub fairing from the rotor hub (r 14.3 mm) to a
+      point at Y 642 (43 deg boat-tail); free area 1.05 x the nozzle; solidity 0.57 against the
+      nacelle stator's 1.36 on the same rotor (FAIL). Further aft, the vanes become the throat
+      in place of the R22 nozzle. G1 trade: hold the 64.8 mm bore to Y 643 and taper in the last
+      7 mm, which fits 16 vanes of 13 mm (solidity 1.42) but cuts the RCS passages from
+      213-245 to 179-207 mm2 (255 needed). `hover_trim_rcs.py`: de-swirl vane loss K 0.3
+      ASSUMED; full-throttle capacity 1.99 lbf.in nose-down, 1.66 nose-up (was 2.25 / 1.87);
+      the plan-case CG window narrows to +1.3 to +2.8 mm. The minimum printed wall in the
+      layout tool is now the 1.5 mm interim floor (AGENTS.md section 7), not REF-MFG-001's
+      1.0 mm.
 - [ ] **TEDF-06** — [STD] Cargo duct layout: Flight Engineer box forward, belly panel, fairlead
     under the pivot, screen, flow guides, line guard, pre-G1 bench fixtures, aft balance allowance.
     Plan U6. (S44)

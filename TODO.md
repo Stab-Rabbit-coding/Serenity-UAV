@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Last updated:** 2026-11-17
+**Last updated:** 2026-11-18
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -111,7 +111,7 @@
 - [ ] REF-HT-001 edition and sections — read the heat-transfer text
 - [ ] Brass thermal conductivity — the 70 Btu/(hr ft F) (121.2 W/m-K)…
 - [ ] RCS jets (TEDF-05 findings, owner/G1): the planned 245/295 deg…
-- [ ] Tail EDF rotor-exit swirl and stator (TEDF-05 pusher correction…
+- [ ] Tail EDF de-swirl (owner direction 2026-11-18
 - [ ] EDF first critical speed (TEDF-05, also the nacelle units)
 - [ ] CG shortfall: with the ledger gaps closed, the plan's own forward…
 - [ ] Hull mass basis: `head_cargo_shell24_2mm_merged_hatch.stl` (named in…

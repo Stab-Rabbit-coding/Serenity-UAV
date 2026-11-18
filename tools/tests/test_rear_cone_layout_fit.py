@@ -116,11 +116,54 @@ def test_the_pusher_stack_runs_motor_then_plate_then_rotor_aft_with_the_rotor_at
     assert st["vanes_y1"] <= st["rotor_y0"]  # the plate's stator vanes are AHEAD of the rotor
 
 
-def test_the_exit_stator_option_moves_the_stack_forward_by_its_length():
-    a, b = rc.pusher_stack(), rc.pusher_stack(exit_stator=True)
-    shift = rc.EXIT_STATOR_L - rc.SHROUD_AFT_OF_ROTOR
-    assert math.isclose(a["rotor_y1"] - b["rotor_y1"], shift)
-    assert math.isclose(a["motor_y0"] - b["motor_y0"], shift)
+def test_the_tube_stator_keeps_the_vane_row_wider_than_the_nozzle():
+    """The vanes and hub fairing shall not become the throat in place of the R22 nozzle."""
+    st = rc.tube_stator(650.0, 626.0)
+    assert st is not None and st["ratio"] >= rc.THROAT_MARGIN
+    assert st["le"] >= rc.SCOOP_Y + rc.SCOOP_LIP_L  # aft of the scoop lips
+    lo, _ = rc.stator_min_ratio(650.0, st)
+    assert math.isclose(lo, st["ratio"])
+    # the same row moved 6 mm aft, into the narrower taper, falls below the margin
+    aft = {**st, "le": st["le"] + 6.0, "te": st["te"] + 6.0, "hub_y1": st["hub_y1"] + 6.0}
+    assert rc.stator_min_ratio(650.0, aft)[0] < rc.THROAT_MARGIN
+
+
+def test_the_free_area_with_no_vanes_or_hub_is_the_bore_over_the_nozzle():
+    st = {"n": 0, "le": 700.0, "te": 701.0, "hub_y0": 0.0, "hub_y1": 0.0}
+    a, b = rc.tube_bore_ab(627.0, 650.0)
+    want = (a * b) / (rc.NOZZLE_A * rc.NOZZLE_B / 4.0)
+    assert math.isclose(rc.tube_free_ratio(627.0, 650.0, st), want)
+    assert math.isclose(rc.tube_free_ratio(650.0, 650.0, st), 1.0)
+
+
+def test_holding_the_bore_longer_allows_a_more_solid_stator():
+    a = rc.tube_stator(650.0, 626.0)
+    b = rc.tube_stator(650.0, 626.0, taper_y0=640.0)
+    assert b["solidity"] > a["solidity"]
+
+
+def test_the_nacelle_solidity_is_chord_over_pitch_at_the_mean_radius():
+    pitch = 2.0 * math.pi * 0.5 * (rc.VANE_HUB_R + rc.ROTOR_TIP_R) / rc.N_VANES
+    assert math.isclose(rc.NACELLE_SOLIDITY, rc.VANE_CHORD / pitch)
+
+
+def test_the_scoop_faces_less_swirl_at_the_wall_than_the_rotor_mean_radius():
+    """Free vortex: V_theta r is constant, so the wall sees less tangential speed."""
+    d, sw = rc.scoop_deswirl(0.8), rc.rotor_swirl(0.8)
+    r_m = 0.5 * (rc.VANE_HUB_R + rc.ROTOR_TIP_R)
+    assert math.isclose(d["v_theta"] * rc.TUBE_R627, sw["v_theta"] * r_m)
+    assert 0.0 < d["yaw_deg"] < 90.0
+
+
+def test_the_tube_stator_and_its_checks_are_in_the_layout(ev):
+    st = ev["layout"]["tube_stator"]
+    assert any(p[0].startswith("tube stator") for p in ev["parts"])
+    rows = _row(ev, "tube stator solidity over the nacelle stator's")
+    assert rows[0][1] == st["solidity"] / rc.NACELLE_SOLIDITY
+    assert not rc.passed(rows[0])  # the tapering tube cannot hold the nacelle's solidity
+    assert all(rc.passed(x) for x in _row(ev, "tube stator free area over the nozzle area"))
+    cv = ev["contour"]
+    assert cv["stator"]["solidity"] >= rc.NACELLE_SOLIDITY > st["solidity"]
 
 
 def test_the_rotor_exit_swirl_is_reported_and_grows_with_pressure_rise():

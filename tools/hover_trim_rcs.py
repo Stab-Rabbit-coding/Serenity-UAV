@@ -180,16 +180,23 @@ class JetModel:
     bore_m: float = 0.71 * IN_M  # plan: four jets of 0.71 in bore
     k_path: float = 1.0  # ASSUMED scoop + passage + exhaust loss
     scoop_fraction: float = 1.0  # ASSUMED share of the duct total pressure at the scoop
+    # Each scoop faces the swirl (about 45 deg at the wall, rear_cone_layout_fit.py) and a
+    # turning vane takes it out (owner direction 2026-11-18): an added turning loss, ASSUMED.
+    k_deswirl: float = 0.3
+
+    @property
+    def k_total(self) -> float:
+        return self.k_path + self.k_deswirl
 
     @property
     def area(self) -> float:
         return math.pi / 4.0 * self.bore_m ** 2
 
     def a_eff(self, n_open: int) -> float:
-        return n_open * self.area / math.sqrt(1.0 + self.k_path)
+        return n_open * self.area / math.sqrt(1.0 + self.k_total)
 
     def speed(self, p_duct: float, rho: float) -> float:
-        return math.sqrt(2.0 * self.scoop_fraction * p_duct / (rho * (1.0 + self.k_path)))
+        return math.sqrt(2.0 * self.scoop_fraction * p_duct / (rho * (1.0 + self.k_total)))
 
 
 def jet_wrench(case: Case, jet: Jet, force: float) -> tuple[float, float]:
@@ -409,9 +416,15 @@ def rcs_comparison(case: Case, flow: tf.Inputs) -> None:
         dn = -pair_capacity(case, su, 1.0, VENTRAL)["pitch"]
         up = pair_capacity(case, su, 1.0, UPPER)["pitch"]
         print(f"  {label}: full-throttle capacity nose-down {lbf_in(dn)}, nose-up {lbf_in(up)}")
-    print("  sensitivities (TEDF-05 jets, full throttle; ASSUMED magnitudes, no stator yet):")
-    for label, mod in (("rotor-exit swirl turns every exhaust +15 deg",
-                        {"swirl_deg": 15.0}),
+    print("  sensitivities (TEDF-05 jets, full throttle; ASSUMED magnitudes; the scoops "
+          "de-swirl the bleed, owner 2026-11-18):")
+    for k in (0.0, 0.6):
+        su = Setup(flow, JetModel(k_deswirl=k), DEFAULT_JETS)
+        print(f"    de-swirl vane K {k}: nose-down "
+              f"{lbf_in(-pair_capacity(case, su, 1.0, VENTRAL)['pitch'])}, nose-up "
+              f"{lbf_in(pair_capacity(case, su, 1.0, UPPER)['pitch'])}")
+    for label, mod in (("de-swirl leaves 5 deg of swirl in every exhaust",
+                        {"swirl_deg": 5.0}),
                        ("port scoop recovers 80 % of the starboard",
                         {"scoop_port": 0.8})):
         port = mod.get("scoop_port", 1.0)
@@ -530,7 +543,8 @@ def report(case: Case, su: Setup) -> int:
           f"couple arm {case.arm / IN_M:.2f} in ({case.arm * 1e3:.1f} mm)")
     print(f"  pitch inertia {case.inertia / (LBM_KG * IN_M ** 2):.0f} lbm.in^2 "
           f"({case.inertia:.4f} kg.m^2), the ledger's single value")
-    print(f"  jets: {su.jm.bore_m / IN_M:.2f} in bore, path loss K {su.jm.k_path} ASSUMED, scoop "
+    print(f"  jets: {su.jm.bore_m / IN_M:.2f} in bore, path loss K {su.jm.k_path} + de-swirl "
+          f"vane K {su.jm.k_deswirl} ASSUMED, scoop "
           f"fraction {su.jm.scoop_fraction} ASSUMED; ventral {su.jets[0].az_deg:.0f}/"
           f"{su.jets[1].az_deg:.0f} deg canted {su.jets[0].cant_deg:.0f} deg aft at Y "
           f"{su.jets[0].y:.0f} r {su.jets[0].r:.1f} mm; upper {su.jets[2].az_deg:.0f}/"

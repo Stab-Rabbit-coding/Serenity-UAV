@@ -2082,7 +2082,7 @@ which prints that caveat on every run.
 | **Limitation** | General SLS-nylon guidance from 2019. It predates DuraForm PA CF (2023) and gives no material allowables. |
 
 **Used in:** `tools/sls_dfm_audit.py`, `tools/sls_print_orientation.py`,
-`tools/rear_cone_layout_fit.py` (p. 15, 1 mm minimum feature: the ventral passage web),
+`tools/rear_cone_layout_fit.py` (until 2026-11-18: p. 15, 1 mm minimum feature, for the ventral passage web; the tool now uses the 1.5 mm interim floor of `docs/SLS_MIN_WALL_THICKNESS.md` and AGENTS.md section 7),
 `airframe/openscad/nacelles/nacelle_nozzle_fixed.scad`,
 `airframe/openscad/fuselage/cargo/tilt_brake.scad`,
 `airframe/openscad/fuselage/belly_panel.scad`, `docs/SLS_MIGRATION.md`,
