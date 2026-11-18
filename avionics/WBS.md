@@ -1190,6 +1190,12 @@ customer. Plan and sprints S34–S41:
     drills and no locator holes; Molex SD-105313-100 wants dia 1.20 contacts, a dia 1.60 hole
     and a 1.75 x 1.60 slot 7.18 behind the row (`avionics/datasheets/molex/`). The corrected
     land is in `NoNFO-PB2.pretty`. Applies to every 105313-1204 in the fleet.
+    F9 (2026-11-18, S36): TACCO wires the PB2-I mLRS UART TX to STM32WLE5 PA2, which is
+    USART2_TX (`avionics/datasheets/st/stm32wle5jc.pdf` pin table), so TX meets TX. Cross it:
+    PB2-I TX to PA3, PA2 to PB2-I RX. The NoNFO-PB2 generator already does.
+    F10 (2026-11-18, S36): TACCO's FB1 742792510 sits on KiCad's IPC `L_1812_4532Metric`,
+    narrower than Wurth's high-current land (7.3 mm span, 1.9 x 3.0 mm pads). Pilot's
+    742792512 is rated 2 A; re-check Pilot's own 5 V peak against it.
 - [ ] **NFP-QA** — Track fastener, connector and harness mass and CG per board.
     Owner direction 2026-11-14 (PR #289). Starts with the stern stack (S34, S41); the same
     lines are owed for Pilot, TACCO, Commo, Flight Engineer, gateway and Observer.
@@ -1205,6 +1211,7 @@ customer. Plan and sprints S34–S41:
     OD-19 still holds. Brought to the owner in OD-22 (S46, after the 2026-11-16 S45/S46 swap).
 - [ ] **NFP-TEDF-3** — [STD] The cooling-fan drive output on the stern board has no fan to
     drive. Remove it or repurpose it, and record which (S36 or S41).
+    S36 (2026-11-18): kept as drawn (J-FAN on MCU PA21, no header pin spent); decide in S41.
 - [ ] **NFP-TEDF-4** — [ADV] Tail thrust monitor node and independent nacelle trim logic (owner
     direction 2026-11-16, plan 002 R39, R40, KD21): an independent sensor (candidates: thrust-tube
     pressure, rotor speed tach, speed-controller lead current) with its own microcontroller, converter
