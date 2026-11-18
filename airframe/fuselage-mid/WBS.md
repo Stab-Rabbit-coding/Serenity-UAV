@@ -1380,6 +1380,10 @@ forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
       contour is declined). The solidity check is now reported, not a limit. Rotor hand still
       open: no aerodynamic preference (the nacelle pairs counter-rotate, so the tail fan is
       unpaired in torque and gyroscopic coupling either way); choose by the rotor retention.
+    - 2026-11-18, owner decisions: tail rotor CW viewed from the intake (right-hand retaining
+      screw, head aft, self-tightens under start-up torque; threadlocker and a witness mark for
+      braking torque); first critical speed: measure first (NAC-64-FIT-02 bearing positions,
+      shaft, rotor mass, bench vibration sweep) before any EDF spins on its plate.
 - [ ] **TEDF-06** — [STD] Cargo duct layout: Flight Engineer box forward, belly panel, fairlead
     under the pivot, screen, flow guides, line guard, pre-G1 bench fixtures, aft balance allowance.
     Plan U6. (S44)
