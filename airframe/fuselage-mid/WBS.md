@@ -1376,6 +1376,10 @@ forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
       the plan-case CG window narrows to +1.3 to +2.8 mm. The minimum printed wall in the
       layout tool is now the 1.5 mm interim floor (AGENTS.md section 7), not REF-MFG-001's
       1.0 mm.
+    - 2026-11-18, owner decision: sparse stator; the planning taper is kept (the held-bore
+      contour is declined). The solidity check is now reported, not a limit. Rotor hand still
+      open: no aerodynamic preference (the nacelle pairs counter-rotate, so the tail fan is
+      unpaired in torque and gyroscopic coupling either way); choose by the rotor retention.
 - [ ] **TEDF-06** — [STD] Cargo duct layout: Flight Engineer box forward, belly panel, fairlead
     under the pivot, screen, flow guides, line guard, pre-G1 bench fixtures, aft balance allowance.
     Plan U6. (S44)

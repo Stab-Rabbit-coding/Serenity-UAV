@@ -158,9 +158,9 @@ def test_the_scoop_faces_less_swirl_at_the_wall_than_the_rotor_mean_radius():
 def test_the_tube_stator_and_its_checks_are_in_the_layout(ev):
     st = ev["layout"]["tube_stator"]
     assert any(p[0].startswith("tube stator") for p in ev["parts"])
-    rows = _row(ev, "tube stator solidity over the nacelle stator's")
-    assert rows[0][1] == st["solidity"] / rc.NACELLE_SOLIDITY
-    assert not rc.passed(rows[0])  # the tapering tube cannot hold the nacelle's solidity
+    # the owner accepted the sparse stator (2026-11-18): reported, not a pass/fail limit
+    assert st["solidity"] < rc.NACELLE_SOLIDITY
+    assert not any(x[0].startswith("tube stator solidity") for x in ev["limits"])
     assert all(rc.passed(x) for x in _row(ev, "tube stator free area over the nozzle area"))
     cv = ev["contour"]
     assert cv["stator"]["solidity"] >= rc.NACELLE_SOLIDITY > st["solidity"]

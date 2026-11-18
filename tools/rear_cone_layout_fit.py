@@ -771,9 +771,6 @@ def limits(r) -> list[tuple[str, float, str, float, str]]:
          0.0 if L["tube_stator"] is None else 1.0, ">=", 1.0, ""),
         ("tube stator free area over the nozzle area",
          L["tube_stator"]["ratio"] if L["tube_stator"] else 0.0, ">=", THROAT_MARGIN, ""),
-        ("tube stator solidity over the nacelle stator's (same rotor)",
-         L["tube_stator"]["solidity"] / NACELLE_SOLIDITY if L["tube_stator"] else 0.0, ">=",
-         1.0, ""),
         ("port and starboard ventral jets mirror", -abs((JETS[0][1] + JETS[1][1]) - 540.0),
          ">=", 0.0, "deg"),
         ("port and starboard upper jets mirror", -abs((JETS[2][1] + JETS[3][1]) - 180.0),
@@ -847,21 +844,24 @@ def report(r):
               f"{st['hub_y1']:.0f} (boat-tail {st['boat_tail_deg']:.0f} deg); least free area "
               f"{st['ratio']:.2f} x nozzle at Y {st['ratio_y']:.1f}; solidity "
               f"{st['solidity']:.2f} against the nacelle stator's {NACELLE_SOLIDITY:.2f} on the "
-              "same rotor.  The tapering tube leaves little area for vanes: further aft the "
-              "vane row would become the throat in place of the R22 nozzle.")
+              "same rotor: the sparse stator, owner decision 2026-11-18 (planning taper kept); "
+              "the residual swirl and roll torque go to CFD (U12).  Further aft the vane row "
+              "would become the throat in place of the R22 nozzle.")
     else:
         print("    tube stator: NO vane row fits with the free area at "
               f"{THROAT_MARGIN} x the nozzle on the planning contour.")
     cv = r["contour"]
     if cv:
         cs = cv["stator"]
-        print(f"    G1 trade, tube contour: holding the 64.8 mm bore to Y {cv['taper_y0']:.0f} "
+        print("    (declined 2026-11-18) tube contour: holding the 64.8 mm bore to Y "
+              f"{cv['taper_y0']:.0f} "
               f"(taper {cv['taper_len']:.0f} mm to the nozzle) fits {cs['n']} vanes of "
               f"{cs['chord']:.0f} mm, solidity {cs['solidity']:.2f}; RCS passage areas then "
               + ", ".join(f"{n} {a:.0f}" for n, a in cv["passages"].items())
               + f" mm2 (against {math.pi / 4.0 * BORE ** 2:.0f} needed).")
     else:
-        print("    G1 trade, tube contour: no taper start reaches the nacelle solidity.")
+        print("    (declined 2026-11-18) tube contour: no taper start reaches the nacelle "
+              "solidity.")
     print(f"  longest overhang for margin {CRIT_MARGIN_MIN}: 3 mm shaft "
           f"{r['max_overhang_3']:.1f} mm; separate 4 mm shaft {r['max_overhang_4']:.1f} mm. "
           "Default: rotor on the motor shaft (owner decides at G1).")
