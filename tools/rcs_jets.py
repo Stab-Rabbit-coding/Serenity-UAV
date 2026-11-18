@@ -9,7 +9,8 @@ Owner decision 2026-11-18 (brief 3, option B): one ventral jet at 270 deg, cante
 whose exhaust sides lie on the port and starboard joints of the centre belly panel (joint
 grooves at 245.5 and 294.5 deg, measured on the Rev U hull from Y 632 to Y 648), from Y 635
 (clear of the skid crossbar) to Y 649.  The upper pair stays at 45 and 135 deg, normal to the
-axis.  The planned pair (245/295 deg at Y 632, S43) is kept only as a comparison.
+axis, each fed by a 56 deg passage sector (owner, brief 4, 2026-11-18).  The planned pair
+(245/295 deg at Y 632, S43) is kept only as a comparison.
 
 `r_mm` and `area_mm2` are measured on the hull; tools/tests/test_rear_cone_layout_fit.py ties
 them back to the mesh, so a hull change that moves them fails a test.
@@ -50,10 +51,11 @@ class RcsJet:
         return math.sin(math.radians(self.az_deg)) < 0.0
 
 
-# The upper passage sectors are 45 deg until the owner settles brief 4 (proposed: 55 deg).
+# Upper passage sectors 56 deg (owner decision 2026-11-18, brief 4): the narrowest width that
+# carries the exhaust area at both passage stations on both sides (starboard is the tighter).
 JETS: tuple[RcsJet, ...] = (
-    RcsJet("upper 45", 45.0, 0.0, 632.0, 642.0, BORE_AREA_MM2, 39.44, (22.5, 67.5)),
-    RcsJet("upper 135", 135.0, 0.0, 632.0, 642.0, BORE_AREA_MM2, 39.39, (112.5, 157.5)),
+    RcsJet("upper 45", 45.0, 0.0, 632.0, 642.0, BORE_AREA_MM2, 39.44, (17.0, 73.0)),
+    RcsJet("upper 135", 135.0, 0.0, 632.0, 642.0, BORE_AREA_MM2, 39.39, (107.0, 163.0)),
     RcsJet("ventral 270", 270.0, 25.0, 635.0, 649.0, 428.0, 36.84, (220.0, 320.0),
            edges="panel", panel=(245.5, 294.5)),
 )

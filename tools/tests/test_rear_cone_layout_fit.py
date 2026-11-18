@@ -232,8 +232,13 @@ def test_the_passage_check_runs_at_both_stations_for_every_jet(ev):
         now = j.sector[1] - j.sector[0]
         # a passage passes at both stations exactly when its sector is at least the need
         assert all(rc.passed(x) for x in mine) is (now >= need[j.name])
-    # the 45 deg upper sectors fall short until brief 4 widens them
-    assert not any(rc.passed(x) for x in rows if "upper" in x[0])
+    # owner brief 4: 56 deg upper sectors carry the exhaust; 45 deg (the old width) does not
+    assert all(rc.passed(x) for x in rows)
+    import dataclasses
+    j = [t for t in rc.JETS if not t.ventral][1]
+    narrow = dataclasses.replace(j, sector=(j.az_deg - 22.5, j.az_deg + 22.5))
+    assert any(a < j.area_mm2 for a, _, _ in rc.jet_passages(rc.load_aft_hull(), ev["layout"],
+                                                             narrow).values())
 
 
 def test_a_web_thinner_than_the_minimum_printed_wall_fails(ev, monkeypatch):
@@ -298,7 +303,7 @@ def test_every_limit_is_printed_and_a_failing_layout_exits_nonzero(ev, capsys):
     out = capsys.readouterr().out
     assert all(x[0] in out for x in ev["limits"])
     assert ok is all(rc.passed(x) for x in ev["limits"])
-    assert ok is False  # critical speed and the 45 deg upper passages fail: the G1 brief
+    assert ok is False  # the first critical speed fails until NAC-64-FIT-02: the G1 brief
 
 
 # --- review fixes and hand checks (2026-11-18) ---------------------------------------------

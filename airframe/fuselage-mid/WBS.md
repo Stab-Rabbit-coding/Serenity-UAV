@@ -1394,8 +1394,11 @@ forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
       that could not fail moved to a printed design-rules block (#2); `--json` writes (#3);
       vacuous tests replaced (#4, #5); hub fairing is a straight cone (#7); passage areas use
       the trapezoid rule, about 2.2 % lower than before (#8); docstring, view titles and the
-      missing-nozzle guard (#9-#11); the hull mesh must be watertight. Upper passages at 45
-      deg still fail (need 54 / 56 deg; brief 4 open).
+      missing-nozzle guard (#9-#11); the hull mesh must be watertight.
+    - 2026-11-18, owner decision (brief 4): upper passages widened to 56 deg (17-73 and 107-163
+      deg): 274 / 266 mm2 port and 268 / 259 mm2 starboard at Y 631 / Y 632 against the 255
+      mm2 exhaust; webs 19.9 mm (between the upper passages) and 33.5 mm (to the ventral). All
+      RCS rows pass; the layout tool's one FAIL is the first critical speed (NAC-64-FIT-02).
 - [ ] **TEDF-06** — [STD] Cargo duct layout: Flight Engineer box forward, belly panel, fairlead
     under the pivot, screen, flow guides, line guard, pre-G1 bench fixtures, aft balance allowance.
     Plan U6. (S44)
