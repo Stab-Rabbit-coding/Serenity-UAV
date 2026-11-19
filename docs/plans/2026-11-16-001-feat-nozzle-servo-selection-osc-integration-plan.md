@@ -72,6 +72,8 @@ Candidate data, from the sources listed below:
 | Gears / sensor | steel / potentiometer | hardened steel / potentiometer | not stated | metal / potentiometer |
 | Temperature | 14 to 149 °F (−10 to +65 °C) | 14 to 149 °F (−10 to +65 °C) | not stated | not stated |
 
+> **Owner note, 2026-11-19 (working preference, not D-SV-1):** the KST CM07, at about $25, is the owner's current pick for the nacelle nozzle and the fallback for the tail RCS valve servos. D-SV-1 and D-SV-2 are still decided at the U3 gate. Open for the CM07: its continuous torque (the 2026-05 KST sheet gives stall only; the chart is at 7.4 V), and whether its 20.5 x 7.5 x 19 mm case needs more dorsal-shroud growth than the current resize (the pocket is 20 x 7 x 16.6 mm).
+
 Three findings shape the work:
 
 1. **The baseline has no continuous-duty margin at 6 V.** `tools/nozzle_servo_linkage_64.py`
