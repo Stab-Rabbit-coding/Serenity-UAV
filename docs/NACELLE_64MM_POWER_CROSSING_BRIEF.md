@@ -441,8 +441,8 @@ cavity is not modelled. Mesh 1.51 M cells, y+ median 3.2, 95th percentile 12.1.
    1.50 in glove (0.171 lbf) is not meaningful: the glove was an idealised zero-wall body and no as-built
    glove exists. For the two fairings on the aircraft that is about 0.069 lbf (0.31 N)
    more than the idealised shape at 40 kt; the aircraft's total drag was not computed here.
-2. **Hypothesis: the cause is mainly the open bore, not the printing allowances** (not isolated by
-   this run; the capped-bore run below tests it). Beyond the collar end (X 2.94 in
+2. **The cause is not the open bore** (hypothesis tested and refuted by the capped-bore run below:
+   capping it raised drag). Beyond the collar end (X 2.94 in
    (74.8 mm)) and the trunnion (X 3.11 in (79.0 mm)) the fairing's 2.20 in (56 mm) bore holds only the wing
    and a spar tube out to the fairing's end at X 3.71 in (94.3 mm). The section at X 3.27 in (83 mm)
    shows the airflow meeting the wing nose, then a C-shaped wall with an open pocket and a wide separated
@@ -468,4 +468,24 @@ bore (a solid flat-faced tail block where the part is open); that number is with
 
 ### Capped-bore isolation run (brief review finding 1, 2026-11-16)
 
-PENDING_CAPPED
+Run 2026-11-12 to 11-19 in this repository's CFD setup (`geom_asbuilt.py S --cap`, the pocket filled
+from the collar end to the fairing end, nothing else changed; 1.27 M cells, iterations 1,500–2,000
+averaged over 11 saved snapshots, same machine as the plain as-built run).
+
+| Body | Drag at 40 kt | sd (11 iterations) | Reversed-flow area in strip |
+|---|---|---|---|
+| Idealised end plate | 0.147 lbf (0.652 N) | 0.003 lbf (0.015 N) | 6.55 in² (4,229 mm²) of 21.8 in² |
+| As built, bore open | 0.181 lbf (0.806 N) | 0.004 lbf (0.016 N) | 9.51 in² (6,135 mm²) of 30.7 in² |
+| As built, bore capped | **0.208 lbf (0.925 N)** | 0.004 lbf (0.019 N) | 7.20 in² (4,644 mm²) of 23.8 in² |
+
+**Result: the hypothesis is refuted.** Filling the pocket *raised* drag by about 15 % (0.027 lbf
+(0.12 N)), about five times the combined spread. The open bore is therefore not the cause of the +23 %
+over the idealised shape; the excess comes from the rest of the as-built body: the printing allowances
+(thicker tail, trailing-edge cut, fillet toe) or the real collar, trunnion and spar steps, which are
+still not separated. A plausible reading is that the open pocket vents the nose stagnation region while
+a closed blunt face carries full stagnation pressure, but no run tests that. **A nose cap is ruled out
+as a drag fix.**
+
+Limits: as above, plus the capped and open bodies are on different meshes (1.27 M and 1.51 M cells) and
+the difference is a single pair of runs with no grid study; the sign is the robust finding, the 15 % is
+not.
