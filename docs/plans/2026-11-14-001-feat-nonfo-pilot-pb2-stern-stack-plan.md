@@ -317,6 +317,8 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 
 **Goal:** Each isolated bus cell routed and DRC-clean on its own board.
 
+**Status 2026-11-19: done.** Five cells (CAN-FD, RS-485, two Ethernet ports, 1553) each have DRC 0 errors and 0 unconnected on a 4-layer board. A track drawn across the moat is caught in every cell, and clearance is 0.3 mm outside two documented fine-pitch footprints. CI job `cell-drc` was added. Each TC1G00 mixes its windings across its pad columns, so the moat steps under each body in a Z. The ISOW sec 13.1 bubble is applied outward of the pin row (owner review). Findings: F11, the Pilot 1553 connector carries logic GND across the transformer; F12, Pilot's DRU isolation rules never checked tracks (NFP-PILOT-ISO). Results are in SecureControllers `kicad/NoNFO-Pilot/PB2/NoNFO-Pilot-PB2.md`.
+
 **Requirements:** R6, R14; KTD4.
 
 **Dependencies:** U3.

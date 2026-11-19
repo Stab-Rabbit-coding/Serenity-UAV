@@ -1196,6 +1196,14 @@ customer. Plan and sprints S34–S41:
     F10 (2026-11-18, S36): TACCO's FB1 742792510 sits on KiCad's IPC `L_1812_4532Metric`,
     narrower than Wurth's high-current land (7.3 mm span, 1.9 x 3.0 mm pads). Pilot's
     742792512 is rated 2 A; re-check Pilot's own 5 V peak against it.
+- [ ] **NFP-PILOT-ISO** — Pilot isolation defects found in NoNFO-PB2 S37 (fix on Pilot's next pass).
+    F11: the MIL-1553 connector pin 3 carries logic GND onto the field side of the 1553
+    transformer, defeating its isolation; a transformer-coupled stub needs the bus pair
+    and shield only (NoNFO-PB2 leaves pin 3 open, owner review).
+    F12: `Pilot.kicad_dru` tests `A.Reference`, which is undefined on tracks and vias, so
+    `iso_cross_domain_clearance` and the `bubble_*` rules never checked a track or via.
+    Use `memberOfFootprint()` (SecureControllers `kicad/NoNFO-Pilot/PB2/kicads/
+    NoNFO-Pilot-PB2.kicad_dru`) and re-run Pilot's DRC.
 - [ ] **NFP-QA** — Track fastener, connector and harness mass and CG per board.
     Owner direction 2026-11-14 (PR #289). Starts with the stern stack (S34, S41); the same
     lines are owed for Pilot, TACCO, Commo, Flight Engineer, gateway and Observer.
