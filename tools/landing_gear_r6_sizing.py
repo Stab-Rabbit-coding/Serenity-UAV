@@ -78,7 +78,7 @@ from pathlib import Path
 # AUW, CG and pitch radius of gyration come from the bottom-up ledger
 # (tools/auw_ledger.py --write -> current-specification/auw_ledger.json),
 # heaviest configuration (6S 4000 mAh + 8 oz payload).  Until 2026-10-19 this
-# file carried M_AUW_KG = 3.130 (a Phase 11 design figure, about half the
+# file carried M_AUW_KG = 3.130 (a former Phase 11 design figure, about half the
 # measured aircraft) and Y_CG = 111.5 -- the nacelle pivot in the NACELLE's own
 # frame, mistaken for a hull station.  The hull-frame pivot is Y +21.0.
 LEDGER = Path(__file__).resolve().parent.parent / "current-specification" / "auw_ledger.json"

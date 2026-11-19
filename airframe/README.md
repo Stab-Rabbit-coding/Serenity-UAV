@@ -1,5 +1,7 @@
 # Serenity UAV — Airframe Subsystem
 
+> **Pre-shift figures (note 2026-11-17).** This document predates the 2026-11-16 design shift (`docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`): the tail EDF (QX 64 mm) and the RCS are part of the first build (Phase 5). "Former Phase 11" below means the pre-shift aft-EDF configuration (55 mm or 120 mm EDF, 3,130 g design case). Its figures are history, not current values; current values are in `current-specification/auw_ledger.json` and the plan.
+
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Current design revision:** Rev U (2026-11-03, see `docs/WBS.md` §6.5 for changelog)
 **Last updated:** 2026-10-07
@@ -45,6 +47,14 @@
 - **Modular sections:** Four fuselage sections (head, cargo bay, middle neck/horseshoe ring,
   rear) plus wings and tilting nacelles allow field disassembly for transport and maintenance
 
+### Section roles (moved from `airframe/AGENTS.md` "Geometry Reference Points", 2026-11-17)
+
+- **Head** — forwardmost; tapers to a narrow nose (most negative Y extent)
+- **Cargo** — immediately aft of head; largest cross-section; wing attachment flanges on upper outer edges; since 2026-11-16 a sealed duct for the tail EDF: doors fused into the skin, one belly service hatch, louvred forward ramp intake (pre-shift: bay door opens toward −Z, ventral)
+- **Middle** — narrow horseshoe-ring neck between cargo and rear; open at −Z (ventral); the inner-neck tube is the open air passage from the cargo duct to the tail EDF (2026-11-16, `airframe/fuselage-mid/WBS.md` §1.1.1.4.0); the Flight Engineer box moves forward into the cargo duct and the former Phase 11 intake scoops are retired
+- **Rear** — aftmost; houses engine room, dorsal pod, and two landing skids extending aft
+- **Wings** attach to the cargo section lateral walls; **nacelles** are at the pylon tips, outboard of the wings, stored in forward-flight attitude, and tilt to vertical thrust in hover
+
 ## Coordinate Standard (Rev R1)
 
 All design artifacts (SCAD, STL, Blender/FreeCAD scripts) use the **hull frame** coordinate
@@ -66,7 +76,7 @@ See `HULL_FRAME_REFERENCE.md` for the validated component placement extents tabl
 | **Head** | Nose cone + sensor mount | ~90 mm | Bow sensor pod apertures; cockpit cap (GPS antenna access) |
 | **Cargo Bay** | Payload + winch + door actuation | ~150 mm | Clamshell doors; SPT5425LV/LibreServo v2 winch mount; DRV8833 H-bridge tray (the gondola shell was superseded 2026-09-15) |
 | **Middle / Neck** | Avionics + power + fuel (battery) | ~230 mm | Horseshoe ring frame; Flight Engineer PDB mount; battery bay; 4× avionics bays (A–D); foam fill; keel rod |
-| **Rear** | Tail cone + tail boom | ~140 mm | Optional Phase 11 aft-EDF intake; twin rear-nozzle pods; landing-gear hard points |
+| **Rear** | Tail cone + tail boom | ~140 mm | Optional former Phase 11 aft-EDF intake; twin rear-nozzle pods; landing-gear hard points |
 | **Wings** | Port + stbd lift surfaces | 486 mm span (19.1 in) | Fixed, bonded 20 mm CF spar (Rev T1); bonded root moment flanges; wing + spar clamps into the fuselage (releasable) |
 | **Nacelles** | Two tilting propulsion pods | ~200 mm each | 64 mm tandem EDF pair (QX-Motor QF2822-2300KV, 12-blade); servo-driven variable nozzle; trunnion on 2 × 6804ZZ, concentric with the fixed spar, driven by the cargo-bay worm drive |
 
@@ -84,10 +94,10 @@ See `HULL_FRAME_REFERENCE.md` for the validated component placement extents tabl
 | Cargo bay internals (gondola, door, winch, servo) | ~180 | 6.3 | SPT5425LV winch servo (LibreServo v2), ratchet, latch, Dyneema line |
 | Payload bay (empty) | — | — | Rated for 226 g (8 oz) cargo |
 | **Total AUW** | ~3,911 | ~137.9 | Phase 5–10 (no aft EDF); corrected 2026-08-22 from a stale ~2,768g figure — see TODO.md §0.10.1 |
-| **Phase 11 addition (aft EDF, RCS)** | ~+362 | ~+12.8 | 55 mm EDF, RCS solenoids/valves, rear nozzle housing |
-| **AUW Phase 11** | ~4,273 | ~150.7 | Full system with rear propulsion |
+| **Former Phase 11 addition (aft EDF, RCS)** | ~+362 | ~+12.8 | 55 mm EDF, RCS solenoids/valves, rear nozzle housing |
+| **AUW former Phase 11** | ~4,273 | ~150.7 | Full system with rear propulsion |
 
-Thrust: 9.84 lbf (4,464 g) nacelles-only; hover T/W ≈ 1.14 at 8.62 lbm (3,911 g) AUW — VTOL capable with a thin margin. The earlier 1.61 used the stale 2,768 g AUW. Phase 11 hover T/W is ≈ 1.04 at 9.42 lbm (4,273 g), because the rear EDF adds mass but no hover thrust. Both figures are provisional until the bottom-up AUW recompute closes (`docs/WBS.md` §0.10.1).
+Thrust: 9.84 lbf (4,464 g) nacelles-only; hover T/W ≈ 1.14 at 8.62 lbm (3,911 g) AUW — VTOL capable with a thin margin. The earlier 1.61 used the stale 2,768 g AUW. Former Phase 11 hover T/W is ≈ 1.04 at 9.42 lbm (4,273 g), because the rear EDF adds mass but no hover thrust. Both figures are provisional until the bottom-up AUW recompute closes (`docs/WBS.md` §0.10.1).
 
 ## Printing Specifications
 

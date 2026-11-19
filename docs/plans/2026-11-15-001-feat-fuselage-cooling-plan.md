@@ -4,7 +4,8 @@ type: feat
 date: 2026-11-15
 topic: fuselage-cooling
 artifact_contract: ce-unified-plan/v1
-artifact_readiness: implementation-ready
+artifact_readiness: superseded
+superseded_by: docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md
 product_contract_source: ce-plan-bootstrap
 execution: code
 ---
@@ -16,7 +17,7 @@ execution: code
 **Target repo:** `Serenity-UAV`. All paths are relative to that repo.
 **Source issue:** GitHub issue #290, "fuselage cooling". It is the design basis for WBS item COOL-01.
 
-> **SUPERSEDED 2026-11-15.** The owner replaced the fan stage with the tail EDF cooling design. This document is kept as the record of the measured baseline. Do not execute its units. The plan in force is `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
+> **SUPERSEDED 2026-11-15.** The owner replaced the fan stage with the tail EDF cooling design. This document is kept as the record of the measured baseline. Do not execute its units. The plan in force is `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`. This plan's gates G1 (its U3) and G2 (its U9) do not apply; G1 and G2 now mean plan 002's gates (U8 and U14).
 
 > **WARNING — engineering review required.** Every analysis result this plan produces shall be reviewed and accepted by a qualified engineer before it is applied to flight hardware. A passing margin is an input to that review. It is not a clearance to build.
 

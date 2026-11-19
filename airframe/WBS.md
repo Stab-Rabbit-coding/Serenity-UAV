@@ -307,7 +307,7 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     removed; `ARCHIVE_INDEX.md` section "airframe/archive/FreeCAD-scripts/" added.
     The canonical `SerenityAssembly.FCStd` was left in place in `airframe/freecad/assembly/`.
 
-- [x] **OD-19 — Owner: adopt the SLS minimum-wall rule?** (2026-11-11) **DECIDED 2026-11-11: option A**,
+- [x] **OD-25 — Owner: adopt the SLS minimum-wall rule?** (2026-11-11) **DECIDED 2026-11-11: option A**,
     adopted into `AGENTS.md` §7 (2.0 mm where category or orientation is not stated). Text below is the
     original brief; the current table is `docs/SLS_MIN_WALL_THICKNESS.md`.
     The 0.079 in (2.0 mm) `AGENTS.md` §7 wall came from FDM CF-PETG. `docs/SLS_MIN_WALL_THICKNESS.md`
@@ -338,7 +338,7 @@ Z = +dorsal; origin = SerenityAssembly.FCStd world origin). See CLAUDE.md
     `tools/sls_dfm_audit.py` (MIN_WALL_MM 1.0) still cites p. 15. Get the bureau's minimum wall for
     DuraForm PA CF, then fix the audit constant and its citation.
 - [ ] **SLS-WALL-STIFF — 2.0 mm SLS load-bearing skins, unfixed orientation**
-    Finding from OD-19: a 2.0 mm PA CF skin whose print orientation is not fixed has about 37 % of
+    Finding from OD-25: a 2.0 mm PA CF skin whose print orientation is not fixed has about 37 % of
     the bending stiffness (E t³, Z modulus factor 0.35 from 33 % CF-PA12 proxy data; 52 % under the
     old 0.5 assumption) of the 2.0 mm CF-PETG skin the existing hull, collar and pod analyses
     assumed. Review each load-bearing SLS shell: fix its orientation on the drawing, thicken it
@@ -391,7 +391,7 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
     BOM entries added to `current-specification/bom_revR.csv`.
     **⚠ MASS NOTICE: Faraday aircraft system now 364 g (0.80 lbm) after
     ferrite reduction to 4/cage and 1 bond strap/cage. Full Rev R1 weight
-    reduction pass (Phase 11 deferrals, wiring gauge, PCB consolidation,
+    reduction pass (former Phase 11 deferrals, wiring gauge, PCB consolidation,
     head infill, CF plates) brings cumulative T/W to ~1.19 without battery
     swap; T/W ~1.25 with BATT-6S-2800. See §1.1.5 mass budget.**
     *(done 2026-06-13)*
@@ -499,11 +499,11 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
 |------|-----|-------------|-------|
 | 50mm EDF @ 6S (budget tier) | 4× | ~$25–40ea | 2 per nacelle, tandem; verify OD fits 55–56mm ID bore |
 | 40A 6S BLHeli32 BDSHOT ESC | 4× | ~$18–25ea | 1 per nacelle EDF |
-| 55mm 6S EDF (~1,500 gf) | 1× | ~$35–55 | Fuselage rear; canonical tail nozzle; **Phase 11 deferred** |
-| 50A 6S BLHeli32 ESC | 1× | ~$18–28 | Fuselage EDF; **Phase 11 deferred** |
+| QX-Motor 64 mm EDF, QF2822 2300 KV | 1× | — | Tail pusher, first build (plan 002, TEDF-11); same part as the nacelle EDFs; flight-critical in hover |
+| Open-Secure-ESC OSESC-NAC | 1× | — | Tail EDF controller, forward in the cargo duct (OSESC-TAIL-1) |
 | Digital tilt servo ≥25 kg·cm @ 6V, metal gear | 2× | ~$20–30ea | Nacelle tilt; prefer 30+ kg·cm |
 | SG90 micro servo | 2× | ~$3ea | Nacelle nozzle ×2 (redundant) |
-| SG90-class proportional valve servo | 4× | ~$3ea | RCS bleed jets; **Phase 11 deferred**; hosted by the Phase 11 `GW-RCS` gateway (`docs/CARGO_DOOR_GATEWAY_SPEC.md` §9), not FC2 PWM |
+| RCS valve actuator | 4× | — | First build (2026-11-16); concept (sliding shutter, hinged plate flap, or servos aft) decided at G1; hosted by the `GW-RCS` gateway (`docs/CARGO_DOOR_GATEWAY_SPEC.md` §9), not FC2 PWM |
 | MF104ZZ flanged bearing 4×10×4mm | 4× | ~$8 total | 2 per nacelle pivot |
 | 4mm OD CF rod (pivot) | 2× cut lengths | — | From 2.3 CF stock above |
 | Steel pushrod 2mm OD × ~60mm | 2× | ~$3 total | Longitudinal nozzle shaft per nacelle |
@@ -524,10 +524,8 @@ run with `freecadcmd airframe/FreeCAD-scripts/serenity_placeholders_assembly.py`
 | Item | Qty | Approx. Cost | Notes |
 |------|-----|-------------|-------|
 | STS3215 serial-bus servo | 1× | ~$25 | Winch drive (supersedes N20 DC motor) |
-| ~~DRV8833 dual H-bridge driver~~ | 0× | — | RETIRED 2026-09-21 — servos are gateway-driven |
-| SG90 servo | 3× | ~$9 | Port door + stbd door + payload release, on `CAN-PERIPH-GW-DOOR` (`docs/CARGO_DOOR_GATEWAY_SPEC.md`, 2026-09-21) |
+| SG90 servo | 3× now, 1× after U14 | ~$3ea | Payload release only after U14: the two door servos leave the BOM with the fused-door hull rebuild (TEDF-10, plan 002 U14); survival of this one is G1 question OQ10), on the gateway board now repurposed for `GW-RCS` |
 | Dyneema SK75 0.5mm braid | 2 m | ~$4 | Winch line |
-| 3mm CF rod | ~60 mm | — | Clamshell door hinge pin |
 | Closed-cell foam gasket tape | — | — | Gondola-to-hull perimeter seal |
 
 ---

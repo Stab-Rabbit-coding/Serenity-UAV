@@ -88,4 +88,10 @@
 
 - [ ] Delete stale feature branches on GitHub after confirming this…
 
+## §6.5 — Rev U Checkpoint
+→ full detail: `WBS.md` §6.5
+
+- [ ] PHASE-RENUMBER-RESIDUAL — Comment-only label fixes left because they…
+- [ ] REVU-RELABEL — At the Rev U close, stamp every active component's…
+
 ---

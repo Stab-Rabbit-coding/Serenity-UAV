@@ -70,7 +70,7 @@ self-contained and license-scanner-friendly.
 | `tools/` | **Mixed** — CERN-OHL-W 2.0 (tools that write/render hardware; listed in `tools/LICENSE`) + MIT (analysis, verification, CI, utilities) + CC BY-SA 4.0 (docs) | Per-file header is authoritative |
 | `current-specification/` | CC BY-SA 4.0 | Active specs, BOM, revision `.jsx` design documents |
 | `graphical-build-guide/` | CC BY-SA 4.0 | Build guide, SVG fabrication diagrams |
-| `deferred/` | **Mixed** — CERN-OHL-W 2.0 (Phase 11 aft-EDF SCAD/STL hardware) + CC BY-SA 4.0 (docs) | `deferred/aft-edf/` contains hardware design files alongside its README |
+| `deferred/` | **Mixed** — CERN-OHL-W 2.0 (former Phase 11 aft-EDF SCAD/STL hardware) + CC BY-SA 4.0 (docs) | `deferred/aft-edf/` contains hardware design files alongside its README |
 
 Root `LICENSE` (CERN-OHL-W 2.0 full text, unmodified for license-scanner detection) plus this
 file together are the parents every subsystem `LICENSE` federates from — per subsystem file,

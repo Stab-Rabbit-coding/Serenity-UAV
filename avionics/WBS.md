@@ -1077,11 +1077,14 @@ Spec `docs/BAY_A_FWD_LAYOUT.md`; thermal `docs/BAY_A_FWD_THERMAL.md`.
 - [ ] **BAYA-FWD-T1** — ★ BLOCKER (owner decision): no thermal tier sustains CN1's 8.3 W
     all-radio peak; the fan tier caps it at 5.49 W (PROVISIONAL). Choose a TACCO TX
     duty / thermal-throttle cap, or a better heat path.
+    *(2026-11-16: the fan tier and its decision OD-6 are overtaken by the tail EDF cooling design.
+    The sustained transmit limit is restated from S51 (TEDF-13, plan 002 U13) on the EDF airflow;
+    on the ground the tail throttle follows radio power above this duty limit, plan 002 R9.)*
 - [ ] **BAYA-FWD-T2** — Confirm the design ambient (104 °F / 40 °C ASSUMED).
 - [ ] **BAYA-FWD-T3** — Cite or bench-measure the thermal inputs (pouch conductance, PA12-CF
     k, gap pad, film coefficients); re-run `tools/bay_a_thermal_budget.py`.
-- [ ] **BAYA-FWD-T4** — Vent-slot and fan geometry, gated in `head_layout_fit.py`
-    (after T1).
+- [ ] **BAYA-FWD-T4** — Bow-inlet geometry (no fan), gated in `head_layout_fit.py`
+    (plan 002 U7, S44; retitled 2026-11-16, was "vent-slot and fan geometry").
 - [ ] **BAYA-FWD-B1** — Cite the CAN-FD and RS-485 stub limits from the fitted
     transceivers' datasheets into `STUB_LIMIT_MM` (check is PROVISIONAL until then).
 - [ ] **BAYA-FWD-B2** — Airspeed sensor footprint at the pitot hose turn (X −3.6, Y 50.5,
@@ -1167,21 +1170,69 @@ customer. Plan and sprints S34–S41:
     −40 to +85 °C; 0.7 g; rail at least 0.8 A. Variant 453-00046 (MHF4) approved by the owner 2026-11-14.
     Needed for the USB order code, strapping, temperature rating and mass (S35). Owner to
     rule whether a login-gated data sheet passes the sourcing rule.
+- [x] **NFP-OD22** — ★ Owner: AX88772E is sold only at 0 to 70 C.
+    **CLOSED 2026-11-17 (owner):** no specification requires an industrial temperature rating;
+    the agent had inferred one from the PB2-I's grade. The AX88772EQF stays.
+- [x] **NFP-OD23** — ★ Owner: logging medium; `avionics/AGENTS.md` requires microSD.
+    **DECIDED 2026-11-17 (owner): microSD on the USB hub.** The hub becomes the Microchip
+    USB2641i (built-in SD reader on its third port); the write-block PLD drives its SD_WP.
+    The same fix serves TACCO's unhosted slot.
+    The PB2-I header carries no SD bus, so a cape microSD slot has no host (TACCO's is unhosted
+    too). NoNFO-Pilot-PB2 logs to NOR flash behind the write-block PLD and the PB2-I eMMC.
+    Found in S35 (finding F5).
+- [ ] **NFP-TACCO-FP** — TACCO footprint defects found in S35 (fix on TACCO's next pass).
+    F1: `TPS6303x_VSON-10_2p5` is a guessed 3-2-3-2 pattern; TI DSK0010A is 5 + 5 pads
+    (SecureControllers `kicad/NoNFO-Pilot/PB2/kicads/NoNFO-PB2.pretty` has the corrected one).
+    F2: W25Q128JVSIQ is package code S, SOIC 208-mil; TACCO uses the 150-mil footprint.
+    F4: Nexperia PRTR5V0U2X fails the sourcing rule (Wingtech, PRC) and is a 5 V part on
+    RS-485.
+    F8 (2026-11-18, Pilot too): `Serenity-Custom:Molex_NanoFit_1x04_Horizontal` has 1.0 mm
+    drills and no locator holes; Molex SD-105313-100 wants dia 1.20 contacts, a dia 1.60 hole
+    and a 1.75 x 1.60 slot 7.18 behind the row (`avionics/datasheets/molex/`). The corrected
+    land is in `NoNFO-PB2.pretty`. Applies to every 105313-1204 in the fleet.
+    F9 (2026-11-18, S36): TACCO wires the PB2-I mLRS UART TX to STM32WLE5 PA2, which is
+    USART2_TX (`avionics/datasheets/st/stm32wle5jc.pdf` pin table), so TX meets TX. Cross it:
+    PB2-I TX to PA3, PA2 to PB2-I RX. The NoNFO-PB2 generator already does.
+    F10 (2026-11-18, S36): TACCO's FB1 742792510 sits on KiCad's IPC `L_1812_4532Metric`,
+    narrower than Wurth's high-current land (7.3 mm span, 1.9 x 3.0 mm pads). Pilot's
+    742792512 is rated 2 A; re-check Pilot's own 5 V peak against it.
+- [ ] **NFP-PILOT-ISO** — Pilot isolation defects found in NoNFO-PB2 S37 (fix on Pilot's next pass).
+    F11: the MIL-1553 connector pin 3 carries logic GND onto the field side of the 1553
+    transformer, defeating its isolation; a transformer-coupled stub needs the bus pair
+    and shield only (NoNFO-PB2 leaves pin 3 open, owner review).
+    F12: `Pilot.kicad_dru` tests `A.Reference`, which is undefined on tracks and vias, so
+    `iso_cross_domain_clearance` and the `bubble_*` rules never checked a track or via.
+    Use `memberOfFootprint()` (SecureControllers `kicad/NoNFO-Pilot/PB2/kicads/
+    NoNFO-Pilot-PB2.kicad_dru`) and re-run Pilot's DRC.
 - [ ] **NFP-QA** — Track fastener, connector and harness mass and CG per board.
     Owner direction 2026-11-14 (PR #289). Starts with the stern stack (S34, S41); the same
     lines are owed for Pilot, TACCO, Commo, Flight Engineer, gateway and Observer.
 - [ ] **NFP-THERM** — Thermal load check for the stern stack at peak electrical load (S40).
 - [ ] **NFP-LEDGER** — Enter the stern stack in the AUW ledger and BOM (S41).
 - [ ] **NFP-SADDLE** — Couple the Simon saddle to the new outline in CI (S41).
-- [ ] **NFP-POLICY** — Update root `AGENTS.md` §1 and §9 to seven nodes (S41).
+- [x] **NFP-POLICY** — Update root `AGENTS.md` §1 and §9 to seven nodes (S41). *(done 2026-11-17:
+    root §1 roster, §9 Commo row, `avionics/AGENTS.md`, `avionics/PACE.md`, `CONCEPTS.md` "Node".)*
 - [ ] **NFP-TEDF-1** — [STD] Tail EDF cooling design shift (2026-11-15, `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`): the
     stern stack sits in the tail EDF's intake stream. NFP-THERM shall use that airflow, and
-    its result gates TEDF-02 (S46). Do it in S40.
+    its result gates TEDF-02 (S45, after the 2026-11-16 S45/S46 swap). Do it in S40.
 - [ ] **NFP-TEDF-2** — [ADV] Confirm which node commands the tail EDF throttle and the four
     RCS valves (GW-RCS), now flight-critical in hover, and whether the PACE assignment of
-    OD-19 still holds. Brought to the owner in OD-22 (S45).
+    OD-19 still holds. Brought to the owner in OD-22 (S46, after the 2026-11-16 S45/S46 swap).
 - [ ] **NFP-TEDF-3** — [STD] The cooling-fan drive output on the stern board has no fan to
     drive. Remove it or repurpose it, and record which (S36 or S41).
+    S36 (2026-11-18): kept as drawn (J-FAN on MCU PA21, no header pin spent); decide in S41.
+- [ ] **NFP-TEDF-4** — [ADV] Tail thrust monitor node and independent nacelle trim logic (owner
+    direction 2026-11-16, plan 002 R39, R40, KD21): an independent sensor (candidates: thrust-tube
+    pressure, rotor speed tach, speed-controller lead current) with its own microcontroller, converter
+    and fused power branch, broadcasting the measured tail thrust fraction and a loss flag, signed, to
+    every controller; independent trim logic in the nacelle tilt-drive controller that moves both
+    nacelles to the moment-balance tilt. Specified in S54 (plan U16,
+    `docs/TAIL_EDF_FAULT_COMPENSATION_SPEC.md`); board and firmware design after G1.
+- [ ] **NFP-TEDF-5** — [ADV] Extend `tools/pace_balance.py` and `docs/PACE_REBALANCE_BRIEF.md` to six
+    roles (the four existing, plus tail EDF and RCS control, and thrust monitor and trim
+    compensation): revise the Latin-square rules (every role has P, A, C, E on four different stacks;
+    every stack holds every level at least once; River keeps Flight Control P), score the options,
+    and bring them to G1 with NFP-TEDF-2. (S45)
 - [ ] **NFP-FW-IF** — Hand Theme F the host-link and device-tree interface (S41).
 
 ## §1.8 — Names
@@ -1453,40 +1504,40 @@ REFERENCES.md Removed/Superseded Citations).
     (`airframe/fuselage-mid/WBS.md` §1.1.1.2.2). BOM: `CAN-PERIPH-GW-DOOR`,
     `PRINT-GW-DOOR-TRAY`, `SERVO-CARGO` 2→3, `DRV8833-CARGO` + tray retired
     (`tools/bom_edit_door_gateway.py`). `CAN-PERIPH-GW-1.md` Deployment 4/5.
-    - [ ] **GW-DOOR-1 — build the `N_STACKS=1` instance.** Confirm the layout to
+    - [ ] **GW-DOOR-1 — build the `N_STACKS=1` instance.** *(2026-11-16: no door servos remain; this board instance now serves GW-RCS, the first-build RCS valve gateway, under TEDF-10/U11.)* Confirm the layout to
         build from (the DRC-clean N=1 backup vs a repack of the live 2-lane board);
         keep parts ≥ 2.5 mm from the two short edges and the bottom long edge (card-edge
         rails); if the outline changes, update `GW_PCB_L/W` in `tools/cargo_layout_fit.py`.
         ERC/DRC/gerbers close under U7.
-    - [ ] **GW-DOOR-2 — OpenServoCore physical layer + logic level.** The upstream README
+    - [ ] **GW-DOOR-2 — OpenServoCore physical layer + logic level.** *(2026-11-16: kept for GW-RCS, which uses the same osc-native chain.)* The upstream README
         (re-read 2026-09-21) does not state whether osc-native is single-wire half-duplex
         (→ `FLEX_TTL_GPIO` = direction line) or full-duplex, nor the swap board's I/O
         voltage; the swap board is "designed but not spun yet". Read the hardware docs,
         decide the `FLEX_TTL_GPIO` role, re-check the shippable gate literally (REF-SENSOR-015
         row in `REFERENCES.md` Open Standards Verification Items).
-    - [ ] **GW-DOOR-3 — PWM-fallback bench items.** SG90 input threshold at 3.3 V (else a
+    - [x] (superseded 2026-11-16 by TEDF-10: no cargo doors; the SG90 door servos are gone, plan 002 KD5) **GW-DOOR-3 — PWM-fallback bench items.** SG90 input threshold at 3.3 V (else a
         harness level shifter); PA24 timer function per SLASFA6B Table 6-2 (bit-bang the
         release otherwise); measured three-servo stall current → size `F_DOOR` (3 A
         placeholder; REF-ACT-003 states 0.5–2 A "operation current" only).
-    - [ ] **GW-DOOR-5 — SG90 at 6 V.** REF-ACT-003 lists 4.8 V only; `POWER_DISTRIBUTION.md`
+    - [x] (superseded 2026-11-16 by TEDF-10: no cargo doors; the SG90 door servos are gone, plan 002 KD5) **GW-DOOR-5 — SG90 at 6 V.** REF-ACT-003 lists 4.8 V only; `POWER_DISTRIBUTION.md`
         §3.3 feeds the class from the 6 V rail. Confirm the sourced part's rating or feed
         `F_DOOR` from 5 V.
-    - [ ] **GW-DOOR-6 — weigh the populated board** (6 g estimate) and feed A0.
-    - [ ] **GW-DOOR-7 — firmware:** osc-native master / PWM fallback, the three frame
+    - [ ] **GW-DOOR-6 — weigh the populated board** *(2026-11-16: now the GW-RCS board.)* (6 g estimate) and feed A0.
+    - [x] (superseded 2026-11-16 by TEDF-10: no cargo doors; the SG90 door servos are gone, plan 002 KD5) **GW-DOOR-7 — firmware:** the door frames and interlocks are retired; the osc-native master and the release frame move to GW-RCS and the winch. Original: osc-native master / PWM fallback, the three frame
         classes, door/release interlocks (release only with both doors OPEN; CLOSE refused
         while `WINCH_STATUS` reports tension), U6 assurance mapping for the SG90 endpoint
         class. Cross-ref `avionics/firmware/WBS.md`.
     - [ ] **Nacelle gateway BOM rows.** Found while adding `CAN-PERIPH-GW-DOOR`: no BOM row
         exists for the two nacelle gateway boards (GW-PORT / GW-STBD, `N_STACKS=4`) either —
         add them with a weighed mass once a populated board exists.
-- [ ] **`GW-RCS` — Phase 11 RCS bleed-valve gateway, SPECIFIED ONLY (2026-09-21).**
+- [ ] **`GW-RCS` — RCS valve gateway, SPECIFIED ONLY (2026-09-21); first build since 2026-11-16 (plan 002, TEDF-10/TEDF-11, G1 valve concept and failsafe decisions).**
     `docs/CARGO_DOOR_GATEWAY_SPEC.md` §9 / `CAN-PERIPH-GW-1.md` Deployment 5: second
     gateway instance in the rear engine cone for the 4 `SERVO-RCS-VALVE` (osc-native chain at
     `N_STACKS=1`, or `N_STACKS=2` for four hardware timer channels with stock PWM — attitude
     effectors need loop-rate command, no bit-banging); fail-CLOSED on heartbeat/MAC loss;
-    `RCS_COMMAND ≥ 50 Hz` — per-frame CMAC signing latency to be measured on the door
-    gateway first. Replaces the Phase 11 wording that maps the valves onto FC2's local PWM
-    (contradicts U1). Not to be built before Phase 11; tracked in `deferred/WBS.md` §Phase11.
+    `RCS_COMMAND ≥ 50 Hz` — per-frame CMAC signing latency to be measured on the repurposed
+    `N_STACKS=1` gateway board (the door gateway is retired). Replaces the former Phase 11 wording that maps the valves onto FC2's local PWM
+    (contradicts U1). First build since 2026-11-16 (the earlier "not before former Phase 11" is superseded); its placement depends on the G1 valve concept; tracked in `deferred/WBS.md` §Phase11 and plan 002.
 - [x] **`ENC-NACELLE-1` DRC — fixed, 2026-07-26.** Found and fixed a genuine
     short (+3V3/ENC_CSN via-to-track contact) plus several clearance
     violations from a congested prior reroute, by moving the conflicting
@@ -2027,7 +2078,7 @@ REFERENCES.md Removed/Superseded Citations).
         - [ ] Pilot + TACCO DTS: hold the unused second ball of every dual-ball header pin
             (P1-2/4/6/10/12/26/28/33/36, P2-1/3/5/7/9/11/29/31) as a GPIO input with no pull
             (PB2I_AM625_HEADER_CAPABILITIES.md §2 CAUTION).
-    - [ ] FLEET sourcing audit (AGENTS.md §5 "Component sourcing and openness", owner
+    - [ ] FLEET sourcing audit (`docs/SOURCING_POLICY.md`, gate in AGENTS.md §5, owner
         2026-10-17): check every board's ICs / semiconductors / modules for manufacturer
         domicile/control in a restricted country and for NDA-only datasheets — TACCO, XO, Commo,
         Observer, Flight Engineer, CAN-PERIPH-GW-1, ESC / servo boards. Nexperia parts

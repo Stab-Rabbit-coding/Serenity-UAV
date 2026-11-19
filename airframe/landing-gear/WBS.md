@@ -56,6 +56,9 @@ ground debris through the absorption stroke) — it is **not** sized to pass a
 cargo box underneath the parked aircraft (the aircraft lands *over* a
 ground-staged box with the cargo doors open and winches it in). This replaces
 the ≥76 mm (3.0 in) payload-mission requirement carried since Rev R1.
+*(Status 2026-11-16: the cargo doors are fused shut and cargo is carried on an external sling
+through a belly fairlead under the tilt pivot, `airframe/fuselage-mid/WBS.md` §1.1.1.4.0. The
+clearance basis above, aircraft safety rather than payload pass-through, is unchanged.)*
 
 **Minimum safe length derived, and the variant decided (2026-09-06).** Retiring
 the cargo driver was right; the driver that replaced it is harder and was not

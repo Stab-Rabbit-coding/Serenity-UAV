@@ -95,7 +95,7 @@
 | head_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
 | middle_canonical_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
 | cargo_sect_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
-| rear_neck_intake_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | Print now; cover reduced-area scoop windows (sized for 55mm EDF) with removable 3mm PETG blanks until Phase 11 |
+| rear_neck_intake_shell24.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | Superseded 2026-11-16: no scoop windows; the neck is the open air passage to the tail EDF, and the hulls are rebuilt under TEDF-09/10. Pre-shift: print now; cover reduced-area scoop windows (sized for 55mm EDF) with removable 3mm PETG blanks until former Phase 11 |
 | wings_s1223_revo.stl | CF-PETG | 0.20mm | 8% gyroid | 1 | |
 | eng_left_stator_shell24_revo.stl | CF-PETG | 0.15mm | 25% gyroid, 4 walls | 1 | |
 | eng_right_stator_shell24_revo.stl | CF-PETG | 0.15mm | 25% gyroid, 4 walls | 1 | |
@@ -107,11 +107,8 @@
 | nacelle_nozzle_petal.stl | PETG + translucent-blue inner | 0.20mm | 20% gyroid | 16 | |
 | nacelle_nozzle_ring.stl | CF-PETG | 0.15mm | 40% | 2 | |
 | nacelle_nozzle_iris.stl | PETG | 0.12mm | 40% | 2 | |
-| rear_nozzle_canonical.stl | CF-PETG | 0.15mm | 30%, 4 walls | 1 | **DEFERRED — Phase 11.** Fixed canonical elliptical tail nozzle (2.06×1.76 in / 52.3×44.7 mm exit); replaces the old iris rear_nozzle_frame/petal. Requires regeneration for 55mm + canonical geometry — see §Phase 11. |
-| rcs_thruster_nozzle.stl | CF-PETG | 0.15mm | 40%, 4 walls | 4 | **DEFERRED — Phase 11.** RCS bleed-air jet nozzle; fed from aft EDF plenum. Requires generation — see §Phase 11. |
-| rcs_distribution_manifold.stl | PETG | 0.20mm | 30% | 1 | **DEFERRED — Phase 11.** Splits ~15% EDF mass flow to the 4 RCS proportional valves. Requires generation — see §Phase 11. |
-| rcs_valve_bracket.stl | CF-PETG | 0.15mm | 40% | 4 | **DEFERRED — Phase 11.** SG90-class proportional valve mount, one per RCS jet. Requires generation — see §Phase 11. |
 | nacelle_sector_gear.stl | CF-PETG | 0.12mm | 40%, 4 walls | 2 | |
+| *(tail EDF and RCS parts)* | — | — | — | — | Rows for `rear_nozzle_canonical.stl`, `rcs_thruster_nozzle.stl`, `rcs_distribution_manifold.stl` and `rcs_valve_bracket.stl` removed 2026-11-16: the nozzle, scoops, passages and exhausts are cut into the one-piece aft hull (TEDF-09), and the valve parts follow the concept the owner chooses at G1 (TEDF-11). |
 | nacelle_pinion.stl | PETG or resin | 0.12mm | 40% | 4 | |
 | nacelle_bevel_pair.stl | PETG or resin | 0.12mm | 40% | 2 sets | |
 | nacelle_bevel_housing.stl | CF-PETG | 0.15mm | 40% | 2 | |
@@ -183,7 +180,7 @@
 
 - [ ] Install 49 MHz (Part 15 §15.235) forward wire post (dorsal, X≈120mm, bonded with 5-min epoxy).
 
-- [ ] Install 49 MHz (Part 15 §15.235) **temporary** aft wire post: PETG hook bonded to aft dorsal hull skin near station ~580mm (NOT on rear nozzle frame — that post is Phase 11). This temporary post reduces antenna length slightly; field-strength compliance with 47 CFR §15.235 is firmware power-limited (see §0.1), not antenna-length dependent.
+- [ ] Install 49 MHz (Part 15 §15.235) **temporary** aft wire post: PETG hook bonded to aft dorsal hull skin near station ~580mm (NOT on rear nozzle frame — that permanent post goes on the tail nozzle in Phase 5). This temporary post reduces antenna length slightly; field-strength compliance with 47 CFR §15.235 is firmware power-limited (see §0.1), not antenna-length dependent.
 
 - [ ] String 49MHz top wire (0.3mm SS wire or 22AWG enamelled Cu) from forward post to temporary aft post with ~20g tension; CF keel connected to the 49 MHz (Part 15 §15.235) GND as counterpoise.
 

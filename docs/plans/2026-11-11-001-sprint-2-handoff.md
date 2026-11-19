@@ -1,3 +1,8 @@
+> **SUPERSEDED 2026-11-16.** Steps 1–5 below were completed on 2026-11-11 (WA-R10 closed; the `wires`
+> check replaced the `--stage cable` exit under OD-18 item 1; see the brief's "Sprint 2 as built"). What
+> remains of S2 is the 2026-11-16 brief review close-out and OD17-FAIR-BORE, tracked in
+> `airframe/wings-nacelles/WBS.md`. Kept as a record; do not execute.
+
 # Sprint 2 handoff — draw the 4 × 10 AWG route (WA-R10), from the OD-17 decision
 
 **Written 2026-11-11, end of the session that decided OD-17.** Branch `ccr-8ff05bfb-r6gena`, PR #281 (draft → ready;

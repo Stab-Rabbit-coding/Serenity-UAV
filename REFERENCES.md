@@ -102,7 +102,7 @@ itself, the CF spar tube and 4130/17-4 PH/7075 allowables verification remains o
     - [REF-SENSOR-012: STS3215 Digital Servo Motor — Cargo Winch Control (SUPERSEDED)](#ref-sensor-012-sts3215-serial-bus-servo--cargo-winch-drive-superseded)
     - [REF-ACT-001: Pololu 20D mm Metal Gearmotors](#ref-act-001-pololu--20d-mm-metal-gearmotors-datasheet--dimension-diagram)
     - [REF-ACT-002: Pololu 25D mm Metal Gearmotors](#ref-act-002-pololu--25d-mm-metal-gearmotors-datasheet-rev-20--dimension-diagram)
-    - [REF-ACT-003: TowerPro SG90 — 9 g Micro Servo (cargo door / release; RCS valves Phase 11)](#ref-act-003-towerpro-sg90--9-g-micro-servo-cargo-door--release-rcs-valves-phase-11)
+    - [REF-ACT-003: TowerPro SG90 — 9 g Micro Servo (cargo door / release; RCS valves, first build)](#ref-act-003-towerpro-sg90--9-g-micro-servo-cargo-door--release-rcs-valves-first-build)
     - [REF-ESC-001: Open-Secure-ESC — 6S/10A brushed build, the nacelle-tilt controller](#ref-esc-001-open-secure-esc--6s10a-brushed-build-the-nacelle-tilt-controller)
     - [REF-SENSOR-013: SPT Servo SPT5425LV — 25 kgf·cm Analog/Digital PWM Servo (fleet-standard high-torque body)](#ref-sensor-013-spt-servo-spt5425lv--25-kgfcm-analogdigital-pwm-servo-fleet-standard-high-torque-body)
     - [REF-SENSOR-014: LibreServo v2 (stab-rabbit-coding fork) — Open-Source Smart-Servo Control Board](#ref-sensor-014-libreservo-v2-stab-rabbit-coding-fork--open-source-smart-servo-control-board)
@@ -729,7 +729,7 @@ cycle); hardware-enforced append-only non-executable log microSD on every XO nod
 | **Issuing authority** | 117th U.S. Congress; James M. Inhofe National Defense Authorization Act for Fiscal Year 2023, Public Law 117-263, 136 Stat. 2395 (2022); §5949 at 136 Stat. 3485 ff., codified as a note to 41 U.S.C. §4713 |
 | **Official access** | <https://www.congress.gov/117/plaws/publ263/PLAW-117publ263.htm> (enrolled text, HTTP 200, read 2026-10-17) |
 | **Section applied** | §5949(a)(1) prohibition on executive-agency procurement of electronic parts that include "covered semiconductor products or services"; §5949(c)(1) effective five years after enactment; §5949(j)(3)(A)-(C) definition (SMIC, CXMT, YMTC, and entities owned/controlled by or connected to the government of a foreign country of concern); §5949(j)(5) foreign country of concern -> 15 U.S.C. §4651(7) (REF-LAW-003) |
-| **Cited in** | `AGENTS.md` §5 "Component sourcing and openness" |
+| **Cited in** | `docs/SOURCING_POLICY.md` (gate: `AGENTS.md` §5) |
 
 ### REF-LAW-002: Public Law 118-31 (FY2024 NDAA) Div. A Title XVIII Subtitle B — American Security Drone Act of 2023
 
@@ -738,7 +738,7 @@ cycle); hardware-enforced append-only non-executable log microSD on every XO nod
 | **Issuing authority** | 118th U.S. Congress; National Defense Authorization Act for Fiscal Year 2024, Public Law 118-31, 137 Stat. 136 (2023); Subtitle B "Drone Security", §§1821-1833, at 137 Stat. 691 ff., codified as a note preceding 41 U.S.C. §3901 |
 | **Official access** | <https://www.congress.gov/118/plaws/publ31/PLAW-118publ31.htm> (enrolled text, HTTP 200, read 2026-10-17) |
 | **Section applied** | §1821 short title; §1822(1)(A)-(E) "covered foreign entity" (incl. (D) entities domiciled in, or subject to influence or control by the government or Communist Party of, the People's Republic of China, and (E) their subsidiaries/affiliates); §1823(a) prohibition on executive-agency procurement of unmanned aircraft systems "manufactured or assembled by a covered foreign entity", including "communication links and the components that control the unmanned aircraft" |
-| **Cited in** | `AGENTS.md` §5 "Component sourcing and openness" |
+| **Cited in** | `docs/SOURCING_POLICY.md` (gate: `AGENTS.md` §5) |
 
 ### REF-LAW-003: 15 U.S.C. §4651(7) "foreign country of concern" and 10 U.S.C. §4872 "covered nation"
 
@@ -747,7 +747,7 @@ cycle); hardware-enforced append-only non-executable log microSD on every XO nod
 | **Issuing authority** | United States Code (Office of the Law Revision Counsel); read via Cornell LII |
 | **Official access** | <https://www.law.cornell.edu/uscode/text/15/4651>; <https://www.law.cornell.edu/uscode/text/10/4872> (both HTTP 200, read 2026-10-17); authoritative text at <https://uscode.house.gov/> |
 | **Section applied** | 15 U.S.C. §4651(7)(A)-(B): a "covered nation" under 10 U.S.C. §4872, plus any country the Secretary of Commerce determines to be engaged in conduct detrimental to U.S. national security or foreign policy. 10 U.S.C. §4872 "covered nation" = the Democratic People's Republic of Korea, the People's Republic of China, the Russian Federation and the Islamic Republic of Iran. §4651(7)(A) cites §4872(d); in the current code the definition is at §4872(f)(2) (renumbered by later amendment). §4872 itself restricts magnets, tungsten, tantalum, molybdenum, germanium and gallium, not semiconductors; it is used here only for its country list |
-| **Cited in** | `AGENTS.md` §5 "Component sourcing and openness" |
+| **Cited in** | `docs/SOURCING_POLICY.md` (gate: `AGENTS.md` §5) |
 
 ### REF-MIL-001: MIL-STD-1553C — Digital Time Division Command/Response Multiplex Data Bus
 
@@ -1723,7 +1723,7 @@ FEA cross-check (ANSYS Workbench, linear-elastic model, Table 11): simulated fle
 | **Official access** | <https://en.jtcopper.com/c26000-brass.html> (fetched 2026-10-26) |
 | **Section applied** | Mechanical properties table: Annealed 300–400 MPa tensile, 100–150 MPa yield, 55–70 % elongation; Cold Worked H02 450–550 / 350–420 / 15–25 %; H04 550–650 / 480–550 / 5–12 %; density 8.53–8.60 g/cm^3. The page notes the data apply to standard thicknesses and processing states. |
 | **Use limits** | Vendor ranges, not ASTM B134 minimums; used only for the fuse-material TRADE (worst case of each range). A PRC-domiciled vendor: cited as a property source only, never as a supply source (AGENTS.md §5 governs silicon, but supply of any part should follow the owner's sourcing intent). Replace with ASTM B134 / a US mill sheet before any sizing for build. |
-| **Cited in** | `tools/lg_fuse_material.py`; `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md` §6 |
+| **Cited in** | `tools/lg_fuse_material.py`; `tools/cg_mass_reduction_study.py`; `tools/node_thermal_forced_air.py` (density only); `docs/LG_BELLCRANK_LOAD_PATH_STUDY.md` §6 |
 
 ### REF-MAT-010: Elgin Fastener Group (M&W) — "Carbon Steel Grade 1008 Fact Sheet" (1008 annealed)
 
@@ -1892,7 +1892,9 @@ and Claude Opus 5.5 read and translated it.
 **Where it is applied:** `tools/nacelle_axial_fit.py`, `tools/tests/test_nacelle_axial_fit.py`,
 `airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad`,
 `docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`,
-`airframe/wings-nacelles/WBS.md` §1.1.4 NAC-64-SERVO-01 / NAC-64-FIT-01 / NAC-64-FIT-02.
+`airframe/wings-nacelles/WBS.md` §1.1.4 NAC-64-SERVO-01 / NAC-64-FIT-01 / NAC-64-FIT-02;
+tail EDF (plan 002): `tools/tail_edf_flow.py`, `tools/hover_trim_rcs.py`,
+`tools/rear_cone_layout_fit.py` (shroud diameters, motor drawing, shaft, 140 g).
 ---
 
 
@@ -2080,10 +2082,24 @@ which prints that caveat on every run.
 | **Limitation** | General SLS-nylon guidance from 2019. It predates DuraForm PA CF (2023) and gives no material allowables. |
 
 **Used in:** `tools/sls_dfm_audit.py`, `tools/sls_print_orientation.py`,
+`tools/rear_cone_layout_fit.py` (until 2026-11-18: p. 15, 1 mm minimum feature, for the ventral passage web; the tool now uses the 1.5 mm interim floor of `docs/SLS_MIN_WALL_THICKNESS.md` and AGENTS.md section 7),
 `airframe/openscad/nacelles/nacelle_nozzle_fixed.scad`,
 `airframe/openscad/fuselage/cargo/tilt_brake.scad`,
 `airframe/openscad/fuselage/belly_panel.scad`, `docs/SLS_MIGRATION.md`,
 `docs/SLS_PRINT_ORIENTATION.md`
+
+---
+
+### REF-HT-001: Incropera, DeWitt, Bergman and Lavine — Fundamentals of Heat and Mass Transfer (John Wiley & Sons)
+
+| Field | Value |
+| --- | --- |
+| **Issuing body** | John Wiley & Sons (textbook; authors F. P. Incropera, D. P. DeWitt, T. L. Bergman, A. S. Lavine) |
+| **Edition and URL** | **Edition not recorded and no publisher URL validated — requires verification.** The book is paywalled; no copy is in the repository. |
+| **Section applied** | Three relations are used in `tools/node_thermal_forced_air.py`: (1) average laminar flat-plate convection, Nu_L = 0.664 Re_L^1/2 Pr^1/3 (Re_L < 5e5, Pr >= 0.6); (2) the straight rectangular fin with an insulated tip, efficiency eta = tanh(mL)/(mL), m = sqrt(h/(k t)); (3) the air property row at a 60 C (140 F) film temperature. **Equation, table and chapter numbers are NOT verified.** A public lecture deck based on this text labels relation (1) "Eq. 7.30" ([UMD CHBE 250 notes](https://terpconnect.umd.edu/~nsw/chbe250/BLsimilar-Incropera.pdf)); that is a secondary source and is not accepted as the check. Relations (2) and (3) could not be located in any source read on 2026-11-17. |
+| **Status** | **Requires verification** — TODO §0.14 item `REF-HT-001 edition and sections`. The relations are standard heat-transfer results, but the section numbers must not be quoted until read in the book or the NCEES FE Reference Handbook [REF-NCEES-009 is the dynamics section only]. Every figure that rests on this entry stays PROVISIONAL. |
+
+**Used in:** `tools/node_thermal_forced_air.py` (film coefficient, fin efficiency, air properties)
 
 ---
 
@@ -2255,7 +2271,7 @@ redundancy policy [REF-NIST-001 §2.1].
 | Package | 484-ball FCBGA/FCCSP | AM62Ax datasheet Rev. E |
 
 **Applied to:** Observer board vision half (nose bow sensor pod and cargo bay nadir FPV mount) —
-see `avionics/AGENTS.md` "Observer — Cargo-Handling System and Nose/Cargo-Bay Vision, ToF & Laser Board". **Open item:** the
+see `avionics/kicad/Observer/Observer.md`. **Open item:** the
 484-ball FCBGA package is a substantial escalation in assembly difficulty versus the discrete
 components elsewhere in this design; PCB fabrication/assembly house capability for this
 package must be confirmed before board layout (tracked in TODO.md §1.2c).
@@ -2598,8 +2614,7 @@ servo/board combinations, and gives every one of them the signed-serial-bus tele
 STS3215 winch conversion was chasing in the first place — without the STS3215's own
 never-resolved datasheet-verification gate (REF-SENSOR-012 above), since the SPT5425LV's
 envelope, torque and mass are all published COTS figures (REF-SENSOR-013). Separately, the
-SG90 micro servos (cargo door, payload release; RCS bleed-valve servos are Phase 11
-deferred) are standardised on **OpenServoCore** (REF-SENSOR-015), an SG90/MG90-class
+SG90 micro servos (cargo door, payload release; RCS valve servos are first-build items) are standardised on **OpenServoCore** (REF-SENSOR-015), an SG90/MG90-class
 open-source swap board — not LibreServo, whose smallest documented target is a
 standard-size (40 mm class) servo, not the 23 mm SG90 body.
 
@@ -2734,8 +2749,8 @@ Items").
 
 **Applied to:** `SERVO-CARGO` (port door ×1, starboard door ×1, payload release ×1 — qty 3
 since 2026-09-21, `docs/CARGO_DOOR_GATEWAY_SPEC.md` D-GW-2), hosted by `CAN-PERIPH-GW-DOOR`;
-RCS bleed-jet proportional valve servos (`SERVO-RCS-VALVE`, ×4, Phase 11 deferred) are the
-same SG90 class and inherit this note when that phase is implemented (hosted by the Phase 11
+RCS bleed-jet proportional valve servos (`SERVO-RCS-VALVE`, ×4, first build, Qty 0 until the G1 valve concept fixes the part) are the
+same SG90 class and inherit this note when the part is fixed (hosted by the first-build
 `GW-RCS` gateway specified in that document §9), but are not otherwise touched here.
 
 **Used in:** `current-specification/bom_revS.json`, `current-specification/bom_revS.csv`,
@@ -2935,7 +2950,7 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Status** | Trade-study record only from Rev T5e (2026-09-16): the Ø25 body cannot clear the Ø42 worm wheel for any worm that clears the battery cradle (finding T5d-1, `docs/CARGO_SECTION_LAYOUT.md` §4); superseded for the build by REF-ACT-001. |
 | **Caveat** | Overall length of the encoder version is not read from the drawing (the diagram covers motors without encoders). No axial-load rating for the output shaft is published. |
 
-### REF-ACT-003: TowerPro SG90 — 9 g Micro Servo (cargo door / release; RCS valves Phase 11)
+### REF-ACT-003: TowerPro SG90 — 9 g Micro Servo (cargo door / release; RCS valves, first build)
 
 | Field | Value |
 |---|---|
@@ -3928,7 +3943,7 @@ airframe reference sources (REF-CAD-002/003/004) — see `docs/attribution_and_l
 **Applied to:** `docs/OSHW_CERTIFICATION.md` readiness checklist; not yet applied to an actual
 OSHWA certification submission (open item).
 
-**Used in:** `docs/OSHW_CERTIFICATION.md`, `TODO.md` §0.9; `AGENTS.md` §5 "Component sourcing and openness" (NDA-free datasheet rule, re-read 2026-10-17).
+**Used in:** `docs/OSHW_CERTIFICATION.md`, `TODO.md` §0.9; `docs/SOURCING_POLICY.md` (gate: `AGENTS.md` §5) (NDA-free datasheet rule, re-read 2026-10-17).
 
 ### REF-LIC-003: The MIT License
 
@@ -4019,6 +4034,8 @@ because they were incorrectly attributed, unverifiable, or inapplicable.
 | "LibreServo_v4.1-TC" tilt-controller variant (`LS-TILT-TC`, `TILT-CTL-08`, `TC-BOARD`, `LS-CR-1`) | `docs/TILT_ACTUATOR_SELECTION.md` §4, `docs/TILT_DRIVE_CONTROL_SPEC.md`, `docs/POWER_DISTRIBUTION.md` §3.3a, `docs/CARGO_SECTION_LAYOUT.md`, `current-specification/bom_revS.*`, `WBS.md` | **Superseded by design decision (2026-09-17), not an error.** A LibreServo variant would fork that board away from its upstream and break the attribution chain, for a device that is no longer a servo controller. | REF-ESC-001 — Open-Secure-ESC build `6s/10A/BRUSHED_CAN_485_isolation`; BOM row `OSESC-TILT-TC` |
 | REF-MIL-001 used for CNAF M-3710.7 (ID collision) | `AGENTS.md` §6a, `tools/precommit_doc_wording.py`, `.githooks/pre-commit` (branch `avionics-docs-audit`) | **Duplicate ID.** REF-MIL-001 is MIL-STD-1553C; the CNAF M-3710.7 entry was filed under the same ID. Found while merging `main` 2026-10-05. | REF-MIL-003 (same CNAF entry, renumbered) |
 | Avia Semiconductor HX711 24-bit ADC and the `HX711-LC` breakout module — cargo line-tension ADC | `current-specification/bom_revS.*` (retained as the Rev S snapshot) and `bom_revT.*` (row replaced), `docs/CARGO_WINCH_SPECIFICATION.md`, `docs/POWER_DISTRIBUTION.md` §3.2, `avionics/firmware/fc/tools/governor_cal.py`, `airframe/placeholders/generate_placeholders.py` | **Superseded by owner decision (2026-10-20), not a citation error.** Page 1 of the HX711 datasheet prints Avia's contact as "(P. R. China)", which fails the component-sourcing rule in `AGENTS.md` §5; the BOM entry also named no manufacturer for the module. The datasheet stays at `avionics/datasheets/avia-semiconductor/hx711.pdf` pending the owner's decision to delete it. | REF-SENSOR-063 (TI ADS1231) |
+| [REF-FAN-001] Delta ASB02505SHA-AY6B fan datasheet (P-Q curve, mass, power) | `tools/node_thermal_forced_air.py`, `tools/rear_cone_layout_fit.py` | **Never catalogued, and superseded by design decision (2026-11-16, TEDF-01).** No REF-FAN-001 entry ever existed in this file, so the citation could not resolve. The 25 mm fan is replaced by the tail EDF (plan 002). The thermal tool's citation is removed in U1; its fan figures leave with the fan in TEDF-02; the layout tool's were removed with the fan in TEDF-05 (2026-11-17, `tools/rear_cone_layout_fit.py` rewritten for the QX unit). | None — fan removed. Tail EDF figures cite REF-EDF-003. |
+| `[REF-MAT-008]` used for C26000 brass density | `tools/node_thermal_forced_air.py` | **Incorrect attribution.** REF-MAT-008 is ASTM A228 music wire (Gibbs Wire); C26000 brass is REF-MAT-009. Found 2026-11-17. | REF-MAT-009 (density 8.53 g/cm^3; it gives no thermal conductivity — see TODO §0.14) |
 
 ---
 

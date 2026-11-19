@@ -1,5 +1,7 @@
 # Airframe Specifications Verification (Task 0.6.1)
 
+> **Pre-shift figures (note 2026-11-17).** This document predates the 2026-11-16 design shift (`docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`): the tail EDF (QX 64 mm) and the RCS are part of the first build (Phase 5). "Former Phase 11" below means the pre-shift aft-EDF configuration (55 mm or 120 mm EDF, 3,130 g design case). Its figures are history, not current values; current values are in `current-specification/auw_ledger.json` and the plan.
+
 **Date:** 2026-08-01  
 **Status:** Superseded — closed out by `docs/WBS.md` §0.10.1 (2026-08-22); this document's
 open items were resolved there. Retained as historical record.  
@@ -172,7 +174,7 @@ total AUW accuracy.
 
 ---
 
-### 3.3 Phase 11 (Deferred) — Rear EDF Thrust (No Stator Efficiency)
+### 3.3 former Phase 11 (Deferred) — Rear EDF Thrust (No Stator Efficiency)
 
 | Parameter | Spec | Source | Notes | Status |
 |-----------|------|--------|-------|--------|
@@ -185,10 +187,10 @@ total AUW accuracy.
 - **Rear EDF (55mm):** 1,500g raw thrust; **no inter-stage stator** (no efficiency factor)
 - RCS bleed is mass-flow diversion, not efficiency loss — serves attitude control, not thrust enhancement
 
-**Phase 11 thrust budget:**
+**Former Phase 11 thrust budget:**
 - Hover authority: 4,464 g (nacelles only) — rear EDF does not contribute to hover
 - Forward cruise thrust: 1,275 g (rear EDF after RCS bleed)
-- Total Phase 11 AUW: ~3,130 g | Hover T/W ≈ 1.43 (nacelles only)
+- Total former Phase 11 AUW: ~3,130 g | Hover T/W ≈ 1.43 (nacelles only)
 
 ---
 

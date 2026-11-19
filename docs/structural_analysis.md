@@ -1,5 +1,7 @@
 # Serenity UAV — Fuselage Structural Analysis
 
+> **Pre-shift figures (note 2026-11-17).** This document predates the 2026-11-16 design shift (`docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`): the tail EDF (QX 64 mm) and the RCS are part of the first build (Phase 5). "Former Phase 11" below means the pre-shift aft-EDF configuration (55 mm or 120 mm EDF, 3,130 g design case). Its figures are history, not current values; current values are in `current-specification/auw_ledger.json` and the plan.
+
 **Revision:** R1 (2026-06-14)
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
@@ -421,13 +423,13 @@ touchdown. This unit re-derives §6.2 with the corrected AUW first, since
 §2's own 2026-08-22 note already flags every number in §3–§7 as computed
 from a stale, doubled mass budget, then adds the case §6.2 never had.)*
 
-**Mass basis:** the owner directed using the **Phase 11 (full system) AUW,
+**Mass basis:** the owner directed using the **Former Phase 11 (full system) AUW,
 4,273 g (9.42 lbm, `README.md`)** for this re-derivation specifically, so it
 does not need re-deriving again once the aircraft reaches its final,
 heaviest configuration. Total weight W = 4.273 kg × 9.80665 m/s² = **41.90 N**.
 This supersedes §2's own Phase 5–10 corrected figure (36.8 N) *for this
 section only* — §2 stays as the Phase 5–10 basis for the rest of this
-document; do not silently propagate the Phase 11 figure elsewhere.
+document; do not silently propagate the former Phase 11 figure elsewhere.
 
 **Geometry re-measured directly from the published STL, not assumed.** §6.1's
 "low-Z vertices" survey and §6.2's "approx 76 × 23 mm²" box-shell estimate

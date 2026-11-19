@@ -123,7 +123,7 @@
 - [ ] **Cargo control** — DRV8833 winch H-bridge, ADS1231 load cell (payload weight sensing), SG90 door and release servos; state machine: IDLE → DEPLOY → DELIVERED → RETRACT → LATCHED.
     - [ ] DRV8833 H-bridge winch driver.
     - [ ] ADS1231 load-cell driver (line-tension sensing, overload cutoff): wait for DRDY/DOUT low, clock 24 bits, return SCLK low after every read (Standby entry otherwise); hardware is `LC-ADC`, WBS CARGO-LC-01.
-    - [ ] SG90 door + release servo driver.
+    - [x] (superseded 2026-11-16 by TEDF-10: the cargo doors are fused into the skin and the belly service panel with captive fasteners replaces them, plan 002 KD5 and R12) SG90 door + release servo driver.
     - [ ] State machine implementation: IDLE → DEPLOY → DELIVERED → RETRACT → LATCHED, with fault states.
     - [ ] Bench test: full cycle with simulated payload load, verify ADS1231 cutoff and state transitions.
 

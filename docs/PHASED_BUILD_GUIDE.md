@@ -2,6 +2,8 @@
 
 # Serenity-Class Tiltrotor UAV — Phased Build Guide (Rev M — SUPERSEDED)
 
+> **Pre-shift figures (note 2026-11-17).** This document predates the 2026-11-16 design shift (`docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`): the tail EDF (QX 64 mm) and the RCS are part of the first build (Phase 5). "Former Phase 11" below means the pre-shift aft-EDF configuration (55 mm or 120 mm EDF, 3,130 g design case). Its figures are history, not current values; current values are in `current-specification/auw_ledger.json` and the plan.
+
 > **⚠ SUPERSEDED for 24-inch builds.** This guide was written for the Rev M 18-inch hull
 > with dual 80mm EDFs and PocketBeagle 2 Industrial nodes. For the current 24-inch Rev T+
 > build, use **`graphical-build-guide/REVN_BUILD_GUIDE_24IN.md`** (Rev T+ refresh 2026-10-31) and the
@@ -476,7 +478,7 @@ Label each conduit at BOTH ends with permanent marker. Immediately thread pull s
 
 - Step 3: Mount 2× 80A BLHeli32 ESCs against hull interior sides in bay C — foam tape + M2.5 tabs. These will be replaced in Phase 7; mount accessibly.
 
-- Step 4: Mount 1× BLHeli32 50A ESC in bay E for the 55mm fuselage EDF (Phase 11 deferred).
+- Step 4: Mount 1× BLHeli32 50A ESC in bay E for the 55mm fuselage EDF (former Phase 11 deferred).
 
 ## 5.Install 5V/5A BEC; output to avionics power rail.Verify 5.00V ±0.05V under 1A bench load before connecting avionics
 
@@ -1120,7 +1122,7 @@ Each run sweeps 0%→100%→0% throttle, fits k coefficient (T = k × RPM²), ou
 | ----- | ----------------------------------------------------- | ----------- | ----------- | --------------------------------------------- |
 | 0     | Print All Parts + Cut CF                              | ~$65        | ~$65        | Filament + CF materials + resin gears         |
 | 1     | Structure + All Future Provisions                     | ~$80        | ~$145       | Foam, epoxy, conduits, hardware               |
-| 2     | Nacelle Mechanics + Budget EDFs                       | ~$145       | ~$290       | 55mm fuselage EDF deferred to Phase 11        |
+| 2     | Nacelle Mechanics + Budget EDFs                       | ~$145       | ~$290       | 55mm fuselage EDF deferred to former Phase 11        |
 | **3** | **Minimum Viable Flyer ★ FIRST FLIGHT**               | **~$740**   | **~$1,030** | CN1+FC1+CN2+FC2, power, ESCs, radios, battery |
 | 4     | Full 8-Node Architecture                              | ~$540       | ~$1,570     | CN3+FC3+CN4+FC4 — full ring redundancy        |
 | 5     | Obstacle Avoidance: 12× ToF                           | ~$110       | ~$1,680     | Dual-redundant OA arrays                      |
@@ -1167,7 +1169,7 @@ The phased approach reaches first flight at **~$1,030** and defers the $590 moto
 | C     | Cargo belly | 160–251mm | Hinge          | Cargo gondola, clamshell doors, winch motor                                                                                                                     |
 | D     | Dorsal aft  | 251–320mm | 4× N42 magnets | CN3 TACCO (lower) + FC3 Pilot (upper); CN3 XCVR-49MHZ; FC3 GPS coax (~275mm); ETH-BD/ETH-DE conduit ends; CN3 log μSD; Array A mux                               |
 | E     | Aft service | 320–388mm | 4× M2.5        | CN4 TACCO (lower) + FC4 Pilot (upper); CN4 XCVR-49MHZ; FC4 GPS coax (~350mm); ETH-DE/ETH-EA conduit ends; CAN FD 120Ω at FC4; CN4 log μSD; budget→Hobbywing ESCs |
-| F     | Engine bell | 388–457mm | Bayonet        | 55mm fuselage EDF, fixed canonical elliptical nozzle, 4× RCS bleed-jet valves (Phase 11)                                                                        |
+| F     | Engine bell | 388–457mm | Bayonet        | 55mm fuselage EDF, fixed canonical elliptical nozzle, 4× RCS bleed-jet valves (former Phase 11)                                                                        |
 
 ---
 
