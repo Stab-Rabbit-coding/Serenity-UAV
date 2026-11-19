@@ -13940,6 +13940,14 @@
       ],
       "archived": false
     },
+    "docs/solutions/logic-errors/cfd-body-must-come-from-the-real-parts-and-test-the-cause.md": {
+      "description": "A CFD body must come from the real parts, and a cause must be tested",
+      "tags": [
+        "documentation",
+        "security"
+      ],
+      "archived": false
+    },
     "docs/solutions/logic-errors/cgal-touching-sheets-non-manifold-split-by-fan-pairing.md": {
       "description": "A merged CGAL render can still be non-manifold where two sheets touch",
       "tags": [
@@ -17638,6 +17646,7 @@
       "docs/solutions/design-patterns/self-locking-worm-and-vectoring-bandwidth-are-mutually-exclusive.md",
       "docs/solutions/design-patterns/void-formers-are-cut-from-the-shell-mesh-by-a-seeded-boolean.md",
       "docs/solutions/logic-errors/bom-csv-json-mirror-drift-and-in-place-rewrite-truncation.md",
+      "docs/solutions/logic-errors/cfd-body-must-come-from-the-real-parts-and-test-the-cause.md",
       "docs/solutions/logic-errors/cgal-touching-sheets-non-manifold-split-by-fan-pairing.md",
       "docs/solutions/logic-errors/loft-rings-index-by-station-not-by-resampled-position.md",
       "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
@@ -17958,6 +17967,7 @@
       "docs/solutions/conventions/one-limits-list-drives-the-printout-and-the-exit-code.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
+      "docs/solutions/logic-errors/cfd-body-must-come-from-the-real-parts-and-test-the-cause.md",
       "docs/solutions/logic-errors/mating-face-aperture-allowlist.md",
       "docs/solutions/workflow-issues/a-recorded-route-or-clearance-goes-stale-when-its-part-changes.md",
       "gcs/AGENTS.md",
