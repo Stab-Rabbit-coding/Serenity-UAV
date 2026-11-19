@@ -22,7 +22,7 @@ execution: code
 - **Objective.** Take NoNFO-Pilot-PB2 from ideation to fab-ready: ERC 0, DRC 0, schematic parity 0, unconnected 0, Gerbers generated, on KiCad 9.0.2. It becomes the stern (Simon) control stack of Serenity Rev U.
 - **Product authority.** Owner (Stab-Rabbit-coding). Sprint order is a recommendation; each owner-decision gate needs the owner's word.
 - **Mode.** Governed. This plan creates no second task list. Board items live in `SecureControllers:TODO.md` §5; airframe items live in `avionics/WBS.md` §1.11; sprints S34 to S41 are indexed in Theme A of `docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md`.
-- **Owner decisions in force (2026-11-14):** architecture B+; BBE-Black outline; mass minimised, not floored; PACE option B; Wi-Fi Ezurio Sterling-LWB5+ 453-00046 (USB, MHF4).
+- **Owner decisions in force (2026-11-14):** architecture B+; BBE-Black outline; mass minimised, not floored; PACE option B; Wi-Fi Ezurio Sterling-LWB5+ 453-00046 (USB, MHF4); logging microSD on the USB2641i hub.
 - **Stop conditions.** A sprint does not start if its owner decision is open. A fit or mass gate that still fails after the one pre-authorised re-run without GNSS stops layout and goes to the owner as an Owner Decision Brief (`docs/DOC_TEMPLATES.md`).
 - **Out of scope.** The BBE-hosted variant. Firmware (Theme F). Any change to the three full stacks.
 
@@ -258,6 +258,8 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 
 ### U2. S35 — Parts sourced, footprints verified
 
+**Status 2026-11-18: done.** Nano-Fit 105313-1204 regenerated from Molex SD-105313-100 (finding F8); courtyard fill (logic 89 %, power_entry 94 %) carried to S38. Earlier, 2026-11-17: BOM (53 lines), sourcing gate, and three OEM-drawn footprints done; findings F1 to F7 in SecureControllers `kicad/NoNFO-Pilot/PB2/NONFO_PB2_FOOTPRINT_VERIFICATION.md`. OD-23 decided 2026-11-17: logging microSD on the hub (USB2641i). OD-22 closed 2026-11-17 (no temperature specification). KMR2 verified. Open: Nano-Fit drawing, logic-zone courtyard 89 % (to S38).
+
 **Goal:** Every part chosen, sourced and footprint-verified before it enters the schematic.
 
 **Requirements:** R6 to R9, R11, R12, R15. Needs OD-20.
@@ -285,6 +287,8 @@ Total: optimistic 9, most likely **14**, pessimistic 22 sessions. At least 20 it
 ### U3. S36 — Schematic generator, ERC 0
 
 **Goal:** A generated schematic that passes ERC and matches the ledger.
+
+**Status 2026-11-18: done.** 265 parts, KiCad 9.0.2 ERC 0 errors and 0 warnings, 28 tests including both negative controls, CI ERC job added. The 5 V peak is revised from S34's 3.12 A to 3.5 A once the LWB5+ got its own +3V6 rail (768 mA calibration peak). The 5 V entry sim dips to 4.53 V against the 4.5 V ISOW floor (CAUTION, to S41). Findings F9 (TACCO mLRS UART TX to TX) and F10 (input bead rated 2 A, now 742792510 at 5 A). The pull-up negative control runs on the design-rule test, because a net-label schematic gives ERC nothing to flag. Results in SecureControllers `kicad/NoNFO-Pilot/PB2/NoNFO-Pilot-PB2.md`.
 
 **Requirements:** R3, R6 to R14.
 
