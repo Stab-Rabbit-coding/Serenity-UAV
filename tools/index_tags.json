@@ -3473,6 +3473,20 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/Bourns_CDSOT23-SM712.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/Bourns_SMAJ.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/ECS_ECX-32.pdf": {
       "description": "PDF document",
       "tags": [
@@ -3496,6 +3510,13 @@
     },
     "avionics/datasheets/ImportGuides.html": {
       "description": "HTML document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/Murata_DFE201610P.pdf": {
+      "description": "PDF document",
       "tags": [
         "avionics-hardware"
       ],
@@ -4114,6 +4135,13 @@
       "archived": false
     },
     "avionics/datasheets/molex/1051620001_sd.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/molex/1053131204.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -11957,6 +11985,15 @@
       ],
       "archived": false
     },
+    "docs/plans/2026-11-16-001-feat-nozzle-servo-selection-osc-integration-plan.md": {
+      "description": "Nozzle Servo Selection and Secure Servo Integration - Plan",
+      "tags": [
+        "documentation",
+        "propulsion",
+        "security"
+      ],
+      "archived": false
+    },
     "docs/references/108090023_STS3215-C001_Datasheet.pdf": {
       "description": "PDF document",
       "tags": [
@@ -17241,6 +17278,7 @@
       "docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md",
       "docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md",
       "docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md",
+      "docs/plans/2026-11-16-001-feat-nozzle-servo-selection-osc-integration-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/AC_43.13-1B_w-chg1.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
@@ -17783,6 +17821,7 @@
       "docs/plans/2026-11-07-001-feat-rev-u-completion-execution-plan.md",
       "docs/plans/2026-11-11-001-sprint-2-handoff.md",
       "docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md",
+      "docs/plans/2026-11-16-001-feat-nozzle-servo-selection-osc-integration-plan.md",
       "docs/solutions/conventions/one-limits-list-drives-the-printout-and-the-exit-code.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
@@ -18903,6 +18942,7 @@
       "docs/plans/2026-10-19-001-baseline-r1/nacelle_esc_bay_fit.py.txt",
       "docs/plans/2026-10-19-001-baseline-r1/nozzle_linkage_check.py.txt",
       "docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md",
+      "docs/plans/2026-11-16-001-feat-nozzle-servo-selection-osc-integration-plan.md",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model.html",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/1.jpg",
       "docs/references/EDF Ducted Fan XFly Galaxy X5 XFLY-Model 50mm 12 blades + 6S Motor 3200KV - Xfly-Model_files/2.jpg",
@@ -19268,10 +19308,13 @@
       "avionics/datasheets/AX88772E_AX88772D_DEMO_BOARD_BOM_20251128.xlsx",
       "avionics/datasheets/AX88772E_Application_DesignNote_v110.pdf",
       "avionics/datasheets/AX88772E_DEMO_BOARD_SCHEMATIC_V101.pdf",
+      "avionics/datasheets/Bourns_CDSOT23-SM712.pdf",
+      "avionics/datasheets/Bourns_SMAJ.pdf",
       "avionics/datasheets/ECS_ECX-32.pdf",
       "avionics/datasheets/ESD2CANxx24-Q1_SLVSFW5D.pdf",
       "avionics/datasheets/HolyStone_HVC_Series.pdf",
       "avionics/datasheets/ImportGuides.html",
+      "avionics/datasheets/Murata_DFE201610P.pdf",
       "avionics/datasheets/Pulse_TC002_PulseChip.pdf",
       "avionics/datasheets/TaiyoYuden_LMK325BJ476KMHP_SS.pdf",
       "avionics/datasheets/YAGEO_CC0402JRNPO9BN150.pdf",
@@ -19360,6 +19403,7 @@
       "avionics/datasheets/molex/1040310811_sd.pdf",
       "avionics/datasheets/molex/1051620001.pdf",
       "avionics/datasheets/molex/1051620001_sd.pdf",
+      "avionics/datasheets/molex/1053131204.pdf",
       "avionics/datasheets/molex/987651-1223.pdf",
       "avionics/datasheets/molex/molex-104031.pdf",
       "avionics/datasheets/molex/molex-1040310811.pdf",
