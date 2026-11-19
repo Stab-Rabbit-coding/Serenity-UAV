@@ -748,8 +748,9 @@ def inch(mm: float) -> str:
 def report(r) -> bool:
     print("CARGO DUCT LAYOUT (plan 002 U6, TEDF-06), frame R2, mm.  PROVISIONAL.")
     print(f"ASSUMED: gap {GAP} mm; speed controller {ESC_BOX}; gateway {GATEWAY_BOX}; servo "
-          f"envelope {SERVO_BOX} (KST CM07 {CM07} over lugs + horn and cable exit); fairlead boss r {FAIRLEAD_R} x "
-          f"{FAIRLEAD_H}; hook recess r {HOOK_R} x {HOOK_DEPTH}; guard r {GUARD_R}; panel reach "
+          f"envelope {SERVO_BOX} (KST CM07 {CM07} over lugs + horn and cable exit); "
+          f"fairlead boss r {FAIRLEAD_R} x {FAIRLEAD_H}; hook recess r {HOOK_R} x {HOOK_DEPTH}; "
+          f"guard r {GUARD_R}; panel reach "
           f"{REACH}, land {PANEL_EDGE}, fastener pitch {FASTENER_PITCH}; masses {MASS}.")
     print(f"PLACEHOLDERS: bow pocket CG travel {BOW_POCKET_TRAVEL} mm (U7 sizes it); flow "
           "guides (U2 names the nodes and sizes them).")
