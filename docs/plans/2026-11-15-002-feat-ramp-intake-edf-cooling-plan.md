@@ -114,7 +114,7 @@ Internal cargo occupies the centre of the fuselage, which is the only place wher
 
 **RCS**
 
-- R16. Four RCS jets shall be fitted and working in the first build, with their valves, servos and gateway.
+- R16. Four RCS jets shall be fitted and working in the first build, with their valves, servos and gateway. (2026-11-18, owner option B: three RCS jets, two upper and one ventral, with three servos; `tools/rcs_jets.py`.)
 - R17. Each RCS jet shall have a clear discharge path past the dorsal pod, the skids and the skid crossbar, checked in 3D for the spreading jet at its stated azimuth and aft cant.
 - R32. The ventral RCS jets shall exit the skin at station Y 628 or further aft, 50° apart (245° and 295°) and canted 25° aft, clear of the skid crossbar. (Owner direction, 2026-11-16: a radial ventral jet at Y 634 strikes the crossbar at Y 626 to 627; from 20° aft cant the jet is clear. The upper jets stay radial.) (Amended 2026-11-18, owner: one ventral jet at 270°, canted 25° aft, its exhaust sides on the port and starboard joints of the centre belly panel (about 245.5° and 294.5°), from Y 635 to Y 649, 0.66 in² (428 mm²); the 245°/295° pair strikes the skid pods (TEDF-05 3D check), and a jet at 255° to 285° clears the crossbar from Y 635 aft; `tools/rcs_jets.py`.)
 

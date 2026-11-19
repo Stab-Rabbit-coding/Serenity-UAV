@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-18",
+  "generated": "2026-11-19",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -15724,6 +15724,13 @@
       ],
       "archived": false
     },
+    "tools/cargo_duct_layout_fit.py": {
+      "description": "Python script",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/cargo_layout_fit.py": {
       "description": "Python script",
       "tags": [
@@ -16741,6 +16748,13 @@
     },
     "tools/tests/test_bay_a_thermal_budget.py": {
       "description": "test_bay_a_thermal_budget.py -- lumped thermal network for the Bay A",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_cargo_duct_layout_fit.py": {
+      "description": "Tests for tools/cargo_duct_layout_fit.py (plan 002 U6, TEDF-06).",
       "tags": [
         "build-tooling"
       ],
@@ -20973,6 +20987,7 @@
       "tools/build_landing_gear_views.py",
       "tools/cargo_bay_envelope.py",
       "tools/cargo_bulkhead_context.py",
+      "tools/cargo_duct_layout_fit.py",
       "tools/cargo_layout_fit.py",
       "tools/cargo_observer_sensor_fit.py",
       "tools/cfd_internal_air_domain.py",
@@ -21110,6 +21125,7 @@
       "tools/tests/test_bay_a_fwd_mounts.py",
       "tools/tests/test_bay_a_fwd_routes.py",
       "tools/tests/test_bay_a_thermal_budget.py",
+      "tools/tests/test_cargo_duct_layout_fit.py",
       "tools/tests/test_check_agents_size.py",
       "tools/tests/test_check_hull_tarballs.py",
       "tools/tests/test_esc80_cooptimize.py",

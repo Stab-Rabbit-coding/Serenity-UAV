@@ -262,7 +262,8 @@ Per `deferred/DEFERRED_ITEM_TEMPLATE.md` fields:
   - **Failsafe:** heartbeat loss or MAC failure → **all four valves CLOSED** (no bleed, the
     aft EDF's thrust stays axial) — the opposite polarity from the door gateway's hold-last;
     the attitude mixer must treat RCS authority as absent when `RCS_STATUS` stops.
-  - **Location:** rear engine cone, Panel F bay, beside the 50 A ESC (`deferred/WBS.md`
+  - **Location (superseded 2026-11-19):** plan 002 KD11 moves the RCS servos and their gateway forward into the cargo duct; `tools/cargo_duct_layout_fit.py` places the gateway and three SG90 servos (owner option B, three jets) at Y 308-368. The text that follows is the pre-plan record.
+  - **Former location:** rear engine cone, Panel F bay, beside the 50 A ESC (`deferred/WBS.md`
     §Phase11 "Install 50A ESC in Panel F bay") — next to the four `rcs_valve_bracket.stl`
     stations so the four pigtails stay short. Tray: a former Phase 11 re-parameterisation of
     `gateway_door_tray.scad` (`GW_PCB_L` → the N=2 length; the rail/slot design is unchanged)

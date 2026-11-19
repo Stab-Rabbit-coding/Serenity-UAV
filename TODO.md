@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Last updated:** 2026-11-18
+**Last updated:** 2026-11-19
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -118,6 +118,10 @@
 - [ ] Hull mass basis: `head_cargo_shell24_2mm_merged_hatch.stl` (named in…
 - [ ] Three tests fail on main before and after TEDF-01 and are NOT…
 - [ ] TEDF-03 step 8 — recalibrate `tools/tail_edf_flow.py` to the owner's…
+- [ ] Flight Engineer box does not fit the cargo duct (TEDF-06…
+- [ ] Cargo duct free area (TEDF-06 finding for TEDF-03)
+- [ ] Cargo Observer service access (TEDF-06, R12)
+- [ ] Wing-spar bore at the pivot (TEDF-06, R25)
 - [ ] Critical-speed method source (TEDF-05 code review #6, 2026-11-18)
 - [ ] Momentum-theory / actuator-disc source for `tools/tail_edf_flow.py`…
 - [ ] TEDF-04 — price the plan's forward and aft moves (Flight Engineer…

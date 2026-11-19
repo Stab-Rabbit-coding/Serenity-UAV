@@ -1402,6 +1402,26 @@ forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
 - [ ] **TEDF-06** — [STD] Cargo duct layout: Flight Engineer box forward, belly panel, fairlead
     under the pivot, screen, flow guides, line guard, pre-G1 bench fixtures, aft balance allowance.
     Plan U6. (S44)
+    - 2026-11-19, layout tool: `tools/cargo_duct_layout_fit.py` (19 tests). It measures the
+      duct on the published head+cargo hull closed by the fused doors, splice collar, wing-root
+      flanges, wings and gear bays (every bay station closes at <= 4 mm seams; the spar bore at
+      the pivot is plugged). Placed: winch on the floor at Y 356.5, mirrored so its servo clears
+      the port tilt drive, on a plinth over the hook recess; fairlead under the pivot; line
+      guard (the line runs 0.96 in drum to fairlead, inside it); speed controller, RCS gateway
+      and three SG90 RCS servos forward at Y 308-368 (roof and floor); belly service panel X
+      +-42.5, Y 298-424 (16.6 in2), 10 captive quarter-turn fasteners (part to source, R12);
+      screen frame covering the 52 x 36 mm ramp opening; R34 allowance 2.51 mm (movable
+      equipment 1.16 + rear-cone ballast 30 g at Y 640, 1.34) against a 2.0 mm PLACEHOLDER
+      (U7 sizes the bow pocket). Motor lead 12.9 in per phase, 14 AWG ASSUMED, 0.17 V at hover.
+      Exits 1 on G1 findings: (1) the Flight Engineer box (75 x 94 x 36 mm) fits nowhere in the
+      bay -- the hull height and the winch stack reject it in every orientation (plan risk
+      table: fallback is the winch and Cargo Observer moves of KD7, owner decision); (2) the
+      Cargo Observer tray is 19 % reachable through the panel (it sits aft of the panel field).
+      Also found: the kept equipment already pinches the stream below the 11,800 mm2 floor at
+      Y 288-296 (about 9,200-9,500) and Y 412-428 (about 6,000-6,900, the aft avionics nodes and
+      the Observer tray), so `tools/tail_edf_flow.py` a_cargo should take the least figure;
+      the wing-spar bore opens the duct to the wing roots unless the spar ends are capped (R25).
+      Flow guides and the bench fixtures remain (U2 names the guides; fixtures next).
 - [ ] **TEDF-07** — [STD] Head layout: GNSS antenna placement trade for G1, ballast pocket and
     bow inlets. Plan U7. (S45)
 - [ ] **TEDF-08** — [ADV] Gate G1 Owner Decision Brief and figures (OD-22), after the owner's
