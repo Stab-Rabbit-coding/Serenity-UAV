@@ -2869,6 +2869,11 @@ and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
     collar end to the fairing end, nothing else changed) is running with a same-machine repeat of the
     plain as-built case; their difference is the bore's share of the +23 %. The Owner Decision Brief
     waits on that result. The fairing outer shape stays HELD (finding 2).
+    **2026-11-19 result:** capped 0.208 lbf (0.925 N) vs open 0.181 lbf (0.806 N): capping **raised**
+    drag about 15 %. The bore is not the cause and a nose cap is ruled out (it supersedes the "nose cap"
+    option above). The +23 % lies in the printing allowances or the real collar/trunnion/spar steps, not
+    yet separated. Owner options now: leave as is, or fund isolating runs on those features. Outer shape
+    stays HELD.
 - [ ] **OD17-FALLBACK-CLR — Fallback channel needs +2 mm shift (2026-11-16).**
     Finding 6 of the 2026-11-16 brief review; owner chose "study first". If NAC-64-WIRE-QUAL fails and
     the channel is redrawn to the 0.73 in (18.5 mm) centreline fallback, the aft pair's wire-to-duct gap
