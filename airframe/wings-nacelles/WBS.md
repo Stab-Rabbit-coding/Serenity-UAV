@@ -2394,6 +2394,10 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         capacitor ripple-current rating at 44 A sustained and 63 A peak (with NAC-64-ESC-80A.j item 2).
         (5) Firmware limit per NAC-64-FUSE-COORD: up to 60 A for at most 10 s, folding back to the
         qualified wire rating.
+        (6) Owner 2026-11-19 (FE split plan R9, option C): add a common-mode choke rated for the
+        branch current at the ESC input wherever it fits the board (44 x 33 mm, OSESC-NAC; and
+        OSESC-TAIL-1); the per-branch chokes leave the Flight Engineer, and the bulk ripple
+        capacitance of item (4) is the ESC's own (`docs/plans/2026-11-19-001-feat-flight-engineer-split-relayout-plan.md`).
     - [ ] **NAC-64-ESC-80A — 80 A Open-Secure-ESC builds (owner 2026-10-03,
         Stab-Rabbit-coding: two 80 A 6S ESCs that fit against the 64 mm thrust
         tube; supersedes NAC-64-ESC-70A, the earlier 70 A placeholder).** The

@@ -23,7 +23,7 @@ License: CC BY-SA 4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 
 - **Objective:** re-architect the Flight Engineer (FE) power distribution unit as two modules that fit the TEDF-06 cargo duct, with a power path rated for today's loads; also grow the belly service panel and reserve the nacelle cable corridor in the duct tool.
 - **Product authority:** owner (Steve Griffing). Scope chosen 2026-11-19 in the S44 session and in the PR #309 review threads.
-- **Open blockers:** the per-branch EMC change (R9) needs the owner's sign-off against the 500 W/m² susceptibility requirement; an in-line packing at the 8,000 mm2 floor is found by a session search and still needs confirming in the tool and in CAD (OQ6).
+- **Open blockers:** an in-line packing at the 8,000 mm2 floor is found by a session search and still needs confirming in the tool and in CAD (OQ6).
 
 ---
 
@@ -59,6 +59,7 @@ Separately, Rev R was sized for 18 A per fan. Today's design currents are 44 A s
 - **The spar bore carries the four nacelle EDF cables.** Any seal is a pass-through around them, and the bay keeps a corridor from the bore to the FE. Governs R11, R13. (session-settled: user-directed -- owner PR #309 review, 2026-11-19)
 - **Every PCB lies in line with the airflow; no board stands across the stream as an air dam.** Governs R16. (session-settled: user-directed -- owner, 2026-11-19; a standing rule in `airframe/AGENTS.md`)
 - **The stream floor is 12.4 in2 (8,000 mm2) at every bay station, and future changes hold it.** About -0.7 % hover tail thrust in `tools/tail_edf_flow.py`; the lowest floor tried at which every board packs in line. Governs R15. (session-settled: user-directed -- chosen over 11,800 mm2, where the in-line Observer has no station, and 6,000 mm2, at -1.6 %: owner, 2026-11-19)
+- **Per-branch noise suppression moves to the cables and the ESCs (option A), plus a source-side common-mode choke on each ESC input where it fits (option C).** Governs R9. (session-settled: user-directed -- chosen over 44 A chokes kept on the Flight Engineer (option B), which are unlikely to fit the power module: owner, 2026-11-19)
 - **Heavy current runs in copper bars, lugs and bolt-down or blade fuses, not PCB copper.** A 3 x 10 mm (0.118 x 0.394 in) bar dissipates 1.8 W and drops 8.6 mV per 70 mm (2.76 in) at 214 A; two 30 mm (1.2 in) 4 oz pours dissipate 6.5 W. Governs R3, R4.
 
 ### Requirements
@@ -79,7 +80,7 @@ Separately, Rev R was sized for 18 A per fan. Today's design currents are 44 A s
 
 **EMC**
 
-- R9. The 500 W/m2 radiated-susceptibility and the per-branch noise-isolation intents of Rev R are met with the per-branch suppression moved onto the cables (clamp-on ferrites) and the per-ESC bulk capacitance moved onto the ESCs; the owner signs off the change.
+- R9. The per-branch noise isolation of Rev R moves off the Flight Engineer: shielded twisted-pair ESC cables with clamp-on ferrites at both ends, one bus-level filter at the power module input, RC filters on the INA226 sense lines, and the bulk ripple capacitance on each ESC; a common-mode choke rated for the branch current is added at each ESC's input wherever it fits on the ESC board. The 500 W/m2 immunity stays with the enclosure, glands, Y-capacitors and TVS.
 
 **Duct tool**
 
@@ -124,6 +125,7 @@ Separately, Rev R was sized for 18 A per fan. Today's design currents are 44 A s
 - OQ2. Pack fuse form (MAXI with a holder, or a bolt-down MEGA/ANL class) and branch fuse form (60 A MAXI, derated to 48 A at 122 F), from the NAC-64-FUSE-COORD curves.
 - OQ3. R8's disconnect: a parallel FET bank (about 8 x 0.6 mOhm, 3.4 W at 214 A) or an arming plug that leaves BQ76930 as monitor only.
 - OQ4. Where the INA226s sit: beside the shunts in the power module (short Kelvin lines, I2C across) or on the logic module.
+- OQ7. R9 verification before G1: one ESC at full PWM, measure the noise it couples into the other branches' INA226 readings and the conducted emissions on the bus (MIL-STD-461G [REF-MIL-002] as the guide, limits to be checked against the standard); and whether the source choke fits each ESC board (OSESC-NAC 44 x 33 mm, OSESC-TAIL-1) without moving the nacelle mass budget.
 - OQ5. The CG effect of the two module masses against the 158 g single-unit row (TEDF-04 pricing).
 
 ### Sources / Research
