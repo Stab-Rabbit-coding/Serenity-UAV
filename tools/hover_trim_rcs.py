@@ -7,7 +7,9 @@ tools/tail_edf_flow.py (itself a planning model) and on ASSUMED values labelled 
 FREE-BODY DIAGRAM (pitch plane; Y aft, Z up, hull frame mm; pitch-up positive).  Isolated:
 the whole aircraft in hover.  Forces: weight W at the CG; nacelle thrust T at the tilt pivot
 (Y 339.4, Z 146.9), tilted aft of vertical by delta; tail-EDF thrust F_t forward along the tail
-axis (Z 165.2); four RCS jets at Y 633.  With r = (y, z) from the CG to the point of
+axis (Z 165.2); the RCS jets of tools/rcs_jets.py, each at its own station and skin radius
+(owner option B, 2026-11-18: upper 45/135 deg at Y 637, one ventral jet at 270 deg, Y 642).
+With r = (y, z) from the CG to the point of
 application and F = (F_y, F_z), the nose-up moment is  M = z F_y - y F_z.
   nacelles: d = CG aft of pivot, h_p = CG above pivot:  M = d T cos(delta) - h_p T sin(delta)
   tail EDF: h_t = tail axis above CG:                   M = - h_t F_t
@@ -33,7 +35,8 @@ planning scenario (6,840 g, CG 2.3 mm aft of the pivot, inertia 225 lbm.in^2) fo
 One limits list (`limits()`) drives the printout and the exit code.
 
 Run:
-    /usr/bin/python3 tools/hover_trim_rcs.py [--case ledger|plan] [--louvre-k 1.0]
+    /usr/bin/python3 tools/hover_trim_rcs.py [--case ledger|plan|projected] [--louvre-k 1.0]
+        [--jets table|plan] [--plot OUT.png]
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP
 AI note: Written by Claude (model: Claude Sonnet 5.5, Anthropic) under the author's
@@ -52,6 +55,7 @@ from dataclasses import dataclass, replace
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+import rcs_jets as rj  # noqa: E402
 import tail_edf_flow as tf  # noqa: E402
 
 LEDGER = os.path.join(os.path.dirname(HERE), "current-specification", "auw_ledger.json")
@@ -60,8 +64,8 @@ LBF_N, LBM_KG, IN_M = 4.44822, 0.45359237, 0.0254
 # Geometry, hull frame mm (plan "Hover trim and control limits"; rear-cone fit).
 PIVOT_Y, PIVOT_Z = 339.4, 146.9
 TAIL_Z = 165.2
-JET_Y = 633.0  # exhausts leave the skin from about Y 632 (plan KD20)
-JET_R = 43.4  # skin radius at Y 628, mm
+JET_Y = 633.0  # S43 / plan exhaust station (plan KD20: "from about Y 632")
+JET_R = 43.4  # S43 skin radius (the plan's Y 628 figure); measured jets carry their own
 FAIRLEAD_Z = 84.0  # ASSUMED belly plane under the pivot (R14)
 NACELLE_X = 230.4  # mm, ledger row "Nacelle port rotating assembly"
 HOVER_THROTTLE = 0.8
@@ -137,12 +141,54 @@ def plan_case() -> Case:
 
 @dataclass(frozen=True)
 class Jet:
-    az_deg: float  # azimuth about the tail axis, 270 = straight down, 90 = up
+    az_deg: float  # azimuth of the exhaust about the tail axis, 270 = straight down, 90 = up
     cant_deg: float  # aft cant of the exhaust
+    y: float = JET_Y  # exhaust station, mm
+    r: float = JET_R  # outer skin radius at the exhaust, mm (from the tail axis)
+    scoop: float = 1.0  # this scoop's share of the duct total pressure, relative (ASSUMED)
+    swirl_deg: float = 0.0  # tangential turn of the exhaust (rotor-exit swirl), ASSUMED 0
+    area_ratio: float = 1.0  # exhaust flow area over the bore area (a panel exhaust is larger)
+
+    @property
+    def ventral(self) -> bool:
+        return math.sin(math.radians(self.az_deg)) < 0.0
 
 
-DEFAULT_JETS = (Jet(245.0, 25.0), Jet(295.0, 25.0), Jet(45.0, 0.0), Jet(135.0, 0.0))
-VENTRAL, UPPER = (0, 1), (2, 3)
+def from_table(j: rj.RcsJet) -> Jet:
+    """A trim-model jet from the shared table: at its exhaust centre, on its skin radius."""
+    return Jet(j.az_deg, j.cant_deg, j.y, j.r_mm, area_ratio=j.area_mm2 / rj.BORE_AREA_MM2)
+
+
+# S43 used the plan's jets: 245/295 deg at Y 633 on a 43.4 mm radius.  TEDF-05 found that pair
+# strikes the skid pods.  The flown set is the shared table, which rear_cone_layout_fit.py gates
+# against the hull (owner option B, 2026-11-18).
+SCOOP_Y_MM = 628.0  # KD20 scoop station
+PLAN_JETS: tuple[Jet, ...] = (Jet(245.0, 25.0), Jet(295.0, 25.0), Jet(45.0, 0.0), Jet(135.0, 0.0))
+DEFAULT_JETS: tuple[Jet, ...] = tuple(from_table(j) for j in rj.JETS)
+VENTRAL, UPPER = "ventral", "upper"  # the jets that open together for nose-down / nose-up
+
+
+def group(jets: tuple[Jet, ...], which: str) -> tuple[int, ...]:
+    """Indices of the ventral (exhaust below the axis) or upper jets of a set."""
+    return tuple(i for i, j in enumerate(jets) if j.ventral == (which == VENTRAL))
+
+
+def unit_force(jet: Jet) -> tuple[float, float, float]:
+    """Force on the aircraft per newton of jet thrust: minus the exhaust direction, with the
+    exhaust turned tangentially by the jet's swirl angle (X port, Y aft, Z up)."""
+    az, cant = math.radians(jet.az_deg + jet.swirl_deg), math.radians(jet.cant_deg)
+    e = (math.cos(cant) * math.cos(az), math.sin(cant), math.cos(cant) * math.sin(az))
+    return (-e[0], -e[1], -e[2])
+
+
+def jet_moments(case: Case, jet: Jet, force: float) -> dict[str, float]:
+    """Pitch-up, yaw (about +Z) and roll (about +Y) moments, N m, of one jet at `force` N."""
+    fx, fy, fz = (force * c for c in unit_force(jet))
+    a = math.radians(jet.az_deg)
+    x = jet.r * math.cos(a) / 1e3
+    y = (jet.y - case.cg_y) / 1e3
+    z = (TAIL_Z + jet.r * math.sin(a) - case.cg_z) / 1e3
+    return {"pitch": z * fy - y * fz, "yaw": x * fy - y * fx, "roll": z * fx - x * fz}
 
 
 @dataclass(frozen=True)
@@ -150,27 +196,30 @@ class JetModel:
     bore_m: float = 0.71 * IN_M  # plan: four jets of 0.71 in bore
     k_path: float = 1.0  # ASSUMED scoop + passage + exhaust loss
     scoop_fraction: float = 1.0  # ASSUMED share of the duct total pressure at the scoop
+    # Each scoop faces the swirl (about 45 deg at the wall, rear_cone_layout_fit.py) and a
+    # turning vane takes it out (owner direction 2026-11-18): an added turning loss, ASSUMED.
+    k_deswirl: float = 0.3
+
+    @property
+    def k_total(self) -> float:
+        return self.k_path + self.k_deswirl
 
     @property
     def area(self) -> float:
         return math.pi / 4.0 * self.bore_m ** 2
 
-    def a_eff(self, n_open: int) -> float:
-        return n_open * self.area / math.sqrt(1.0 + self.k_path)
+    def a_eff(self, area_ratios: list[float]) -> float:
+        """Effective exit area the open jets add to the duct (bore area x each jet's ratio)."""
+        return sum(area_ratios) * self.area / math.sqrt(1.0 + self.k_total)
 
     def speed(self, p_duct: float, rho: float) -> float:
-        return math.sqrt(2.0 * self.scoop_fraction * p_duct / (rho * (1.0 + self.k_path)))
+        return math.sqrt(2.0 * self.scoop_fraction * p_duct / (rho * (1.0 + self.k_total)))
 
 
 def jet_wrench(case: Case, jet: Jet, force: float) -> tuple[float, float]:
     """(pitch-up moment, yaw moment about Z) in N m of one jet at thrust `force` N."""
-    az, cant = math.radians(jet.az_deg), math.radians(jet.cant_deg)
-    e = (math.cos(cant) * math.cos(az), math.sin(cant), math.cos(cant) * math.sin(az))
-    fx, fy, fz = (-force * c for c in e)
-    x = JET_R * math.cos(az) / 1e3
-    y = (JET_Y - case.cg_y) / 1e3
-    z = (TAIL_Z + JET_R * math.sin(az) - case.cg_z) / 1e3
-    return z * fy - y * fz, x * fy - y * fx
+    m = jet_moments(case, jet, force)
+    return m["pitch"], m["yaw"]
 
 
 @dataclass(frozen=True)
@@ -184,15 +233,20 @@ def tail_thrust(su: Setup, theta: float) -> float:
     return tf.operate(su.flow, theta).thrust_n
 
 
-def pair_capacity(case: Case, su: Setup, theta: float, pair: tuple[int, ...]) -> dict[str, float]:
-    """Jets of `pair` open at throttle theta: total pitch moment, yaw per jet, jet speed, Mach."""
-    inp = replace(su.flow, a_jets_eff=su.jm.a_eff(len(pair)))
+def pair_capacity(case: Case, su: Setup, theta: float, which: str) -> dict[str, float]:
+    """The ventral or upper jets open at throttle theta: total pitch moment, yaw per jet, jet
+    speed, Mach."""
+    pair = group(su.jets, which)
+    inp = replace(su.flow, a_jets_eff=su.jm.a_eff([su.jets[i].area_ratio for i in pair]))
     r = tf.operate(inp, theta)
     v = su.jm.speed(r.p_duct_pa, inp.rho)
-    f = inp.rho * su.jm.area * v * v
-    m_pitch = sum(jet_wrench(case, su.jets[i], f)[0] for i in pair)
-    yaw = max(abs(jet_wrench(case, su.jets[i], f)[1]) for i in pair)
-    return {"force": f, "pitch": m_pitch, "yaw": yaw, "mach": v / inp.a_sound,
+    forces = [inp.rho * su.jm.area * su.jets[i].area_ratio * v * v * su.jets[i].scoop
+              for i in pair]  # v^2 ~ scoop share
+    ms = [jet_moments(case, su.jets[i], f) for i, f in zip(pair, forces)]
+    return {"force": max(forces), "pitch": sum(m["pitch"] for m in ms),
+            "yaw": max(abs(m["yaw"]) for m in ms), "pair_yaw": sum(m["yaw"] for m in ms),
+            "pair_roll": sum(m["roll"] for m in ms),
+            "mach": v * math.sqrt(max(su.jets[i].scoop for i in pair)) / inp.a_sound,
             "tail_thrust": r.thrust_n}
 
 
@@ -365,6 +419,138 @@ def limits(case: Case, su: Setup) -> list[tuple[str, float, float, bool, str]]:
     return out
 
 
+def rcs_comparison(case: Case, flow: tf.Inputs) -> None:
+    """S43 jets (the plan's) against the flown jets (tools/rcs_jets.py), and the swirl and
+    scoop sensitivities."""
+    print("\nRCS jets, S43 (plan) against option B (tools/rcs_jets.py) (force on the aircraft "
+          "per N of jet thrust; X port, Y aft, Z up; moments per N about the CG, nose-up / +Z / "
+          "+Y positive):")
+    for label, jets in (("S43 plan", PLAN_JETS), ("option B", DEFAULT_JETS)):
+        for j in jets:
+            f = unit_force(j)
+            m = jet_moments(case, j, 1.0)
+            print(f"  {label:8} az {j.az_deg:5.1f} cant {j.cant_deg:4.1f} Y {j.y:5.1f} r "
+                  f"{j.r:4.1f}: F ({f[0]:+.3f}, {f[1]:+.3f}, {f[2]:+.3f})  pitch "
+                  f"{m['pitch'] * 1e3:+6.1f}  yaw {m['yaw'] * 1e3:+6.1f}  roll "
+                  f"{m['roll'] * 1e3:+6.1f} mm")
+    for label, jets in (("S43 plan", PLAN_JETS), ("option B", DEFAULT_JETS)):
+        su = Setup(flow, JetModel(), jets)
+        dn = -pair_capacity(case, su, 1.0, VENTRAL)["pitch"]
+        up = pair_capacity(case, su, 1.0, UPPER)["pitch"]
+        print(f"  {label}: full-throttle capacity nose-down {lbf_in(dn)}, nose-up {lbf_in(up)}")
+    print("  sensitivities (option B jets, full throttle; ASSUMED magnitudes; the scoops "
+          "de-swirl the bleed, owner 2026-11-18):")
+    for k in (0.0, 0.6):
+        su = Setup(flow, JetModel(k_deswirl=k), DEFAULT_JETS)
+        print(f"    de-swirl vane K {k}: nose-down "
+              f"{lbf_in(-pair_capacity(case, su, 1.0, VENTRAL)['pitch'])}, nose-up "
+              f"{lbf_in(pair_capacity(case, su, 1.0, UPPER)['pitch'])}")
+    for label, mod in (("de-swirl leaves 5 deg of swirl in every exhaust",
+                        {"swirl_deg": 5.0}),
+                       ("port scoop recovers 80 % of the starboard",
+                        {"scoop_port": 0.8})):
+        port = mod.get("scoop_port", 1.0)
+        mod_jets = tuple(replace(j, swirl_deg=mod.get("swirl_deg", 0.0),
+                                 scoop=port if math.cos(math.radians(j.az_deg)) > 0 else 1.0)
+                         for j in DEFAULT_JETS)
+        su = Setup(flow, JetModel(), mod_jets)
+        v = pair_capacity(case, su, 1.0, VENTRAL)
+        u = pair_capacity(case, su, 1.0, UPPER)
+        print(f"    {label}: nose-down {lbf_in(-v['pitch'])}, nose-up {lbf_in(u['pitch'])}; "
+              f"ventral pair leaves yaw {lbf_in(v['pair_yaw'])} and roll "
+              f"{lbf_in(v['pair_roll'])}; upper pair yaw {lbf_in(u['pair_yaw'])} roll "
+              f"{lbf_in(u['pair_roll'])}")
+
+
+def plot_vectors(case: Case, path: str) -> None:
+    """Diagram of the four RCS jets: a 3D view and three orthographic views (aft, side, plan).
+    Exit points on the skin; red = exhaust direction, blue = force on the aircraft; option B
+    jets in colour, the S43 (plan) jets in grey dashes.  Arrows 25 mm per unit force."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import numpy as np
+    scale = 25.0
+    sets = ((PLAN_JETS, "0.55", "--", "0.55", "S43 plan"),
+            (DEFAULT_JETS, "C3", "-", "C0", "option B"))
+
+    def pts(j: Jet) -> tuple[float, float, float]:
+        a = math.radians(j.az_deg)
+        return (j.r * math.cos(a), j.y, TAIL_Z + j.r * math.sin(a))
+
+    fig = plt.figure(figsize=(12, 10))
+    ax3 = fig.add_subplot(2, 2, 1, projection="3d")
+    th = np.linspace(0, 2 * math.pi, 73)
+    for y, r in ((628.0, 44.0), (638.0, 39.3)):
+        ax3.plot(r * np.cos(th), np.full_like(th, y), TAIL_Z + r * np.sin(th), color="0.8",
+                 lw=0.8)
+    ax3.plot([0, 0], [600, 665], [TAIL_Z, TAIL_Z], "k-.", lw=1)
+    for jets, ec, ls, fc, tag in sets:
+        for j in jets:
+            p, f = pts(j), unit_force(j)
+            ax3.quiver(*p, *(-c * scale for c in f), color=ec, linestyle=ls, lw=1.2,
+                       arrow_length_ratio=0.25)
+            ax3.quiver(*p, *(c * scale for c in f), color=fc, linestyle=ls, lw=2.0,
+                       arrow_length_ratio=0.3)
+            ax3.text(*p, f" {j.az_deg:.0f}", fontsize=7, color=ec)
+    ax3.set_box_aspect((90, 65, 90))
+    ax3.set_xlim(-45, 45)
+    ax3.set_ylim(600, 665)
+    ax3.set_zlim(TAIL_Z - 45, TAIL_Z + 45)
+    ax3.set_xlabel("X port + (mm)")
+    ax3.set_ylabel("Y aft + (mm)")
+    ax3.set_zlabel("Z up + (mm)")
+    ax3.view_init(elev=20, azim=-35)
+    ax3.set_title("3D, from aft-starboard-above")
+    views = ((2, "", 0, 2),
+             (3, "side view from port (Y aft right, Z up)", 1, 2),
+             (4, "plan view from below (Y aft right, X port up)", 1, 0))
+    for n, title, u, v in views:
+        ax = fig.add_subplot(2, 2, n)
+        if (u, v) == (0, 2):
+            title = "aft view, looking FORWARD from behind (port on the left)"
+            ax.plot(44 * np.cos(th), TAIL_Z + 44 * np.sin(th), color="0.8", lw=0.8)
+            ax.plot(39.3 * np.cos(th), TAIL_Z + 39.3 * np.sin(th), color="0.8", lw=0.8)
+            ax.plot([0], [TAIL_Z], "k+")
+        else:
+            ax.axhline(TAIL_Z if v == 2 else 0.0, color="k", ls="-.", lw=0.8)
+            ax.axvline(SCOOP_Y_MM, color="0.6", ls=":", lw=0.8)
+            ax.text(SCOOP_Y_MM, (TAIL_Z if v == 2 else 0.0) + 50.0, "scoops Y 628 ",
+                    ha="right", va="top", fontsize=7, color="0.4")
+        for jets, ec, ls, fc, tag in sets:
+            for j in jets:
+                p, f = pts(j), unit_force(j)
+                ax.annotate("", xy=(p[u] - f[u] * scale, p[v] - f[v] * scale), xytext=(p[u], p[v]),
+                            arrowprops=dict(arrowstyle="->", color=ec, ls=ls, lw=1.2))
+                ax.annotate("", xy=(p[u] + f[u] * scale, p[v] + f[v] * scale), xytext=(p[u], p[v]),
+                            arrowprops=dict(arrowstyle="-|>", color=fc, ls=ls, lw=2.0))
+                ax.plot(p[u], p[v], "o", color=ec, ms=3)
+                ax.text(p[u], p[v], f" {j.az_deg:.0f}", fontsize=7, color=ec)
+        lims = {0: (-55.0, 55.0), 1: (595.0, 675.0), 2: (TAIL_Z - 68.0, TAIL_Z + 55.0)}
+        ax.set_xlim(*lims[u])
+        ax.set_ylim(*lims[v])
+        ax.set_aspect("equal")
+        ax.set_title(title, fontsize=9)
+        ax.grid(alpha=0.3)
+        lab = {0: "X port + (mm)", 1: "Y aft + (mm)", 2: "Z up + (mm)"}
+        ax.set_xlabel(lab[u])
+        ax.set_ylabel(lab[v])
+    ax2 = fig.axes[1]
+    ax2.set_xlim(55, -55)  # looking forward from behind: port (+X) on the viewer's left
+    fig.legend(handles=[
+        matplotlib.lines.Line2D([], [], color="C3", label="option B exhaust direction"),
+        matplotlib.lines.Line2D([], [], color="C0", lw=2, label="option B force on the aircraft"),
+        matplotlib.lines.Line2D([], [], color="0.55", ls="--",
+                                label="S43 plan jets (245/295 deg at Y 633)"),
+        matplotlib.lines.Line2D([], [], color="k", ls="-.", label="tail axis, Z 165.2")],
+        loc="lower center", ncol=4, fontsize=8)
+    fig.suptitle("RCS jets on the tail cone, 25 mm per unit force; case "
+                 f"{case.name}, CG at Y {case.cg_y:.0f} Z {case.cg_z:.0f} (forward, out of view)")
+    fig.tight_layout(rect=(0, 0.04, 1, 0.96))
+    fig.savefig(path, dpi=150)
+    plt.close(fig)
+
+
 def lbf_in(nm: float) -> str:
     return f"{nm / LBF_N / IN_M:6.2f} lbf.in ({nm:6.3f} N.m)"
 
@@ -379,10 +565,11 @@ def report(case: Case, su: Setup) -> int:
           f"couple arm {case.arm / IN_M:.2f} in ({case.arm * 1e3:.1f} mm)")
     print(f"  pitch inertia {case.inertia / (LBM_KG * IN_M ** 2):.0f} lbm.in^2 "
           f"({case.inertia:.4f} kg.m^2), the ledger's single value")
-    print(f"  jets: {su.jm.bore_m / IN_M:.2f} in bore, path loss K {su.jm.k_path} ASSUMED, scoop "
-          f"fraction {su.jm.scoop_fraction} ASSUMED; ventral {su.jets[0].az_deg:.0f}/"
-          f"{su.jets[1].az_deg:.0f} deg canted {su.jets[0].cant_deg:.0f} deg aft; upper "
-          f"{su.jets[2].az_deg:.0f}/{su.jets[3].az_deg:.0f} deg radial")
+    print(f"  jets: {su.jm.bore_m / IN_M:.2f} in bore, path loss K {su.jm.k_path} + de-swirl "
+          f"vane K {su.jm.k_deswirl} ASSUMED, scoop fraction {su.jm.scoop_fraction} ASSUMED; "
+          + "; ".join(f"{'ventral' if j.ventral else 'upper'} {j.az_deg:.0f} deg, cant "
+                      f"{j.cant_deg:.0f}, Y {j.y:.0f}, r {j.r:.1f} mm, area x{j.area_ratio:.2f}"
+                      for j in su.jets))
     print("\nTrim by throttle (tail thrust with jets closed; nacelles cancel it):")
     print("  throttle  tail thrust            untrimmed moment            trim use  "
           "reserve dn / up rad/s2   yaw, one upper jet")
@@ -489,6 +676,9 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     ap.add_argument("--case", choices=("ledger", "plan", "projected"), default="ledger")
     ap.add_argument("--louvre-k", type=float, default=tf.Inputs.k_louvre)
+    ap.add_argument("--jets", choices=("table", "plan"), default="table",
+                    help="table: tools/rcs_jets.py (owner option B); plan: 245/295 at Y 633")
+    ap.add_argument("--plot", help="write the 3D jet-vector diagram to this PNG/SVG path")
     a = ap.parse_args(argv)
     if a.case == "plan":
         case = plan_case()
@@ -496,7 +686,12 @@ def main(argv: list[str] | None = None) -> int:
         case = projected_case()
     else:
         case = ledger_case()
-    return report(case, Setup(tf.Inputs(k_louvre=a.louvre_k)))
+    flow = tf.Inputs(k_louvre=a.louvre_k)
+    if a.plot:
+        plot_vectors(case, a.plot)
+    rc = report(case, Setup(flow, JetModel(), DEFAULT_JETS if a.jets == "table" else PLAN_JETS))
+    rcs_comparison(case, flow)
+    return rc
 
 
 if __name__ == "__main__":

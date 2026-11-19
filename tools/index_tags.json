@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-17",
+  "generated": "2026-11-18",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -15994,7 +15994,7 @@
       "archived": false
     },
     "tools/hover_trim_rcs.py": {
-      "description": "hover_trim_rcs.py -- hover pitch trim, RCS jet authority, CG window and the tilt-vectoring",
+      "description": "Python script",
       "tags": [
         "build-tooling"
       ],
@@ -16569,8 +16569,15 @@
       ],
       "archived": false
     },
+    "tools/rcs_jets.py": {
+      "description": "The RCS jet table, one source for tools/rear_cone_layout_fit.py (which gates it against the",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/rear_cone_layout_fit.py": {
-      "description": "rear_cone_layout_fit.py -- gate G1 layout of the fuselage cooling fan and the tail EDF",
+      "description": "rear_cone_layout_fit.py -- rear-cone layout of the tail EDF (QX-Motor 64 mm, QF2822",
       "tags": [
         "build-tooling"
       ],
@@ -16817,6 +16824,13 @@
       "tags": [
         "build-tooling",
         "redundancy-failover"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_rear_cone_layout_fit.py": {
+      "description": "Tests for tools/rear_cone_layout_fit.py (plan 002 U5, TEDF-05).",
+      "tags": [
+        "build-tooling"
       ],
       "archived": false
     },
@@ -21071,6 +21085,7 @@
       "tools/precommit_sanitize.py",
       "tools/prep_nacelle_64_bake.py",
       "tools/purge_stale_fcstd_objects.py",
+      "tools/rcs_jets.py",
       "tools/rear_cone_layout_fit.py",
       "tools/scad_flatten.py",
       "tools/shift_baked_stl.py",
@@ -21106,6 +21121,7 @@
       "tools/tests/test_nonfo_simon_fit.py",
       "tools/tests/test_nozzle_servo_linkage.py",
       "tools/tests/test_pace_balance.py",
+      "tools/tests/test_rear_cone_layout_fit.py",
       "tools/tests/test_sync_operators_manual.py",
       "tools/tests/test_tail_edf_flow.py",
       "tools/tests/test_tail_strike_requirement.py",

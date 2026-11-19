@@ -1328,6 +1328,77 @@ forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
 - [ ] **TEDF-05** — [ADV] Rear-cone layout: QX pusher unit, RCS scoops at Y 628 with structure at the
     shroud joint, ventral exhausts at 245° and 295° canted 25° aft, trapezoidal exhausts on the canon
     plate pattern, 3D jet check, the three RCS valve concepts for G1. Plan U5. (S44)
+    - 2026-11-17, tool rewritten: `tools/rear_cone_layout_fit.py` (QX pusher, 21 tests). It exits 1 on
+      three findings for G1, not tool faults: (1) the planned ventral pair at 245/295 deg strikes
+      the skid pods at every exhaust station from Y 632 to Y 641 (3D jet from the bore, 12 deg
+      half-angle ASSUMED, also blocked at 8 and 16 deg); a ventral exhaust clears both pods and
+      crossbar only at Y 635 or aft and 255 deg or inboard (the 255/285 pair, about 7 % more
+      vertical moment than 245/295), with the scoops kept at 245/295 per KD20; (2) the exhausts
+      at Y 632 put the bore's forward edge over the crossbar (aft face Y 627.5); (3) 45 deg
+      passage sectors give 245 mm2 ventral and 213-219 mm2 upper against the 255 mm2 exhaust;
+      47 deg ventral and 52-53 deg upper meet it. Passing: shroud Y 582-627 with a 6.9 mm gap,
+      first critical 77,600 rpm against 57,960 rpm (margin 1.34; bearing span ASSUMED; overhang
+      limit 8.5 mm on the 3 mm shaft, 13.9 mm on a separate 4 mm shaft), scoop blockage 7.7 %,
+      ventral web 2.9 mm, mounting ring ends forward of Y 625, upper jets clear. Plate joints
+      mapped (rib bands near 0-9, 56-65, 115-124, 170-180, 236-245, 295-304 deg); each exhaust
+      reports its joint shift. Aft hardware cross-check: about 220 g, CG +7.8 mm, agreeing with
+      the plan's +7.6 mm delta.
+    - 2026-11-17, pusher correction (owner review): the first rewrite put the rotor at the
+      forward lip, a tractor. Corrected per KD10 / KTD6: motor ahead, plate, rotor at the aft
+      end of the shroud, 1 mm forward of the shroud joint (Y 627) and the Y 628 scoops
+      (shroud Y 548.3-627.0, gap 8.6 mm; motor 553.3-611.3, stator vanes 593.3-611.3 ahead of
+      the rotor, rotor 615.3-626.0; 25 tests). New findings for G1: (4) the reused 11-vane
+      stator sits UPSTREAM of the rotor in the pusher, so the rotor-exit swirl (Euler,
+      about 53 deg at 80-100 % throttle) reaches the scoops 2 mm downstream; an exit stator
+      (20 mm) moves the rotor to Y 596-607 (reported as a variant); (5) first critical speed
+      with the plate stack (12.35 mm overhang, bearing span and set-in ASSUMED) is 46,900 rpm
+      against 57,960 rpm, margin 0.81 (FAIL; the stock 5.35 mm overhang gives 1.28); the
+      nacelle units use the same plate stack, so measure the QF2822 bearing positions
+      (NAC-64-FIT-02) before either flies; (6) aft hardware about 253 g, CG +9.4 mm
+      (envelope estimate) against the plan's +7.6 mm. `tools/hover_trim_rcs.py` now carries
+      per-jet station, radius, scoop recovery and swirl (`--jets tedf05|plan`, `--plot`):
+      the clear 255/285 pair at Y 638 gives 2.25 lbf.in nose-down against 2.06 for 245/295;
+      15 deg of swirl leaves 0.61 lbf.in of ventral-pair yaw; an 80 % port scoop leaves
+      0.19 lbf.in of upper-pair yaw and cuts nose-up capacity about 10 %.
+    - 2026-11-18, owner direction: the scoops de-swirl the RCS bleed and a stator in the thrust
+      tube de-swirls the main jet (the exit-stator option between rotor and joint is dropped).
+      `rear_cone_layout_fit.py` (30 tests): wall swirl at the scoops 45 deg (free vortex from
+      the rotor mean radius, ASSUMED), so each scoop mouth yaws 45 deg into the swirl with a
+      turning vane; the yaw sense follows the rotor hand (CW or CCW, not yet chosen). Tube
+      stator on the planning contour (straight taper from Y 627): 12 vanes, 7 mm chord, at the
+      1.5 mm printed floor, Y 633-640, with a hub fairing from the rotor hub (r 14.3 mm) to a
+      point at Y 642 (43 deg boat-tail); free area 1.05 x the nozzle; solidity 0.57 against the
+      nacelle stator's 1.36 on the same rotor (FAIL). Further aft, the vanes become the throat
+      in place of the R22 nozzle. G1 trade: hold the 64.8 mm bore to Y 643 and taper in the last
+      7 mm, which fits 16 vanes of 13 mm (solidity 1.42) but cuts the RCS passages from
+      213-245 to 179-207 mm2 (255 needed). `hover_trim_rcs.py`: de-swirl vane loss K 0.3
+      ASSUMED; full-throttle capacity 1.99 lbf.in nose-down, 1.66 nose-up (was 2.25 / 1.87);
+      the plan-case CG window narrows to +1.3 to +2.8 mm. The minimum printed wall in the
+      layout tool is now the 1.5 mm interim floor (AGENTS.md section 7), not REF-MFG-001's
+      1.0 mm.
+    - 2026-11-18, owner decision: sparse stator; the planning taper is kept (the held-bore
+      contour is declined). The solidity check is now reported, not a limit. Rotor hand still
+      open: no aerodynamic preference (the nacelle pairs counter-rotate, so the tail fan is
+      unpaired in torque and gyroscopic coupling either way); choose by the rotor retention.
+    - 2026-11-18, owner decisions: tail rotor CW viewed from the intake (right-hand retaining
+      screw, head aft, self-tightens under start-up torque; threadlocker and a witness mark for
+      braking torque); first critical speed: measure first (NAC-64-FIT-02 bearing positions,
+      shaft, rotor mass, bench vibration sweep) before any EDF spins on its plate.
+    - 2026-11-18, owner decision (brief 3, option B): one ventral RCS jet at 270 deg, canted
+      25 deg aft, exhaust sides on the centre belly panel's port and starboard joints (245.5 /
+      294.5 deg), Y 635-649, measured 0.66 in2 (428 mm2), 1.40 in wide forward to 0.98 in aft;
+      KD16 and R32 amended. One jet table (`tools/rcs_jets.py`) now feeds both tools and the
+      layout tool gates it (code review #1): ventral passage 563 / 486 mm2 at Y 631 / Y 635,
+      3D path clear, both ventral sides probed. Trim: nose-down 1.83 lbf.in (0.207 N.m) at
+      full throttle, R30 use 29 % at 80 % (plan case). Review fixes in the same change: rows
+      that could not fail moved to a printed design-rules block (#2); `--json` writes (#3);
+      vacuous tests replaced (#4, #5); hub fairing is a straight cone (#7); passage areas use
+      the trapezoid rule, about 2.2 % lower than before (#8); docstring, view titles and the
+      missing-nozzle guard (#9-#11); the hull mesh must be watertight.
+    - 2026-11-18, owner decision (brief 4): upper passages widened to 56 deg (17-73 and 107-163
+      deg): 274 / 266 mm2 port and 268 / 259 mm2 starboard at Y 631 / Y 632 against the 255
+      mm2 exhaust; webs 19.9 mm (between the upper passages) and 33.5 mm (to the ventral). All
+      RCS rows pass; the layout tool's one FAIL is the first critical speed (NAC-64-FIT-02).
 - [ ] **TEDF-06** — [STD] Cargo duct layout: Flight Engineer box forward, belly panel, fairlead
     under the pivot, screen, flow guides, line guard, pre-G1 bench fixtures, aft balance allowance.
     Plan U6. (S44)
