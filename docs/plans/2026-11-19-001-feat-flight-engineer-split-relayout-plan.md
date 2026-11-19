@@ -23,7 +23,7 @@ License: CC BY-SA 4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 
 - **Objective:** re-architect the Flight Engineer (FE) power distribution unit as two modules that fit the TEDF-06 cargo duct, with a power path rated for today's loads; also grow the belly service panel and reserve the nacelle cable corridor in the duct tool.
 - **Product authority:** owner (Steve Griffing). Scope chosen 2026-11-19 in the S44 session and in the PR #309 review threads.
-- **Open blockers:** the per-branch EMC change (R9) needs the owner's sign-off against the 500 W/m² susceptibility requirement; the stated stream floor (R15, OQ1) is an owner decision; no packing yet satisfies R16 with every board placed (OQ6).
+- **Open blockers:** the per-branch EMC change (R9) needs the owner's sign-off against the 500 W/m² susceptibility requirement; the stated stream floor (R15, OQ1) is an owner decision; an in-line packing exists only with the floor at or below about 8,000 mm2 (OQ6).
 
 ---
 
@@ -117,7 +117,7 @@ Separately, Rev R was sized for 18 A per fan. Today's design currents are 44 A s
 
 - OQ1. The stated stream floor. `tools/tail_edf_flow.py` (k_cargo 1.0 ASSUMED, the whole duct taken at the floor, so conservative) gives hover tail thrust -0.1 % at 11,800 mm2 (18.3 in2), -0.7 % at 8,000 mm2 (12.4 in2), -1.6 % at 6,000 mm2 (9.3 in2) and -4.0 % at 4,000 mm2 (6.2 in2), against the 12,750 mm2 model value; the nozzle (about 1,840 mm2) meters the flow. At a 6,000 mm2 floor the session fit places power modules up to 45 x 90 x 45, 50 x 80 x 50 or 55 x 70 x 55 mm and logic modules up to 60 x 80 x 18 mm with every other item placed; at 11,800 mm2 only 45 x 70 x 45 plus 60 x 40 x 18 mm fits.
 
-- OQ6. Packing under R16. The kept N2/N4 nodes (58 x 37 mm boards, 22 mm along Y) and the Observer tray (76.8 x 70.8 mm, 20 mm along Y) stand across the flow today and must be re-laid. In the session's greedy fit at a 6,000 mm2 floor, the in-line Observer finds no station aft of Y 370 even with every movable item removed; placed forward (Y 300-377) it lets N2 and N4 fit in line but then the FE power module does not. Planning must find a packing (an ordering or optimising search, then CAD) or re-lay boards to narrower outlines, merge boards, or move the winch stack (the KD7 fallback).
+- OQ6. Packing under R16. The kept N2/N4 nodes (58 x 37 mm boards, 22 mm along Y) and the Observer tray stand across the flow today and must be re-laid. The cargo Observer is the nose design's trapezoid (25.4 mm narrow end, 58 mm wide end, 69.85 mm long, `avionics/kicad/Observer/mod_vera_trapezoid.py`) with its camera, laser and ToF on cables, so it can stand on edge (modelled as the outline grown 2 mm for the Faraday can, 20 mm across X, ASSUMED). A session greedy fit (boards toward the walls, corridor kept) places every board in line and every moved item at a floor of 8,000 mm2 (least station 8,084 mm2 at Y 288) or 6,000 mm2 (6,962 mm2): FE power module X -33..12, Y 304-374, Z 162-207; FE logic module flat over it or on the port wall; Observer on edge, wide end down, at X -18..2, Y 368-430; N2 and N4 on edge at X -48..-20 and 7..35, Y 376-417. At 11,800 mm2 no greedy order places the Observer. Planning confirms a packing in the tool and in CAD, and checks the forward items' effect on the ramp inflow and on the tail motor lead.
 
 **Deferred to Planning**
 
