@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16",
+  "generated": "2026-11-19",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -3473,20 +3473,6 @@
       ],
       "archived": false
     },
-    "avionics/datasheets/Bourns_CDSOT23-SM712.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/Bourns_SMAJ.pdf": {
-      "description": "PDF document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
     "avionics/datasheets/ECS_ECX-32.pdf": {
       "description": "PDF document",
       "tags": [
@@ -3510,13 +3496,6 @@
     },
     "avionics/datasheets/ImportGuides.html": {
       "description": "HTML document",
-      "tags": [
-        "avionics-hardware"
-      ],
-      "archived": false
-    },
-    "avionics/datasheets/Murata_DFE201610P.pdf": {
-      "description": "PDF document",
       "tags": [
         "avionics-hardware"
       ],
@@ -19289,13 +19268,10 @@
       "avionics/datasheets/AX88772E_AX88772D_DEMO_BOARD_BOM_20251128.xlsx",
       "avionics/datasheets/AX88772E_Application_DesignNote_v110.pdf",
       "avionics/datasheets/AX88772E_DEMO_BOARD_SCHEMATIC_V101.pdf",
-      "avionics/datasheets/Bourns_CDSOT23-SM712.pdf",
-      "avionics/datasheets/Bourns_SMAJ.pdf",
       "avionics/datasheets/ECS_ECX-32.pdf",
       "avionics/datasheets/ESD2CANxx24-Q1_SLVSFW5D.pdf",
       "avionics/datasheets/HolyStone_HVC_Series.pdf",
       "avionics/datasheets/ImportGuides.html",
-      "avionics/datasheets/Murata_DFE201610P.pdf",
       "avionics/datasheets/Pulse_TC002_PulseChip.pdf",
       "avionics/datasheets/TaiyoYuden_LMK325BJ476KMHP_SS.pdf",
       "avionics/datasheets/YAGEO_CC0402JRNPO9BN150.pdf",
