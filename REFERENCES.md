@@ -2958,9 +2958,10 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **Product page** | <https://www.towerpro.com.tw/product/sg90-7/> |
 | **Retrieved** | 2026-09-21 (product page read directly; TowerPro publishes no separate datasheet PDF for this part) |
 | **Figures used** | Dimensions "23×12.2x29mm"; weight "9g"; stall torque "1.8kg/cm(4.8v)"; operating speed "0.1sec/60degree(4.8v)"; operating voltage "4.8v". Operating current is stated only in the manufacturer's Q&A on that page: "about 0.5A – 2A" — carried as the range to size the servo-branch fuse against, **not** as a datasheet stall figure. No PWM input-threshold or 6 V rating is published. |
-| **Applied to** | `docs/CARGO_DOOR_GATEWAY_SPEC.md` (D-GW-4 servo-power branch, §3 logic-level VERIFY, §9 RCS valve dynamics), `docs/CARGO_DOOR_LATCH_SPEC.md` §1/§2 (stall-torque-vs-V_max governing finding, pushrod force), `current-specification/bom_revS.csv` `SERVO-CARGO` / `SERVO-RCS-VALVE`, `docs/POWER_DISTRIBUTION.md` §3.3 |
+| **Applied to** | `tools/cargo_duct_layout_fit.py` (RCS servo envelope, 23 x 12.2 x 29 mm body); `docs/CARGO_DOOR_GATEWAY_SPEC.md` (D-GW-4 servo-power branch, §3 logic-level VERIFY, §9 RCS valve dynamics), `docs/CARGO_DOOR_LATCH_SPEC.md` §1/§2 (stall-torque-vs-V_max governing finding, pushrod force), `current-specification/bom_revS.csv` `SERVO-CARGO` / `SERVO-RCS-VALVE`, `docs/POWER_DISTRIBUTION.md` §3.3 |
 | **Status** | Selected servo body for the SG90 class (with the OpenServoCore swap board, REF-SENSOR-015). Marketplace "SG90" listings are frequently clones; procure against this manufacturer page or re-verify the figures for whichever part is actually bought. |
 | **Caveat** | The page lists 4.8 V only; `docs/POWER_DISTRIBUTION.md` §3.3 feeds the SG90 class from the 6 V servo rail — see "Open Standards Verification Items" (SG90 6 V tolerance). |
+| **Note 2026-11-19** | An owner-supplied 7-page compilation of retailer SG90 sheets (not a TowerPro document) gives 0–55 °C (32–131 °F) and conflicting torque (1.8 kgf·cm on TowerPro's listing; 1.2 kgf·cm at 4.8 V and 1.6 kgf·cm at 6 V on another retailer's) — REQUIRES VERIFICATION. The RCS valve servo is now the KST CM07 (REF-ACT-006, owner 2026-11-19); this entry still serves the cargo servos. |
 
 
 ### REF-ACT-004: Blue Bird BMS-101DMG — micro digital metal-gear servo (nacelle nozzle servo)
@@ -2982,8 +2983,18 @@ design target is fs ≥ 2 at ultimate load (the catalogue's high-accuracy class)
 | **URLs** | <https://servodatabase.com/servo/kst/x06>; <https://alofthobbies.com/products/kst-x06-1-8kg-24-99-oz-in-07-sec-wide-voltage> |
 | **Retrieved** | 2026-10-04 (via web search summary, Claude Opus 5.5) |
 | **Values applied** | 20 x 7 x 16.6 mm; 6 g; stall 0.80 / 1.50 / 1.80 kgf·cm at 3.8 / 6.0 / 8.4 V; 3.8–8.4 V; coreless motor; hardened-steel gears; aluminium housing; travel ±60 deg |
-| **Caveat** | Not the manufacturer datasheet — **dimensions, shaft position and the 6 V torque REQUIRE VERIFICATION** on a physical unit before the pocket is printed. Owner selected 2026-10-04 over REF-ACT-004 for force margin. |
+| **Caveat** | Not the manufacturer datasheet — **dimensions, shaft position and the 6 V torque REQUIRE VERIFICATION** on a physical unit before the pocket is printed. Owner selected 2026-10-04 over REF-ACT-004 for force margin. **Superseded 2026-11-19 by REF-ACT-006 (KST CM07, owner).** |
 | **Applied to** | `tools/nozzle_servo_linkage_64.py`; `airframe/openscad/nacelles/nacelle_nozzle_servo_64mm.scad`; plan 2026-09-28-001 KTD2 |
+### REF-ACT-006: KST CM07 — 7.5 mm digital micro servo, coreless, hardened-steel gears (nacelle nozzle servo; RCS valve servo)
+
+| Field | Value |
+|---|---|
+| **Type** | Manufacturer technical specification (KST Digital Technology Limited, www.kstsz.com), dated 2026-05, 1 page; supplied by the owner 2026-11-19 |
+| **Local copy** | `avionics/datasheets/kst/KST_CM07_Technical_Specification_2026-05.pdf` (also `open-servo-core-secure/hardware/CM07_Technical_Specifcation.pdf`) |
+| **Values applied** | Case 20.5 x 7.5 x 19 mm ±0.2; 7 g ±10 %; rated 7.4 V, range 3.5–8.4 V; torque 1.10 / 1.40 / 1.80 / 2.10 / 2.40 kgf·cm at 3.5 / 4.2 / 6.0 / 7.4 / 8.4 V; speed 0.14 / 0.11 / 0.08 / 0.07 / 0.06 s per 60 deg at the same voltages; travel ±60 deg (900–2100 µs); -10 to +65 °C; plastic case; coreless DC motor; hardened-steel gears; potentiometer; 2 ball bearings; 4 mm 15T spline |
+| **Caveat** | The sheet states torque without saying stall or continuous (treated as stall, as the plan 2026-11-16-001 candidate table does); no continuous-torque or current figure; the over-lug length (28.5 mm) is from that plan's table, not this sheet — verify on a unit. Body is PRC-domiciled: flown only gutted with the secure board (plan 2026-11-16-001 KTD6). |
+| **Applied to** | `tools/nozzle_servo_linkage_64.py` (servo torque and body), `airframe/openscad/nacelles/nozzle_servo_linkage_64_params.scad` (generated), `tools/nacelle_mass_cg_64.py`, `tools/cargo_duct_layout_fit.py` (RCS servo envelope), BOM `SERVO-KST-CM07`, `SERVO-RCS-VALVE`; owner selection 2026-11-19 |
+
 ### REF-ESC-001: Open-Secure-ESC — 6S/10A brushed build, the nacelle-tilt controller
 
 | Field | Value |

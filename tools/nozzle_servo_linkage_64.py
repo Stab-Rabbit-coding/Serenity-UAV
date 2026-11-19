@@ -76,8 +76,8 @@ C_AZ, C_Z, C_R = (
 )  # ce-optimize nds-1 winner; r 42.7 clears the open stop lug
 L_OUT = 14.0
 HORN, SERVO_SWEEP = 4.0, 90.0  # mm, deg (+/-45: maximises T sin cos)
-SERVO_TORQUE = 0.147  # N.m, 1.5 kgf.cm at 6 V, KST X06 [REF-ACT-005] (VERIFY)
-SERVO_DIMS = (20.0, 7.0, 16.6)  # L x W x H mm [REF-ACT-005] (VERIFY)
+SERVO_TORQUE = 0.1765  # N.m, 1.80 kgf.cm at 6.0 V, KST CM07 [REF-ACT-006] (owner 2026-11-19)
+SERVO_DIMS = (20.5, 7.5, 19.0)  # L x W x H mm, KST CM07 case [REF-ACT-006]
 SPRING_N = 2.0  # KTD3 spring at the ball (plan U2)
 
 
@@ -251,7 +251,7 @@ NSL_HORN = {HORN}; NSL_SERVO_SWEEP = {srv_sweep:.2f};
 NSL_TH_CLOSED = {math.degrees(ths[0]):.2f};
 NSL_TH_OPEN = {math.degrees(ths[-1]):.2f};
 NSL_SERVO_SIDE = -1;   // servo body on the -az side of its horn plane (centred on the crest)
-NSL_SERVO = [{SERVO_DIMS[0]}, {SERVO_DIMS[1]}, {SERVO_DIMS[2]}];   // KST X06 L x W x H
+NSL_SERVO = [{SERVO_DIMS[0]}, {SERVO_DIMS[1]}, {SERVO_DIMS[2]}];   // KST CM07 L x W x H
 // [REF-ACT-005] VERIFY
 """)
     print(f"wrote {OUT}  ->  {'PASS' if good else 'FAIL'}")

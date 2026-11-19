@@ -72,6 +72,8 @@ Candidate data, from the sources listed below:
 | Gears / sensor | steel / potentiometer | hardened steel / potentiometer | not stated | metal / potentiometer |
 | Temperature | 14 to 149 °F (−10 to +65 °C) | 14 to 149 °F (−10 to +65 °C) | not stated | not stated |
 
+> **D-SV-1 decided by the owner, 2026-11-19: the KST CM07** (REF-ACT-006, KST sheet 2026-05; about $25), for the nacelle nozzle and for the RCS valve servos (R5 amended: the CM07, not the SG90, after conflicting heat ratings for SG90/MG90-class bodies; the Corona DS939MG was the other candidate found). D-SV-2 (rail voltage) stays open. Session check on the CM07 (`tools/nozzle_servo_linkage_64.py` and `tools/dorsal_shroud_resize_64.py --eval-only`): linkage PASS; ear force at stall 2.00 lbf (8.9 N) at 6.0 V and 2.33 lbf (10.4 N) at 7.4 V; the tool's 50 %-of-stall holding figure 4.4 N at 6.0 V against the 2.0 N spring. The servo body does not bind the shroud: the CM07 and the X06 give the same resize (K_H 1.006, crest +0.92 mm at Z0 184.44; the committed shroud is K_H 1.000, a pre-existing 0.006 difference not regenerated here). Still open: the CM07's continuous torque (the sheet gives no continuous rating; at the X06H's 27 %-of-stall zone the ear force is about 2.4 N at 6.0 V and 2.8 N at 7.4 V, against 2.0 N of spring before flap load), the U6 bench hold test, and the secure slim board for the CM07 body (KTD6).
+
 Three findings shape the work:
 
 1. **The baseline has no continuous-duty margin at 6 V.** `tools/nozzle_servo_linkage_64.py`
