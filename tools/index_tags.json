@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-18",
+  "generated": "2026-11-19",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -4167,6 +4167,20 @@
       "archived": false
     },
     "avionics/datasheets/molex/1051620001_sd.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/molex/1053131204.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/molex/1053131204_sd.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -19528,6 +19542,8 @@
       "avionics/datasheets/molex/1040310811_sd.pdf",
       "avionics/datasheets/molex/1051620001.pdf",
       "avionics/datasheets/molex/1051620001_sd.pdf",
+      "avionics/datasheets/molex/1053131204.pdf",
+      "avionics/datasheets/molex/1053131204_sd.pdf",
       "avionics/datasheets/molex/987651-1223.pdf",
       "avionics/datasheets/molex/molex-104031.pdf",
       "avionics/datasheets/molex/molex-1040310811.pdf",
