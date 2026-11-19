@@ -17,7 +17,7 @@ The PB2-I brings no SDIO to its headers, so Wi-Fi has to come in over USB1 (owne
 |---|---|
 | 5 GHz Wi-Fi (the fleet's 5 GHz C2 path); 2.4 GHz too | BBE plan key decisions; `avionics/emi-hardening/WBS.md` (5 GHz-only spec for the Wi-Fi link) |
 | USB 2.0 device interface to the PB2-I USB1 | owner 2026-09-29 |
-| −40 to +85 °C operating | every fleet node is industrial-rated (PB2-I) |
+| −40 to +85 °C operating | **Withdrawn 2026-11-17:** agent inference from the PB2-I's grade, not a specification (owner). The chosen module meets it anyway. |
 | Manufacturer not domiciled or controlled in a restricted country; public, NDA-free datasheet | root `AGENTS.md` §5 sourcing rule (owner 2026-10-17) |
 | Driver usable on the PB2-I's Debian kernel, preferably mainline | `avionics/firmware/README.md` (Debian Trixie on the AM6254) |
 | Locking connectors only (U.FL for RF); no plug-in consumer dongle | plan R11 |

@@ -3815,6 +3815,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/ck/Littelfuse-CK-KMR2-Series-Datasheet.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/cml-microcircuits/cmx994ds.pdf": {
       "description": "PDF document",
       "tags": [
@@ -4096,6 +4103,20 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/microchip/USB2422-DS00001726B.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/microchip/USB2640i-USB2641i-DS00001948C.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/microchip/atf16v8bql.pdf": {
       "description": "PDF document",
       "tags": [
@@ -4146,6 +4167,20 @@
       "archived": false
     },
     "avionics/datasheets/molex/1051620001_sd.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/molex/1053131204.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/molex/1053131204_sd.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -5071,6 +5106,13 @@
       "archived": false
     },
     "avionics/datasheets/ti/tpsm82822.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
+    "avionics/datasheets/ti/tusb4020bi-SLLSEI0E.pdf": {
       "description": "PDF document",
       "tags": [
         "avionics-hardware"
@@ -19463,6 +19505,7 @@
       "avionics/datasheets/bourns/Bourns_MF-PSMF.pdf",
       "avionics/datasheets/bourns/SRF2012A.pdf",
       "avionics/datasheets/central-semiconductor/2N3866_SERIES.PDF",
+      "avionics/datasheets/ck/Littelfuse-CK-KMR2-Series-Datasheet.pdf",
       "avionics/datasheets/cml-microcircuits/cmx994ds.pdf",
       "avionics/datasheets/coilcraft/0805cs.pdf",
       "avionics/datasheets/coilcraft/0805hq.pdf",
@@ -19503,6 +19546,8 @@
       "avionics/datasheets/microchip/KSZ8863MLL-FLL-RLL_DS00002335B.pdf",
       "avionics/datasheets/microchip/KSZ8863_Daughter_Board_DS50002767B.pdf",
       "avionics/datasheets/microchip/KSZ9477S-Data-Sheet-DS00002392C.pdf",
+      "avionics/datasheets/microchip/USB2422-DS00001726B.pdf",
+      "avionics/datasheets/microchip/USB2640i-USB2641i-DS00001948C.pdf",
       "avionics/datasheets/microchip/atf16v8bql.pdf",
       "avionics/datasheets/microchip/mcp1703.pdf",
       "avionics/datasheets/microchip/mcp4901-4911-4921.pdf",
@@ -19511,6 +19556,8 @@
       "avionics/datasheets/molex/1040310811_sd.pdf",
       "avionics/datasheets/molex/1051620001.pdf",
       "avionics/datasheets/molex/1051620001_sd.pdf",
+      "avionics/datasheets/molex/1053131204.pdf",
+      "avionics/datasheets/molex/1053131204_sd.pdf",
       "avionics/datasheets/molex/987651-1223.pdf",
       "avionics/datasheets/molex/molex-104031.pdf",
       "avionics/datasheets/molex/molex-1040310811.pdf",
@@ -19642,6 +19689,7 @@
       "avionics/datasheets/ti/tps63031.pdf",
       "avionics/datasheets/ti/tps7a20.pdf",
       "avionics/datasheets/ti/tpsm82822.pdf",
+      "avionics/datasheets/ti/tusb4020bi-SLLSEI0E.pdf",
       "avionics/datasheets/ti/ul_XPSM82822SILR.zip",
       "avionics/datasheets/ti/wl1837mod.pdf",
       "avionics/datasheets/u-blox/MAX-M10S_DataSheet_UBX-20035208.pdf",
