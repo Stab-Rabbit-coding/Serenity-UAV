@@ -23,7 +23,7 @@ License: CC BY-SA 4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 
 - **Objective:** re-architect the Flight Engineer (FE) power distribution unit as two modules that fit the TEDF-06 cargo duct, with a power path rated for today's loads; also grow the belly service panel and reserve the nacelle cable corridor in the duct tool.
 - **Product authority:** owner (Steve Griffing). Scope chosen 2026-11-19 in the S44 session and in the PR #309 review threads.
-- **Open blockers:** the per-branch EMC change (R9) needs the owner's sign-off against the 500 W/m² susceptibility requirement; the stated stream floor (R15, OQ1) is an owner decision; an in-line packing exists only with the floor at or below about 8,000 mm2 (OQ6).
+- **Open blockers:** the per-branch EMC change (R9) needs the owner's sign-off against the 500 W/m² susceptibility requirement; an in-line packing at the 8,000 mm2 floor is found by a session search and still needs confirming in the tool and in CAD (OQ6).
 
 ---
 
@@ -57,7 +57,8 @@ Separately, Rev R was sized for 18 A per fan. Today's design currents are 44 A s
 - **One plan covers the split and the high-current fix.** Governs R1-R9. (session-settled: user-approved -- chosen over fixing the power path first in its own plan, and over a split that keeps the on-board 44 A common-mode chokes: the power path sets the module's form, and the on-board chokes are unlikely to fit)
 - **The belly panel grows to reach every fuselage avionics unit that has no hatch of its own, and may span the whole flat bottom of the cargo section, edge to edge, from the intake ramp to where the hull necks down toward the tail EDF, cut out only for the landing gear bays.** Governs R12. (session-settled: user-directed -- owner PR #309 review and session, 2026-11-19; no restriction to the door field's width)
 - **The spar bore carries the four nacelle EDF cables.** Any seal is a pass-through around them, and the bay keeps a corridor from the bore to the FE. Governs R11, R13. (session-settled: user-directed -- owner PR #309 review, 2026-11-19)
-- **Every PCB lies in line with the airflow; no board stands across the stream as an air dam.** Governs R16. (session-settled: user-directed -- owner, 2026-11-19)
+- **Every PCB lies in line with the airflow; no board stands across the stream as an air dam.** Governs R16. (session-settled: user-directed -- owner, 2026-11-19; a standing rule in `airframe/AGENTS.md`)
+- **The stream floor is 12.4 in2 (8,000 mm2) at every bay station, and future changes hold it.** About -0.7 % hover tail thrust in `tools/tail_edf_flow.py`; the lowest floor tried at which every board packs in line. Governs R15. (session-settled: user-directed -- chosen over 11,800 mm2, where the in-line Observer has no station, and 6,000 mm2, at -1.6 %: owner, 2026-11-19)
 - **Heavy current runs in copper bars, lugs and bolt-down or blade fuses, not PCB copper.** A 3 x 10 mm (0.118 x 0.394 in) bar dissipates 1.8 W and drops 8.6 mV per 70 mm (2.76 in) at 214 A; two 30 mm (1.2 in) 4 oz pours dissipate 6.5 W. Governs R3, R4.
 
 ### Requirements
@@ -86,7 +87,7 @@ Separately, Rev R was sized for 18 A per fan. Today's design currents are 44 A s
 - R11. The tool keeps a nacelle cable corridor clear from the spar bore at each hull wall to the power module (the session used X +-55, Y 327-352, Z 135-159 mm).
 - R12. The tool takes the belly panel opening as the flat bottom of the cargo section from the ramp to the neck-down, less the gear bays and the frame land, and every fuselage avionics unit without a dedicated hatch passes the reach gate as a hard pass/fail.
 - R16. Every PCB envelope in the duct (FE modules, speed controller, gateway, N2/N4, Observer, chin nodes, tilt controller) has its thinnest side across the flow (along X or Z), never along Y, and the tool fails any board that faces the stream.
-- R15. The tool gates the stream against one stated free-area floor at every bay station, the owner's value from OQ1, and reports the tail-fan thrust cost of that floor from `tools/tail_edf_flow.py`.
+- R15. The tool gates the stream against 8,000 mm2 (12.4 in2) of free area at every bay station and reports the tail-fan thrust cost of that floor from `tools/tail_edf_flow.py`.
 - R13. The U13 spar-bore seal is specified as a pass-through around the four nacelle cables, keeping the bore's free area for them.
 
 **Logic module**
@@ -115,7 +116,6 @@ Separately, Rev R was sized for 18 A per fan. Today's design currents are 44 A s
 
 **Resolve Before Planning**
 
-- OQ1. The stated stream floor. `tools/tail_edf_flow.py` (k_cargo 1.0 ASSUMED, the whole duct taken at the floor, so conservative) gives hover tail thrust -0.1 % at 11,800 mm2 (18.3 in2), -0.7 % at 8,000 mm2 (12.4 in2), -1.6 % at 6,000 mm2 (9.3 in2) and -4.0 % at 4,000 mm2 (6.2 in2), against the 12,750 mm2 model value; the nozzle (about 1,840 mm2) meters the flow. At a 6,000 mm2 floor the session fit places power modules up to 45 x 90 x 45, 50 x 80 x 50 or 55 x 70 x 55 mm and logic modules up to 60 x 80 x 18 mm with every other item placed; at 11,800 mm2 only 45 x 70 x 45 plus 60 x 40 x 18 mm fits.
 
 - OQ6. Packing under R16. The kept N2/N4 nodes (58 x 37 mm boards, 22 mm along Y) and the Observer tray stand across the flow today and must be re-laid. The cargo Observer is the nose design's trapezoid (25.4 mm narrow end, 58 mm wide end, 69.85 mm long, `avionics/kicad/Observer/mod_vera_trapezoid.py`) with its camera, laser and ToF on cables, so it can stand on edge (modelled as the outline grown 2 mm for the Faraday can, 20 mm across X, ASSUMED). A session greedy fit (boards toward the walls, corridor kept) places every board in line and every moved item at a floor of 8,000 mm2 (least station 8,084 mm2 at Y 288) or 6,000 mm2 (6,962 mm2): FE power module X -33..12, Y 304-374, Z 162-207; FE logic module flat over it or on the port wall; Observer on edge, wide end down, at X -18..2, Y 368-430; N2 and N4 on edge at X -48..-20 and 7..35, Y 376-417. At 11,800 mm2 no greedy order places the Observer. Planning confirms a packing in the tool and in CAD, and checks the forward items' effect on the ramp inflow and on the tail motor lead.
 

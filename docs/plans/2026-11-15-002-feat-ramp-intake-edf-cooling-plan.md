@@ -605,7 +605,7 @@ flowchart TB
     - Every envelope clears the hull and its neighbours by the stated gap.
     - The fairlead is at the pivot station within tolerance.
     - The winch line, at any payout angle, does not enter the stream keep-out.
-    - No envelope blocks the stream below a stated free area.
+    - No envelope blocks the stream below a stated free area. (Amendment 2026-11-19, owner: the stated free area is 12.4 in2, 8,000 mm2, at every bay station, and no PCB stands across the stream as an air dam; standing rules in `airframe/AGENTS.md` "Interior Air Path".)
     - Every serviceable item is reachable through the hatch opening.
     - The Flight Engineer box at its forward station clears the twin tray loading path, or the path is restated.
     - Moving an envelope into the stream keep-out fails the gate.

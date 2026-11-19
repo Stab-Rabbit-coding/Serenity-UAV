@@ -80,8 +80,14 @@ FE_BOX = (75.0, 94.0, 36.0)  # Flight Engineer unit: can 75 x 94 x 28 + 8 mm ent
 #                              (tools/middle_layout_fit.py FE_CAN_*, FE_PLATE_Y)
 SG90 = (23.0, 12.2, 29.0)  # TowerPro SG90 body [REF-ACT-003]
 N_RCS_SERVOS = 3  # owner option B (tools/rcs_jets.py): two upper jets and one ventral
-A_STREAM_MIN = 11800.0  # mm^2: the low end of the measured closed-cavity free area that
-#                         tools/tail_edf_flow.py (a_cargo, 11,800 to 13,700) rests on
+# Owner benchmark 2026-11-19 (AGENTS.md, airframe/AGENTS.md "Interior Air Path"): every bay
+# station keeps at least 8,000 mm^2 (12.4 in^2) of stream free area; future changes hold this
+# line.  tools/tail_edf_flow.py puts its cost at about -0.7 % hover tail thrust (k_cargo ASSUMED).
+A_STREAM_MIN = 8000.0
+# Owner rule 2026-11-19: every PCB in the air path lies in line with the flow; none stands across
+# the stream as an air dam (its thinnest side may not lie along Y).
+PCB_PREFIXES = ("Flight Engineer", "tail speed controller", "RCS gateway", "node ",
+                "observer tray", "tilt controller board")
 
 # --- ASSUMED, labelled on every run -------------------------------------------------------------
 GAP = 2.0  # mm static clearance, equipment to hull and to each other (cargo_layout_fit gap)
@@ -405,9 +411,24 @@ def screen_coverage(screen: dict[str, float], opening) -> float:
 
 
 # --- the forward-move search ------------------------------------------------------------------
-def orientations(size: tuple[float, float, float]) -> list[tuple[float, float, float]]:
+def orientations(size: tuple[float, float, float], pcb: bool = False
+                 ) -> list[tuple[float, float, float]]:
+    """The six axis permutations; for a PCB, only those with its thinnest side across the flow."""
     a, b, c = size
-    return sorted({(a, b, c), (b, a, c), (a, c, b), (c, a, b), (b, c, a), (c, b, a)})
+    out = sorted({(a, b, c), (b, a, c), (a, c, b), (c, a, b), (b, c, a), (c, b, a)})
+    if pcb and min(size) < max(size):
+        out = [o for o in out if o[1] > min(size)]
+    return out
+
+
+def is_pcb(name: str) -> bool:
+    return name.startswith(PCB_PREFIXES)
+
+
+def in_line(b: Box) -> bool:
+    """A board is in line with the flow unless its Y extent is its thinnest side."""
+    dx, dy, dz = b.x1 - b.x0, b.y1 - b.y0, b.z1 - b.z0
+    return not (dy < min(dx, dz) - 1e-9)
 
 
 def clears(b: Box, placed: list[Box]) -> bool:
@@ -472,7 +493,7 @@ def place_forward(name: str, size, placed: list[Box], y_lo=292.0, y_hi=430.0,
     """Most forward station (smallest Y) at which the item fits on the floor or on another
     face, clear of the hull, of every placed envelope and of the stream floor."""
     best: Box | None = None
-    for dx, dy, dz in orientations(size):
+    for dx, dy, dz in orientations(size, is_pcb(name)):
         for y0 in np.arange(y_lo, y_hi - dy + 1e-9, y_step):
             if best is not None and y0 >= best.y0:
                 break
@@ -507,7 +528,7 @@ def blockers(name: str, size, placed: list[Box], step=6.0) -> dict[str, int]:
     from collections import Counter
     from scipy import ndimage
     cnt: Counter = Counter()
-    for dx, dy, dz in orientations(size):
+    for dx, dy, dz in orientations(size, is_pcb(name)):
         for y0 in np.arange(296.0, BAY_Y1 - dy + 1e-9, step):
             for xc in np.arange(-80.0 + dx / 2, 80.0 - dx / 2 + 1e-9, step):
                 x0, x1 = xc - dx / 2, xc + dx / 2
@@ -702,6 +723,10 @@ def limits(r) -> list[tuple[str, float, str, float, str]]:
     a = r["aft"]
     out.append(("R34 aft allowance (movable equipment + rear-cone ballast provision) >= the bow "
                 "pocket's travel (PLACEHOLDER until U7)", a["total"], ">=", a["target"], "mm"))
+    for b in r["placed"]:
+        if is_pcb(b.name) and not b.name.endswith("cable zone") and b.kind != "unplaced":
+            out.append((f"PCB in line with the airflow, not an air dam: {b.name}",
+                        1.0 if in_line(b) else 0.0, ">=", 1.0, ""))
     pinch = [y for y in r["stations"] if BAY_Y0 <= y <= BAY_Y1
              and r["baseline"][y] < A_STREAM_MIN]
     out.append(("U6 adds no blockage where the kept equipment already pinches the stream",
@@ -727,8 +752,8 @@ def report(r) -> bool:
           f"{REACH}, land {PANEL_EDGE}, fastener pitch {FASTENER_PITCH}; masses {MASS}.")
     print(f"PLACEHOLDERS: bow pocket CG travel {BOW_POCKET_TRAVEL} mm (U7 sizes it); flow "
           "guides (U2 names the nodes and sizes them).")
-    print(f"  stream floor {A_STREAM_MIN:.0f} mm2 ({A_STREAM_MIN / 645.16:.1f} in2): the low end "
-          "of the measured closed-cavity free area in tools/tail_edf_flow.py (a_cargo)")
+    print(f"  stream floor {A_STREAM_MIN:.0f} mm2 ({A_STREAM_MIN / 645.16:.1f} in2): owner "
+          "benchmark 2026-11-19, held by every future change (airframe/AGENTS.md)")
     print("  duct free area by station, before -> after the U6 moves (mm2): " + ", ".join(
         f"Y{y:.0f} {r['baseline'][y]:.0f}->{r['final'][y]:.0f}" for y in r["stations"]))
     hand = ("as drawn" if r["winch"]["hand"] > 0

@@ -70,6 +70,18 @@ tilt from 90° to the 135° limit, and shall fail to 105% on loss of servo power
 tilt-angle validity. Drive mechanism (servo, owner 2026-09-28) and rationale:
 `docs/NOZZLE_DRIVE_TRADE.md`; plan `docs/plans/2026-09-28-001-feat-nacelle-nozzle-servo-drive-plan.md`.
 
+## Interior Air Path (tail EDF)
+
+Standing rules for the tail EDF's air path through the fuselage interior (owner, 2026-11-19).
+Basis and figures: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md` (U6) and
+`docs/plans/2026-11-19-001-feat-flight-engineer-split-relayout-plan.md` (R15, R16).
+
+- **Stream floor: 12.4 in² (8,000 mm²) of free area at every bay station.** Every future
+  change to the interior holds this line; lowering it is an owner decision, never an edit to
+  make a layout fit. `tools/cargo_duct_layout_fit.py` (`A_STREAM_MIN`) gates it.
+- **No PCB is an air dam.** Every board in the air path lies in line with the flow: its
+  thinnest side is across the flow (X or Z), never along Y. The same tool gates it.
+
 ## Design Records
 
 - Landing gear: `docs/LANDING_GEAR_ANALYSIS.md`, SCAD in `airframe/openscad/fuselage/`.

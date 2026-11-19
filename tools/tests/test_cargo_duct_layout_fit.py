@@ -186,3 +186,31 @@ def test_every_limit_is_printed_and_a_failing_layout_exits_nonzero(ev, capsys):
     assert all(x[0] in out for x in ev["limits"])
     assert ok is all(cd.passed(x) for x in ev["limits"])
     assert ok is False  # Flight Engineer fit and Observer reach: the G1 brief reports them
+
+
+# --- owner rules, 2026-11-19 (AGENTS.md; airframe/AGENTS.md "Interior Air Path") ---------------
+def test_the_stream_floor_is_the_owner_benchmark():
+    """8,000 mm2 (12.4 in2) at every bay station; a change that lowers it must be an owner
+    decision, not an edit to make a layout fit."""
+    assert cd.A_STREAM_MIN == 8000.0
+    assert math.isclose(cd.A_STREAM_MIN / 645.16, 12.4, abs_tol=0.05)
+
+
+def test_a_pcb_is_never_offered_an_orientation_that_faces_the_stream():
+    board = (40.0, 60.0, 18.0)
+    for dx, dy, dz in cd.orientations(board, pcb=True):
+        assert dy > min(board)
+    assert any(o[1] == 18.0 for o in cd.orientations(board))  # a non-PCB may take any
+    assert cd.in_line(cd.Box("b", 0, 18, 0, 60, 0, 40))
+    assert not cd.in_line(cd.Box("dam", 0, 58, 0, 22, 0, 37))
+
+
+def test_every_board_in_the_duct_is_checked_and_the_air_dams_are_caught(ev):
+    rows = {x[0].split(": ", 1)[1]: x for x in _rows(ev, "PCB in line with the airflow")}
+    for b in ev["moved"]:
+        if cd.is_pcb(b.name) and b.kind != "unplaced":
+            assert cd.passed(rows[b.name]), b.name
+    # the kept aft nodes and the Observer tray stand across the flow today (re-lay, OQ6)
+    for name in ("node N2 FC2 (aft port)", "node N4 FC3 (aft stbd)", "observer tray"):
+        assert not cd.passed(rows[name]), name
+    assert cd.passed(rows["tilt controller board"])

@@ -31,6 +31,7 @@ EDF. The tail EDF is part of the first build and flight-critical in hover: it dr
 through the fuselage interior to cool the avionics, feeds the **fixed** canonical elliptical
 tail nozzle (**never** an iris) plus RCS bleed-air thrusters for pitch/yaw, is the only hover
 pitch trim, and its remainder is forward thrust that shall not be counted toward hover lift.
+Its interior air path keeps at least 12.4 in² (8,000 mm²) of free area at every bay station, and no PCB stands across it as an air dam (owner, 2026-11-19; rules in `airframe/AGENTS.md` "Interior Air Path").
 Basis: `airframe/fuselage-mid/WBS.md` §1.1.1.4.0 and
 `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`. Values for calculations come
 from `current-specification/bom_revU.json` and `airframe/README.md`, never from this file.

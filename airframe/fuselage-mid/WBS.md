@@ -1402,6 +1402,10 @@ forward. Plan: `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`.
 - [ ] **TEDF-06** — [STD] Cargo duct layout: Flight Engineer box forward, belly panel, fairlead
     under the pivot, screen, flow guides, line guard, pre-G1 bench fixtures, aft balance allowance.
     Plan U6. (S44)
+    - 2026-11-19, owner rules (standing, `airframe/AGENTS.md` "Interior Air Path"): the stream keeps
+      12.4 in2 (8,000 mm2) at every bay station and no PCB stands across it as an air dam; the
+      tool gates both (`A_STREAM_MIN`, the in-line rows; 22 tests). Under them the kept N2/N4
+      nodes and the Observer tray are findings to re-lay (`docs/plans/2026-11-19-001-feat-flight-engineer-split-relayout-plan.md` OQ6).
     - 2026-11-19, layout tool: `tools/cargo_duct_layout_fit.py` (19 tests). It measures the
       duct on the published head+cargo hull closed by the fused doors, splice collar, wing-root
       flanges, wings and gear bays (every bay station closes at <= 4 mm seams; the spar bore at
