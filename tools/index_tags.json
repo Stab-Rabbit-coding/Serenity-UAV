@@ -4047,6 +4047,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/kst/KST_CM07_Technical_Specification_2026-05.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/linear/2893159.pdf": {
       "description": "PDF document",
       "tags": [
@@ -19558,6 +19565,7 @@
       "avionics/datasheets/johanson/johanson-2450bp15e0100.pdf",
       "avionics/datasheets/jst/SM04B-SRSS-TB.pdf",
       "avionics/datasheets/jst/eGH.pdf",
+      "avionics/datasheets/kst/KST_CM07_Technical_Specification_2026-05.pdf",
       "avionics/datasheets/linear/2893159.pdf",
       "avionics/datasheets/linear/4370f.pdf",
       "avionics/datasheets/linear/ltc4359.pdf",

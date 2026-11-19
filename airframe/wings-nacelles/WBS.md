@@ -2205,6 +2205,7 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         (Claude Opus 5.5; owner decisions: servo in the canonical dorsal spine,
         bellcrank, fixed shroud on the pod, slide-off nozzle module, KST X06,
         "any height increase must be a resizing of the canonical dorsal shroud").**
+        - 2026-11-19, owner D-SV-1: the servo is the KST CM07 (REF-ACT-006; BOM SERVO-KST-CM07, replaces SERVO-KST-X06). `tools/nozzle_servo_linkage_64.py` regenerated the params on the CM07 (20.5 x 7.5 x 19 mm, 0.1765 N.m at 6.0 V): PASS; the shroud resize is unchanged. The servo pocket in `nacelle_nozzle_servo_64mm.scad` follows NSL_SERVO; re-render and re-check it before printing. Plan `docs/plans/2026-11-16-001-feat-nozzle-servo-selection-osc-integration-plan.md`.
         Drive: KST X06 [REF-ACT-005] flat in the spine (shaft Z 144, az 280,
         4 mm horn ±45°) -> link -> bellcrank on a radial Ø2 pin (az 266, Z 179,
         r 42.7; arms 4.6/14) -> 18.7 mm rod -> ring ear ball. Single source

@@ -1,48 +1,48 @@
 {
  "configs": {
   "cargo_2800_payload": {
-   "I_pitch_gmm2": 74728987.578096,
-   "T_W": 1.406221,
+   "I_pitch_gmm2": 74729359.518791,
+   "T_W": 1.405804,
    "cg": [
-    -0.110972,
-    347.938203,
-    157.487005
+    -0.110939,
+    347.935671,
+    157.483851
    ],
-   "k_pitch_mm": 105.285172,
-   "mass_g": 6741.471123
+   "k_pitch_mm": 105.26982,
+   "mass_g": 6743.471123
   },
   "heaviest_4000_payload": {
-   "I_pitch_gmm2": 75087552.050935,
-   "T_W": 1.385869,
+   "I_pitch_gmm2": 75087929.717121,
+   "T_W": 1.385464,
    "cg": [
-    -0.109365,
-    347.515048,
-    157.943083
+    -0.109334,
+    347.512676,
+    157.939841
    ],
-   "k_pitch_mm": 104.77097,
-   "mass_g": 6840.471123
+   "k_pitch_mm": 104.755921,
+   "mass_g": 6842.471123
   },
   "hover_4000": {
-   "I_pitch_gmm2": 74873464.18328,
-   "T_W": 1.433395,
+   "I_pitch_gmm2": 74873877.864677,
+   "T_W": 1.432961,
    "cg": [
-    -0.113116,
-    347.20693,
-    158.932187
+    -0.113082,
+    347.20457,
+    158.928535
    ],
-   "k_pitch_mm": 106.400254,
-   "mass_g": 6613.671123
+   "k_pitch_mm": 106.384464,
+   "mass_g": 6615.671123
   },
   "hover_twin_2200": {
-   "I_pitch_gmm2": 83463117.88885,
-   "T_W": 1.429504,
+   "I_pitch_gmm2": 83463427.869724,
+   "T_W": 1.429073,
    "cg": [
-    -0.112809,
-    337.865013,
-    159.207415
+    -0.112775,
+    337.865476,
+    159.20369
    ],
-   "k_pitch_mm": 112.185263,
-   "mass_g": 6631.671123
+   "k_pitch_mm": 112.168559,
+   "mass_g": 6633.671123
   }
  },
  "cooling_airflow": {
@@ -93,9 +93,9 @@
  },
  "pitch_inertia": {
   "I_kg_m2": 0.083463,
-  "I_lbm_in2": 285.208054,
+  "I_lbm_in2": 285.209113,
   "config": "hover_twin_2200",
-  "k_pitch_in": 4.416743
+  "k_pitch_in": 4.416085
  },
  "rows_hover": [
   {
@@ -693,7 +693,7 @@
     146.9
    ],
    "kind": "NACELLE",
-   "mass_g": 964.24,
+   "mass_g": 965.24,
    "name": "Nacelle port rotating assembly (64 mm)",
    "ref": "NACELLE",
    "source": "tools/nacelle_mass_cg_64.py roll-up at the hull pivot"
@@ -705,7 +705,7 @@
     146.9
    ],
    "kind": "NACELLE",
-   "mass_g": 964.24,
+   "mass_g": 965.24,
    "name": "Nacelle stbd rotating assembly (64 mm)",
    "ref": "NACELLE",
    "source": "tools/nacelle_mass_cg_64.py roll-up at the hull pivot"
@@ -2286,7 +2286,7 @@
  "subtotals_hover_g": {
   "BOM": 2386.904,
   "GAP": 295.9714,
-  "NACELLE": 1977.876227,
+  "NACELLE": 1979.876227,
   "PRINT": 1952.919496
  },
  "thrust_gf": 9480.0,

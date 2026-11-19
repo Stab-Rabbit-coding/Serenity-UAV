@@ -78,7 +78,8 @@ OBSERVER_Y0, OBSERVER_Y1 = 409.5, 429.5  # R20: the Cargo Observer stays (cargo_
 DOOR_X, DOOR_Y0, DOOR_Y1 = 50.5, 307.7, 413.7  # the fused clamshell doors (KD5), measured
 FE_BOX = (75.0, 94.0, 36.0)  # Flight Engineer unit: can 75 x 94 x 28 + 8 mm entry plate
 #                              (tools/middle_layout_fit.py FE_CAN_*, FE_PLATE_Y)
-SG90 = (23.0, 12.2, 29.0)  # TowerPro SG90 body [REF-ACT-003]
+CM07 = (20.5, 7.5, 19.0)  # KST CM07 case [REF-ACT-006]; the RCS valve servo (owner 2026-11-19)
+CM07_LUGS = 28.5  # mm over the mounting lugs (plan 2026-11-16-001 candidate table; verify)
 N_RCS_SERVOS = 3  # owner option B (tools/rcs_jets.py): two upper jets and one ventral
 # Owner benchmark 2026-11-19 (AGENTS.md, airframe/AGENTS.md "Interior Air Path"): every bay
 # station keeps at least 8,000 mm^2 (12.4 in^2) of stream free area; future changes hold this
@@ -93,7 +94,7 @@ PCB_PREFIXES = ("Flight Engineer", "tail speed controller", "RCS gateway", "node
 GAP = 2.0  # mm static clearance, equipment to hull and to each other (cargo_layout_fit gap)
 ESC_BOX = (44.0, 33.0, 15.0)  # OSESC-NAC folded board 44 x 33 (nacelle_esc_thermal) + parts
 GATEWAY_BOX = (49.0, 13.6, 25.5)  # SKIPPER-CAN-PERIPH-GW-PCB, N_STACKS=1 (door-gateway envelope)
-SERVO_BOX = (SG90[0] + 9.0, SG90[1] + 4.0, SG90[2] + 6.0)  # SG90 + tabs, horn and cable exit
+SERVO_BOX = (CM07_LUGS, CM07[1] + 4.0, CM07[2] + 6.0)  # CM07 over lugs + horn and cable exit
 FAIRLEAD_R, FAIRLEAD_H = 8.0, 10.0  # boss radius, height above the belly
 HOOK_R, HOOK_DEPTH = 14.0, 12.0  # hook / magnet recess in the belly (R15)
 GUARD_R = 7.0  # line guard tube radius around the line, drum to fairlead (R26)
@@ -109,7 +110,7 @@ PANEL_X = DOOR_X  # the belly service panel stays inside the fused door field's 
 MASS = {"Flight Engineer box": 158.0,  # ledger "Flight Engineer" (BOM Unit_Mass_g)
         "tail speed controller": 52.7,  # OSESC-NAC roll-up estimate (ESC wire market survey)
         "RCS gateway": 6.0,  # as CAN-PERIPH-GW-DOOR (BOM)
-        "RCS servo": 9.0}  # SG90 [REF-ACT-003]
+        "RCS servo": 7.0}  # KST CM07 [REF-ACT-006]
 FE_FROM_Y = 467.7  # the Flight Engineer box today (ledger, middle-section neck)
 TAIL_MOTOR_Y = 582.3  # tail EDF motor centre, Y 553.3..611.3 (tools/rear_cone_layout_fit.py)
 TAIL_MOTOR_Z = 165.25
@@ -747,7 +748,7 @@ def inch(mm: float) -> str:
 def report(r) -> bool:
     print("CARGO DUCT LAYOUT (plan 002 U6, TEDF-06), frame R2, mm.  PROVISIONAL.")
     print(f"ASSUMED: gap {GAP} mm; speed controller {ESC_BOX}; gateway {GATEWAY_BOX}; servo "
-          f"envelope {SERVO_BOX} (SG90 {SG90} + tabs and horn); fairlead boss r {FAIRLEAD_R} x "
+          f"envelope {SERVO_BOX} (KST CM07 {CM07} over lugs + horn and cable exit); fairlead boss r {FAIRLEAD_R} x "
           f"{FAIRLEAD_H}; hook recess r {HOOK_R} x {HOOK_DEPTH}; guard r {GUARD_R}; panel reach "
           f"{REACH}, land {PANEL_EDGE}, fastener pitch {FASTENER_PITCH}; masses {MASS}.")
     print(f"PLACEHOLDERS: bow pocket CG travel {BOW_POCKET_TRAVEL} mm (U7 sizes it); flow "
