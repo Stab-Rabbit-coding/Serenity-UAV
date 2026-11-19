@@ -111,6 +111,7 @@
 - [ ] REF-HT-001 edition and sections — read the heat-transfer text
 - [ ] Brass thermal conductivity — the 70 Btu/(hr ft F) (121.2 W/m-K)…
 - [ ] RCS jets (TEDF-05, owner/G1): ventral azimuth DECIDED 2026-11-18…
+- [ ] [CAUTION] RCS valves are not specified (found 2026-11-19, owner flag
 - [ ] Tail EDF de-swirl (owner direction 2026-11-18
 - [ ] EDF first critical speed (TEDF-05, also the nacelle units)
 - [ ] Nacelle rotor retention (found 2026-11-18)
