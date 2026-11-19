@@ -2,10 +2,17 @@
 
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 **Current design revision:** Rev U (2026-11-03, see `docs/WBS.md` §6.5 for changelog)  
-**Last updated:** 2026-10-07
+**Last updated:** 2026-11-17
 
-> Phase 11+ design work, aft propulsion system, RCS attitude thrusters, cargo-bay range-extender
-> battery module, and other deferred upgrades planned for post-Phase-10 operations.
+> Deferred upgrades and speculative future work, plus the pre-shift records of the aft propulsion
+> system and RCS attitude thrusters that are now part of the first build.
+
+> **Numbering (owner direction, 2026-11-17).** The aft-EDF and RCS work formerly called Phase 11 has been
+> part of the first build (Phase 5) since 2026-11-16 (plan
+> `docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md`). The cargo-bay range-extender battery
+> module, formerly Phase 12, is now **Phase 11**, and the speculative items formerly Phase 13+ are
+> **Phase 12+**. Sections below titled "Former Phase 11" are the pre-shift record of the aft EDF; their
+> figures (55 mm EDF, 4,273 g AUW) are history, not current values.
 
 ## Overview
 
@@ -14,25 +21,29 @@ enhancements that are **deferred beyond Phase 10** (Advanced Autonomy and Long-R
 These features are **not required** for first flight (Phase 5) or initial autonomous operations
 (Phases 6–10), but enable extended-mission capabilities once the baseline platform is flight-proven.
 
-## Current Status (2026-10-07)
+## Current Status (2026-11-17)
 
-Nothing in this folder is built. The physical aircraft has not been assembled, so every Phase 11
-and Phase 12 date below is conditional on Phase 5–10 flight validation, not scheduled.
+Nothing in this folder is built. The physical aircraft has not been assembled.
 
-- **Phase 11 (aft EDF + RCS):** CAD and plumbing concepts only. All items in `WBS.md` §Phase11
-  are open. The RCS bleed-valve gateway (`GW-RCS`) was specified 2026-09-21 and is not built.
-  The rear EDF's motor, ESC, and duct geometry are not settled.
-- **Phase 12 (range-extender battery):** concept only; no schematic or CAD exists.
+- **Tail EDF and RCS (formerly Phase 11):** no longer deferred. Their build steps and pass criteria are in
+  `graphical-build-guide/flight-phases/WBS.md` §Phase5 and §Phase9; the design is TEDF-01..17
+  (`airframe/fuselage-mid/WBS.md` §1.1.1.4.0). The concepts in this folder (120 mm and 55 mm EDF, plenum,
+  bleed taps, iris nozzle) are superseded. The RCS valve gateway (`GW-RCS`, specified 2026-09-21) is a
+  first-build item.
+- **Phase 11 (range-extender battery, formerly Phase 12):** promoted into the active build on 2026-10-26
+  (`docs/plans/2026-10-26-001-feat-split-battery-head-rail-plan.md`,
+  `docs/plans/2026-10-26-002-feat-fe-multi-battery-pdb-plan.md`); the Phase 11 section below is the original
+  concept record.
 - **Planned PCB revisions** formerly listed here (Commo R1, XO R1, Flight Engineer A1) were
   overtaken: Commo is now a standalone Rev T node, "XO" is TACCO, and the Flight Engineer 6 V
   BEC removal is tracked in `avionics/rev-s1/WBS.md`.
-- **Known open inconsistency:** `WBS.md` sizes the rear-EDF ESC at 50 A and routes ESC5 to
-  Inara's FC2, while `aft-edf/README.md` says 80 A, and root `AGENTS.md` §9 assigns the aft EDF
-  to Simon. The owner must adjudicate before Phase 11 work starts.
+- **Resolved by the design shift:** the former conflicts over the rear-EDF ESC (50 A vs 80 A), ESC5 routing
+  to FC2, and which node commands the aft EDF are superseded. The tail speed controller is OSESC-TAIL-1, and
+  the commanding node is assigned at G1 (NFP-TEDF-2 / OD-22).
 
 ## Deferred Phases & Features
 
-### Phase 11 — Aft EDF Integration (Forward Thrust + RCS)
+### Former Phase 11 — Aft EDF Integration (Forward Thrust + RCS)
 
 **Purpose:** Add rear-fuselage EDF for forward/cruise thrust and four RCS (reaction-control system)
 bleed-jet thrusters for pitch/yaw attitude authority in forward flight.
@@ -43,18 +54,18 @@ bleed-jet thrusters for pitch/yaw attitude authority in forward flight.
 - **Nozzle:** Fixed canonical elliptical nozzle (2.06" × 1.76", 52.3 × 44.7 mm)
 - **RCS system:** 4× SG90 proportional valves, rcs_distribution_manifold, ~15% EDF mass flow diverted
 - **Mass impact:** +362 g (55mm EDF, RCS servos, manifold, nozzle housing)
-- **Phase 11 AUW:** ~9.42 lbm (4,273 g) including the rear EDF; the rear EDF thrust is **not** in the hover budget, so the hover T/W falls from ≈1.14 to ≈1.04 (provisional pending the AUW ledger recompute, `docs/WBS.md` §0.10.1)
+- **Former Phase 11 AUW:** ~9.42 lbm (4,273 g) including the rear EDF; the rear EDF thrust is **not** in the hover budget, so the hover T/W falls from ≈1.14 to ≈1.04 (provisional pending the AUW ledger recompute, `docs/WBS.md` §0.10.1)
 
 **Design documents:**
 - `deferred/AGENTS.md` and `deferred/aft-edf/README.md`
 - `deferred/WBS.md` §Phase11
-- `deferred/TODO.md` — open Phase 11 tasks
+- `deferred/TODO.md` — open former Phase 11 tasks
 
 **Status:** Design complete; implementation deferred pending Phase 5–10 baseline flight validation.
 
 ---
 
-### Phase 12 — Cargo-Bay Range-Extender Battery Module (RBM)
+### Phase 11 — Cargo-Bay Range-Extender Battery Module (RBM)
 
 **Purpose:** Add a secondary battery pack in the cargo bay to extend endurance on autonomous
 missions or support higher-altitude operations.
@@ -68,7 +79,7 @@ missions or support higher-altitude operations.
 - **Field swappability:** Quick-disconnect XT90-S connector in gondola nose
 - **Firmware:** `pwr_fault` node monitors voltage/current across all three rails
 
-**Phase 12 impact:**
+**Phase 11 impact:**
 - Endurance extension: +2–4 minutes typical hover time (TBD via flight testing)
 - No structural changes (cargo bay already open)
 - No additional avionics (uses the existing Flight Engineer + PB2-I monitoring)
@@ -82,9 +93,9 @@ missions or support higher-altitude operations.
 
 ---
 
-### Phase 13+ — Future Expansion (Speculative)
+### Phase 12+ — Future Expansion (Speculative)
 
-Possible additions beyond Phase 12 (not yet formally scoped):
+Possible additions beyond Phase 11 (not yet formally scoped):
 
 - **Advanced gimbal tracking** — motorized antenna platform on ground station (partially
   designed; gimbal mechanics in `gcs/hardware/`)
@@ -106,7 +117,7 @@ Possible additions beyond Phase 12 (not yet formally scoped):
 | `README.md` | This file (feature overview and navigation) |
 | `WBS.md` | Work breakdown structure for Phases 11–13 (full task narrative) |
 | `TODO.md` | Open items for deferred work (checked items stay for history) |
-| `aft-edf/` | Phase 11 aft-EDF design documents and CAD source files |
+| `aft-edf/` | Former Phase 11 aft-EDF design documents and CAD source files |
 | `DEFERRED_ITEM_TEMPLATE.md` | Required field template for every deferred item |
 | `LICENSE` | Folder license file |
 
@@ -115,7 +126,7 @@ RCS and range-extender design material is carried in `WBS.md`, `AGENTS.md`, and
 
 ---
 
-## Phase 11 — Detailed Feature Breakdown
+## Former Phase 11 — Detailed Feature Breakdown
 
 ### Aft EDF Selection & Integration
 
@@ -129,11 +140,11 @@ RCS and range-extender design material is carried in `WBS.md`, `AGENTS.md`, and
 2. **Forward thrust only** — Does not contribute to hover T/W (decoupled from VTOL authority)
 3. **RCS bleed integration:** ~15% of EDF mass flow diverted to 4 RCS jets → 1,275 g net forward thrust (1,500 × 0.85)
 
-**SCAD sources (Phase 11):**
+**SCAD sources (former Phase 11):**
 - `aft_edf_plenum.stl` — EDF inlet plenum, 55 mm bore, 4× RCS bleed taps
 - `rcs_distribution_manifold.stl` — Bleed-flow splitting (TBD split ratio, likely 85% forward / 15% RCS)
 - `rcs_thruster_nozzle.stl` (×4) — Small convergent nozzles for RCS jets
-- `middle_neck_intake_frame.stl` — Intake scoop window frame (Phase 11 variant with larger windows)
+- `middle_neck_intake_frame.stl` — Intake scoop window frame (former Phase 11 variant with larger windows)
 
 **Mass budget addition:**
 - 55 mm EDF unit: ~95 g
@@ -141,7 +152,7 @@ RCS and range-extender design material is carried in `WBS.md`, `AGENTS.md`, and
 - RCS manifold + nozzles: ~50 g
 - Wiring + mounts: ~20 g
 - **Subtotal phase 11 additions: ~201 g**
-- But rear nozzle housing replaces cowl tail (no net mass change there); **net Phase 11 Δ ≈ +362 g total**
+- But rear nozzle housing replaces cowl tail (no net mass change there); **net former Phase 11 Δ ≈ +362 g total**
 
 ### RCS System Architecture
 
@@ -152,20 +163,20 @@ RCS and range-extender design material is carried in `WBS.md`, `AGENTS.md`, and
 | **Pitch** | Top (dorsal) + bottom (ventral) | Collective bleed-flow rate | ~15% of rear EDF mass flow → ~225 g-force equivalent at full deflection | Spring-return to closed (no RCS = neutral pitch) |
 | **Yaw** | Port + starboard | Differential bleed flow | One side closed, other full open | Closed both (no yaw authority without thrust differential) |
 
-**Firmware (Phase 11):**
+**Firmware (former Phase 11):**
 - 4× proportional-valve PWM outputs on Inara (FC2, the aft node assigned by PACE)
 - Attitude controller blends VTOL hover authority (nacelle tilt) with RCS bleed for forward-flight
   yaw/pitch (cross-fade as nacelle tilt reduces toward 0°)
 - Fail-safe: loss of Inara → River (FC3) takes over RCS channels
 
 **Bench testing:** RCS authority verified via thrust vector measurement before first forward-flight
-(Phase 11 Phase 5.1 in the local Phase 11 WBS).
+(former Phase 11 Phase 5.1 in the local former Phase 11 WBS).
 
 ---
 
-### Phase 11 Build Sequence (Conceptual)
+### Former Phase 11 Build Sequence (Conceptual)
 
-*Estimated Phase 11 integration: 30–40 flight-test hours post-Phase-10.*
+*Estimated former Phase 11 integration: 30–40 flight-test hours post-Phase-10.*
 
 1. **Print phase 11 STLs** — neck intake frame, plenum, RCS nozzles, rear pod fairing
 2. **Modify middle neck** — Remove temporary intake scoop covers; install permanent frame
@@ -180,19 +191,19 @@ RCS and range-extender design material is carried in `WBS.md`, `AGENTS.md`, and
 
 ---
 
-### Phase 11 — Risk Mitigation
+### Former Phase 11 — Risk Mitigation
 
 | Risk | Mitigation |
 |------|------------|
 | EDF over-thrust damages rear fuselage | Load-test STL with weights before flight; bond plenum with structural epoxy |
 | Bleed-air backpressure damages intake | Design intake frame with pressure-relief divert (or over-size manifold for low loss) |
 | RCS valve stiction or blockage | Use proportional servos (not on-off); test bleed-air pressure with manometer before flight |
-| Loss of rear-EDF power during flight | Graceful degradation; aircraft can VTOL-return on nacelle EDFs alone (T/W ≈ 1.04 at Phase 11 mass; provisional) |
+| Loss of rear-EDF power during flight | Graceful degradation; aircraft can VTOL-return on nacelle EDFs alone (T/W ≈ 1.04 at former Phase 11 mass; provisional) |
 | Nacelle/RCS cross-control confusion | Separate PWM channels; firmware explicitly cross-fade between modes (test on bench) |
 
 ---
 
-## Phase 12 — Range-Extender Battery Module (RBM)
+## Phase 11 — Range-Extender Battery Module (RBM)
 
 ### Secondary Battery Integration
 
@@ -213,18 +224,18 @@ RCS and range-extender design material is carried in `WBS.md`, `AGENTS.md`, and
 - With RBM (4000 mAh secondary): 12–13 minute hover (rough estimate; verify via flight test)
 - Cargo capacity trade-off: RBM occupies one cargo-bay side bin; full 226 g payload ← cargo bay, not RBM space
 
-### Phase 12 Hardware BOM
+### Phase 11 Hardware BOM
 
 | Item | Qty | Mass | Specs | Status |
 |------|-----|------|-------|--------|
 | 6S LiPo battery (RBM) | 1 | ~500 g | 2000–4000 mAh, 100C, XT90-S | Procure per endurance testing |
 | XT90-S quick-disconnect | 1 pair | ~10 g | Shielded connector | TBD part number |
 | Reverse-polarity diode (SBM60/60A) | 2 | ~5 g | One per battery leg | SBM60 or equivalent 60A Schottky |
-| Gondola battery tray | 1 | ~30 g | 3D-printed CF-PETG, fold-down | Design pending (Phase 12 SCAD) |
+| Gondola battery tray | 1 | ~30 g | 3D-printed CF-PETG, fold-down | Design pending (Phase 11 SCAD) |
 
 **Total RBM system mass:** ~545 g (battery dominating)
 
-### Phase 12 Firmware (pwr_fault node)
+### Phase 11 Firmware (pwr_fault node)
 
 Minimal changes to `pwr_fault` watchdog node:
 
@@ -246,11 +257,11 @@ if (battery_main < 5.5V && battery_rbm < 5.5V) {
 
 ## Deferred Work Status & WBS
 
-### Phase 11 Work Items (WBS Tracking)
+### Former Phase 11 Work Items (WBS Tracking)
 
 | Item | Description | Status | Est. Hours |
 |------|-------------|--------|------------|
-| Phase 11 CAD | Aft EDF, plenum, RCS manifold, nozzles | ~70% complete | 10–15 |
+| Former Phase 11 CAD | Aft EDF, plenum, RCS manifold, nozzles | ~70% complete | 10–15 |
 | Intake frame geometry | Scoop window size (5mm²), frame structure | 50% complete | 5–8 |
 | RCS valve selection | Datasheet verification, sizing | 50% complete | 3–5 |
 | Bleed-air manifold design | Pressure drop analysis, split-ratio tuning | 30% complete | 8–12 |
@@ -259,10 +270,10 @@ if (battery_main < 5.5V && battery_rbm < 5.5V) {
 | Bench testing plan | Pressure-relief test, valve calibration procedure | 0% (draft only) | 3–5 |
 | Flight test plan | Gradual envelope expansion, abort criteria | 0% (draft only) | 5–10 |
 
-**Estimated Phase 11 completion (design phase):** 40–60 hours (1–2 person-weeks)  
-**Estimated Phase 11 build/test:** 30–50 hours (3–5 days on-site with aircraft)
+**Estimated former Phase 11 completion (design phase):** 40–60 hours (1–2 person-weeks)  
+**Estimated former Phase 11 build/test:** 30–50 hours (3–5 days on-site with aircraft)
 
-### Phase 12 Work Items
+### Phase 11 Work Items
 
 | Item | Description | Status | Est. Hours |
 |------|-------------|--------|------------|
@@ -273,33 +284,35 @@ if (battery_main < 5.5V && battery_rbm < 5.5V) {
 | Endurance modeling | Flight-test data required; deferred | 0% | 4–6 |
 | Bench discharge test | Verify parallel load-sharing, no crosstalk | 0% | 2–3 |
 
-**Estimated Phase 12 completion (design):** 15–25 hours  
-**Estimated Phase 12 build/test:** 8–12 hours (bench only; no flight)
+**Estimated Phase 11 completion (design):** 15–25 hours  
+**Estimated Phase 11 build/test:** 8–12 hours (bench only; no flight)
 
 ---
 
 ## Work Planning & Triggers
 
-### When to Start Phase 11?
+### When to Start the Tail EDF and RCS Work? *(superseded 2026-11-16)*
 
-**Prerequisite:** Phase 5–10 baseline flight testing complete and documented.
+This was the former Phase 11 trigger. The tail EDF and RCS are now part of the first build (Phase 5), so no go/no-go applies. The criteria below are the pre-shift record.
 
-**Go/no-go criteria (none met yet):**
+**Pre-shift prerequisite:** Phase 5–10 baseline flight testing complete and documented.
+
+**Go/no-go criteria (pre-shift; none met):**
 1. Phase 5 first hover achieved; vehicle stable at ±15° tilt
 2. Phase 6 all 8 nodes operating; OA working
 3. Phase 7 cargo door + winch fully functional
 4. Phase 9 performance envelope documented (thrust stand calibrated, T/W measured, endurance logged)
 5. Phase 10 BVLOS mission successful; node failover proven
 
-**Phase 11 start:** no date; it follows flight validation of the baseline, and the aircraft is not yet built
+**Pre-shift start:** no date; it followed flight validation of the baseline. Superseded: the work is in Phase 5.
 
-### When to Start Phase 12?
+### When to Start Phase 11?
 
-**Prerequisite:** Phase 11 forward-flight envelope validated; RCS attitude authority proven.
+**Prerequisite:** Tail EDF forward-thrust envelope validated (Phase 9) and RCS attitude authority proven (Phase 5).
 
 **Trigger:** If Phase 9–10 endurance is <10 min and missions need >12 min loiter time.
 
-**Phase 12 start:** no date; conditional, and may defer indefinitely if Phase 5–10
+**Phase 11 start:** no date; conditional, and may defer indefinitely if Phase 5–10
 endurance meets mission needs
 
 ---
@@ -310,10 +323,10 @@ endurance meets mission needs
 |----------|----------|---------|
 | AGENTS.md | deferred/ | Policy for Phase 11+ design |
 | WBS.md | deferred/ | Full task breakdown + narrative |
-| TODO.md | deferred/ | Open Phase 11 + 12 items |
+| TODO.md | deferred/ | Open Phase 11 (battery module) items |
 | NOZZLE_DRIVE_TRADE.md | docs/ | Aft nozzle design rationale (fixed vs. variable) |
 | TILT_SPAR_ANALYSIS.md | docs/ | Structural analysis (applicable to rear pod) |
-| aft-edf/README.md | deferred/aft-edf/ | Phase 11 design details (if created) |
+| aft-edf/README.md | deferred/aft-edf/ | Former Phase 11 design details (if created) |
 
 ---
 

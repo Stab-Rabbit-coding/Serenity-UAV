@@ -2,7 +2,7 @@
 
 **Author:** Steve Griffing, PE(CSE), CISSP-ISSEP, CPP  
 **License:** CC BY-SA 4.0 — creativecommons.org/licenses/by-sa/4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
-**Last updated:** 2026-11-18
+**Last updated:** 2026-11-19
 
 > **This file lists only currently-open (unchecked) tasks — one line each,
 > <=70 chars, no prose — for a fast "what's actually left" view.** Every
@@ -104,6 +104,24 @@
 - [ ] Re-test on newest reachable KiCad — if already fixed, do NOT file
 - [ ] Search KiCad GitLab for a duplicate before filing
 - [ ] File at gitlab.com/kicad/code/kicad/-/issues, attach repro zip
+
+### 0.14 — Thermal Tool Reference Verification (2026-11-17, TEDF-01)
+→ detail: `REFERENCES.md` REF-HT-001, REF-MAT-009; `tools/node_thermal_forced_air.py`
+
+- [ ] REF-HT-001 edition and sections — read the heat-transfer text
+- [ ] Brass thermal conductivity — the 70 Btu/(hr ft F) (121.2 W/m-K)…
+- [ ] RCS jets (TEDF-05, owner/G1): ventral azimuth DECIDED 2026-11-18…
+- [ ] Tail EDF de-swirl (owner direction 2026-11-18
+- [ ] EDF first critical speed (TEDF-05, also the nacelle units)
+- [ ] Nacelle rotor retention (found 2026-11-18)
+- [ ] CG shortfall: with the ledger gaps closed, the plan's own forward…
+- [ ] Hull mass basis: `head_cargo_shell24_2mm_merged_hatch.stl` (named in…
+- [ ] Three tests fail on main before and after TEDF-01 and are NOT…
+- [ ] TEDF-03 step 8 — recalibrate `tools/tail_edf_flow.py` to the owner's…
+- [ ] Critical-speed method source (TEDF-05 code review #6, 2026-11-18)
+- [ ] Momentum-theory / actuator-disc source for `tools/tail_edf_flow.py`…
+- [ ] TEDF-04 — price the plan's forward and aft moves (Flight Engineer…
+- [ ] Delta ASB02505SHA-AY6B datasheet [REF-FAN-001, never catalogued]
 
 ### 0.13 — Joint-Torque Standards Section Verification (2026-11-02)
 → detail: `REFERENCES.md` REF-FAA-005, REF-NASA-004, REF-STD-BOLT-001, REF-STD-BOLT-002; plan `docs/plans/2026-11-02-001-feat-build-guide-joint-torque-and-sequence-plan.md`
@@ -218,10 +236,7 @@
 - [ ] HULL-LEAK-04 Belly service hatch gasket (was the cargo door seam
 - [ ] LG-AFT-BOLT-01 Aft-port gear bolt driver access vs wing
 - [ ] HULL-FUSE-02 Fuse other bonded mounts into one-piece print
-- [ ] TEDF-01 Tail EDF: record, references, ledger gaps (S42)
 - [ ] TEDF-02 Tail EDF: thermal model refresh (S45)
-- [ ] TEDF-03 Tail EDF flow tool: thrust, stall margin (S43)
-- [ ] TEDF-04 Hover trim and RCS tool, CG window (S43)
 - [ ] TEDF-05 Rear-cone layout: QX pusher, RCS exhausts (S44)
 - [ ] TEDF-06 Cargo duct layout: FE box forward, hatch (S44)
 - [ ] TEDF-07 Head layout: GNSS trade, ballast, inlets (S45)
@@ -539,7 +554,6 @@
 
 - [ ] Mount XT90 PDB at keel sta 130mm; solder 14AWG main leads to ES…
 - [ ] Install 2× 40A BLHeli32 ESCs in bay C (port + stbd nacelle fore…
-- [ ] Phase 11 only:
 - [ ] Install 5V/5A BEC; verify 5.00V ±0.05V under 1A bench load.
 - [ ] Pull motor phase leads through conduit to ESCs; solder (verify…
 - [ ] CAN FD termination: 120Ω SOLDERED to CN1 TACCO at Shepherd's r…
@@ -576,7 +590,6 @@
 - [ ] ESC calibration (full throttle power-on → drop to zero).
 - [ ] Motor spin test (5% throttle 2s): all 5 motors spin in correct…
 - [ ] Tilt servo calibration: 0° = nacelle horizontal ±0.5°, 90° = vertical…
-- [ ] Rear nozzle servo endpoints verified.
 - [ ] 190mm from nose
 - [ ] GPS lock: HDOP ≤1.5 on both FC nodes; positions agree within 2m.
 - [ ] Radio checks: MAVLink heartbeat in QGC (SiK + LoRa backup); 49…
@@ -598,6 +611,16 @@
 - [ ] All 4-node CAN FD heartbeats confirmed
 - [ ] Node failover: standby assumes within 100ms of master power-kill
 - [ ] Flight log on both CN μSDs; CPLD write-block verified
+- [ ] Generate tail nozzle and RCS STLs; mesh-verify them
+- [ ] Bench-test tail EDF; seat it; bond its retaining ring
+- [ ] Route tail EDF motor leads to its ESC; install the ESC
+- [ ] Bond the fixed tail nozzle flush to the hull
+- [ ] Install 4 RCS nozzles and valves; calibrate; bench authority
+- [ ] Move 49 MHz aft post to the tail nozzle; re-string wire
+- [ ] Enable tail EDF ESC in FC firmware; build GW-RCS gateway
+- [ ] RCS valves in the mixer as signed RCS_COMMAND frames
+- [ ] Verify all 5 ESC heartbeats on CAN FD
+- [ ] Tail EDF and RCS pass criteria met (seat, ESC, nozzle, valves, post)
 
 ### Phase6 — Full 8-Node Architecture + ToF Obstacle Avoidance
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase6
@@ -679,6 +702,8 @@
 - [ ] Nacelle transition altitude excursion ≤0.5 m
 - [ ] Endurance ≥8 min at hover (6S 4000mAh baseline)
 - [ ] Logs on all 4 CN nodes; write-block verified
+- [ ] Tail EDF in the forward-thrust schedule, not the hover mixer
+- [ ] Forward-thrust test at 60% throttle; ESC temps <=70C
 
 ### Phase10 — Advanced Autonomy and Long-Range Operations
 → detail: `graphical-build-guide/flight-phases/WBS.md` §Phase10
@@ -695,38 +720,6 @@
 - [ ] Node failure: remaining FCs maintain flight ≥30 s
 - [ ] RTL on link loss: lands within 3 m of takeoff point
 - [ ] All regulatory documentation current and on file
-
-### Phase11 — Aft EDF Integration (Deferred)
-→ detail: `deferred/WBS.md` §Phase11
-
-- [ ] Generate
-- [ ] Generate
-- [ ] Run mesh watertightness verification on all regenerated STLs; r…
-- [ ] Verify aerodynamic orientation: intake lips face forward (−Y /…
-- [ ] Apply structural epoxy to tongues + shoulder flanges; press fra…
-- [ ] Route motor leads through Panel F to 50A ESC; route signal lead…
-- [ ] Install 50A ESC in Panel F bay; foam tape + cable tie. Cure 2h…
-- [ ] Fixed — no moving petals.
-- [ ] Install 4× rcs_thruster_nozzle.stl at their RCS stations; conne…
-- [ ] Install 4× SG90-class proportional valves on rcs_valve_bracket.…
-- [ ] Calibrate RCS valves: 0% = closed (no bleed); 100% = full bleed…
-- [ ] Bond permanent aft 49 MHz (Part 15 §15.235) wire post to top of…
-- [ ] Remove temporary aft post from station ~580mm.
-- [ ] Restring 49MHz top wire (~470mm) from forward post to nozzle af…
-- [ ] Enable ESC5 in FC2 firmware (PRU Ch.2); configure BDSHOT govern…
-- [ ] Add the 4 RCS proportional-valve channels to the attitude-contr…
-- [ ] Add rear EDF to the forward-thrust (cruise) schedule — NOT the…
-- [ ] Verify all 5 ESC heartbeats on CAN FD; confirm FC2 cross-drive…
-- [ ] Bench-test RCS attitude authority; then forward-flight thrust t…
-- [ ] All regenerated rear-EDF STLs pass mesh watertightness verifica…
-- [ ] Plenum + RCS manifold pressure-test passed (draft at EDF inlet…
-- [ ] EDF seated at station ~430mm, centerline ±2mm; rotation verifie…
-- [ ] 50A ESC installed; ESC5 signal routed to FC2 PRU Ch.2
-- [ ] Canonical nozzle bonded flush to hull outer mold line; exit 2.0…
-- [ ] All 4 RCS valves calibrated; pitch/yaw authority confirmed on b…
-- [ ] 49MHz aft wire post on canonical nozzle; top wire re-strung at…
-- [ ] Forward-thrust test passed; rear EDF NOT used for hover lift; E…
-- [ ] All 5 ESC telemetry visible on CAN FD; ESC temps ≤70°C at cruis…
 
 ### 4.2 — FC Node (Pilot) - Phase 7 Firmware
 → detail: `avionics/firmware/WBS.md` §4.2
@@ -873,6 +866,12 @@
 → detail: `docs/WBS.md` §6.1
 
 - [ ] Delete stale feature branches
+
+### 6.5 — Rev U Checkpoint (2026-11-03)
+→ detail: `docs/WBS.md` §6.5
+
+- [ ] PHASE-RENUMBER-RESIDUAL — SCAD and generator comment labels
+- [ ] REVU-RELABEL — stamp every component Rev U at the Rev U close
 
 ---
 

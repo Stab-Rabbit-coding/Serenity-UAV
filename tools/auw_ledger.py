@@ -124,6 +124,15 @@ _BAY_A_M = np.mean(_BAY_A, axis=0)
 _BAY_A_C = (float(_BAY_A_M[0]), float(_BAY_A_M[1]), float(_BAY_A_M[2]))
 _OBS_M = hlf.observer_board().centroid
 _OBS_NOSE_C = (float(_OBS_M[0]), float(_OBS_M[1]), float(_OBS_M[2]))
+PITOT_TIP_C = hlf.PITOT_TUBE_A
+
+
+def _pod_station(name: str) -> tuple[tuple[float, float, float], str]:
+    """Centroid of a published nose-bay keep-out envelope (head_layout_fit.layout())."""
+    c = _HEAD[name]["solid"].centroid
+    return (float(c[0]), float(c[1]), float(c[2])), f"head_layout_fit '{name}' envelope centroid"
+
+
 NODE_ST = {
     "A": (_BAY_A_C, "head_layout_fit Bay A node CN1 + FC1 envelopes (mean centroid)"),
     "chin": ((X_CL, 0.5 * (clf.N_CHIN_Y0 + clf.N_CHIN_Y1),
@@ -182,6 +191,14 @@ PRINTED = [
     ("PRINT-TWIN-PACK-SLED", "fuselage/head/twin_pack_sled.stl", 2,
      ("st", (X_CL, 223.0, 172.0),
       "ESTIMATE: two sleds in the tray lanes, Y 163-283 (BATTERY_TRIM_ENDURANCE_OPTIONS 6)")),
+    # Bay A forward node mounts (tools/gen_bay_a_fwd_mounts.py), published in the hull frame.
+    # TEDF-01 (2026-11-17): they were in the head layout gate but not in this ledger.  The hatch
+    # cover is NOT listed: it is the roof panel of the published merged hull (section check
+    # 2026-11-17: 100 % inside that hull), whose mass already carries it.
+    ("PRINT-BAY-A-DRAWER", "fuselage/head/bay_a_cn1_drawer.stl", 1, "hull"),
+    ("PRINT-BAY-A-GATE", "fuselage/head/bay_a_cn1_gate.stl", 1, "hull"),
+    ("PRINT-BAY-A-SHELF", "fuselage/head/bay_a_fc1_shelf.stl", 1, "hull"),
+    ("PRINT-BAY-A-HATCH-FLANGE", "fuselage/head/bay_a_hatch_flange.stl", 1, "hull"),
     ("PRINT-TWIN-PACK-GATE", "fuselage/head/twin_pack_gate.stl", 1,
      ("st", (X_CL, 285.0, 190.0), "ESTIMATE: hinged aft gate at the aft end of the pack band")),
     ("PRINT-CARGO-MIDDLE-COLLAR", "fuselage/cargo_middle_splice_collar.stl", 1, "hull"),
@@ -364,6 +381,10 @@ EXCLUDED = {
                     "(CF_PLATE_PARTS)",
     "BATT-6S-2800": "alternate pack; the configurations pick ONE battery",
     "BATT-6S-4000": "the configurations pick ONE battery",
+    "PRINT-BAY-A-HATCH-COVER": "the roof panel is inside the published merged hull's mass "
+                               "(the hatch opening is cut only in the separate _hatch mesh)",
+    "CELL-6S-2200": "the two twin-pack cells; priced from this row by twin_pack_items() in "
+                    "hover_twin_2200 only (the other configurations pick one pack)",
     "BRG-MF104ZZ": "50 mm pivot bearing, superseded by the trunnion (Rev T4)",
     "CF-ROD-4MM": "50 mm pivot rod, superseded by the trunnion (Rev T4)",
     "SPAR-TILT-CF4": "rotating tilt spar, superseded by the fixed CF spar (Rev T1)",
@@ -372,7 +393,7 @@ EXCLUDED = {
     "CF-TUBE-12MM": "12 mm spar tube, superseded by SPAR-CF-20X16 (Rev T1)",
     "PRINT-PYLON": "Rev O pylon, superseded by the Rev T1 fixed spar + trunnion; "
                    "no source in tree",
-    "PRINT-NECK-INTAKE-FRAME": "Phase 11 rear-EDF intake (deferred/aft-edf)",
+    "PRINT-NECK-INTAKE-FRAME": "former Phase 11 aft-EDF intake (superseded 2026-11-16)",
     "PRINT-PUSHROD-CRANK": "Option B nozzle crank, retired Rev S1g (MASS_AUDIT SS7)",
     "PUSHROD-BALL-M3": "Option B nozzle pushrod, superseded by the KST X06 servo drive",
     "BALLSTUD-M3": "Option B nozzle pushrod, superseded by the KST X06 servo drive",
@@ -405,6 +426,8 @@ CF_PLATE_PARTS = [
      ((X_CL, 595.7, 162.0), "structural_analysis SS5.2, ~10 mm band ESTIMATE")),
 ]
 
+PITCH_INERTIA_CONFIG = "hover_twin_2200"  # the one config whose I_pitch the plans quote
+
 # Coverage gaps: installed items with no BOM row.  Stated estimates.
 GAPS = [
     # OD-17 wing-tip fairing foam core (owner 2026-11-11: hollow, foam filled): cavity 11,804 mm3 x
@@ -427,11 +450,28 @@ GAPS = [
      "ESTIMATE 60 g -- no BOM row; envelope 76.8 x 70.8 x 20 mm"),
     # Nose Observer (2026-11-15, WBS BAYA-FWD-08): in the head layout since Rev H2 but
     # never in this ledger.  60 g is the figure docs/CG_RELOCATION_STUDY.md section 2
-    # assumes, the same as the cargo Observer estimate above.  Its camera, ToF and laser
-    # pods and the pitot parts have no mass data and are NOT included.
+    # assumes, the same as the cargo Observer estimate above.  The camera, ToF and laser
+    # bodies and the pitot parts follow as their own ESTIMATE rows (TEDF-01, 2026-11-17).
     ("Nose Observer board (vision/ToF/laser carrier)", 60.0,
      (_OBS_NOSE_C, "head_layout_fit.observer_board() centroid"),
      "ESTIMATE 60 g -- no BOM row; docs/CG_RELOCATION_STUDY.md sec 2 ASSUMED"),
+    # Nose sensor bodies and pitot parts (TEDF-01, 2026-11-17).  None has a selected, weighed
+    # part, so each is a stated ESTIMATE at the centroid of its published keep-out envelope.
+    ("Nose camera module (port pod)", 5.0, _pod_station("camera pod (port)"),
+     "ASSUMED 5 g, the remote-head figure of docs/CG_RELOCATION_STUDY.md sec 5.2 row 3; the module "
+     "is not selected (head_layout_fit CAM_FOV_DEG)"),
+    ("Nose ToF module (stbd pod)", 5.0, _pod_station("ToF pod (stbd)"),
+     "ASSUMED 5 g, the TFmini-S manual weight [REF-SENSOR-002] as a placeholder only; that "
+     "part fails AGENTS.md sec 5 and is to be re-selected"),
+    ("Nose laser module (centreline)", 1.4, _pod_station("laser module"),
+     "ASSUMED upper bound: solid aluminium, 6 mm dia x 18 mm (head_layout_fit LASER_D/L) x "
+     "2.70 g/cc; no part is selected (REFERENCES.md Observer laser item)"),
+    ("Pitot hose, barb clamp and static line", 2.0, _pod_station("pitot hose"),
+     "ASSUMED 2 g -- weigh at build; the tube and nipple are already in the hull mesh"),
+    ("Pitot probe (owner-built, starboard dish post)", 3.0,
+     ((float(PITOT_TIP_C[0]), float(PITOT_TIP_C[1]), float(PITOT_TIP_C[2])),
+      "head_layout_fit PITOT_TUBE_A (the probe is ~10 mm forward)"),
+     "ASSUMED 3 g -- the probe is owner-built (head_layout_fit PITOT-01); weigh at build"),
     ("CAN-PERIPH-GW-1 gateways x2 (winch, tilt encoders)", 12.0, WINCH_ST,
      "ESTIMATE 6 g each, as CAN-PERIPH-GW-DOOR -- no BOM rows"),
     ("Structural epoxy (West System 105/206 + 406), bonded joints", 40.0,
@@ -609,8 +649,9 @@ def battery_item(ref: str, bom: dict[str, dict]) -> Item:
 def twin_pack_items() -> list[Item]:
     """Two Tattu R-Line 6S 2200 cells flat in the twin pack tray (published
     2026-11-01, WBS BAYA-FWD-02).  Cell mass and size from head_layout_fit; the
-    cells have no BOM row yet (root WBS: BOM and ledger update for the twin tray)."""
-    m = hlf.CELL_G
+    cell mass is the BOM row CELL-6S-2200 (added TEDF-01, 2026-11-17; the same figure as
+    head_layout_fit CELL_G)."""
+    m = float(bom_rows()["CELL-6S-2200"]["Unit_Mass_g"])
     y = 0.5 * (twin.TRAY_Y0 + twin.TRAY_Y1)
     ln, w, ht = hlf.CELL_L, hlf.CELL_H, hlf.CELL_W  # flat: 34 lateral, 38.5 tall
     inertia = m / 12.0 * np.diag([ln * ln + ht * ht, w * w + ht * ht, w * w + ln * ln])
@@ -685,6 +726,15 @@ def build() -> dict:
     by_kind: dict[str, float] = {}
     for it in configs["hover_4000"]:
         by_kind[it.kind] = by_kind.get(it.kind, 0.0) + it.m
+    # The ONE pitch inertia every plan-002 tool takes (TEDF-01, 2026-11-17): about the CG, about
+    # hull X, in the published twin-pack configuration.  Replaces the ASSUMED 225 lbm.in^2.
+    pp = result["configs"][PITCH_INERTIA_CONFIG]
+    result["pitch_inertia"] = {
+        "config": PITCH_INERTIA_CONFIG,
+        "I_kg_m2": pp["I_pitch_gmm2"] * 1e-9,
+        "I_lbm_in2": pp["I_pitch_gmm2"] * LBM_PER_G / 25.4 ** 2,
+        "k_pitch_in": pp["k_pitch_mm"] / 25.4,
+    }
     result["subtotals_hover_g"] = by_kind
     result["nacelle_printed_unit_g"] = {k: round(v, 2)
                                         for k, v in nac64.printed_by_ref().items()}
@@ -717,6 +767,9 @@ def report(r: dict) -> None:
           f"(hover_4000: retired single cargo pack)")
     print(f"  CG offset {r['configs']['hover_twin_2200']['cg'][1] - PIVOT['port'][1]:+.1f} mm "
           f"(hover_twin_2200: two cells in the published twin tray)")
+    pi = r["pitch_inertia"]
+    print(f"  pitch inertia ({pi['config']}, about the CG): {pi['I_lbm_in2']:.0f} lbm.in^2 "
+          f"({pi['I_kg_m2']:.4f} kg.m^2), k {pi['k_pitch_in']:.2f} in")
     ca = r["cooling_airflow"]
     print(f"\nCooling airflow ({ca['status']}):")
     for case, (plain, louv) in ca["need_lps"].items():

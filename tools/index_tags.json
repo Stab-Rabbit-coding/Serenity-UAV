@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-17",
+  "generated": "2026-11-18",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -140,7 +140,8 @@
     "CONCEPTS.md": {
       "description": "Concepts",
       "tags": [
-        "documentation"
+        "documentation",
+        "redundancy-failover"
       ],
       "archived": false
     },
@@ -3414,6 +3415,15 @@
       "tags": [
         "avionics-hardware",
         "licensing"
+      ],
+      "archived": false
+    },
+    "avionics/PACE.md": {
+      "description": "PACE Failover Matrix and Per-Stack Tasking",
+      "tags": [
+        "avionics-hardware",
+        "documentation",
+        "redundancy-failover"
       ],
       "archived": false
     },
@@ -9790,14 +9800,14 @@
       "archived": false
     },
     "current-specification/auw_ledger.json": {
-      "description": "JSON data (7 top-level keys)",
+      "description": "JSON data (8 top-level keys)",
       "tags": [
         "specification"
       ],
       "archived": false
     },
     "current-specification/bom_revU.csv": {
-      "description": "Bill of materials, CSV (225 items)",
+      "description": "Bill of materials, CSV (231 items)",
       "tags": [
         "bom",
         "specification"
@@ -9805,7 +9815,7 @@
       "archived": false
     },
     "current-specification/bom_revU.json": {
-      "description": "Bill of materials, JSON (225 items)",
+      "description": "Bill of materials, JSON (231 items)",
       "tags": [
         "bom",
         "specification"
@@ -9885,7 +9895,7 @@
       "archived": false
     },
     "deferred/aft-edf/README.md": {
-      "description": "Aft Fuselage EDF \u2014 Deferred to Phase 11",
+      "description": "Aft Fuselage EDF \u2014 Pre-shift Design Record (former Phase 11; superseded 2026-11-16)",
       "tags": [
         "deferred-future",
         "documentation",
@@ -10466,6 +10476,13 @@
       ],
       "archived": false
     },
+    "docs/SOURCING_POLICY.md": {
+      "description": "Component Sourcing and Openness Policy",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md": {
       "description": "Tail Strike on the Aft Skids (4 ft Drop) and Landing-Gear Materials in SLS",
       "tags": [
@@ -10572,6 +10589,13 @@
     },
     "docs/WING_SECTION_POLAR_COMPARISON.md": {
       "description": "Serenity UAV \u2014 As-Built Wing Sections vs True S1223: XFOIL and NeuralFoil Polars",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/adr/0001-single-project-revision-letter.md": {
+      "description": "One project-wide revision letter",
       "tags": [
         "documentation"
       ],
@@ -15764,6 +15788,13 @@
       ],
       "archived": false
     },
+    "tools/check_agents_size.py": {
+      "description": "Fail when an AGENTS.md file exceeds its size cap.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/check_bom_mesh_sync.py": {
       "description": "check_bom_mesh_sync.py -- the BOM printed-part mass IS the mesh mass.",
       "tags": [
@@ -15984,6 +16015,13 @@
       "archived": false
     },
     "tools/head_layout_fit.py": {
+      "description": "Python script",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/hover_trim_rcs.py": {
       "description": "Python script",
       "tags": [
         "build-tooling"
@@ -16559,8 +16597,15 @@
       ],
       "archived": false
     },
+    "tools/rcs_jets.py": {
+      "description": "The RCS jet table, one source for tools/rear_cone_layout_fit.py (which gates it against the",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/rear_cone_layout_fit.py": {
-      "description": "rear_cone_layout_fit.py -- gate G1 layout of the fuselage cooling fan and the tail EDF",
+      "description": "rear_cone_layout_fit.py -- rear-cone layout of the tail EDF (QX-Motor 64 mm, QF2822",
       "tags": [
         "build-tooling"
       ],
@@ -16679,6 +16724,14 @@
       ],
       "archived": false
     },
+    "tools/tail_edf_flow.py": {
+      "description": "tail_edf_flow.py -- installed thrust, flow, flow split and pressure margin of the",
+      "tags": [
+        "build-tooling",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "tools/tail_strike_requirement.py": {
       "description": "tail_strike_requirement.py -- 4 ft drop tail strike on the aft skids, and the",
       "tags": [
@@ -16721,6 +16774,13 @@
       ],
       "archived": false
     },
+    "tools/tests/test_check_agents_size.py": {
+      "description": "Tests for tools/check_agents_size.py.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/tests/test_check_hull_tarballs.py": {
       "description": "Tests for tools/check_hull_tarballs.py.",
       "tags": [
@@ -16737,6 +16797,13 @@
     },
     "tools/tests/test_export_pcb_step.py": {
       "description": "Tests for tools/export_pcb_step.py (plan 2026-11-02-001 U12).",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_hover_trim_rcs.py": {
+      "description": "Tests for tools/hover_trim_rcs.py (plan 002 U4, TEDF-04).",
       "tags": [
         "build-tooling"
       ],
@@ -16788,10 +16855,25 @@
       ],
       "archived": false
     },
+    "tools/tests/test_rear_cone_layout_fit.py": {
+      "description": "Tests for tools/rear_cone_layout_fit.py (plan 002 U5, TEDF-05).",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/tests/test_sync_operators_manual.py": {
       "description": "Tests for tools/sync_operators_manual.py (WBS 0.10.3, OM-5).",
       "tags": [
         "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_tail_edf_flow.py": {
+      "description": "Tests for tools/tail_edf_flow.py (plan 002 U3, TEDF-03).",
+      "tags": [
+        "build-tooling",
+        "propulsion"
       ],
       "archived": false
     },
@@ -16994,6 +17076,7 @@
       "archives/MANIFEST.md",
       "archives/README.md",
       "avionics/AGENTS.md",
+      "avionics/PACE.md",
       "avionics/README.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
@@ -17102,6 +17185,7 @@
       "docs/SLS_MIGRATION.md",
       "docs/SLS_MIN_WALL_THICKNESS.md",
       "docs/SLS_PRINT_ORIENTATION.md",
+      "docs/SOURCING_POLICY.md",
       "docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md",
       "docs/TILT_ACTUATOR_OPTIONS.md",
       "docs/TILT_ACTUATOR_SELECTION.md",
@@ -17116,6 +17200,7 @@
       "docs/WIFI_MODULE_OD20_BRIEF.md",
       "docs/WING_ATTACH_INTERFACE.md",
       "docs/WING_SECTION_POLAR_COMPARISON.md",
+      "docs/adr/0001-single-project-revision-letter.md",
       "docs/attribution_and_licensing.md",
       "docs/brainstorms/2026-09-29-commo-49mhz-single-chip-search.md",
       "docs/brainstorms/2026-09-29-commo-standalone-node-requirements.md",
@@ -17660,11 +17745,13 @@
     "redundancy-failover": [
       "AGENTS.md",
       "CLAUDE-MEMORY.md",
+      "CONCEPTS.md",
       "README.md",
       "airframe/SPEC_VERIFICATION_0.6.1.md",
       "airframe/openscad/fuselage/cargo/cargo_sect_shell24.scad",
       "airframe/openscad/fuselage/middle_canonical_shell24.scad",
       "avionics/AGENTS.md",
+      "avionics/PACE.md",
       "avionics/README.md",
       "avionics/TODO.md",
       "avionics/emi-hardening/WBS.md",
@@ -19046,8 +19133,10 @@
       "tools/nozzle_servo_linkage.py",
       "tools/nozzle_servo_linkage_64.py",
       "tools/prep_nacelle_64_bake.py",
+      "tools/tail_edf_flow.py",
       "tools/tests/test_nacelle_esc_service.py",
-      "tools/tests/test_nozzle_servo_linkage.py"
+      "tools/tests/test_nozzle_servo_linkage.py",
+      "tools/tests/test_tail_edf_flow.py"
     ],
     "sensors-vision": [
       "airframe/blender-scripts/merge_head_sensor_bay.py",
@@ -19334,6 +19423,7 @@
     "avionics-hardware": [
       "avionics/AGENTS.md",
       "avionics/LICENSE",
+      "avionics/PACE.md",
       "avionics/README.md",
       "avionics/TODO.md",
       "avionics/WBS.md",
@@ -20920,6 +21010,7 @@
       "tools/cfd_internal_air_domain.py",
       "tools/cg_mass_reduction_study.py",
       "tools/cg_relocation_study.py",
+      "tools/check_agents_size.py",
       "tools/check_bom_mesh_sync.py",
       "tools/check_datum_drift.py",
       "tools/check_hull_tarballs.py",
@@ -20951,6 +21042,7 @@
       "tools/generate_lg_a1b_housing.py",
       "tools/generate_lg_bays.py",
       "tools/head_layout_fit.py",
+      "tools/hover_trim_rcs.py",
       "tools/hull_datums.py",
       "tools/import-specctra-ses.py",
       "tools/joint_register.py",
@@ -21025,6 +21117,7 @@
       "tools/precommit_sanitize.py",
       "tools/prep_nacelle_64_bake.py",
       "tools/purge_stale_fcstd_objects.py",
+      "tools/rcs_jets.py",
       "tools/rear_cone_layout_fit.py",
       "tools/scad_flatten.py",
       "tools/shift_baked_stl.py",
@@ -21042,22 +21135,27 @@
       "tools/spar_bundle_fit.py",
       "tools/stitch_vias.py",
       "tools/sync_operators_manual.py",
+      "tools/tail_edf_flow.py",
       "tools/tail_strike_requirement.py",
       "tools/tests/test_allowables.py",
       "tools/tests/test_auw_ledger_cooling.py",
       "tools/tests/test_bay_a_fwd_mounts.py",
       "tools/tests/test_bay_a_fwd_routes.py",
       "tools/tests/test_bay_a_thermal_budget.py",
+      "tools/tests/test_check_agents_size.py",
       "tools/tests/test_check_hull_tarballs.py",
       "tools/tests/test_esc80_cooptimize.py",
       "tools/tests/test_export_pcb_step.py",
+      "tools/tests/test_hover_trim_rcs.py",
       "tools/tests/test_joint_register.py",
       "tools/tests/test_nacelle64_assembly_check.py",
       "tools/tests/test_nacelle_esc_service.py",
       "tools/tests/test_nonfo_simon_fit.py",
       "tools/tests/test_nozzle_servo_linkage.py",
       "tools/tests/test_pace_balance.py",
+      "tools/tests/test_rear_cone_layout_fit.py",
       "tools/tests/test_sync_operators_manual.py",
+      "tools/tests/test_tail_edf_flow.py",
       "tools/tests/test_tail_strike_requirement.py",
       "tools/tests/test_wbs_burndown.py",
       "tools/tilt_actuator_options.py",

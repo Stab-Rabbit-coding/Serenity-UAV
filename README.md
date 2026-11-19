@@ -74,12 +74,12 @@ Throughout the mission, the aircraft shall also:
 | Wingspan | 19.1 in (486 mm) |
 | Height | 7.93 in (201.5 mm) |
 | AUW — two cells + 8 oz payload (Rev T-SB) | 13.93 lbm (6,318 g), provisional (`docs/flight_envelope.md`) |
-| AUW — Phase 11 (full system) | not re-derived since the 64 mm / split-battery redesign |
+| AUW — with tail EDF and RCS (first build) | 15.08 lbm (6,840 g) planning estimate (plan 2026-11-15-002); ledger baseline without the tail hardware 14.49 lbm (6,572 g), `current-specification/auw_ledger.json` |
 | Payload capacity (minimum) | 8.0 oz (226 g) in a 4″ × 3″ × 3″ bay |
 | Thrust — nacelles only | 20.90 lbf (9,480 g) = 4 × 83.60 ozf (2,370 gf), QF2822-2300KV at 24 V, 80 A ESCs |
-| Thrust — Phase 11 rear EDF (cruise) | ~2.81 lbf (1,275 g) net after RCS bleed |
+| Thrust — tail EDF (QX 64 mm) | installed thrust is the TEDF-03 flow tool's output; not yet stated |
 | T/W — nacelles only (hover) | ≈ 1.50 with payload (design floor 1.2; provisional pending mass truth) |
-| T/W — Phase 11 (hover, nacelles only) | not re-derived |
+| Tail EDF in hover | pitch trim and RCS supply only; not counted toward hover lift or T/W |
 | Compute | 8× PocketBeagle 2 Industrial (AM6254), PACE failover |
 | Onboard buses | CAN FD, MIL-STD-1553C, RS-485, Ethernet RSTP ring |
 | External comms | Five C2 links: Wi-Fi 5 GHz, Zigbee 2.4 GHz, mLRS, SiK/MAVLink 915 MHz, 49 MHz AX.25 |

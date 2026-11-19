@@ -1,52 +1,22 @@
 # Current Specification — Agent Instructions
 
-> *See the root `AGENTS.md` for project-wide policies. This file provides specific guidance for active design specifications and version control.*
+Adds specification rules to root `AGENTS.md`, which wins wherever it speaks. Scope: the active
+design specifications and requirements for the current revision. Completed specifications are
+archived under `archives/` (listed in `ARCHIVE_INDEX.md`).
 
-## Scope
+## Rules
 
-This folder contains the active (in-progress) design specifications and requirements documents for the current revision of Serenity-UAV. These files define the current design baseline and are subject to change as the design evolves.
-
-**Note:** This folder is for **active, current work**. Completed specifications are archived in the `archives/` folder and referenced in `ARCHIVE_INDEX.md`.
-
-## Revision Policy
-
-Root `AGENTS.md` §8 "Revisions" is authoritative for the revision-numbering scheme — letter
-revisions as comprehensive checkpoints, sequential numbered modifications that reset at each new
-letter, and archived items keeping the label they held at archival. Read it there; it is not
-restated here. Every specification in this folder follows it and carries its revision label in
-the header. Example progression: Rev N (baseline, released) → Rev N1 (first modification) →
-Rev N2 (second modification; N1 components carry forward) → Rev O (new comprehensive revision,
-all active components carry forward, numbering resets).
-
-## Specification Document Structure and Workflow
-
-**`current-specification/SPEC_TEMPLATE.md`** is the authoritative template: header fields
-(title, revision, status, change summary), the eight numbered sections every specification
-carries, the "Changes from Rev [X]" change-tracking block, the pre-publication approval
-workflow, version-control practice, the traceability-matrix requirement, and the standards
-citation format with a worked `[REF-FAA-001 §48.205]` example. Follow it whenever you author or
-revise a specification in this folder.
-
-## Active Specification Maintenance
-
-**Update specifications in this folder when:**
-
-- A new revision is being prepared (all changes integrated)
-- A design change requires coordination across multiple systems
-- A specification needs clarification or correction
-- A new analysis or test result changes the baseline
-
-**Do NOT use this folder for:**
-
-- Drafting new ideas or experimental designs (use a separate draft folder)
-- Tracking day-to-day modifications to individual components (use subdirectory AGENTS.md files and git history)
-
-## Known Deferred Items
-
-This folder may include a `DEFERRED_ITEMS.md` document listing deferred work (Phase 11+),
-planned board revisions, and known limitations that do not block the current baseline. The
-content is descriptive and lives in `deferred/` and the owning board `.md` files; do not restate
-it here.
-
-Deferred items should reference `TODO.md` for the specific work items; the deferred work itself
-is described in `deferred/AGENTS.md` "Status Categories".
+- Revision labels follow root `AGENTS.md` §8 (one project-wide letter; currently Rev U). Every
+  specification here carries its revision label in its header.
+- **`current-specification/SPEC_TEMPLATE.md`** is the authoritative template: header fields,
+  the numbered sections, the "Changes from Rev [X]" block, approval workflow, traceability
+  matrix, and citation format. Follow it.
+- Update a specification here when a revision is being prepared, a design change needs
+  coordination across systems, a specification needs correction, or a new analysis or test
+  result changes the baseline.
+- Do not use this folder for drafts or experimental designs, or for day-to-day component
+  changes (those live in the owning subsystem's records and git history).
+- Deferred work is described in `deferred/`; a `DEFERRED_ITEMS.md` here, if present, only
+  points there.
+- Record open work in the owning subsystem's `WBS.md` (this folder owns no WBS branch;
+  `docs/WBS_FEDERATION.md`).

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """cfd_internal_air_domain.py -- voxel air domain of the fuselage interior for
 the OpenFOAM cooling-air case (owner, 2026-11-01: rear fan pulling bow-inlet
-air to the Phase 11 tail exit; "use /openfoam-cfd for your airflow
+air to the former Phase 11 tail exit; "use /openfoam-cfd for your airflow
 modeling").
 
 Walls: the merged head+cargo hull, the cargo doors (closed), the cargo/middle
