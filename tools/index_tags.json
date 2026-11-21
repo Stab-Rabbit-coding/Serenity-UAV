@@ -10554,6 +10554,13 @@
       ],
       "archived": false
     },
+    "docs/THEME_N_DECISION_BRIEFS.md": {
+      "description": "Theme N Owner Decision Briefs (2026-11-21)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/TILT_ACTUATOR_OPTIONS.md": {
       "description": "Nacelle-Tilt Actuator Options \u2014 Rev T5 trade (GENERATED)",
       "tags": [
@@ -10892,6 +10899,41 @@
       "tags": [
         "documentation",
         "power"
+      ],
+      "archived": false
+    },
+    "docs/figures/odb_theme_n_a.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/odb_theme_n_b.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/odb_theme_n_c.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/odb_theme_n_d.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/odb_theme_n_e.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
       ],
       "archived": false
     },
@@ -16991,6 +17033,13 @@
       ],
       "archived": false
     },
+    "tools/theme_n_od_briefs.py": {
+      "description": "Python script",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/tilt_actuator_options.py": {
       "description": "tilt_actuator_options.py -- the three nacelle-tilt actuator options, side by",
       "tags": [
@@ -17285,6 +17334,7 @@
       "docs/SLS_PRINT_ORIENTATION.md",
       "docs/SOURCING_POLICY.md",
       "docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md",
+      "docs/THEME_N_DECISION_BRIEFS.md",
       "docs/TILT_ACTUATOR_OPTIONS.md",
       "docs/TILT_ACTUATOR_SELECTION.md",
       "docs/TILT_DRIVE_CONTROL_SPEC.md",
@@ -17330,6 +17380,11 @@
       "docs/figures/od3_esc_fit_mass.png",
       "docs/figures/od3_esc_path.png",
       "docs/figures/od3_esc_thermal.png",
+      "docs/figures/odb_theme_n_a.png",
+      "docs/figures/odb_theme_n_b.png",
+      "docs/figures/odb_theme_n_c.png",
+      "docs/figures/odb_theme_n_d.png",
+      "docs/figures/odb_theme_n_e.png",
       "docs/flight_envelope.md",
       "docs/handoffs/2026-10-20-aircraft-datum-r2-migration.md",
       "docs/handoffs/2026-10-26-split-battery-and-fe-pdb.md",
@@ -21288,6 +21343,7 @@
       "tools/tests/test_tail_edf_flow.py",
       "tools/tests/test_tail_strike_requirement.py",
       "tools/tests/test_wbs_burndown.py",
+      "tools/theme_n_od_briefs.py",
       "tools/tilt_actuator_options.py",
       "tools/try-via-again.py",
       "tools/twin_head_pack_fit.py",

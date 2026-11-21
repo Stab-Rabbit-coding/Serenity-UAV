@@ -2218,7 +2218,22 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     - [ ] **NAC-64-SERVO-01 — nozzle servo drive.**  **D-SV-1 DECIDED 2026-11-21 (owner): KST CM07**
         (0.807 x 0.295 x 0.748 in (20.5 x 7.5 x 19 mm), plastic case, 25.0 ozf.in stall at 6.0 V),
         replacing the KST X06.  BOM, REFERENCES and the servo table move to it in the nozzle-servo
-        plan's U1/U2 (S5.0/S5.1); pocket integration: `docs/THEME_N_DECISION_BRIEFS.md` brief E.
+        plan's U1/U2 (S5.0/S5.1); pocket integration: `docs/THEME_N_DECISION_BRIEFS.md` brief E;
+        rail voltage D-SV-2: brief D.
+        - [ ] **NAC-64-SERVO-HOLD — CM07 continuous holding margin is +10 % (found 2026-11-21).**
+            KST CM07 sheet (2026-05) performance chart: continuous zone ends ~0.45 kgf.cm
+            (6.25 ozf.in); holding the 0.45 lbf (2.0 N) fail-open spring needs ~5.66 ozf.in, so the
+            ring ear keeps +0.05 lbf (+0.21 N) with NO flap load, at any rail voltage (continuous
+            torque is thermal).  Plan 2026-09-28-001 KTD3 levers: lower the spring within the
+            1.5 x friction floor, or change the lever ratio (both reopen fit-closed geometry):
+            owner decision.  Bench the holding current and case temperature (plan U6).
+        - [ ] **NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A with two CM07s (2026-11-21).**
+            `docs/POWER_DISTRIBUTION.md` section 3.3 total 4.2 A + 2 x 0.67 A exceeds the BEC's 5 A
+            continuous (inside the 7 A / 100 ms burst).  Size the F_NOZ fuses and confirm the burst
+            window; add the nozzle servos to the section 3.3 table.
+        - [ ] **NAC-64-SERVO-PAIR — the nozzle-servo power pair is not in the spar-bore census.**
+            The F_NOZ pair (0.67 A stall) must cross the tilt joint with the 4 x 10 AWG, signal and
+            nav conductors; add it to the census and the OD-17 wire checks.
         *Original entry:* DESIGNED + FIT-CLOSED 2026-10-04
         (Claude Opus 5.5; owner decisions: servo in the canonical dorsal spine,
         bellcrank, fixed shroud on the pod, slide-off nozzle module, KST X06,
@@ -2287,6 +2302,8 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         (3,795 mm3) port and 0.227 in3 (3,713 mm3) stbd over its whole footprint (az 221-290,
         Z 85-142.5).  ESC B has nowhere to go until bay B is re-sited or the shroud is cut for it.
         **Owner decision** (it moves an ESC bay against the canon-shroud rule of 2026-10-04).
+        **Brief 2026-11-21:** `docs/THEME_N_DECISION_BRIEFS.md` brief A (recommends A1: build the
+        OD-3 four-bay layout; one bay per ESC is 73 % of the outline a 70 A ESC needs).
         Related: the roll-up counts 4 covers per nacelle (70 A, two bays per ESC,
         `esc70_design.json`) while the pod cuts 2 bays (68 / 248) -- decide the bay count with it.
     - [ ] **NAC-64-LEAD-AZ — port stage-1 lead conduit misses the port bay (found 2026-11-21).**
@@ -2296,7 +2313,8 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         outboard, stbd cover A low inboard).  On the port pod the conduit ends in the cavity
         ~44 deg from the nearest bay.  NAC-64-ESC-80A.l reads "248 (port 292)", i.e. mirrored
         bays were intended.  Decide the mirror rule with NAC-64-BAYB-SHROUD, then make the bays,
-        lead routes, lead vanes and covers follow one convention.
+        lead routes, lead vanes and covers follow one convention.  **Brief 2026-11-21:** brief B
+        (recommends B1, X mirror a -> 180 - a; B2 leaves A324 0 of 42 mm on the stbd pod).
     - [x] **NAC-64-VANE-WIND — stator vanes were inside-out — FIXED 2026-11-21 (S3).**
         `vane_solid()` in `edf_motor_mount_64mm.scad` listed faces opposite to OpenSCAD's
         polyhedron convention (-8,578 mm3 for the 11 vanes with the manifold backend, which
@@ -2943,7 +2961,8 @@ and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
     drag about 15 %. The bore is not the cause and a nose cap is ruled out (it supersedes the "nose cap"
     option above). The +23 % lies in the printing allowances or the real collar/trunnion/spar steps, not
     yet separated. Owner options now: leave as is, or fund isolating runs on those features. Outer shape
-    stays HELD.
+    stays HELD.  **Brief 2026-11-21:** `docs/THEME_N_DECISION_BRIEFS.md` brief C (recommends C1:
+    leave as built and release the HOLD; 0.069 lbf (0.31 N), 6.3 W at 40 kt for both fairings).
 - [ ] **OD17-FALLBACK-CLR — Fallback channel needs +2 mm shift (2026-11-16).**
     Finding 6 of the 2026-11-16 brief review; owner chose "study first". If NAC-64-WIRE-QUAL fails and
     the channel is redrawn to the 0.73 in (18.5 mm) centreline fallback, the aft pair's wire-to-duct gap

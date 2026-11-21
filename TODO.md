@@ -52,6 +52,9 @@
 - [ ] ★ LEDGER-STATUS — owner confirm: PRINT-PYLON excluded (no Rev T…
 - [ ] ★ NAC-64-BAYB-SHROUD — ESC bay B is filled by the dorsal shroud
 - [ ] NAC-64-LEAD-AZ — port lead conduit 292 vs bays 68/248; one mirror rule
+- [ ] NAC-64-SERVO-HOLD — CM07 holding margin +10 %; KTD3 lever (owner)
+- [ ] NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A > 5 A BEC continuous
+- [ ] NAC-64-SERVO-PAIR — servo power pair missing from spar-bore census
 - [ ] LG-CLR-TOOL-64 — port landing_gear_ground_clearance.py to 64 mm
 - [ ] NAC-64-SPECK — zero-volume sliver in the stbd pod cavity
 - [ ] ★ DATUM-R2 — one aircraft datum (centreline, nose tip, static ground…
