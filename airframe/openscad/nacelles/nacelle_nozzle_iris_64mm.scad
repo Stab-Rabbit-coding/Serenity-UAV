@@ -372,9 +372,9 @@ function spiral_pts(r1, r2, a1, a2, half_w, n) =
 BORE_R             = 32.0;   // [mm] 50 mm EDF bore radius (airflow passage centre) —
                             //   fixed by the 50 mm EDF spec (CLAUDE.md); unchanged.
 // [flattened] NOZZLE_CLOSED_R: value from its last assignment (override), kept at the first position
-NOZZLE_CLOSED_R    = 24.0;   // [mm] nozzle exit radius at 0 deg tilt  = 75 % of BORE_R
+NOZZLE_CLOSED_R    = 24.0;   // [mm] FLOW exit radius (flap inner face) at 0 deg tilt  = 75 % of BORE_R
 // [flattened] NOZZLE_OPEN_R: value from its last assignment (override), kept at the first position
-NOZZLE_OPEN_R      = 33.6;   // [mm] nozzle exit radius at 90 deg tilt = 105 % of BORE_R
+NOZZLE_OPEN_R      = 33.6;   // [mm] FLOW exit radius (flap inner face) at 90 deg tilt = 105 % of BORE_R
 
 // ── Throat Tube (fixed flow liner — carries the hinge ring) ──────────────────
 
@@ -403,8 +403,24 @@ FLAP_LENGTH        = 36.0;             // [mm] hinge to trailing edge, axial-ish
 HINGE_Z      = THROAT_LEN;       // [mm] = 15.0, hinge line Z station
 
 // phi(exit_r) = asin((R_HINGE - exit_r) / FLAP_LENGTH) — see header derivation.
-PHI_CLOSED = asin((R_HINGE - NOZZLE_CLOSED_R) / FLAP_LENGTH);   // = 16.96 deg (L=30)
-PHI_OPEN   = asin((R_HINGE - NOZZLE_OPEN_R)   / FLAP_LENGTH);   // =  2.39 deg (L=30)
+// ── Exit targets on the FLOW surface (2026-11-21, owner; WBS NAC-64-NOZ-EXIT) ──────────────
+// NOZZLE_CLOSED_R / NOZZLE_OPEN_R are the radii the FLOW sees: the trailing edge of the master
+// flap's INNER face.  The flap band runs from R_HINGE - t (inner) to R_HINGE (outer = hinge line),
+// so after a swing phi about the hinge the inner trailing edge sits at
+//     r_exit(phi) = R_HINGE - FLAP_LENGTH * sin(phi) - t * cos(phi)
+// (checked against the rendered flaps: 21.61 / 31.10 mm predicted vs 21.67 / 31.09 measured at the
+// old angles).  Until this date the targets were applied to the hinge line (r = R_HINGE - L sin phi)
+// and the flow exit came out 67.7 % closed / 97.1 % open against the 75 % / 105 % requirement
+// (docs/NOZZLE_64MM_LOAD_STUDY.md, finding 2).  Solving  L sin phi + t cos phi = R_HINGE - r_exit:
+//     phi = asin((R_HINGE - r_exit) / sqrt(L^2 + t^2)) - atan(t / L)
+// Closed 75 % -> 12.95 deg; open 105 % -> -2.54 deg: the open flap diverges slightly, as an exit
+// larger than the 64 mm bore must.  The cam (PIN_R_REF_*, THETA_RING_REF_OPEN) is unchanged; the
+// flap lever tab (TAB_X / TAB_Z below) re-derives from these angles.
+PHI_FLOW_T = 2.5;   // [mm] = FLAP_THICKNESS (master flap band), asserted equal at the end of file
+PHI_CLOSED = asin((R_HINGE - NOZZLE_CLOSED_R) / sqrt(FLAP_LENGTH * FLAP_LENGTH + PHI_FLOW_T * PHI_FLOW_T))
+             - atan(PHI_FLOW_T / FLAP_LENGTH);                    // = 12.95 deg (64 mm)
+PHI_OPEN   = asin((R_HINGE - NOZZLE_OPEN_R)   / sqrt(FLAP_LENGTH * FLAP_LENGTH + PHI_FLOW_T * PHI_FLOW_T))
+             - atan(PHI_FLOW_T / FLAP_LENGTH);                    // = -2.54 deg (64 mm)
 
 // ── Lever Tab / Follower Pin (drives the flap from the ring's spiral cam) ────
 //
@@ -456,6 +472,7 @@ TAB_X = ((PIN_R_REF_CLOSED - R_HINGE) + TAB_Z * sin(PHI_CLOSED)) / cos(PHI_CLOSE
 
 FOLLOWER_PIN_D   = 2.0;    // [mm] follower pin OD (SS dowel)
 FOLLOWER_PIN_L   = 4.0;    // [mm] follower pin length (engages the ring's slot pocket)
+TAB_TIP_LIFT     = 0.5;    // [mm] tab tip set aft of the pin root (ring-face clearance, 2026-11-21)
 
 // pin position as a function of swing angle phi (used for BOTH the flap's
 // own pin placement and, via the theta_ring mapping below, the ring's
@@ -1051,14 +1068,19 @@ module nozzle_flap(seal = false) {
     // outward and axially upstream) — matches flap_pin_r(0)/flap_pin_z(0)
     // measured from the hinge.  A short stub pin projects further upstream
     // (local -Z) from the tip to engage the ring's spiral slot pocket.
+    // TAB_TIP_LIFT (2026-11-21, WBS NAC-64-NOZ-EXIT): the tab tip disk stops this far aft of the pin
+    // root so it clears the ring's aft face across the swing.  With the flow-surface exit angles the
+    // open flap diverges (-2.54 deg) and the un-lifted tip dipped 0.27 mm into the ring face (the
+    // 16.96/1.43 deg geometry cleared it by only 0.006 mm).  The follower pin is lengthened by the
+    // same amount from the lifted tip, so its engagement end - and so the cam - is unchanged.
     hull() {
         translate([0, 0, 0])
             cylinder(h = 0.1, d = HINGE_KNUCKLE_W);
-        translate([TAB_X, 0, -TAB_Z])
+        translate([TAB_X, 0, -TAB_Z + TAB_TIP_LIFT])
             cylinder(h = 0.1, d = HINGE_KNUCKLE_W * 0.6);
     }
     translate([TAB_X, 0, -TAB_Z])
-        cylinder(h = FOLLOWER_PIN_L, d = FOLLOWER_PIN_D, center = false);
+        cylinder(h = FOLLOWER_PIN_L + TAB_TIP_LIFT, d = FOLLOWER_PIN_D, center = false);
 }
 
 // ── Fit Confirmation (Rev T cam-only / pushrod drive) ───────────────────────────
@@ -1287,6 +1309,11 @@ mirror([NZ_SIDE < 0 ? 1 : 0, 0, 0]) {
 }
 
 assert(HOUSING_OUTER_R < 87.12 / 2, "housing must fit the 64 mm pod pocket");
-assert(abs(asin((R_HINGE - NOZZLE_CLOSED_R) / FLAP_LENGTH) - 16.96) < 0.05,
-       "closed flap angle must match the validated 50 mm value");
+// 2026-11-21: the 16.96 deg closed angle (inherited from the 50 mm hinge-line definition) is
+// retired; the exit targets are on the flow surface (see PHI_CLOSED).  Check the flow exit instead.
+assert(PHI_FLOW_T == FLAP_THICKNESS, "PHI_FLOW_T must equal the master flap thickness");
+assert(abs(R_HINGE - FLAP_LENGTH * sin(PHI_CLOSED) - FLAP_THICKNESS * cos(PHI_CLOSED)
+           - NOZZLE_CLOSED_R) < 0.01, "closed flow exit is not 75 % of the bore");
+assert(abs(R_HINGE - FLAP_LENGTH * sin(PHI_OPEN) - FLAP_THICKNESS * cos(PHI_OPEN)
+           - NOZZLE_OPEN_R) < 0.01, "open flow exit is not 105 % of the bore");
 echo(NZ64 = [R_HINGE, PHI_CLOSED, PHI_OPEN, RING_OUTER_R, HOUSING_OUTER_R, RING_LEVER_AZ]);

@@ -82,12 +82,21 @@ KGFCM = 0.0980665
 CM07: dict[str, Any] = {"stall_kgfcm": {6.0: 1.80, 7.4: 2.10, 8.4: 2.40}, "cont_kgfcm": 0.45}
 
 
+FLAP_T = 2.5                   # master flap thickness (SCAD FLAP_THICKNESS / PHI_FLOW_T)
+
+
+def _phi_flow(r_exit: float) -> float:
+    """Flap angle putting the FLOW exit (inner-face trailing edge) at r_exit (SCAD, 2026-11-21)."""
+    return math.degrees(math.asin((R_HINGE - r_exit) / math.hypot(FLAP_L, FLAP_T))
+                        - math.atan(FLAP_T / FLAP_L))
+
+
 def phi_closed() -> float:
-    return math.degrees(math.asin((R_HINGE - CLOSED_R) / FLAP_L))
+    return _phi_flow(CLOSED_R)
 
 
 def phi_open() -> float:
-    return math.degrees(math.asin((R_HINGE - OPEN_R) / FLAP_L))
+    return _phi_flow(OPEN_R)
 
 
 def tab() -> tuple[float, float]:
@@ -139,7 +148,11 @@ def flap_profile(phi_deg: float, cache: Path) -> dict:
         zs.append(float(z))
         rs.append(float(np.hypot(v[:, 0], v[:, 1]).min()))
     z, r = np.array(zs), np.array(rs)
-    k = int(np.argmin(r))            # the effective exit is the minimum area (no diverging lip)
+    # The exit is the trailing edge of the inner face: the last section 0.7 mm short of the tip
+    # (the tip bevel reads as a radius jump).  NOT the global minimum radius: with the flow-surface
+    # targets the open flap DIVERGES (-2.54 deg), and its smallest radius is the hinge clevis lobes
+    # standing ~1 mm into the bore over 48 deg of circumference just aft of the hinge.
+    k = int(np.searchsorted(z, m.bounds[1][2] - 0.7)) - 1
     return {"z": z[: k + 1], "r": r[: k + 1], "r_exit": float(r[k]), "z_exit": float(z[k])}
 
 

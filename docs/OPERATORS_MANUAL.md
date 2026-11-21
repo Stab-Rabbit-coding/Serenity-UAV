@@ -1,7 +1,7 @@
 <!-- SYNC-STAMP
-parent commit: 0d4961b
-source digest: 70c0ee82ec04
-current-specification/auw_ledger.json: f5653e2abd
+parent commit: dfeff1d
+source digest: 72d701aefc1b
+current-specification/auw_ledger.json: cae1d5fded
 current-specification/flight_limits.json: 25167e891e
 docs/CARGO_WINCH_SPECIFICATION.md: c8b91d0380
 docs/FIRST_FLIGHT_READINESS.md: b24b714027

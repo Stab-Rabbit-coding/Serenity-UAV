@@ -2221,26 +2221,37 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         plan's U1/U2 (S5.0/S5.1); pocket integration: `docs/THEME_N_DECISION_BRIEFS.md` brief E;
         rail voltage D-SV-2: brief D.
         - [ ] **NAC-64-SERVO-HOLD — the servo cannot hold the nozzle closed (2026-11-21, load study
-            `docs/NOZZLE_64MM_LOAD_STUDY.md`).** Full-throttle gas load at the ring ear, closed:
-            1.03-2.43 lbf (4.6-10.8 N) by fan model (design 10.8 N), against the CM07's 0.50 lbf
-            (2.23 N) continuous and 2.00 lbf (8.9 N) stall at 6 V; the 2.0 N spring x 1.5 alone
-            exceeds the continuous rating.  Recommended (owner decision): fix the exit targets
-            (NAC-64-NOZ-EXIT), balance the flaps (NAC-64-NOZ-BALANCE), power-to-hold latch at the
-            closed position, spring re-sized from the U8 friction, 6.0 V rail.  First finding:
-            CM07 continuous holding margin is +10 % (found 2026-11-21).**
+            `docs/NOZZLE_64MM_LOAD_STUDY.md` rev 2).** Full-throttle gas load at the ring ear, closed
+            at the flow-surface 75 % exit: 0.88-1.72 lbf (3.9-7.6 N) by fan model (design 7.6 N;
+            hold 2.0 + 7.6 = 9.6 N), against the CM07's 0.50 lbf (2.23 N) continuous and 2.00 lbf
+            (8.9 N) stall at 6 V through today's linkage; the 2.0 N spring x 1.5 alone exceeds the
+            continuous rating.  Hinge fixed at the canonical petal root (owner, NAC-64-NOZ-BALANCE
+            rejected): relief comes from the linkage mechanical advantage (explore, keeping the
+            unpowered servo back-drivable for fail-open), the spring (U8 friction), or a
+            power-to-hold latch.  Recommendation held for the linkage study (owner decision D/E).
             KST CM07 sheet (2026-05) performance chart: continuous zone ends ~0.45 kgf.cm
             (6.25 ozf.in); holding the 0.45 lbf (2.0 N) fail-open spring needs ~5.66 ozf.in, so the
             ring ear keeps +0.05 lbf (+0.21 N) with NO flap load, at any rail voltage (continuous
             torque is thermal).  Plan 2026-09-28-001 KTD3 levers: lower the spring within the
             1.5 x friction floor, or change the lever ratio (both reopen fit-closed geometry):
             owner decision.  Bench the holding current and case temperature (plan U6).
-        - [ ] **NAC-64-NOZ-EXIT — the iris misses its exit targets (2026-11-21).** The 75 % / 105 %
-            radii are applied to the flap hinge line; the flow exit (inner face, measured) is
-            0.853 in (21.67 mm) = 67.7 % closed and 1.224 in (31.09 mm) = 97.1 % open, and the
-            open flap roots stand 0.9 mm inside the bore.  105 % is unreachable with today's hinge
-            circle and flap root.  Re-reference the targets to the flow surface (closed at
-            phi ~13.0 deg) and move the hinge circle / thin the root for 105 % (plan U11).
-        - [ ] **NAC-64-NOZ-BALANCE — balance the flaps (2026-11-21).** Centre of pressure 0.48-0.49 in
+        - [x] **NAC-64-NOZ-EXIT — exit targets set on the flow surface (2026-11-21, owner direction
+            "set the nozzle exit target on the flow surface").** `nacelle_nozzle_iris_64mm.scad`
+            solves phi for the inner-face trailing edge, r = R_HINGE - L sin(phi) - t cos(phi),
+            and asserts it: closed 12.94 deg, open -2.54 deg (was 16.96 / 1.43 on the hinge line,
+            flow exit 67.7 % / 97.1 %).  Measured from the rendered flaps: 0.945 in (24.01 mm) =
+            75.0 % closed, 1.316 in (33.43 mm) = 104.5 % open.  `TAB_TIP_LIFT` 0.5 mm keeps the
+            diverging open flap's lever tab off the ring face.  Flap STLs re-exported; hinge
+            unchanged.  Root-region step: the clevis lobes stand to r 31.18 mm (0.8 mm inside the
+            bore) over 48 deg at z 15.5, none by z 20 (loss not computed; CFD).
+            - [ ] **NAC-64-NOZ-TABBOSS — the flap lever tab overlaps the housing hinge boss.**
+                Found 2026-11-21 measuring the exit: the rendered flap and the housing's central
+                hinge boss intersect by ~1,600-1,800 mm3 (0.10-0.11 in3) at every angle; predates
+                the exit change.  Resolve the modelling interference (relieve the boss or route the
+                tab) before print; check with a flap x housing boolean at open, mid and closed.
+        - [x] **NAC-64-NOZ-BALANCE — REJECTED 2026-11-21 (owner): "keep the nozzle hinges aligned to the
+            root of the canonical nozzle petals".  The hinge does not move; servo advantage comes
+            from the linkage instead (NAC-64-SERVO-HOLD).** Original proposal: balance the flaps (2026-11-21). Centre of pressure 0.48-0.49 in
             (12.3-12.6 mm) along the 35 mm wetted face at every angle and fan model; a hinge 10 mm
             aft cuts the closed design load at the ear 10.8 -> 2.2 N and keeps the gas opening
             (fail-open) at every angle with 2.3 mm to the c.p.  Confirm the c.p. by axisymmetric
