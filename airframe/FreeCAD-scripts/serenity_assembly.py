@@ -399,10 +399,12 @@ AFT_SLV_Z_START = 122.5
 #          can occupy, so that lever never existed
 PIVOT_Z = 107.5  # pivot station = full-assembly nacelle CG; see the note above
 NOZZLE_RING_Z = 166.25  # nozzle ring station (nozzle placement)
-# 64 mm (Rev T6): PIVOT_Z converged at 109.7 (tools/nacelle_mass_cg_64.py,
-# measured CG 109.67); nozzle ring at 187.86 (nacelle_pod_64mm_tandem.scad).
+# 64 mm: PIVOT_Z is single-sourced in nacelle_64_scale.scad PIVOT_Z_64 (2026-11-21, S3;
+# Rev T6 typed 109.7 here), re-iterated to the rotating CG by tools/nacelle_mass_cg_64.py;
+# nozzle ring at 187.86 (nacelle_pod_64mm_tandem.scad).
 if NACELLE_GEN == 64:
-    PIVOT_Z = 109.7
+    import nacelle_64_scale  # noqa: E402  tools/ is on sys.path (above)
+    PIVOT_Z = nacelle_64_scale.pivot_z()
     NOZZLE_RING_Z = 187.86
 
 

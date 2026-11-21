@@ -637,7 +637,10 @@ SWIRL_DIR       =  +1;    // [+1 / -1] default port nacelle CW from intake
 // Y_cg for the bore-symmetric assembly.  FIRST-PASS (credible band ≈109–112 mm);
 // see the header for the density / nozzle-pocket caveats.
 // [flattened] PIVOT_Z: value from its last assignment (override), kept at the first position
-PIVOT_Z         = 109.7;   // [mm] pivot axial centre = full-assembly CG station
+PIVOT_Z         = PIVOT_Z_64;   // [mm] pivot axial centre = full-assembly CG station
+                           //      Single-sourced in nacelle_64_scale.scad (2026-11-21, S3).
+                           //      Rev T6 converged 109.7 on the x1.00 pod; the x1.06 render
+                           //      measured CG 119.81 (residual +10.11 mm) -> re-converged.
                            //      Rev T4b (2026-08-31): 111.5 -> 105.8 -> 113.8,
                            //      the first values in this part's history that
                            //      were COMPUTED FROM MEASURED MESHES rather than
