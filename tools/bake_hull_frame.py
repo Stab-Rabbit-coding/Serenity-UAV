@@ -219,7 +219,10 @@ _N64_SEAT_SCALED = (41.7 + nacelle_64_scale.get("P64_AXIS_SHIFT_S") + 7.0
 # re-rendered (owner HOLD until the servo linkage is finished).  This table
 # describes the meshes that are actually published; the re-render is WBS
 # NAC-64-REBAKE, and tools/check_datum_drift.py compares the two.
-_N64_SEAT = 53.84            # as baked (x1.00, axis shift 7.14)
+# 2026-11-21 (S3 NAC-64-REBAKE, OD-4 released 2026-11-12): the pods, trunnions and pinions are
+# re-rendered at x1.06 with the OD-17 joint shift and re-baked, so the table now gives the
+# scaled seat (79.31; was the x1.00 seat 53.84 of the stale meshes).
+_N64_SEAT = _N64_SEAT_SCALED
 _N64_Y, _N64_Z = hd.SPAR_Y - nacelle_64_scale.pivot_z(), hd.SPAR_Z
 # 2026-10-19: starboard DERIVED as the mirror of port about hd.X_CL (was the
 # separately measured stbd pad face -345.182, mirrored about -169.241).
@@ -231,6 +234,11 @@ for _side in ("Port", "Stbd"):
     COMPONENTS[f"Nacelle64_{_side}"] = (f"nacelles/nacelle_{_s}_64mm.stl", _pl)
     COMPONENTS[f"Trunnion64_{_side}"] = (f"nacelles/nacelle_trunnion_64mm_{_s}.stl", _pl)
     COMPONENTS[f"TiltPinion64_{_side}"] = (f"wings/wing_tilt_pinion_{_s}.stl", _pl)
+    # ESC bay covers (NAC-64-GEOM-03, 2026-11-21): authored in place in the pod's nacelle-local
+    # frame (nacelle_esc_cover_64mm.scad), so they take the pod's transform.
+    for _bay in ("a", "b"):
+        COMPONENTS[f"EscCover64_{_side}_{_bay.upper()}"] = (
+            f"nacelles/esc/nacelle_esc_cover_64mm_{_s}_{_bay}.stl", _pl)
 
 
 def quat_to_matrix(qx, qy, qz, qw):

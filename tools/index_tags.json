@@ -3136,8 +3136,48 @@
       ],
       "archived": false
     },
+    "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_a.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 EscCover64_Port_A 2026-06-11",
+      "tags": [
+        "cad-mesh",
+        "power",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_b.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 EscCover64_Port_B 2026-06-11",
+      "tags": [
+        "cad-mesh",
+        "power",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_a.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 EscCover64_Stbd_A 2026-06-11",
+      "tags": [
+        "cad-mesh",
+        "power",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_b.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 EscCover64_Stbd_B 2026-06-11",
+      "tags": [
+        "cad-mesh",
+        "power",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/stls/nacelles/nacelle_port_64mm.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 nacelle_port_64mm",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 Nacelle64_Port 2026-06-11",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -3146,7 +3186,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/nacelle_stbd_64mm.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 nacelle_stbd_64mm",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 Nacelle64_Stbd 2026-06-11",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -3155,7 +3195,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/nacelle_trunnion_64mm_port.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 nacelle_trunnion_64mm_port",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 Trunnion64_Port 2026-06-11",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -3164,7 +3204,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/nacelle_trunnion_64mm_stbd.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 nacelle_trunnion_64mm_stbd",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 Trunnion64_Stbd 2026-06-11",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -3243,7 +3283,7 @@
       "archived": false
     },
     "airframe/stls/wings/wing_tilt_pinion_port.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 wing_tilt_pinion_port",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 TiltPinion64_Port 2026-06-11",
       "tags": [
         "cad-mesh",
         "structural"
@@ -3251,7 +3291,7 @@
       "archived": false
     },
     "airframe/stls/wings/wing_tilt_pinion_stbd.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 wing_tilt_pinion_stbd",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 TiltPinion64_Stbd 2026-06-11",
       "tags": [
         "cad-mesh",
         "structural"
@@ -15719,7 +15759,7 @@
       "archived": false
     },
     "tools/auw_ledger.py": {
-      "description": "Serenity UAV -- bottom-up all-up-weight, CG, pitch inertia and hover T/W.",
+      "description": "Python script",
       "tags": [
         "build-tooling"
       ],
@@ -16315,6 +16355,14 @@
       "tags": [
         "build-tooling",
         "security"
+      ],
+      "archived": false
+    },
+    "tools/nacelle64_esc_bay_check.py": {
+      "description": "nacelle64_esc_bay_check.py -- the 64 mm ESC bay covers fit their pods, and what the windows cost.",
+      "tags": [
+        "build-tooling",
+        "power"
       ],
       "archived": false
     },
@@ -18629,6 +18677,10 @@
       "airframe/stls/nacelles/edf_motor_mount_64mm_stage2_stbd.stl",
       "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl",
       "airframe/stls/nacelles/eng_right_shell24_50mm_repaired.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_b.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_b.stl",
       "airframe/stls/nacelles/nacelle_port_64mm.stl",
       "airframe/stls/nacelles/nacelle_stbd_64mm.stl",
       "airframe/stls/nacelles/nacelle_trunnion_64mm_port.stl",
@@ -18948,6 +19000,10 @@
       "airframe/stls/nacelles/edf_motor_mount_64mm_stage2_stbd.stl",
       "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl",
       "airframe/stls/nacelles/eng_right_shell24_50mm_repaired.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_b.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_b.stl",
       "airframe/stls/nacelles/nacelle_port_64mm.stl",
       "airframe/stls/nacelles/nacelle_stbd_64mm.stl",
       "airframe/stls/nacelles/nacelle_trunnion_64mm_port.stl",
@@ -19046,6 +19102,10 @@
       "airframe/stls/nacelles/edf_motor_mount_64mm_stage2_stbd.stl",
       "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl",
       "airframe/stls/nacelles/eng_right_shell24_50mm_repaired.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_b.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_b.stl",
       "airframe/stls/nacelles/nacelle_port_64mm.stl",
       "airframe/stls/nacelles/nacelle_stbd_64mm.stl",
       "airframe/stls/nacelles/nacelle_trunnion_64mm_port.stl",
@@ -19337,6 +19397,10 @@
       "airframe/placeholders/propulsion/ESC_80A_6S_BLHeli32_deferred.stl",
       "airframe/stls/fuselage/battery_tray.stl",
       "airframe/stls/fuselage/cargo/battery_cradle.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_b.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_b.stl",
       "avionics/kicad/FlightEngineer/kicads/Kaylee.kicad_sch.pre-g351x",
       "docs/BATTERY_MOUNT.md",
       "docs/BATTERY_SPLIT_OPTIONS.md",
@@ -19362,6 +19426,7 @@
       "docs/solutions/design-patterns/annular-esc-bay-length-is-set-by-radial-stack-not-panel-width.md",
       "gcs/skipper/hardware/docs/skipper_power_budget.md",
       "graphical-build-guide/build_guide_14_power_routing.svg",
+      "tools/nacelle64_esc_bay_check.py",
       "tools/nacelle_esc_bay_fit.py",
       "tools/nacelle_esc_service.py",
       "tools/nacelle_esc_thermal.py",
@@ -21139,6 +21204,7 @@
       "tools/min_stretch_relocation.py",
       "tools/mirror_claude_memory.py",
       "tools/nacelle64_assembly_check.py",
+      "tools/nacelle64_esc_bay_check.py",
       "tools/nacelle64_od1_figure.py",
       "tools/nacelle64_optD_aft_fairing.py",
       "tools/nacelle64_optD_concept.py",

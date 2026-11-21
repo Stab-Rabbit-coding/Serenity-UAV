@@ -363,7 +363,7 @@ NACELLE = {
     "PRINT-NOZ64-RING": "unison ring measured in the nacelle roll-up",
     "PRINT-NOZ64-FLAP": "4 master flaps per nozzle, measured in the nacelle roll-up",
     "PRINT-NOZ64-FLAP-SEAL": "4 seal flaps per nozzle, measured in the nacelle roll-up",
-    "PRINT-NAC64-ESC-COVER": "4 x ESC covers (scaled estimate, no mesh yet) in the nacelle roll-up",
+    "PRINT-NAC64-ESC-COVER": "4 x ESC covers per nacelle, measured mesh, in the nacelle roll-up",
     "MOTOR-QF2822-2300KV": "motors are in the nacelle roll-up (140 g, REF-EDF-003)",
     "ROTOR-QX64-12B": "rotors are in the nacelle roll-up (20 g ASSUMED, weigh)",
     "OSESC-NAC": "ESCs are in the nacelle roll-up (52.7 g estimate)",
@@ -558,17 +558,15 @@ def nacelle_items() -> list[Item]:
                           total, p, inertia,
                           "tools/nacelle_mass_cg_64.py roll-up at the hull pivot",
                           "NACELLE"))
-    # OD-17 option D: the published pod (above) is still the pre-shift bake until
-    # NAC-64-REBAKE (S3).
-    # The moved joint adds pod material (measured: pod render 369,451 -> 388,178 mm3 on 2026-11-11,
-    # +18,727 mm3 x PA CF 1.11 g/cc = 20.8 g, collar boss net of the wire channels) and 0.91
-    # in (23 mm)
-    # of CF spar (29.1 g / 173 mm, BOM SPAR-CF-20X16 x 23 mm = 3.9 g, ESTIMATE).  Retire this item
-    # when the rebaked pod is published.
+    # OD-17 option D, re-baked 2026-11-21 (S3 NAC-64-REBAKE): the published pod now carries the
+    # moved joint's collar boss, so the 20.8 g "render delta" is measured in the roll-up above and
+    # is retired here.  The 0.91 in (23 mm) of extra CF spar is NOT in the BOM yet (SPAR-CF-20X16
+    # is priced at ~173 mm installed, before the shift): it stays as an ESTIMATE until S6 updates
+    # that row (29.1 g / 173 mm x 23 mm = 3.9 g per side).
     for side, p in PIVOT.items():
-        items.append(Item(f"OD-17 joint extension {side} (pod boss + spar)", "NACELLE",
-                          20.8 + 3.9, p, None,
-                          "render delta + spar ESTIMATE; retire at NAC-64-REBAKE", "NACELLE"))
+        items.append(Item(f"OD-17 spar extension {side} (23 mm CF)", "NACELLE",
+                          3.9, p, None,
+                          "ESTIMATE pending the S6 SPAR-CF-20X16 length update", "NACELLE"))
     return items
 
 

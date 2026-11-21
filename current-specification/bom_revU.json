@@ -2738,13 +2738,13 @@
       "Description": "nacelle_{port,stbd}_64mm.stl — 64 mm tandem-EDF pod, stage 1 integral (hull-frame bake)",
       "Category": "Printed Part",
       "Qty": "2",
-      "Unit_Mass_g": "275.6",
-      "Total_Mass_g": "551.2",
+      "Unit_Mass_g": "430",
+      "Total_Mass_g": "860",
       "Supplier": "SLS service bureau (vendor not yet selected)",
       "Supplier_PN_or_Search": "SLS DuraForm PA CF [3DS-30108A] (REF-MAT-015)",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev U NEW (2026-11-07). Mass is the mean of the two published STLs at the SLS density. STALE: the published pod STLs predate the intake-cowl change; re-bake is open until the pivot converges (docs/handoffs/2026-11-02-nacelle-exterior-canon.md item b). Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 0 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
+      "Notes": "Rev U NEW (2026-11-07). Mass is the mean of the two published STLs at the SLS density. STALE: the published pod STLs predate the intake-cowl change; re-bake is open until the pivot converges (docs/handoffs/2026-11-02-nacelle-exterior-canon.md item b). Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 275.6 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "PRINT-NAC64-CARTRIDGE",
@@ -2842,13 +2842,13 @@
       "Description": "nacelle_esc_cover_64mm_{port,stbd}_{a,b}.stl — hinged-ESC bay access cover, four distinct parts",
       "Category": "Printed Part",
       "Qty": "4",
-      "Unit_Mass_g": "9.5",
-      "Total_Mass_g": "38",
+      "Unit_Mass_g": "7.4",
+      "Total_Mass_g": "29.6",
       "Supplier": "SLS service bureau (vendor not yet selected)",
       "Supplier_PN_or_Search": "SLS DuraForm PA CF [3DS-30108A] (REF-MAT-015)",
       "Est_Unit_Price_USD": "0.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev U NEW, NO MESH: NOT PUBLISHED. Required before flight; blocked on the ESC part selection (WBS NAC-64-ESC-80A), which sets the bay. Mass is the roll-up estimate (50 mm covers x K), 4 x 9.5 g = 37.9 g with SLS density. "
+      "Notes": "Rev U NEW, NO MESH: NOT PUBLISHED. Required before flight; blocked on the ESC part selection (WBS NAC-64-ESC-80A), which sets the bay. Mass is the roll-up estimate (50 mm covers x K), 4 x 9.5 g = 37.9 g with SLS density. Mass synced to the STL mesh at the SLS datasheet density (Rev U, 2026-11-07): was 9.5 g. Unit_Mass_g is authoritative; masses quoted earlier in this note are history. "
     },
     {
       "Ref": "MOTOR-QF2822-2300KV",

@@ -123,7 +123,7 @@ def printed_by_ref() -> dict[str, float]:
 
     Priced from the published STLs at the SLS datasheet density.  The BOM
     (current-specification/bom_revU.*) must equal these; tools/check_bom_mesh_sync.py gates it.
-    The ESC bay covers are not here: they have no 64 mm mesh yet.
+    The ESC bay cover is the mean of the four published 64 mm covers (NAC-64-GEOM-03, 2026-11-21).
     """
     n = base.REPO / "airframe/stls/nacelles"
 
@@ -141,6 +141,8 @@ def printed_by_ref() -> dict[str, float]:
         "PRINT-NOZ64-RING": noz["ring"],
         "PRINT-NOZ64-FLAP": noz["flap"],
         "PRINT-NOZ64-FLAP-SEAL": noz["flap_seal"],
+        "PRINT-NAC64-ESC-COVER": 0.25 * sum(g(f"esc/nacelle_esc_cover_64mm_{s}_{b}.stl")
+                                            for s in ("port", "stbd") for b in ("a", "b")),
     }
 
 
@@ -176,9 +178,11 @@ def rows_64(pod_stl: Path) -> list[tuple[str, float, float, str]]:
         ("ESC B (70 A, aft motor, 2 bays)", 52.7, 136.4,
          ("ESTIMATE: tools/esc80_cooptimize.py on tools/esc70_design.json; "
           "centre from the bay fit")),
-        ("4 x ESC access cover", sls.sls_from_fdm_mass(2 * 4 * 6.99 / 2 * K),
+        ("4 x ESC access cover", 4 * printed_by_ref()["PRINT-NAC64-ESC-COVER"],
          0.5 * (125.4 + 136.4),
-         "SCALED est.: 50 mm covers measured x K, two per ESC (four bays); x PA CF/FDM"),
+         ("MEASURED per cover (mean of the four published 64 mm covers, 2026-11-21); x 4 per "
+          "nacelle for the 70 A two-bays-per-ESC layout (esc70_design.json). The pod cuts 2 "
+          "bays today (NAC-64-ESC-80A.l), so the count is conservative")),
         ("Nozzle throat + housing", noz["throat"], NOZ_Z + 8.55,
          "MEASURED nacelle_nozzle_throat_64mm_stbd.stl (Rev U); station from the iris frame"),
         ("Unison ring", noz["ring"], NOZ_Z + 3.65,

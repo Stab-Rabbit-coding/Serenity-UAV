@@ -1478,7 +1478,16 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     Ø55.4 sleeve bore, against a 13.28 mm bundle. Unblocks when the pod is hollowed.
 
 - [ ] **[OPEN — FLIGHT SAFETY, LG-HOVER-01] Hover ground clearance is still
-    negative on the active gear, but by 2.55 mm rather than 10.5.** Rev S4b's
+    negative on the active gear, but by 2.55 mm rather than 10.5.**
+    **2026-11-21 recompute (S3, x1.06 pod re-baked, PIVOT_Z 118.9):** static hover nozzle
+    tip at hull Z +0.46 in (+11.6 mm) on the 3.0 in gear, -1.19 in (-30.3 mm) on the 1.5 in
+    gear (`nacelle_mass_cg_64.py`, arm 5.32 in (135.2 mm)).  The reserve budget (attitude,
+    settle, drift, build tolerance) is NOT recomputed: `tools/landing_gear_ground_clearance.py`
+    still reads the 50 mm roll-up and the removed `Nacelle_Port` bake entry and crashes
+    (LG-CLR-TOOL-64).  Owner re-confirmation of the margin still stands.
+    - [ ] **LG-CLR-TOOL-64 — port `tools/landing_gear_ground_clearance.py` to the 64 mm
+        roll-up** (`nacelle_mass_cg_64.py` pivot and nozzle reach; `Nacelle64_*` bake keys).
+        Broken since the 50 mm bake entries were removed (Rev U). Rev S4b's
     forward-biased hollowing moved `PIVOT_Z` to 113.8 and recovered 7.9 mm of the
     deficit; the in-nacelle harness (22.9 g, all aft of the pivot, never counted
     in any previous roll-up) accounts for part of that. **Remaining: −2.55 mm on
@@ -2179,8 +2188,13 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         Sleeve-zone start moved 42.2 -> 103.7; 50 mm lead-exit slot and
         retention bosses deleted at 64 mm. Rotating assembly 926 -> 900 g; CG
         111.25 vs PIVOT_Z 109.7 — RE-CONVERGE after nozzle + servo (NAC-64-PIVOT-RC).
-        - [ ] **NAC-64-PIVOT-RC** — re-converge PIVOT_Z once nozzle, servo and
-            gateway are placed; re-render + re-bake both pods.
+        - [x] **NAC-64-PIVOT-RC — CLOSED 2026-11-21 (S3, Claude Opus 5.5).** PIVOT_Z is now
+            single-sourced as `PIVOT_Z_64` in `nacelle_64_scale.scad` (it was re-typed 109.7 in six
+            files) and iterated to the measured CG of the x1.06 pod with the KST X06 nozzle drive:
+            **4.68 in (118.9 mm)**, residual +0.06 mm stbd / -0.02 mm port (gate 0.25 mm; S3 exit
+            1.0 mm).  Rotating assembly 2.453 lbm (1,112.5 g) per nacelle.  The first pass (120.2)
+            was on a render that had lost the stage-1 stator (inside-out vanes, see
+            NAC-64-VANE-WIND); re-converged after the fix.  Re-converge again after D-SV-1 (S5).
         - [ ] **NAC-64-VANE-CFD** — confirm the 12 deg stator inlet angle (measured
             loaded rpm / swirl survey), both stages.
         - [ ] **NAC-64-LEAD-FOAM** — pour-foam plan must keep the stage-1 lead conduit open.
@@ -2245,10 +2259,52 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         guide ~90 mm (T5_STBD_DX copy misplaced — explains Tilt_Wheel_Stbd vs
         Wing_Stbd 2788 mm3 with no port twin). Census must export a symmetric
         tilt pose (assembly default is stbd 90 / port 0).
-    - [ ] **NAC-64-GEOM-02 — ESC cooling ports.** ESC_BLEED_Z now opens onto the
-        stator-sleeve wall, not the duct; add matching sleeve ports or move them.
-    - [ ] **NAC-64-GEOM-03 — ESC cover from the scaled skin.** `nacelle_esc_cover.scad`
-        still reads the unscaled grid; give it the RADIAL_K hook.
+    - [x] **NAC-64-GEOM-02 — ESC cooling ports — CLOSED 2026-11-21 (S4, Claude Opus 5.5).**
+        Moved, not matched: a sleeve port would open the duct at the rotor-2 tips.  The four
+        stretched axial ports (Z 94.8-106.8 + 5.5 mm apex) put the aft two on the stage-2
+        cartridge wall (Z >= 103.7).  Now two round-ended slots side by side across the power
+        panel at Z 96.54 mm, 0.22 x 0.39 in (5.5 x 9.82 mm), 1.5 mm web: total throat 95.0 mm2
+        (= the old 4 x 5.5 mm), so the aspirated circuit in `tools/nacelle_esc_thermal.py` is
+        unchanged (K = 3 still ASSUMED; bench or CFD per section 1.1.3.8).  No teardrop apex
+        (SLS).  Parse-time asserts keep the slot inside the bay floor, 1.0 mm ahead of the
+        cartridge and inside the panel; ray check: all four open from the duct to the bay.
+    - [x] **NAC-64-GEOM-03 — ESC cover from the scaled skin — CLOSED 2026-11-21 (S4).**
+        New `nacelle_esc_cover_64mm.scad` includes the pod wrapper and builds each cover from the
+        pod's own `ESC_SKIN` / `hollow_zs()` / footprint, so cover and rebate share one source.
+        Four handed covers published at `airframe/stls/nacelles/esc/` (baked with their pod's
+        placement): watertight single bodies, 0.0164 lbm (7.43 g) each.  Roll-up row now
+        MEASURED (4 per nacelle, conservative, see NAC-64-BAYB-SHROUD).  Fit gate:
+        `tools/nacelle64_esc_bay_check.py` -- cover A seats with 0 mm3 overlap on both pods;
+        **cover B does NOT** (NAC-64-BAYB-SHROUD below).
+    - [ ] **★ NAC-64-BAYB-SHROUD — ESC bay B is filled by the resized dorsal shroud (found
+        2026-11-21, S4; the measured form of NAC-64-ESC-80A.l).** Bay B (hinge az 248) lies under
+        the nozzle-servo spine extension (`nsv_pod_adds()`, Zone C, added AFTER the bay cut), so
+        the pod has no open window there: the bay-B cover overlaps the pod by 0.232 in3
+        (3,795 mm3) port and 0.227 in3 (3,713 mm3) stbd over its whole footprint (az 221-290,
+        Z 85-142.5).  ESC B has nowhere to go until bay B is re-sited or the shroud is cut for it.
+        **Owner decision** (it moves an ESC bay against the canon-shroud rule of 2026-10-04).
+        Related: the roll-up counts 4 covers per nacelle (70 A, two bays per ESC,
+        `esc70_design.json`) while the pod cuts 2 bays (68 / 248) -- decide the bay count with it.
+    - [ ] **NAC-64-LEAD-AZ — port stage-1 lead conduit misses the port bay (found 2026-11-21).**
+        `motor_lead_routes()` places the conduit at `PYLON_SIDE x 68` (port: 292 deg) and the
+        lead vane in `edf_motor_mount_64mm.scad` follows it, but `ESC_BAY_AZ` = [68, 248] is NOT
+        mirrored, so the port bays are cut at 68 / 248 (baked covers confirm: port cover A low
+        outboard, stbd cover A low inboard).  On the port pod the conduit ends in the cavity
+        ~44 deg from the nearest bay.  NAC-64-ESC-80A.l reads "248 (port 292)", i.e. mirrored
+        bays were intended.  Decide the mirror rule with NAC-64-BAYB-SHROUD, then make the bays,
+        lead routes, lead vanes and covers follow one convention.
+    - [x] **NAC-64-VANE-WIND — stator vanes were inside-out — FIXED 2026-11-21 (S3).**
+        `vane_solid()` in `edf_motor_mount_64mm.scad` listed faces opposite to OpenSCAD's
+        polyhedron convention (-8,578 mm3 for the 11 vanes with the manifold backend, which
+        dropped the stage-1 stator from the pod and pinched the vane roots).  CGAL silently
+        re-oriented them, so the published stage-2 cartridges were already right (58,668 mm3,
+        re-rendered identical).  Faces reversed; plate + vanes 10,390 mm3 in both kernels.
+    - [ ] **NAC-64-SPECK — one zero-volume sliver in the stbd pod (2026-11-21).** A 4-face lens
+        (0.38 mm2 surface, ~0 mm3) floats 0.1 mm inside the cavity's outer surface at nacelle-
+        local (-34.3, 23.3, 86.3); it comes from the cavity grid grazing (removing
+        `hollow_cavity()` removes it), wall there 0.11-0.15 in (2.8-3.8 mm).  Passes
+        `validate_stls.py` (watertight).  Remove it at the next cavity edit; the ESC doubler lap
+        of the same day removed 32 others like it.
     - [x] **NAC-64-GEOM-04 — hull-frame bake — DONE 2026-10-03 (Claude Opus 5.5).**
         `tools/bake_hull_frame.py` 'Nacelle64_*' / 'Trunnion64_*' / 'TiltPinion64_*'
         are DERIVED, one rule both sides: tilt axis = level spar line Y 21.000 /
@@ -2272,9 +2328,15 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         (+0.098, ~0.07 mm backlash); pod relief/trunnion slot re-derived
         (azimuth 5.0 deg). OPEN: nav and AK7455 conduits still camber-following
         (flexible runs; walls to be confirmed by the census).
-    - [ ] **NAC-64-GEOM-05 — gates on the 64 mm pod.** Port `nacelle_trunnion_fit.py`,
-        `nacelle_esc_bay_fit.py` and `nacelle_mass_cg.py` (PIVOT_Z, plan U5) to
-        read the 64 mm wrapper; PIVOT_Z 107.5 is carried unchanged until then.
+    - [x] **NAC-64-GEOM-05 — gates on the 64 mm pod — CLOSED 2026-11-21 (S3/S4).**
+        Mass/CG: `nacelle_mass_cg_64.py` reads `PIVOT_Z_64` (single source; the prep, assembly
+        check, tilt-joint context and FreeCAD assembly read it too).  Trunnion fit:
+        `nacelle_trunnion_fit.py` no longer exists; its job is `nacelle64_assembly_check.py`
+        (static: only the accepted 12 mm3 pod x cartridge rib contact; sweep -5..135 deg: pod
+        in the pinion sweep 0 mm3, trunnion x pinion <= 26 mm3 = tooth phase; wires: all four
+        OK, tightest bend 0.650 in (16.50 mm) = 3 x OD; bay: floor 91 % solid, mouth clear).
+        ESC bay: the 50 mm siting search is settled for 64 mm by OD-3; its T9 cover gate and the
+        window section modulus now live in `tools/nacelle64_esc_bay_check.py`.
     - [x] **NAC-64-ASM-01 — CLOSED 2026-11-07 (owner OD-1: option A, cartridge 0.12 in (3 mm)
         shorter; implemented by Claude Opus 5.5).** `edf_motor_mount_64mm.scad` Z_AFT =
         P64_Z_NOZ − NZ_SPIGOT_L (0.12 in (3 mm)), aft face Z 7.72 in (196.1 mm), which is what
