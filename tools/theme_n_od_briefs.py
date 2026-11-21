@@ -816,7 +816,7 @@ def pocket(params: Path, pod: trimesh.Trimesh, clr: float = 0.6) -> dict:
 def brief_e(res: dict) -> None:
     pod = pod_local("stbd")
     tmp = Path(tempfile.mkdtemp())
-    cases = {}
+    cases: dict[str, dict[str, Any]] = {}
     for name, dims, tq, az in (("X06H az280", X06H["dims"], X06H["stall_nm_6v"], 280.0),
                                ("CM07 az280", CM07["dims"], 1.80 * KGFCM, 280.0),
                                ("CM07 az282", CM07["dims"], 1.80 * KGFCM, 282.0)):
