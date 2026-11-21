@@ -60,3 +60,5 @@ wording follow root §6. Units follow root §5.
 
 Explain each change in its commit message. Archive superseded documents under `archives/`.
 Track multi-document work as items in `docs/WBS.md` (root §10 federation).
+Each theme within a plan shall be built on its own branch named `Theme-[Letter]-S[Number]-S[Number]`
+(first and last sprint of the theme, e.g., `Theme-N-S2-S6`); commit and push it often so no work is lost.
