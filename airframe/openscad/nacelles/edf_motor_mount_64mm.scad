@@ -156,7 +156,14 @@ module vane_solid(t, r0, r1) {
             [id(0, 0, j), id(1, 0, j), id(1, 0, j + 1), id(0, 0, j + 1)] ],
         [ for (j = [0 : NR - 1])                                // TE z = c
             [id(0, NZ, j), id(0, NZ, j + 1), id(1, NZ, j + 1), id(1, NZ, j)] ]);
-    polyhedron(points = pts, faces = faces, convexity = 4);
+    // The face lists above run the opposite way to OpenSCAD's polyhedron() convention (clockwise
+    // looking at the face from outside), so the vane was INSIDE-OUT.  Measured 2026-11-21: as
+    // listed, the 11 vanes rendered at -8578 mm3 with the manifold backend, which then dropped the
+    // stage-1 stator from the pod (and pinched the vane roots against the motor plate); CGAL
+    // silently re-oriented them.  Reversing each face makes the vane positive in both kernels
+    // (plate + vanes 10,390 mm3 either way).
+    polyhedron(points = pts, faces = [ for (f = faces) [ for (i = [len(f) - 1 : -1 : 0]) f[i] ] ],
+               convexity = 4);
 }
 
 module cartridge_tube() {

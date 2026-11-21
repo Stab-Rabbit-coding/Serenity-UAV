@@ -1430,6 +1430,16 @@
       ],
       "archived": false
     },
+    "airframe/openscad/nacelles/nacelle_esc_cover_64mm.scad": {
+      "description": "nacelle_esc_cover_64mm.scad \u2014 Rev U \u2014 64 mm pod ESC bay access cover (four handed parts)",
+      "tags": [
+        "cad-mesh",
+        "power",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/openscad/nacelles/nacelle_hollow_profile.scad": {
       "description": "nacelle_hollow_profile.scad \u2014 GENERATED FILE, DO NOT EDIT BY HAND",
       "tags": [
@@ -18416,6 +18426,7 @@
       "airframe/openscad/nacelles/nacelle_dorsal_shroud_64_gen.scad",
       "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
+      "airframe/openscad/nacelles/nacelle_esc_cover_64mm.scad",
       "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris_64mm.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_servo_64mm.scad",
@@ -18744,6 +18755,7 @@
       "airframe/openscad/nacelles/nacelle_dorsal_shroud_64_gen.scad",
       "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
+      "airframe/openscad/nacelles/nacelle_esc_cover_64mm.scad",
       "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris_64mm.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_servo_64mm.scad",
@@ -19013,6 +19025,7 @@
       "airframe/openscad/nacelles/nacelle_dorsal_shroud_64_gen.scad",
       "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
+      "airframe/openscad/nacelles/nacelle_esc_cover_64mm.scad",
       "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris_64mm.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_servo_64mm.scad",
@@ -19312,6 +19325,7 @@
       "airframe/openscad/fuselage/cargo/battery_cradle.scad",
       "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
+      "airframe/openscad/nacelles/nacelle_esc_cover_64mm.scad",
       "airframe/placeholders/foam/Void_power_bus_25x500x25mm.stl",
       "airframe/placeholders/power/Fuse_MAXI_150A.stl",
       "airframe/placeholders/power/Fuse_mini_40A.stl",
