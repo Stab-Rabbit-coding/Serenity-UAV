@@ -229,3 +229,6 @@ until the U6 bench).
 - 2026-11-21 — first issue: briefs A–E (Claude Opus 5.5).
 - 2026-11-21 — owner decisions: A1, B1, C1. D and E: owner directed the nozzle load
   calculations to be resolved first (`docs/NOZZLE_64MM_LOAD_STUDY.md`).
+- 2026-11-21 — load study done: the gas load overturns the premise of briefs D and E (the CM07
+  cannot hold the closed nozzle; the exit misses its targets). Options and recommendation are in
+  the study, section 4; D and E are re-opened for an owner decision on that basis.

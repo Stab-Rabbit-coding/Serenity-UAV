@@ -10397,6 +10397,14 @@
       ],
       "archived": false
     },
+    "docs/NOZZLE_64MM_LOAD_STUDY.md": {
+      "description": "64 mm Iris Nozzle \u2014 Gas Load, Spring and Servo Study (2026-11-21)",
+      "tags": [
+        "documentation",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "docs/NOZZLE_DRIVE_TRADE.md": {
       "description": "Nozzle-Drive Mechanism Trade Study (Rev S2, 2026-07-19; decided 2026-09-28)",
       "tags": [
@@ -10864,6 +10872,13 @@
       "archived": false
     },
     "docs/figures/nacelle64_war10_options.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nozzle64_flap_loads.png": {
       "description": "Rendered image / reference photo",
       "tags": [
         "documentation"
@@ -16565,6 +16580,13 @@
       ],
       "archived": false
     },
+    "tools/nozzle64_flap_loads.py": {
+      "description": "nozzle64_flap_loads.py -- exhaust gas load on the 64 mm iris nozzle flaps, carried to the servo.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/nozzle_servo_linkage.py": {
       "description": "Servo nozzle drive \u2014 schedule, linkage and force-margin tool (plan U2).",
       "tags": [
@@ -17314,6 +17336,7 @@
       "docs/MATSPEC_SLS_PA_CF.md",
       "docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md",
       "docs/NACELLE_64MM_VERIFICATION.md",
+      "docs/NOZZLE_64MM_LOAD_STUDY.md",
       "docs/NOZZLE_DRIVE_TRADE.md",
       "docs/OBSERVER_LASER_ANALYSIS.md",
       "docs/OBSERVER_MANUFACTURING_READINESS.md",
@@ -17376,6 +17399,7 @@
       "docs/figures/nacelle64_od1_spigot_cartridge.png",
       "docs/figures/nacelle64_sections.png",
       "docs/figures/nacelle64_war10_options.png",
+      "docs/figures/nozzle64_flap_loads.png",
       "docs/figures/od3_esc_current.png",
       "docs/figures/od3_esc_fit_mass.png",
       "docs/figures/od3_esc_path.png",
@@ -19205,6 +19229,7 @@
       "docs/FIXED_NOZZLE_FALLBACK.md",
       "docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md",
       "docs/NACELLE_64MM_VERIFICATION.md",
+      "docs/NOZZLE_64MM_LOAD_STUDY.md",
       "docs/NOZZLE_DRIVE_TRADE.md",
       "docs/handoffs/2026-11-02-nacelle-exterior-canon.md",
       "docs/images/nacelle_64mm_nozzle_servo_option1.png",
@@ -21280,6 +21305,7 @@
       "tools/nacelle_tilt_dynamics.py",
       "tools/node_thermal_forced_air.py",
       "tools/nonfo_simon_fit.py",
+      "tools/nozzle64_flap_loads.py",
       "tools/nozzle_servo_linkage.py",
       "tools/nozzle_servo_linkage_64.py",
       "tools/observer_board_envelope.py",

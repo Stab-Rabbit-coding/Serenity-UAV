@@ -138,7 +138,9 @@
 - [ ] ★ LEDGER-STATUS — owner confirm: PRINT-PYLON excluded (no Rev T source), PRINT-PISTONS kept (no source), belly panels kept (roof battery), Faraday cage 1 of 4 bays
 - [ ] ★ NAC-64-BAYB-SHROUD — DECIDED A1: build the OD-3 four-bay 70 A layout
 - [ ] NAC-64-LEAD-AZ — DECIDED B1: enforce the X-mirror rule on ESC features
-- [ ] NAC-64-SERVO-HOLD — CM07 holding margin +10 %; KTD3 lever (owner)
+- [ ] NAC-64-SERVO-HOLD — servo cannot hold the closed nozzle (load study)
+- [ ] NAC-64-NOZ-EXIT — iris flow exit 67.7 % / 97.1 % vs 75 / 105 %
+- [ ] NAC-64-NOZ-BALANCE — balance the flaps (hinge ~10 mm aft, CFD c.p.)
 - [ ] NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A > 5 A BEC continuous
 - [ ] NAC-64-SERVO-PAIR — servo power pair missing from spar-bore census
 - [ ] LG-CLR-TOOL-64 — port landing_gear_ground_clearance.py to 64 mm
