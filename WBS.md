@@ -136,8 +136,8 @@
 - [ ] ★ HOVER-TRIM — CG Y +39.2 is 18.2 mm aft of the tilt-pivot thrust line (Y +21.0); establish the pitch-trim authority / battery move
 - [ ] ★ LEDGER-GAPS — no BOM rows for: Observer, 2 × CAN-PERIPH-GW-1, node pouches, FE can, epoxy (250.6 g estimated in the ledger); add rows and weigh
 - [ ] ★ LEDGER-STATUS — owner confirm: PRINT-PYLON excluded (no Rev T source), PRINT-PISTONS kept (no source), belly panels kept (roof battery), Faraday cage 1 of 4 bays
-- [ ] ★ NAC-64-BAYB-SHROUD — ESC bay B is filled by the dorsal shroud; re-site (owner)
-- [ ] NAC-64-LEAD-AZ — port lead conduit 292 vs bays 68/248; one mirror rule
+- [ ] ★ NAC-64-BAYB-SHROUD — DECIDED A1: build the OD-3 four-bay 70 A layout
+- [ ] NAC-64-LEAD-AZ — DECIDED B1: enforce the X-mirror rule on ESC features
 - [ ] NAC-64-SERVO-HOLD — CM07 holding margin +10 %; KTD3 lever (owner)
 - [ ] NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A > 5 A BEC continuous
 - [ ] NAC-64-SERVO-PAIR — servo power pair missing from spar-bore census

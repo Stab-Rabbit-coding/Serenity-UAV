@@ -386,6 +386,8 @@ sprint; cut length = pod-side run + wing-side run + service loop.
    the outer shape is not released until it is done. *Outcome 2026-11-12/16:* re-run done (+23 % drag,
    as-built CFD at the end of this brief); the outer shape stays **HELD** pending OD17-FAIR-BORE, and a
    combined run on the chosen bore treatment follows that decision.
+   *Outcome 2026-11-21 (owner, `docs/THEME_N_DECISION_BRIEFS.md` brief C, C1):* the as-built fairing
+   is accepted and the outer shape is **released**; no bore treatment, no combined run.
 3. **Bend-radius clause.** The repo's NASA-STD-8739.4A citation (Table 7-1, §7.2.19, `REFERENCES.md`
    REF-NASA-001) gives 3 × OD for an overall harness. I applied it to each wire. If the four are bound as
    one harness the minimum is 3 × 0.523 in = 1.57 in (39.8 mm), and the shift roughly doubles. I did not

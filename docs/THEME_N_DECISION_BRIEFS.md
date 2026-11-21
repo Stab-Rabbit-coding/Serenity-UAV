@@ -17,9 +17,9 @@ so and why.
 
 | Brief | Decision | Owning item | Recommendation |
 |---|---|---|---|
-| A | ESC bays: build the OD-3 four-bay layout | NAC-64-BAYB-SHROUD, NAC-64-ESC-80A.j/.l | **A1** |
-| B | Port/starboard mirror rule for ESC features | NAC-64-LEAD-AZ | **B1** (X mirror) |
-| C | As-built fairing drag | OD17-FAIR-BORE | **C1** (leave; release the HOLD) |
+| A | ESC bays: build the OD-3 four-bay layout | NAC-64-BAYB-SHROUD, NAC-64-ESC-80A.j/.l | **A1** — **DECIDED A1** (owner 2026-11-21) |
+| B | Port/starboard mirror rule for ESC features | NAC-64-LEAD-AZ | **B1** (X mirror) — **DECIDED B1** |
+| C | As-built fairing drag | OD17-FAIR-BORE | **C1** (leave; release the HOLD) — **DECIDED C1** |
 | D | Nozzle-servo rail voltage for the CM07 | D-SV-2 | **D1** (6.0 V), and see the holding-margin finding |
 | E | CM07 pocket in the dorsal spine | NAC-64-SERVO-01, plan U4 | **E2** (shaft az 282°) |
 
@@ -227,3 +227,5 @@ until the U6 bench).
 ## Changelog
 
 - 2026-11-21 — first issue: briefs A–E (Claude Opus 5.5).
+- 2026-11-21 — owner decisions: A1, B1, C1. D and E: owner directed the nozzle load
+  calculations to be resolved first (`docs/NOZZLE_64MM_LOAD_STUDY.md`).

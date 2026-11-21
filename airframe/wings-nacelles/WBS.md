@@ -2295,7 +2295,11 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         MEASURED (4 per nacelle, conservative, see NAC-64-BAYB-SHROUD).  Fit gate:
         `tools/nacelle64_esc_bay_check.py` -- cover A seats with 0 mm3 overlap on both pods;
         **cover B does NOT** (NAC-64-BAYB-SHROUD below).
-    - [ ] **★ NAC-64-BAYB-SHROUD — ESC bay B is filled by the resized dorsal shroud (found
+    - [ ] **★ NAC-64-BAYB-SHROUD — DECIDED 2026-11-21 (owner, brief A option A1): build the pod to
+        the 70 A ESC requirements, i.e. the OD-3 four-bay layout (two hinged bays per ESC) from
+        `tools/esc80_cooptimize.py` on `tools/esc70_design.json`; implementation open (bays,
+        doublers, eight covers, discharge slots, webs, lead routes).** Original finding: ESC bay B
+        is filled by the resized dorsal shroud (found
         2026-11-21, S4; the measured form of NAC-64-ESC-80A.l).** Bay B (hinge az 248) lies under
         the nozzle-servo spine extension (`nsv_pod_adds()`, Zone C, added AFTER the bay cut), so
         the pod has no open window there: the bay-B cover overlaps the pod by 0.232 in3
@@ -2306,7 +2310,11 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         OD-3 four-bay layout; one bay per ESC is 73 % of the outline a 70 A ESC needs).
         Related: the roll-up counts 4 covers per nacelle (70 A, two bays per ESC,
         `esc70_design.json`) while the pod cuts 2 bays (68 / 248) -- decide the bay count with it.
-    - [ ] **NAC-64-LEAD-AZ — port stage-1 lead conduit misses the port bay (found 2026-11-21).**
+    - [ ] **NAC-64-LEAD-AZ — DECIDED 2026-11-21 (owner, brief B option B1): enforce the X-mirror
+        rule (port azimuth = 180 - starboard) for every ESC feature: bays, discharge slots, lead
+        conduits and slots, lead vanes and covers; re-render the port stage-2 cartridge.
+        Implementation open.** Original finding: port stage-1 lead conduit misses the port bay
+        (found 2026-11-21).
         `motor_lead_routes()` places the conduit at `PYLON_SIDE x 68` (port: 292 deg) and the
         lead vane in `edf_motor_mount_64mm.scad` follows it, but `ESC_BAY_AZ` = [68, 248] is NOT
         mirrored, so the port bays are cut at 68 / 248 (baked covers confirm: port cover A low
@@ -2944,7 +2952,9 @@ and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
     1.0 mm: shell 0.039 lbm (17.5 g) + foam 0.5 g per side, saves 0.026 lbm (11.6 g) per aircraft, needs
     a §7 waiver; the outer half-thickness at the axis could then drop 1 mm toward the CFD shape
     (OD17-FAIR-WALL).
-- [ ] **OD17-FAIR-BORE — Owner: the open bore beyond the collar (finding 2026-11-12, OD17-FAIR-CFD).**
+- [x] **OD17-FAIR-BORE — CLOSED 2026-11-21 (owner, brief C option C1): accept the as-built
+    fairing; the outer-shape HOLD is released.** Original: the open bore beyond the collar
+    (finding 2026-11-12, OD17-FAIR-CFD).
     The fairing's 2.20 in (56 mm) bore runs its whole length, but the pod collar ends at X 2.94 in
     (74.8 mm) and the trunnion at 3.11 in (79.0 mm), so out to the fairing's end at X 3.71 in (94.3 mm)
     the bore is an open forward-facing pocket. The CFD puts the as-built assembly +23 % over the idealised
