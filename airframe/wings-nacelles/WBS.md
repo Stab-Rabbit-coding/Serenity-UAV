@@ -2215,7 +2215,11 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         touch at once. Size it with the 64 mm iris (plan 2026-09-28-001 U11) and
         gate it the way `tools/lg_thigh_variants.py` gates the gear hierarchy.
         Replace `PIN-3X18` in the BOM when the fuse is chosen.
-    - [ ] **NAC-64-SERVO-01 — nozzle servo drive — DESIGNED + FIT-CLOSED 2026-10-04
+    - [ ] **NAC-64-SERVO-01 — nozzle servo drive.**  **D-SV-1 DECIDED 2026-11-21 (owner): KST CM07**
+        (0.807 x 0.295 x 0.748 in (20.5 x 7.5 x 19 mm), plastic case, 25.0 ozf.in stall at 6.0 V),
+        replacing the KST X06.  BOM, REFERENCES and the servo table move to it in the nozzle-servo
+        plan's U1/U2 (S5.0/S5.1); pocket integration: `docs/THEME_N_DECISION_BRIEFS.md` brief E.
+        *Original entry:* DESIGNED + FIT-CLOSED 2026-10-04
         (Claude Opus 5.5; owner decisions: servo in the canonical dorsal spine,
         bellcrank, fixed shroud on the pod, slide-off nozzle module, KST X06,
         "any height increase must be a resizing of the canonical dorsal shroud").**
@@ -2868,7 +2872,11 @@ DS3225's 2.402 N·m — the servo is ~17× oversized (see SPAR-25-6).
 - [x] **SPAR-25-4 (U4) — BUILT 2026-08-31: integral 50T ring on the trunnion +
     14T pinion (module 0.8).** Original text — Tilt ring gear (sector is sufficient
     — the sweep is only 145°) + pinion; mesh stays outside r = 25 mm.
-- [ ] **SPAR-25-5 (U5) — BLOCKED 2026-09-10 on an owner decision** (§1.1.3.1
+- [x] **SPAR-25-5 (U5) — SUPERSEDED 2026-11-21 (owner, OD-9 closed):** the fixed sun gear it
+    needed belongs to the mechanical nozzle sync drive, which the servo nozzle drive (owner
+    2026-09-28, airframe `AGENTS.md` "Nacelle Nozzle Drive") replaced; the nozzle servo is the
+    KST CM07 (D-SV-1, owner 2026-11-21).  Nothing in the 64 mm joint needs the sun's axial home.
+    *Original entry:* **BLOCKED 2026-09-10 on an owner decision** (§1.1.3.1
     "[BLOCKED] KTD3"; `docs/NOZZLE_DRIVE_TRADE.md` "What is blocked"): the fixed
     sun has no axial home in the as-built joint (bearing-stack margin 0.0 mm).
     Choose (i) spend flux margin, (ii) spend wing geometry, or (iii) reopen the
