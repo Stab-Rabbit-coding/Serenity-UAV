@@ -126,7 +126,8 @@ The centre of pressure sits 0.49 in (12.6 mm) along the 1.39 in (35.4 mm) wetted
 angle and fan model. Moving the hinge about 12 mm aft would balance the flaps (revision 1), but
 the owner has directed that the hinges stay at the root of the canonical petals, so **the gas
 hinge moment is taken as given** and any relief has to come from the drive: the linkage
-mechanical advantage (§4), the spring, or a latch.
+mechanical advantage (§4) or the spring. A latch that holds the nozzle closed is not
+permitted: it contradicts the fail-open requirement (owner, 2026-11-21).
 
 ### Structure (one flap, design load)
 
@@ -149,7 +150,9 @@ r 38.0–44.0 mm (bore-wall floor to today's maximum), input-arm tip r ≤ 43.1 
 
 **Why a toggle is allowed here.** KTD3's ring cup is open: the rod only pushes the ball toward
 closed (plan 2026-09-28-001 KTD3). A dead or seized servo releases the ball wherever the linkage
-sits, and the spring opens the nozzle, so a near-toggle at closed does not cost fail-open. The
+sits, and the spring opens the nozzle, so a near-toggle at closed does not cost fail-open. L1 is
+**not a latch**: it stays 11° short of dead centre, so it never goes over-centre, and it can only
+push. Nothing in the drive holds the ring against the spring once the servo stops pushing. The
 energy bound still holds: with an ideal matched profile, continuous duty over the **whole** stroke
 would need 151° of servo travel at the 2.0 N spring (120° at a 1.0 N spring), more than the CM07
 has. A progressive linkage therefore buys continuous duty at the two ends, where the nozzle
@@ -190,22 +193,27 @@ so the tools agree.
 
 ## 5. Options for D and E
 
-| | **L1 linkage** (recommended) | S1 keep drive, reduce loads | S2 bigger servo | S3 drive + zero-power latch |
-|---|---|---|---|---|
-| Hinge | fixed (owner) | fixed | fixed | fixed |
-| Closed hold, continuous | × 1.96 ✓ | fails (× 0.38) | needs a published continuous rating ≥ 14.5 N at the ear | latch holds, no current |
-| Open hold (hover), continuous | × 1.94 ✓ | ✓ | ✓ | ✓ |
-| Closing on 6.0 V stall | × 2.02 ✓ | × 1.45 ✓ | per servo | × 1.45 ✓ |
-| Transition (mid-stroke) | short-time; firmware dwell limit | short-time | ok if rated | short-time |
-| Fail-open | kept (open cup) | kept | kept | kept (latch releases on power loss) |
-| Added parts | none (re-indexed horn, longer link, new bellcrank) | throttle limit on closure (firmware) | larger pocket | pawl + solenoid per nacelle |
-| Rail (D-SV-2) | **6.0 V** | 6.0 V | per servo | 6.0 V |
+| | **L1 linkage** (recommended) | S1 keep drive, reduce loads | S2 bigger servo |
+|---|---|---|---|
+| Hinge | fixed (owner) | fixed | fixed |
+| Closed hold, continuous | × 1.96 ✓ | fails (× 0.38) | needs a published continuous rating ≥ 14.5 N at the ear |
+| Open hold (hover), continuous | × 1.94 ✓ | ✓ | ✓ |
+| Closing on 6.0 V stall | × 2.02 ✓ | × 1.45 ✓ | per servo |
+| Transition (mid-stroke) | short-time; firmware dwell limit | short-time | ok if rated |
+| Fail-open | kept (open cup) | kept | kept |
+| Added parts | none (re-indexed horn, longer link, new bellcrank) | throttle limit on closure (firmware) | larger pocket |
+| Rail (D-SV-2) | **6.0 V** | 6.0 V | per servo |
+
+**Rejected — S3, a closed-position latch (owner, 2026-11-21):** no latch may hold the nozzle
+closed, because it would contradict the fail-open requirement. A latch that holds closed can fail
+(or seize) holding closed, whatever its power logic.
 
 **Recommendation: L1 on the 6.0 V rail (brief D, option D1).** Keep the 2.0 N spring until the U8
 friction measurement re-sizes it, and add a firmware dwell limit at intermediate nozzle
 positions. L1 meets both dwell positions on the continuous rating with no added parts and keeps
-fail-open. Its geometry checks (above) come before adoption. S3 remains the fallback if L1 fails
-the shroud or clearance checks.
+fail-open. Its geometry checks (above) come before adoption. If L1 fails the shroud or clearance
+checks, the next candidate from the same search (§4, e.g. the 3.5 mm horn) is tried first, then S2;
+S1's throttle limit is the last resort.
 
 **Bench measurements that close the largest unknowns (plan U8):** a static-pressure tap upstream
 of the closed nozzle at full throttle (selects the fan model: 3.9–7.6 N spread), the
@@ -229,3 +237,6 @@ seal-flap step (U8). The pressure loss of the clevis-lobe step at the open hinge
   Servo capability re-based on virtual work (the adopted drive gives 87–125 N per N·m, not the
   generator's worst-cosine 50.4); Finding 1 and the options re-stated; L1 near-toggle phasing
   recommended.
+- 2026-11-21 — revision 4 (Claude Opus 5.5): S3 (closed-position latch) rejected by the owner as
+  contrary to fail-open; removed from the options; fallback order re-stated; L1 stated not to be a
+  latch (11° short of dead centre, push-only).

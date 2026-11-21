@@ -2233,7 +2233,10 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
                 link 39.1 mm (was 35.5); bellcrank input arm 5.0 mm (was 4.49) at +35 deg on the
                 bellcrank; servo sweep 109 deg of 120.  Continuous margin x 1.96 closed / x 1.94
                 open, 6 V stall x 2.02 everywhere, 11 deg from dead centre; fail-open kept by the
-                KTD3 open cup.  Before adoption: parameterise the generator (horn index, input-arm
+                KTD3 open cup (L1 is not a latch: never over-centre, push-only).  No closed-position
+                latch is permitted (owner 2026-11-21: it would contradict the fail-open
+                requirement); fallback if L1 fails its checks: the next search candidate, then a
+                larger servo.  Before adoption: parameterise the generator (horn index, input-arm
                 phase), re-run its clearance and transmission checks, the shroud crest
                 (`dorsal_shroud_resize_64.py --eval-only`), the OpenSCAD pod clearance, and pin
                 bearing at the 19.5 N link force; firmware dwell limit at mid-stroke (short-time).
