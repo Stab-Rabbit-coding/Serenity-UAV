@@ -38,7 +38,8 @@ STLS = ROOT / "airframe" / "stls"
 ROOTS = [
     "nacelle_pod_64mm_tandem", "nacelle_nozzle_iris_64mm", "nacelle_nozzle_servo_64mm",
     "edf_motor_mount_64mm", "nacelle_trunnion_64mm", "nacelle_tip_gear_variants",
-    "nacelle_tilt_joint_context", "nacelle_esc_cover", "nacelle_dorsal_shroud_64_gen",
+    "nacelle_tilt_joint_context", "nacelle_esc_cover", "nacelle_esc_cover_64mm",
+    "nacelle_dorsal_shroud_64_gen",
     "nacelle_nozzle_servo_options_context", "nacelle_64_scale",
     "nozzle_servo_linkage_64_params", "nacelle_cowl_fair_table",
 ]

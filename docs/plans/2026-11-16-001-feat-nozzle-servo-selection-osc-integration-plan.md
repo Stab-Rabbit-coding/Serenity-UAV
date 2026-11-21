@@ -123,7 +123,9 @@ Ear force by candidate, by the same linear scaling (analytical):
 
 ### Outstanding Questions
 
-- **D-SV-1 (decided at the U3 gate):** which servo.
+- **D-SV-1 — DECIDED 2026-11-21 (owner): KST CM07**, ahead of the U3 gate. U1/U2 still run (records,
+  servo table); U3 narrows to D-SV-2 (rail voltage) for the CM07: brief D of
+  `docs/THEME_N_DECISION_BRIEFS.md` (2026-11-21; recommends 6.0 V and flags the +10 % holding margin).
 - **D-SV-2 (decided at the U3 gate):** nozzle servo rail at 6.0 V, or raised toward 8.4 V.
 - **Deferred to U1:** LD5801 supply range, 6 V torque, motor, case, sensor and temperature
   range. Its source page is not catalogued. Until filled, it cannot be selected.

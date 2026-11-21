@@ -34,6 +34,7 @@ CLASH_STL = "";   // optional nacelle-local clash mesh, drawn red (see header)
 POD_STL  = "nacelle_stbd_64mm.stl";        // pass -D POD_STL="..." to override
 WING_STL = "../../stls/wings/wing_stbd_s1223_revo.stl";
 include <nacelle_tip_gear_variants.scad>
+include <nacelle_64_scale.scad>   // PIVOT_Z_64 (single source)
 use <../wings/wing_tilt_pinion.scad>   // the real part (option A, metal)
 
 // Overrides go AFTER the include: OpenSCAD keeps the last assignment.
@@ -59,7 +60,7 @@ module wing_local() {
                 [0, 0,  0, 1]])
         import(WING_STL, convexity = 6);
 }
-PIVOT_Z_64 = 109.7;   // nacelle_pod_64mm_tandem.scad PIVOT_Z (converged)
+// PIVOT_Z_64 comes from nacelle_64_scale.scad (single source, 2026-11-21; was a 109.7 copy).
 
 // trunnion PART frame -> nacelle-local: part z -> +X, part x -> +Z (aft),
 // part y -> -Y; origin at the spar tip on the tilt axis.
