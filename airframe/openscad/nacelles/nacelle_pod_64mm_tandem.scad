@@ -2073,10 +2073,17 @@ module _esc_skin_shell(d_out, d_in) {
 // the Zone-B rebate can cut into it; in Zone C nothing could.  It is protected
 // from the cavity subtraction by being named in hollow_cavity()'s keep-out list,
 // the same way the trunnion collar is.
+// ESC_DOUBLER_LAP (2026-11-21, S3 NAC-64-REBAKE): the doubler band runs this far PAST the rebate
+// on every side.  Both used the same ESC_LEDGE_W footprint, so the rebate's forward face
+// (Z 84.79) and its side faces landed exactly on the doubler's edges: knife-edge contact
+// against the cavity, 96 non-manifold edges, and the published pods were not watertight.
+// The lap also gives the rebate a real shoulder to seat in.  About +1 g per bay (estimate).
+ESC_DOUBLER_LAP = 1.0;   // [mm]
 module esc_cover_doubler() {
     intersection() {
         _esc_skin_shell(0.0, ESC_COVER_T + ESC_LEDGE_T);
-        union() for (az = ESC_BAY_AZ) esc_bay_footprint(az, 60.0, ESC_LEDGE_W);
+        union() for (az = ESC_BAY_AZ)
+            esc_bay_footprint(az, 60.0, ESC_LEDGE_W + ESC_DOUBLER_LAP);
     }
     intersection() {
         _esc_skin_shell(0.0, ESC_COVER_T + ESC_BOSS_DEPTH);
