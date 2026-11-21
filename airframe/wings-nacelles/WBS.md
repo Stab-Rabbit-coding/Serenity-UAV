@@ -2221,14 +2221,27 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         plan's U1/U2 (S5.0/S5.1); pocket integration: `docs/THEME_N_DECISION_BRIEFS.md` brief E;
         rail voltage D-SV-2: brief D.
         - [ ] **NAC-64-SERVO-HOLD — the servo cannot hold the nozzle closed (2026-11-21, load study
-            `docs/NOZZLE_64MM_LOAD_STUDY.md` rev 2).** Full-throttle gas load at the ring ear, closed
+            `docs/NOZZLE_64MM_LOAD_STUDY.md` rev 3).** Full-throttle gas load at the ring ear, closed
             at the flow-surface 75 % exit: 0.88-1.72 lbf (3.9-7.6 N) by fan model (design 7.6 N;
-            hold 2.0 + 7.6 = 9.6 N), against the CM07's 0.50 lbf (2.23 N) continuous and 2.00 lbf
-            (8.9 N) stall at 6 V through today's linkage; the 2.0 N spring x 1.5 alone exceeds the
-            continuous rating.  Hinge fixed at the canonical petal root (owner, NAC-64-NOZ-BALANCE
-            rejected): relief comes from the linkage mechanical advantage (explore, keeping the
-            unpowered servo back-drivable for fail-open), the spring (U8 friction), or a
-            power-to-hold latch.  Recommendation held for the linkage study (owner decision D/E).
+            hold 2.0 + 7.6 = 9.6 N, x 1.5 = 14.5 N).  By virtual work the adopted drive gives
+            87-125 N per N.m (not the generator's worst-cosine 50.4): the CM07 closes on 6 V stall
+            with x 1.45 over the 1.5 factor but holds closed continuously at only x 0.38.  Hinge
+            fixed at the canonical petal root (owner).  Recommended: the L1 near-toggle linkage
+            (NAC-64-SERVO-L1), continuous x 1.96 closed and x 1.94 open, 6.0 V rail.
+            - [ ] **NAC-64-SERVO-L1 — adopt the L1 near-toggle phasing (owner decision pending).**
+                `tools/nozzle64_linkage_ma.py`: horn 4.0 mm kept, re-indexed to -82 deg at closed;
+                link 39.1 mm (was 35.5); bellcrank input arm 5.0 mm (was 4.49) at +35 deg on the
+                bellcrank; servo sweep 109 deg of 120.  Continuous margin x 1.96 closed / x 1.94
+                open, 6 V stall x 2.02 everywhere, 11 deg from dead centre; fail-open kept by the
+                KTD3 open cup.  Before adoption: parameterise the generator (horn index, input-arm
+                phase), re-run its clearance and transmission checks, the shroud crest
+                (`dorsal_shroud_resize_64.py --eval-only`), the OpenSCAD pod clearance, and pin
+                bearing at the 19.5 N link force; firmware dwell limit at mid-stroke (short-time).
+            - [ ] **NAC-64-SERVO-VW — replace the generator's worst-cosine force chain.**
+                `tools/nozzle_servo_linkage_64.py` multiplies each joint's worst cosine taken at
+                different stroke points (50.4 N/N.m at the ear; real 87-125) and assumes 50 % of
+                stall for holding.  Use the virtual-work measure of `nozzle64_linkage_ma.py` and
+                the CM07's continuous rating, so the tools agree.
             KST CM07 sheet (2026-05) performance chart: continuous zone ends ~0.45 kgf.cm
             (6.25 ozf.in); holding the 0.45 lbf (2.0 N) fail-open spring needs ~5.66 ozf.in, so the
             ring ear keeps +0.05 lbf (+0.21 N) with NO flap load, at any rail voltage (continuous

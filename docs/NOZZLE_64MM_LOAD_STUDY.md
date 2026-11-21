@@ -6,7 +6,8 @@ License: CC BY-SA 4.0 — see LICENSES/CC-BY-SA-4.0 (SPDX-License-Identifier: CC
 2026-11-21 ("resolve the load calculations to ensure the nozzles do their jobs and the servos do as
 well").
 **Analysis:** Claude (Claude Opus 5.5, Anthropic), with the `statics-and-dynamics` and
-`mechanical-engineering` skills. **Reproduce:** `/usr/bin/python3 tools/nozzle64_flap_loads.py`.
+`mechanical-engineering` skills. **Reproduce:** `/usr/bin/python3 tools/nozzle64_flap_loads.py`
+(gas loads) and `/usr/bin/python3 tools/nozzle64_linkage_ma.py` (linkage, §4).
 **Owning items:** `airframe/wings-nacelles/WBS.md` NAC-64-SERVO-01, NAC-64-SERVO-HOLD,
 NAC-64-NOZ-EXIT, NAC-64-NOZ-BALANCE (rejected); plan `docs/plans/2026-11-16-001-...` (D-SV-2, U2, U6, U8);
 `docs/THEME_N_DECISION_BRIEFS.md` briefs D and E.
@@ -17,6 +18,8 @@ NAC-64-NOZ-EXIT, NAC-64-NOZ-BALANCE (rejected); plan `docs/plans/2026-11-16-001-
 > thrust path; a nozzle that cannot reach or hold its scheduled position changes thrust in flight.
 
 ![Nozzle load study](figures/nozzle64_flap_loads.png)
+
+![Linkage mechanical advantage](figures/nozzle64_linkage_ma.png)
 
 ## 1. Prior studies
 
@@ -46,11 +49,15 @@ not describe the nozzle.
   pin. Determinate per flap (hinge force components + pin force). Hinge moment
   M = Σ Δp · 2πr · s · ds, s along the face from the hinge station.
 - **Transfer to the servo.** Virtual work through the spiral cam (pin radius linear in ring angle,
-  the SCAD's `TAB_X`/`TAB_Z` 3.674/6.905 mm): T_ring = M · |dφ/dθ| (0.63–0.69), then
+  the SCAD's `TAB_X`/`TAB_Z`, 3.185/7.163 mm): T_ring = M · |dφ/dθ| (0.63 at closed), then
   F_ear = T_ring / 39.0 mm. Frictionless; friction is a bench quantity.
 - **Servo capability.** KST CM07 sheet (2026-05): stall 1.80 / 2.10 / 2.40 kgf·cm at 6.0 / 7.4 /
-  8.4 V; continuous zone ends ≈ 0.45 kgf·cm (read off the 7.4 V chart). At the ear through the
-  re-solved linkage's worst point: 50.4 N per N·m.
+  8.4 V; continuous zone ends ≈ 0.45 kgf·cm (read off the 7.4 V chart); travel ±60°. (Sheet:
+  `open-servo-core-secure/hardware/CM07_Technical_Specifcation.pdf`; not yet in `REFERENCES.md`,
+  plan 2026-11-16-001 U2.) At the ear: by virtual work through the whole chain,
+  F_ear / T = |dθ_servo/dψ_ring| / r_ear (§4). Revision 1 used the generator's 50.4 N per N·m,
+  which multiplies each joint's worst cosine taken at different stroke points; the adopted drive
+  actually gives 87–125 N per N·m.
 - **Factor of safety.** 1.5 on the holding requirement, declared as engineering judgment (it
   equals the project's `fastener_default`, `current-specification/safety_factors.json`); no code
   sets one for this mechanism.
@@ -75,24 +82,21 @@ geometry; revision 1's numbers (closed at 16.96°, 67.7 % exit) are in the chang
 The gas pushes the flaps **open** (the fail-safe direction) at every angle; the load falls to zero
 as the nozzle opens.
 
-### Finding 1 — the servo cannot hold the nozzle closed
+### Finding 1 — today's drive cannot hold the nozzle closed continuously
 
 | | At the ring ear |
 |---|---|
 | Required continuous hold, design (spring 2.0 + gas 7.6 N) | **2.17 lbf (9.6 N)**; × 1.5 = 3.25 lbf (14.5 N) |
 | Required, nominal (spring 2.0 + gas 6.4 N) | 1.89 lbf (8.4 N) |
-| CM07 **continuous**, any voltage | **0.50 lbf (2.23 N)** |
-| CM07 stall at 6.0 / 7.4 / 8.4 V | 2.00 / 2.33 / 2.67 lbf (8.9 / 10.4 / 11.9 N) |
+| CM07 **continuous** through today's drive at closed (125 N per N·m) | **1.24 lbf (5.5 N)**: × 0.38 of the design need |
+| CM07 stall at 6.0 V through today's drive at closed | 4.97 lbf (22.1 N): × 1.53 over the need with its 1.5 |
 
-Through today's linkage the CM07 cannot hold the closed nozzle continuously under any fan model.
-At 6.0 V its stall torque closes the nozzle against the nominal load (8.9 ≥ 8.4 N, 6 % margin)
-but not the design load (8.9 < 9.6 N); at 7.4 V it closes against the design load with 8 %
-margin, which is not a design margin. The assumed 0.38 lbf (1.7 N) flap allowance was 3–4 × too
-low, and the 50 %-of-stall holding assumption was 2.4 × the sheet's continuous rating. **The
-spring alone (2.0 N × 1.5 = 3.0 N) exceeds the CM07's continuous capability**: even with zero gas
-load the servo cannot hold any position but fully open indefinitely. The X06H had the same
-problem. Setting the exit on the flow surface cut the closed design load from 10.8 to 7.6 N (the
-nozzle now closes less far, 12.94° against 16.96°), but did not close this finding.
+Today's drive **moves** the nozzle at every point of the stroke on 6.0 V stall torque with the
+1.5 factor and 45 % to spare (× 1.45 at the worst point), so closing needs no more than the 6.0 V
+rail. It cannot **hold** closed continuously (× 0.38). The assumed 0.38 lbf (1.7 N) flap
+allowance was 3–4 × too low, and the 50 %-of-stall holding assumption was 2.4 × the sheet's
+continuous rating. Setting the exit on the flow surface cut the closed design gas load from 10.8
+to 7.6 N; §4 shows that re-phasing the linkage closes the holding gap.
 
 ### Finding 2 — exit targets, now met on the flow surface
 
@@ -122,7 +126,7 @@ The centre of pressure sits 0.49 in (12.6 mm) along the 1.39 in (35.4 mm) wetted
 angle and fan model. Moving the hinge about 12 mm aft would balance the flaps (revision 1), but
 the owner has directed that the hinges stay at the root of the canonical petals, so **the gas
 hinge moment is taken as given** and any relief has to come from the drive: the linkage
-mechanical advantage (WBS NAC-64-SERVO-01, exploration in progress), the spring, or a latch.
+mechanical advantage (§4), the spring, or a latch.
 
 ### Structure (one flap, design load)
 
@@ -133,30 +137,81 @@ tensile strength (`allowables.json`, REF-MAT-011); not governing. **Governing an
 pin bearing in PA CF and the cam-slot wear under the 7.6 N pin load (`allowables.json` bearing
 strength "requires_verification").
 
-## 4. Options for D and E
+## 4. Linkage mechanical advantage (owner direction 2026-11-21)
 
-| | S1 keep CM07, reduce loads | S2 bigger servo | S3 CM07 + zero-power latch | S4 status quo |
+**Method.** `tools/nozzle64_linkage_ma.py` keeps the ring side as adopted (ring ear ball, bellcrank
+pivot, output arm and rod, from the generated `nozzle_servo_linkage_64_params.scad`) and frees the
+servo side: horn length, horn angle at closed, bellcrank input-arm length and its phase on the
+bellcrank. Advantage is by virtual work, rigid and frictionless. The requirement along the stroke
+is spring 2.0 N + the design gas load, × 1.5. Every candidate passes an envelope screen: horn tip
+r 38.0–44.0 mm (bore-wall floor to today's maximum), input-arm tip r ≤ 43.1 mm, servo sweep
+≤ 115° of the CM07's 120°, and ≥ 10° from dead centre. The screen is not a fit check.
+
+**Why a toggle is allowed here.** KTD3's ring cup is open: the rod only pushes the ball toward
+closed (plan 2026-09-28-001 KTD3). A dead or seized servo releases the ball wherever the linkage
+sits, and the spring opens the nozzle, so a near-toggle at closed does not cost fail-open. The
+energy bound still holds: with an ideal matched profile, continuous duty over the **whole** stroke
+would need 151° of servo travel at the 2.0 N spring (120° at a 1.0 N spring), more than the CM07
+has. A progressive linkage therefore buys continuous duty at the two ends, where the nozzle
+dwells (closed in cruise, open in hover), and leaves mid-stroke on short-time torque.
+
+| | Adopted drive | **L1** (recommended) | Best of search |
+|---|---|---|---|
+| Horn | 4.0 mm | 4.0 mm (unchanged) | 3.5 mm |
+| Bellcrank input arm | 4.49 mm | 5.0 mm, phase +35° on the bellcrank | 4.49 mm, +35° |
+| Horn angle at closed / link | −42° / 35.5 mm | −82° / 39.1 mm | −82° / 38.7 mm |
+| Servo sweep (CM07 120°) | 90° | 109° | 112° |
+| Advantage closed / minimum / open (N per N·m) | 125 / 87 / 121 | **641** / 57 / 57 | 654 / 61 / 61 |
+| Continuous margin at closed (over × 1.5) | × 0.38 ✗ | **× 1.96** ✓ | × 2.00 |
+| Continuous margin at open, hover (over × 1.5) | × 4.10 | **× 1.94** ✓ | × 2.06 |
+| Continuous holds from closed to | — | ring 0.99° = 17° of servo | ring 1.24° = 21° |
+| 6.0 V stall margin, worst point (over × 1.5) | × 1.45 | **× 2.02** | × 2.06 |
+| Continuous margin, worst (mid-stroke) | × 0.36 | × 0.50 | × 0.52 |
+| Dead-centre margin | 41° | 11° | 11° |
+| Servo torque / link force at closed, design | 76.8 mN·m / 26.7 N | **15.0 mN·m / 19.5 N** | 14.7 mN·m / 22.0 N |
+| Horn tip radius | 42.6–43.9 mm | 40.5–43.9 mm | 40.4–43.4 mm |
+
+L1 keeps today's horn and servo position. It changes only the horn indexing, the link length and
+the bellcrank's input arm. It holds the cruise-closed nozzle at full throttle on the CM07's
+continuous rating with × 1.96 over the 1.5 factor. The hold covers a 17° servo window around the
+closed command, so servo trim error does not lose it. Mid-stroke (ring 1–20°, the transition)
+stays on short-time torque at × 2.02 over stall-with-factor; the firmware shall limit the dwell
+there (the sheet's short-time limit, bench U6). The hinges do not move.
+
+**Not yet checked (before adoption):**
+
+- the shroud crest (`dorsal_shroud_resize_64.py --eval-only`);
+- the generator's joint-clearance and transmission checks with the new phasing;
+- the bellcrank and link clearances against the pod in OpenSCAD;
+- pin bearing at the 19.5 N link force.
+
+The generator's force chain (worst-cosine product) shall be replaced by this virtual-work measure
+so the tools agree.
+
+## 5. Options for D and E
+
+| | **L1 linkage** (recommended) | S1 keep drive, reduce loads | S2 bigger servo | S3 drive + zero-power latch |
 |---|---|---|---|---|
-| Nozzle geometry | flow-surface exit (done); hinge fixed | same | same | same |
-| Spring | Reduce to 1.5 × measured friction (bench U8) | 2.0 N kept | 2.0 N kept, or reduced | 2.0 N |
-| Closed hold, design × 1.5 | (spring + 7.6) × 1.5 ≥ 11.4 N against 2.2 N continuous: **fails at full throttle**; with a 0.5 N spring it holds while the closed gas load is ≤ 1.0 N, i.e. up to ≈ 13 % of full thrust | needs ≥ 14.5 N continuous at the ear (2.9 kgf·cm continuous through today's linkage); no listed candidate publishes such a rating | the latch holds closed with no servo current; power loss releases it → fails open | fails |
-| Closing at full throttle (stall) | 6.0 V: 8.9 N against 8.1 N (0.5 N spring), 10 % margin | per servo | as S1; 2.0 N spring needs 7.4 V | 6.0 V fails |
-| Intermediate positions (transition) | ok only at low gas load | ok if rated | servo short-time only (< 10 s per the sheet) **unless the spring is reduced** | fails |
-| Added parts | throttle limit on closure in cruise (firmware) | larger pocket (≈ 23 × 7 × 18 mm) | latch pawl + small solenoid per nacelle, power-to-hold | — |
-| Rail (D-SV-2) | 6.0 V | per servo | 6.0 V with a reduced spring, else 7.4 V | — |
+| Hinge | fixed (owner) | fixed | fixed | fixed |
+| Closed hold, continuous | × 1.96 ✓ | fails (× 0.38) | needs a published continuous rating ≥ 14.5 N at the ear | latch holds, no current |
+| Open hold (hover), continuous | × 1.94 ✓ | ✓ | ✓ | ✓ |
+| Closing on 6.0 V stall | × 2.02 ✓ | × 1.45 ✓ | per servo | × 1.45 ✓ |
+| Transition (mid-stroke) | short-time; firmware dwell limit | short-time | ok if rated | short-time |
+| Fail-open | kept (open cup) | kept | kept | kept (latch releases on power loss) |
+| Added parts | none (re-indexed horn, longer link, new bellcrank) | throttle limit on closure (firmware) | larger pocket | pawl + solenoid per nacelle |
+| Rail (D-SV-2) | **6.0 V** | 6.0 V | per servo | 6.0 V |
 
-Every column is limited by the linkage's 50.4 N at the ear per N·m of servo torque. A linkage
-with more mechanical advantage scales every servo number in this table; that exploration is the
-next step (WBS NAC-64-SERVO-01) and **the recommendation is held until it reports**. The
-constraint it shall respect: an unpowered CM07 must still be back-driven open by the spring and
-gas, so a toggle (dead-centre) linkage at the closed position is not acceptable without a
-release.
+**Recommendation: L1 on the 6.0 V rail (brief D, option D1).** Keep the 2.0 N spring until the U8
+friction measurement re-sizes it, and add a firmware dwell limit at intermediate nozzle
+positions. L1 meets both dwell positions on the continuous rating with no added parts and keeps
+fail-open. Its geometry checks (above) come before adoption. S3 remains the fallback if L1 fails
+the shroud or clearance checks.
 
 **Bench measurements that close the largest unknowns (plan U8):** a static-pressure tap upstream
 of the closed nozzle at full throttle (selects the fan model: 3.9–7.6 N spread), the
 ring-and-flap friction (sets the spring), and the CM07 holding current and case temperature.
 
-## 5. Not checked here
+## 6. Not checked here
 
 Fan surge or stall with the nozzle closed at full throttle (no fan curve published); thermal
 effects on PA CF at the nozzle (cold exhaust, electric fan); flap flutter; the open-position
@@ -170,3 +225,7 @@ seal-flap step (U8). The pressure loss of the clevis-lobe step at the open hinge
   open −2.54°; measured 75.0 % / 104.5 %); design gas load 7.6 N; balanced hinge withdrawn per
   owner direction (hinges at the canonical petal root); open-exit read at the trailing edge;
   clevis-lobe and tab/boss findings recorded; recommendation held for the linkage study.
+- 2026-11-21 — revision 3 (Claude Opus 5.5): linkage study (§4, `tools/nozzle64_linkage_ma.py`).
+  Servo capability re-based on virtual work (the adopted drive gives 87–125 N per N·m, not the
+  generator's worst-cosine 50.4); Finding 1 and the options re-stated; L1 near-toggle phasing
+  recommended.
