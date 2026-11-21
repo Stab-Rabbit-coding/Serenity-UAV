@@ -53,7 +53,7 @@
 - [ ] ★ NAC-64-BAYB-SHROUD — DECIDED A1: build the OD-3 four-bay 70 A layout
 - [ ] NAC-64-LEAD-AZ — DECIDED B1: enforce the X-mirror rule on ESC features
 - [ ] NAC-64-SERVO-HOLD — servo cannot hold the closed nozzle (load study)
-- [ ] NAC-64-NOZ-EXIT — iris flow exit 67.7 % / 97.1 % vs 75 / 105 %
+- [ ] NAC-64-NOZ-ROOT — hinge at the canonical petal root, canonical tip…
 - [ ] NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A > 5 A BEC continuous
 - [ ] NAC-64-SERVO-PAIR — servo power pair missing from spar-bore census
 - [ ] LG-CLR-TOOL-64 — port landing_gear_ground_clearance.py to 64 mm

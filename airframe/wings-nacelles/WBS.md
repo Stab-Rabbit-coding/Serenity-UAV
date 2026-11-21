@@ -2225,10 +2225,11 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             at the flow-surface 75 % exit: 0.88-1.72 lbf (3.9-7.6 N) by fan model (design 7.6 N;
             hold 2.0 + 7.6 = 9.6 N, x 1.5 = 14.5 N).  By virtual work the adopted drive gives
             87-125 N per N.m (not the generator's worst-cosine 50.4): the CM07 closes on 6 V stall
-            with x 1.45 over the 1.5 factor but holds closed continuously at only x 0.38.  Hinge
-            fixed at the canonical petal root (owner).  Recommended: the L1 near-toggle linkage
+            with x 1.45 over the 1.5 factor but holds closed continuously at only x 0.38.  At today's
+            hinge station (brief F moves it to the canonical root).  Recommended: the L1 near-toggle linkage
             (NAC-64-SERVO-L1), continuous x 1.96 closed and x 1.94 open, 6.0 V rail.
-            - [ ] **NAC-64-SERVO-L1 — adopt the L1 near-toggle phasing (owner decision pending).**
+            - [ ] **NAC-64-SERVO-L1 — adopt the L1 near-toggle phasing (owner decision pending;
+                computed at today's hinge station, superseded by NAC-64-NOZ-ROOT if F1 is adopted).**
                 `tools/nozzle64_linkage_ma.py`: horn 4.0 mm kept, re-indexed to -82 deg at closed;
                 link 39.1 mm (was 35.5); bellcrank input arm 5.0 mm (was 4.49) at +35 deg on the
                 bellcrank; servo sweep 109 deg of 120.  Continuous margin x 1.96 closed / x 1.94
@@ -2266,12 +2267,23 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
                 the exit change.  Resolve the modelling interference (relieve the boss or route the
                 tab) before print; check with a flap x housing boolean at open, mid and closed.
         - [x] **NAC-64-NOZ-BALANCE — REJECTED 2026-11-21 (owner): "keep the nozzle hinges aligned to the
-            root of the canonical nozzle petals".  The hinge does not move; servo advantage comes
-            from the linkage instead (NAC-64-SERVO-HOLD).** Original proposal: balance the flaps (2026-11-21). Centre of pressure 0.48-0.49 in
+            root of the canonical nozzle petals".  Moving the hinge aft goes away from the canonical
+            root; the owner wants it moved FORWARD to the root with longer petals (NAC-64-NOZ-ROOT,
+            brief F).  (First recorded as "the hinge does not move": a misreading, corrected.)** Original proposal: balance the flaps (2026-11-21). Centre of pressure 0.48-0.49 in
             (12.3-12.6 mm) along the 35 mm wetted face at every angle and fan model; a hinge 10 mm
             aft cuts the closed design load at the ear 10.8 -> 2.2 N and keeps the gas opening
             (fail-open) at every angle with 2.3 mm to the c.p.  Confirm the c.p. by axisymmetric
             CFD (openfoam-cfd) before moving the hinge; >= 13 mm the gas closes the nozzle.
+        - [ ] **NAC-64-NOZ-ROOT — nozzle hinge at the canonical petal root, petals to the canonical
+            tip (owner direction 2026-11-21; brief first: `docs/THEME_N_DECISION_BRIEFS.md` brief F,
+            `tools/nozzle64_hinge_root_brief.py`; owner decision on F1 pending).** Canonical root
+            Z 6.90 in (175.3 mm) on the sides and ventral surface, dorsal cowl to Z 7.76 in
+            (197 mm), tail Z 8.71 in (221.1 mm); today's hinge is 1.53 in (38.9 mm) aft of the
+            root.  F1: flaps 46.6 mm, P64_Z_NOZ 199.13 -> 160.25, gas at the ear x 1.28, -159 g
+            AUW, pivot -6.8 mm, hover clearance +21.5 mm.  Blocking conflict: A1 bay B80 overlaps
+            the new housing zone (4,060 mm3); also A324 0.40 mm, CM07 0.48 mm, motor-2 lead slot,
+            brief E's cover-screw site, R11 assert.  Supersedes the drive geometry of
+            NAC-64-SERVO-L1 if adopted.
         - [ ] **NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A with two CM07s (2026-11-21).**
             `docs/POWER_DISTRIBUTION.md` section 3.3 total 4.2 A + 2 x 0.67 A exceeds the BEC's 5 A
             continuous (inside the 7 A / 100 ms burst).  Size the F_NOZ fuses and confirm the burst

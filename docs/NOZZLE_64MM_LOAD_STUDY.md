@@ -65,9 +65,11 @@ not describe the nozzle.
 ## 3. Results
 
 Revision 2 (same day): the exit targets are now set on the flow surface (owner direction
-2026-11-21, Finding 2) and the hinge stays at the root of the canonical petals (owner direction
-2026-11-21, which rejects the balanced hinge of revision 1). The numbers below are for that
-geometry; revision 1's numbers (closed at 16.96°, 67.7 % exit) are in the changelog.
+2026-11-21, Finding 2). The numbers below are for that geometry at **today's hinge station**
+(Z 8.43 in / 214.1 mm); revision 1's numbers (closed at 16.96°, 67.7 % exit) are in the changelog.
+The owner has since directed the hinge **forward** to the canonical petal root (Z 6.90 in /
+175.3 mm) with petals to the canonical tip: that change is assessed in
+`docs/THEME_N_DECISION_BRIEFS.md` brief F (closed gas load × 1.28 at the ear) and is not yet built.
 
 **Closed (cruise schedule, flow exit 75.0 % of the bore), full throttle:**
 
@@ -109,8 +111,7 @@ rendered flaps: **closed 0.945 in (24.01 mm) = 75.0 %**; **open 1.316 in (33.43 
 error). The open nozzle now diverges (φ −2.54°), so a 0.5 mm (0.020 in) lift was added under the
 lever-tab tip (`TAB_TIP_LIFT`) to keep it off the ring face.
 
-Two root-region findings, recorded and **not** changed (the hinges stay at the canonical petal
-root):
+Two root-region findings at today's hinge, recorded and **not** changed (brief F moves the hinge):
 
 - **Clevis lobes inside the bore, open.** The flap hinge lobes stand to r 31.18 mm (0.8 mm,
   0.03 in, inside the 32.0 mm bore) over 48° of circumference at z 15.5 mm, 16° at z 17 mm, none
@@ -124,8 +125,8 @@ root):
 
 The centre of pressure sits 0.49 in (12.6 mm) along the 1.39 in (35.4 mm) wetted face at every
 angle and fan model. Moving the hinge about 12 mm aft would balance the flaps (revision 1), but
-the owner has directed that the hinges stay at the root of the canonical petals, so **the gas
-hinge moment is taken as given** and any relief has to come from the drive: the linkage
+the owner has directed the hinge to the canonical petal root, which is the other way (forward;
+brief F), so **the gas hinge moment is taken as given** and any relief has to come from the drive: the linkage
 mechanical advantage (§4) or the spring. A latch that holds the nozzle closed is not
 permitted: it contradicts the fail-open requirement (owner, 2026-11-21).
 
@@ -179,7 +180,7 @@ the bellcrank's input arm. It holds the cruise-closed nozzle at full throttle on
 continuous rating with × 1.96 over the 1.5 factor. The hold covers a 17° servo window around the
 closed command, so servo trim error does not lose it. Mid-stroke (ring 1–20°, the transition)
 stays on short-time torque at × 2.02 over stall-with-factor; the firmware shall limit the dwell
-there (the sheet's short-time limit, bench U6). The hinges do not move.
+there (the sheet's short-time limit, bench U6). These results are for today's hinge station.
 
 **Not yet checked (before adoption):**
 
@@ -195,7 +196,7 @@ so the tools agree.
 
 | | **L1 linkage** (recommended) | S1 keep drive, reduce loads | S2 bigger servo |
 |---|---|---|---|
-| Hinge | fixed (owner) | fixed | fixed |
+| Hinge | today's station (brief F moves it) | same | same |
 | Closed hold, continuous | × 1.96 ✓ | fails (× 0.38) | needs a published continuous rating ≥ 14.5 N at the ear |
 | Open hold (hover), continuous | × 1.94 ✓ | ✓ | ✓ |
 | Closing on 6.0 V stall | × 2.02 ✓ | × 1.45 ✓ | per servo |
@@ -231,7 +232,7 @@ seal-flap step (U8). The pressure loss of the clevis-lobe step at the open hinge
   closed design gas load 10.8 N at the ear; recommended a 10 mm aft (balanced) hinge.
 - 2026-11-21 — revision 2 (Claude Opus 5.5): exit targets set on the flow surface (closed 12.94°,
   open −2.54°; measured 75.0 % / 104.5 %); design gas load 7.6 N; balanced hinge withdrawn per
-  owner direction (hinges at the canonical petal root); open-exit read at the trailing edge;
+  owner direction (misread here as "the hinge stays"; corrected in revision 5); open-exit read at the trailing edge;
   clevis-lobe and tab/boss findings recorded; recommendation held for the linkage study.
 - 2026-11-21 — revision 3 (Claude Opus 5.5): linkage study (§4, `tools/nozzle64_linkage_ma.py`).
   Servo capability re-based on virtual work (the adopted drive gives 87–125 N per N·m, not the
@@ -240,3 +241,6 @@ seal-flap step (U8). The pressure loss of the clevis-lobe step at the open hinge
 - 2026-11-21 — revision 4 (Claude Opus 5.5): S3 (closed-position latch) rejected by the owner as
   contrary to fail-open; removed from the options; fallback order re-stated; L1 stated not to be a
   latch (11° short of dead centre, push-only).
+- 2026-11-21 — revision 5 (Claude Opus 5.5): corrects the reading of the owner's hinge direction.
+  The owner wants the hinge moved forward to the canonical petal root with petals to the canonical
+  tip (brief F), not held at today's station; this study's numbers stay valid for today's station.

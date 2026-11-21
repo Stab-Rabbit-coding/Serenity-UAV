@@ -8,7 +8,7 @@ License: CC BY-SA 4.0 — see LICENSES/CC-BY-SA-4.0 (SPDX-License-Identifier: CC
 branch `Theme-N-S2-S6`, PR #313.
 **Reproduce:** `/usr/bin/python3 tools/theme_n_od_briefs.py` writes every figure and number below.
 
-Five decisions remain open in Theme N after OD-9 closed (2026-11-21: SPAR-25-5 superseded by the servo
+Five decisions remained open in Theme N after OD-9 closed (2026-11-21: SPAR-25-5 superseded by the servo
 nozzle drive; the nozzle servo is the KST CM07). Each brief follows `docs/DOC_TEMPLATES.md` "Owner
 Decision Briefs": the six checks, each with a picture and with load or motion vectors, then the
 options side by side, a recommendation and what is still unverified. Brief D is an electrical part
@@ -22,6 +22,7 @@ so and why.
 | C | As-built fairing drag | OD17-FAIR-BORE | **C1** (leave; release the HOLD) — **DECIDED C1** |
 | D | Nozzle-servo rail voltage for the CM07 | D-SV-2 | **D1** (6.0 V), and see the holding-margin finding |
 | E | CM07 pocket in the dorsal spine | NAC-64-SERVO-01, plan U4 | **E2** (shaft az 282°) |
+| F | Nozzle hinge at the canonical petal root, petals to the canonical tip | NAC-64-NOZ-ROOT | **F1** (owner direction); resolve the A1 bay B80 conflict first |
 
 Briefs A and B are linked: B's rule is how A's layout is placed on the starboard pod.
 
@@ -224,6 +225,74 @@ until the U6 bench).
 
 ---
 
+## Brief F — Nozzle hinge at the canonical petal root, petals to the canonical tip
+
+![Brief F figure](figures/odb_theme_n_f.png)
+
+**Reproduce:** `/usr/bin/python3 tools/nozzle64_hinge_root_brief.py` (figure and every number below).
+
+**The direction.** Owner, 2026-11-21: the nozzle petals were to be lengthened so that the hinge
+aligns with the canonical roots of the exhaust petals, seen on the sides and ventral surface of the
+nacelle below the cowl that extends aft on the dorsal surface. Owner choices the same day: petal
+tips at the **canonical** tip, and this brief before any geometry changes. (An earlier reading of
+the owner's "keep the nozzle hinges aligned to the root of the canonical nozzle petals" as "do not
+move the hinge" was wrong; the records that carried it are corrected in this revision.)
+
+**Measured on the canonical shell** (starboard, placed as `nsv_shell()` places it, ray-probed every
+5°):
+
+- **Petal root:** the skin steps inward by 0.12–0.42 in (3–11 mm) at a mean Z of **6.90 in
+  (175.3 mm)** from the intake face, Z 6.83–7.01 in (173.5–178 mm) over the sides and ventral
+  surface.
+- **Dorsal cowl:** the step runs aft to Z 7.76 in (197 mm) over az 250–290°; this is the cowl that
+  extends aft over the petals.
+- **Tail:** Z **8.71 in (221.1 mm)**. Canonical petal outer radius is 1.42–1.65 in (36–42 mm) at the
+  root and 1.35–1.50 in (34.3–38 mm) at the tail: the canonical petals are drawn **open**.
+- **Today (F0):** hinge at Z 8.43 in (214.1 mm), 1.53 in (38.9 mm) aft of the canonical root; the
+  open flaps end 1.14 in (29.0 mm) past the canonical tail, and the 1.677 in (42.6 mm) housing stands
+  proud of the canonical skin at every azimuth, by up to 0.278 in (7.06 mm).
+
+**Options.** **F0** as built. **F1** hinge at the canonical root (Z 6.90 in / 175.25 mm, hinge circle
+unchanged at r 1.358 in / 34.5 mm), flaps 1.83 in (46.6 mm) long so the closed tip lands on the
+canonical tail; exit targets unchanged and set on the flow surface (closed 9.93°, open −1.97°). The
+nozzle module (throat, unison ring, housing) moves forward with the hinge; the stage-2 cartridge's
+plain liner tube (Z 136–196 mm, no structure) is trimmed to the housing face.
+
+| Check | F0 as built | F1 hinge at the canonical root |
+|---|---|---|
+| **Statics and dynamics** | Panel 1. Design load (full throttle, V_NE 87 kt, constant-thrust fan, `docs/NOZZLE_64MM_LOAD_STUDY.md`): hinge moment 4.20 lbf·in (0.475 N·m); gas at the ring ear 1.72 lbf (7.6 N); hold × 1.5 = 3.25 lbf (14.5 N), so the CM07 needs 327 N per N·m at closed; cam pin 1.71 lbf (7.6 N) per flap; flap root 318 psi (2.2 MPa). | Same 1-D model, calibrated to the measured F0 (factor 0.91–0.95). Hinge moment **7.03 lbf·in (0.794 N·m), × 1.67**; gas at the ear **2.20 lbf (9.8 N), × 1.28** (the flatter cam recovers part of the longer flap's moment); hold × 1.5 = 3.98 lbf (17.7 N), needs **401 N per N·m**; cam pin 2.86 lbf (12.7 N); root 531 psi (3.7 MPa) against 12,180 psi (84 MPa) PA CF. |
+| **Function** | Panel 2. Exit 75 % / 105 % on the flow surface (met, load study rev 2). Convergence half-angle 12.9° closed. | Exit 75 % / 105 % met by construction; gentler convergence (9.9° closed). The motor-2 can tail (Z 176.9 mm) sits 0.07 in (1.6 mm) aft of the hinge, inside the petal zone: the pod's R11 fit-gate assert (`EDF2_Z_EXIT <= NOZZLE_RING_Z`) has to be restated, since the can stays 0.69 in (17.6 mm) inside the petals' inner face. Nozzle still slides off aft under the dorsal cowl tongue (housing OD 3.35 in (85.2 mm) under a tongue of outer radius 1.85–1.89 in (47–48 mm)). |
+| **Structural integrity** | Today's ring + housing stack is 0.417 in (10.6 mm) radial outside the bore. | Panel 3. At the new station the canonical skin leaves **0.298 in (7.6 mm)** from the bore to the outer mould line at its tightest (r 1.558 in / 39.58 mm, az 345°). Today's stack does not fit inside it. With the 0.079 in (2.0 mm) minimum walls (`AGENTS.md` §7) no stack fits fully inside canon there; a compact ring and housing reduces the proud band but does not remove it (estimate, not modelled). Cam pin load × 1.67: pin bearing in PA CF already "requires verification". |
+| **Mechanism and component interactions** | Clash check (2026-11-21, 25 stroke points): no hard clash; the CM07 issues sit at the servo, not the nozzle. | Panel 4. **A1 bay B80 overlaps the new housing zone by 0.248 in³ (4,060 mm³)** and its aft end touches the petals (0.07 mm): B80 (Z 112–182 mm) would have to end near Z 158 mm, 46 of its 70 mm board run, or be re-sited (re-run the OD-3 optimiser with the new aft limit). A1 bay A324 ends 0.40 mm from the housing; the CM07 at today's position 0.48 mm from it (no room for a wall; the servo moves forward about 2 mm, which the A1 layout allows). The motor-2 lead slot crosses the housing (392 mm³) and is re-routed. Brief E's new home for cover screw 1 (Z 165 mm) lands in the ring zone and is re-sited. The ring ear moves to Z ≈ 6.47 in (164.3 mm), about 0.18 in (4.5 mm) aft of the servo: the drive becomes a short direct link (no long rod), re-solved from scratch; the L1 near-toggle result (641 N per N·m at closed) would give ×1.60 over the 1.5 factor against F1's 401 if a similar profile is reached. |
+| **Weight and balance** | Tilting group 2.453 lbm (1,112.5 g), CG and pivot Z 4.68 in (118.9 mm), converged. Hover: pivot to open tip 5.17 in (131.2 mm); clearance −1.04 in (−26.3 mm) on the 1.5 in gear, +0.61 in (+15.6 mm) on the 3.0 in gear. | Panel 5. **−0.175 lbm (−79.5 g) per nacelle, −0.350 lbm (−159 g) AUW**: pod skin aft of the root, the housing pocket and 1.42 in (36 mm) of cartridge liner go; flaps +6.4 g. Tilting CG moves **−0.266 in (−6.8 mm)**: PIVOT_Z re-converges forward (or 0.190 lbm (86 g) of ballast at Z 200 mm per nacelle holds it). Hover reach 4.32 in (109.7 mm): clearance −0.19 in (−4.8 mm) on the 1.5 in gear, +1.46 in (+37.1 mm) on the 3.0 in gear. Ledger picks it up at the re-bake. |
+| **Canonical shape** | Panel 6. Housing proud at 72 of 72 azimuths, up to 0.278 in (7.06 mm); petals 1.14 in (29.0 mm) past the canonical tail. | Hinge on the canonical root; open petals end 0.03 in (0.7 mm) past the canonical tail. Housing proud at 26 of 72 azimuths, up to 0.119 in (3.02 mm), around az 345° and the ventral side (less with a compact stack). The axisymmetric petals sit inside the non-round canonical petal skin; matching it exactly would need a shaped outer fairing on each flap (not evaluated). |
+
+**What F1 changes, if chosen** (each is a work item, none is done):
+
+1. `nacelle_nozzle_iris_64mm.scad`: flap length 46.6 mm; cam re-derived for the 9.93° / −1.97°
+   schedule over the same 23.75° ring stroke.
+2. `nacelle_64_scale.scad` `P64_Z_NOZ` 199.13 → 160.25 mm; pod nozzle pocket, dorsal tongue and
+   R11 assert reworked; stage-2 cartridge liner trimmed to the housing face.
+3. Nozzle drive re-solved for the ear at Z ≈ 164 mm (short direct link), CM07 pocket moved forward
+   about 2 mm, cover screw 1 re-sited, motor-2 lead slot re-routed.
+4. A1 bay B80 re-sited or shortened (OD-3 optimiser re-run with Z_MAX ≈ 158 mm), A324 checked for a
+   2.0 mm wall to the housing.
+5. PIVOT_Z re-converged (−6.8 mm) with the tilt-joint gates; hull re-bake; AUW ledger.
+6. Load study and servo margins re-run on the rendered F1 flaps (replacing the ratio estimate).
+
+**Recommendation: F1**, as the owner directed, built in the order above. It puts the hinge on the
+canonical root and the tail on the canonical tail, removes 0.350 lbm (159 g) from the aircraft and
+gives 0.85 in (21.5 mm) more hover ground clearance. Its costs are a 28 % higher closed gas load at
+the ear, a drive and pocket rework, and a conflict with A1's bay B80 that has to be resolved before
+the bays are built.
+
+**Still unverified.** F1 loads are a ratio estimate on an idealised flat flap (calibrated to F0),
+not rendered flaps; flap and module masses are scaled, not rendered; the A1 bay envelopes are
+optimiser outlines, not boards; the B80 re-site is not run; the drive at the new station is not
+solved; pin bearing in PA CF; CFD of the longer petal zone with the motor tail inside it.
+
+---
+
 ## Changelog
 
 - 2026-11-21 — first issue: briefs A–E (Claude Opus 5.5).
@@ -232,3 +301,5 @@ until the U6 bench).
 - 2026-11-21 — load study done: the gas load overturns the premise of briefs D and E (the CM07
   cannot hold the closed nozzle; the exit misses its targets). Options and recommendation are in
   the study, section 4; D and E are re-opened for an owner decision on that basis.
+- 2026-11-21 — brief F added (owner direction: hinge at the canonical petal root, canonical tip;
+  brief before geometry). Corrects the earlier misreading that the hinge stays where it is.

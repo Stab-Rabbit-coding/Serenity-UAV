@@ -10966,6 +10966,13 @@
       ],
       "archived": false
     },
+    "docs/figures/odb_theme_n_f.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/flight_envelope.md": {
       "description": "Serenity UAV \u2014 Flight Envelope Document",
       "tags": [
@@ -16601,6 +16608,13 @@
       ],
       "archived": false
     },
+    "tools/nozzle64_hinge_root_brief.py": {
+      "description": "Python script",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/nozzle64_linkage_ma.py": {
       "description": "nozzle64_linkage_ma.py -- 64 mm nozzle servo linkage mechanical advantage, by virtual work.",
       "tags": [
@@ -17433,6 +17447,7 @@
       "docs/figures/odb_theme_n_c.png",
       "docs/figures/odb_theme_n_d.png",
       "docs/figures/odb_theme_n_e.png",
+      "docs/figures/odb_theme_n_f.png",
       "docs/flight_envelope.md",
       "docs/handoffs/2026-10-20-aircraft-datum-r2-migration.md",
       "docs/handoffs/2026-10-26-split-battery-and-fe-pdb.md",
@@ -21331,6 +21346,7 @@
       "tools/node_thermal_forced_air.py",
       "tools/nonfo_simon_fit.py",
       "tools/nozzle64_flap_loads.py",
+      "tools/nozzle64_hinge_root_brief.py",
       "tools/nozzle64_linkage_ma.py",
       "tools/nozzle_servo_linkage.py",
       "tools/nozzle_servo_linkage_64.py",

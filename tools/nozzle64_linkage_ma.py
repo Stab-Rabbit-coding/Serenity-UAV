@@ -5,8 +5,9 @@ WHY THIS EXISTS
 ---------------
 The nozzle load study (docs/NOZZLE_64MM_LOAD_STUDY.md) found that the KST CM07 cannot hold the
 cruise-closed nozzle on its continuous rating.  The owner directed (2026-11-21) "explore applying a
-mechanical linkage to give the servo an advantage" with the flap hinges kept at the root of the
-canonical petals.  This tool measures the drive's real mechanical advantage along the stroke and
+mechanical linkage to give the servo an advantage".  Computed at today's hinge station (Z 214.1 mm);
+brief F (owner direction: hinge to the canonical petal root) would move the ring and re-solve the
+drive.  This tool measures the drive's real mechanical advantage along the stroke and
 searches the servo-side phasing for a progressive (near-toggle at closed) linkage.
 
 METHOD
@@ -260,7 +261,7 @@ def _figure(
     b.set_title("Servo-to-ring schedule (flat start = toggle hold)")
     b.grid(alpha=0.3)
     b.legend(fontsize=8)
-    fig.suptitle("64 mm nozzle drive, KST CM07, hinge fixed at the canonical petal root "
+    fig.suptitle("64 mm nozzle drive, KST CM07, at today's hinge station "
                  "(ANALYTICAL, UNREVIEWED)", fontsize=10)
     fig.tight_layout()
     fig.savefig(path, dpi=110)
