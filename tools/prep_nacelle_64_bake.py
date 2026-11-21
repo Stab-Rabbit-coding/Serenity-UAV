@@ -50,7 +50,8 @@ STL = REPO / "airframe" / "stls"
 
 # Single-sourced values (see the SCAD files named beside each).
 # 2026-11-21 (S3): were re-typed 35.34 / 109.7 (x1.00 pod, before the OD-17 joint shift).
-TRUNNION_X0 = 28.2 + ns.get("P64_AXIS_SHIFT_S") + ns.get("P64_JOINT_SHIFT")  # trunnion SCAD TRUNNION_X0
+# = nacelle_trunnion_64mm.scad TRUNNION_X0
+TRUNNION_X0 = 28.2 + ns.get("P64_AXIS_SHIFT_S") + ns.get("P64_JOINT_SHIFT")
 PIVOT_Z = ns.pivot_z()       # nacelle_64_scale.scad PIVOT_Z_64
 GEAR_Z0 = 2.0                # trunnion GEAR_Z0 (option A band 2.0..12.5)
 SHAFT_DY, SHAFT_DZ = 25.6, 2.2391   # trunnion SHAFT_DY / SHAFT_DZ (Rev T6)

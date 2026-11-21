@@ -11,14 +11,16 @@ inverse of each part's own bake placement (tools/bake_hull_frame.py COMPONENTS),
 is actually shipped.
 
 Checks, per side:
-  C1  overlap  cover AND pod volume, every cover (manifold3d boolean).  Gate: <= 1 mm3 (0.00006 in3).
+  C1  overlap  cover AND pod volume, every cover (manifold3d boolean).
+               Gate: <= 1 mm3 (0.00006 in3).
   C2  seating  distance from sampled cover points to the pod surface.  A seated cover lands its rim
                and underside within the rebate clearance (ESC_COVER_FIT 0.25 mm per side, plus
                facet error); a displaced one has nothing that close.  Gate: the closest 1 % of
                points within 0.6 mm.  The median is reported.
   C3  section  the pod's cross-section at the bay mid-station (nacelle-local Z = ESC bay centre):
                area, second moments about the duct-axis-parallel centroidal axes, and the elastic
-               section modulus Z = I / c, with the windows OPEN (pod alone) and CLOSED (pod + covers).
+               section modulus Z = I / c, with the windows OPEN (pod alone) and CLOSED
+               (pod + covers).
                Reported, not gated: the cover is a bolted doubler and carries load only through its
                six fasteners, so "closed" is the upper bound and "open" the lower bound.
 
@@ -80,6 +82,8 @@ def to_manifold(mesh: trimesh.Trimesh) -> mf.Manifold:
 def section_props(mesh: trimesh.Trimesh, z: float) -> dict:
     """Area, centroidal second moments and section moduli of the slice at nacelle-local z."""
     sec = mesh.section(plane_origin=[0, 0, z], plane_normal=[0, 0, 1])
+    if sec is None:
+        raise ValueError(f"no pod section at nacelle-local Z {z:.2f} mm")
     # to_2D with an identity frame keeps the nacelle-local x, y of the slice.
     planar, _ = sec.to_2D(to_2D=np.array([[1, 0, 0, 0], [0, 1, 0, 0],
                                           [0, 0, 1, -z], [0, 0, 0, 1]], float))
@@ -138,7 +142,9 @@ def check_side(side: str) -> tuple[dict, list[str]]:
         if not ok:
             fails.append(f"{side} cover {bay}")
     open_ = section_props(pod, BAY_MID_Z)
-    closed = section_props(trimesh.util.concatenate([pod, *covers]), BAY_MID_Z)
+    joined = trimesh.util.concatenate([pod, *covers])
+    assert isinstance(joined, trimesh.Trimesh)
+    closed = section_props(joined, BAY_MID_Z)
     out["section_open"], out["section_closed"] = open_, closed
     for k, lab in (("zxx_mm3", "Z about local x (pitch in cruise)"),
                    ("zyy_mm3", "Z about local y (yaw in cruise)")):
@@ -154,7 +160,8 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--json", type=Path, help="write the results here")
     args = ap.parse_args(argv)
-    print(f"64 mm ESC bay check (published meshes; bay mid-station nacelle-local Z {BAY_MID_Z:.2f} mm)")
+    print("64 mm ESC bay check (published meshes; bay mid-station nacelle-local "
+          f"Z {BAY_MID_Z:.2f} mm)")
     results, fails = {}, []
     for side in ("port", "stbd"):
         results[side], f = check_side(side)
