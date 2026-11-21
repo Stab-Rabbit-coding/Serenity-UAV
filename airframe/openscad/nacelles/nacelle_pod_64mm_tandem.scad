@@ -1507,7 +1507,23 @@ ESC_BLEED_N     =    4;   // [count] discharge ports per bay
 ESC_BLEED_D     =  5.5;   // [mm] port diameter — 4 x Ø5.5 = 95 mm2, giving
                           //   4.53 g/s at K = 3 against the 2781 Pa depression
 // [flattened] ESC_BLEED_Z: value from its last assignment (override), kept at the first position
-ESC_BLEED_Z     = [ for (z = [76.0, 80.0, 84.0, 88.0]) z + 95.0 * (P64_A - 1) ];  // [mm] stations, all inside 74–90
+ESC_BLEED_Z     = [ for (z = [76.0, 80.0, 84.0, 88.0]) z + 95.0 * (P64_A - 1) ];  // [mm] 50 mm-pod stations (history)
+// ── 64 mm discharge slots (2026-11-21, S4 NAC-64-GEOM-02) ────────────────────
+// The four stations above, stretched with the shell, sit at Z 94.8 / 98.8 / 102.8 / 106.8 with a
+// teardrop apex reaching 5.5 mm further aft.  In the 64 mm pod the stage-2 cartridge (and rotor 2,
+// Z 104.2-114.9) starts at Z 103.7, so the aft two ports opened onto the cartridge wall or across
+// its front lip, not into the inter-stage they must discharge into (station 2, -2781 Pa;
+// nacelle_esc_bay.scad "Cooling").  Between the bay's forward end (ESC_BAY_Z0 = 92.79) and the
+// cartridge front only ~7 mm of axial room remains, so the four axial ports become TWO
+// round-ended slots side by side across the power panel at ONE station, with the same throat
+// area (4 x pi x 5.5^2 / 4 = 95.0 mm2), so tools/nacelle_esc_thermal.py's circuit is unchanged.
+// No teardrop apex: the flight pod is SLS (AGENTS.md section 7), which needs no overhang relief.
+ESC_DSLOT_H      = ESC_BLEED_D;                       // [mm] axial height (Z) = the old port diameter
+ESC_DSLOT_AREA   = ESC_BLEED_N * PI * ESC_BLEED_D * ESC_BLEED_D / 4 / 2;   // [mm2] per slot = 47.5
+ESC_DSLOT_L      = ESC_DSLOT_H + (ESC_DSLOT_AREA - PI * ESC_DSLOT_H * ESC_DSLOT_H / 4) / ESC_DSLOT_H;  // = 9.82
+ESC_DSLOT_WEB    = 1.5;                               // [mm] web between the two slots (seat support)
+ESC_DSLOT_Z      = ESC_BAY_Z0 + 1.0 + ESC_DSLOT_H / 2;  // [mm] = 96.54: 1.0 mm inside the bay's forward end
+ESC_DSLOT_CART_MARGIN = 1.0;                          // [mm] min. axial land ahead of the cartridge
 
 
 // ── Derived fold geometry ────────────────────────────────────────────────────
@@ -1688,7 +1704,7 @@ module thrust_tube() {
 // =============================================================================
 // ── Module: esc_wire_exit_slot ────────────────────────────────────────────────
 // =============================================================================
-// Rectangular slot through the forward thrust tube bore wall at Z ≈ ESC_SLOT_Z.
+// Rectangular slot through the forward thrust tube bore wall at Z ≈ ESC_DSLOT_Z.
 // Routes EDF1 ESC motor leads and signal wire radially from bore interior to the
 // nacelle cavity (between bore tube and outer shell), then to the pylon harness.
 // Placed on the pylon-side X face for direct routing to the pylon channel.
@@ -2138,19 +2154,24 @@ module esc_bay_cut() {
 // intake-face-down — so the unsupported top arc of each horizontal hole becomes
 // a self-supporting 45° roof.
 module esc_discharge_ports() {
-    for (az_hinge = ESC_BAY_AZ, z = ESC_BLEED_Z)
-        rotate([0, 0, az_hinge + esc_a_pow()])
-            translate([EDF_BORE_R - 1.0, 0, z])
+    // Two stadium slots per bay, centred on the power panel, radial through the duct wall.
+    // Tangential offsets are taken at the duct wall (r = EDF_BORE_R) and turned into azimuth.
+    off = (ESC_DSLOT_L + ESC_DSLOT_WEB) / 2;
+    for (az_hinge = ESC_BAY_AZ, k = [-1, 1])
+        rotate([0, 0, az_hinge + esc_a_pow() + k * atan(off / EDF_BORE_R)])
+            translate([EDF_BORE_R - 1.0, 0, ESC_DSLOT_Z])
                 rotate([0, 90, 0])
                     linear_extrude(ESC_MOUNT_R - EDF_BORE_R + 3.0)
-                        hull() {
-                            circle(d = ESC_BLEED_D);
-                            // local -x maps to global +Z under rotate([0,90,0])
-                            translate([-ESC_BLEED_D * 0.5, 0])
-                                rotate(45)
-                                    square(ESC_BLEED_D * 0.707, center = true);
-                        }
+                        hull() for (t = [-1, 1])
+                            translate([0, t * (ESC_DSLOT_L - ESC_DSLOT_H) / 2])
+                                circle(d = ESC_DSLOT_H, $fn = 32);
 }
+assert(ESC_DSLOT_Z - ESC_DSLOT_H / 2 >= ESC_BAY_Z0,
+       "ESC discharge slot starts forward of the bay floor");
+assert(ESC_DSLOT_Z + ESC_DSLOT_H / 2 + ESC_DSLOT_CART_MARGIN <= STATOR_SLV_Z_START,
+       "ESC discharge slot reaches the stage-2 cartridge: it must open into the inter-stage");
+assert(2 * ESC_DSLOT_L + ESC_DSLOT_WEB <= ESC_W_POWER,
+       "ESC discharge slots are wider than the power panel");
 
 
 // ── The board seat is a KEEP-OUT, not an addition (Rev T4c) ─────────────────
