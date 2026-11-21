@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-19",
+  "generated": "2026-11-21",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -16761,6 +16761,24 @@
       ],
       "archived": false
     },
+    "tools/tests/fixtures/open_secure_esc/README.md": {
+      "description": "Open-Secure-ESC board fixture",
+      "tags": [
+        "build-tooling",
+        "documentation",
+        "power"
+      ],
+      "archived": false
+    },
+    "tools/tests/fixtures/open_secure_esc/open_secure_esc_6s_50a_can485_faraday.kicad_pcb": {
+      "description": "KiCad PCB layout",
+      "tags": [
+        "build-tooling",
+        "pcb-design",
+        "power"
+      ],
+      "archived": false
+    },
     "tools/tests/test_allowables.py": {
       "description": "Tests for tools/allowables.py (plan 2026-11-02-001 U3).",
       "tags": [
@@ -16846,7 +16864,7 @@
       "archived": false
     },
     "tools/tests/test_nacelle_esc_service.py": {
-      "description": "Python script",
+      "description": "Vendored, unmodified copy of the Open-Secure-ESC board (provenance and licence in",
       "tags": [
         "build-tooling",
         "power",
@@ -17680,7 +17698,8 @@
       "tools/AGENTS.md",
       "tools/README.md",
       "tools/TODO.md",
-      "tools/TOOL_REFERENCE.md"
+      "tools/TOOL_REFERENCE.md",
+      "tools/tests/fixtures/open_secure_esc/README.md"
     ],
     "emi-hardening": [
       "AGENTS.md",
@@ -19334,6 +19353,8 @@
       "tools/nacelle_esc_thermal.py",
       "tools/od3_esc_figures.py",
       "tools/plot_battery_bay.py",
+      "tools/tests/fixtures/open_secure_esc/README.md",
+      "tools/tests/fixtures/open_secure_esc/open_secure_esc_6s_50a_can485_faraday.kicad_pcb",
       "tools/tests/test_nacelle_esc_service.py"
     ],
     "comms-protocol": [
@@ -20708,6 +20729,7 @@
       "tools/kicad_relink.py",
       "tools/kicad_set_value.py",
       "tools/precommit_kicad_load.py",
+      "tools/tests/fixtures/open_secure_esc/open_secure_esc_6s_50a_can485_faraday.kicad_pcb",
       "tools/validate_kicad.py"
     ],
     "firmware": [
@@ -21163,6 +21185,8 @@
       "tools/sync_operators_manual.py",
       "tools/tail_edf_flow.py",
       "tools/tail_strike_requirement.py",
+      "tools/tests/fixtures/open_secure_esc/README.md",
+      "tools/tests/fixtures/open_secure_esc/open_secure_esc_6s_50a_can485_faraday.kicad_pcb",
       "tools/tests/test_allowables.py",
       "tools/tests/test_auw_ledger_cooling.py",
       "tools/tests/test_bay_a_fwd_mounts.py",
