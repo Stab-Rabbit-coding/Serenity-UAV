@@ -169,6 +169,11 @@ def main(argv=None) -> int:
     ap.add_argument("--basis", type=Path, help="nozzle64_hinge_root_brief.py --json output")
     ap.add_argument("--h1", type=Path, help="H1 housing STL: report the fixed-bay H1 pivot only")
     a = ap.parse_args(argv)
+    if a.h1 and not a.basis:
+        ap.error(
+            "--h1 needs --basis (the current hinge-root weight block); without it the pivot "
+            "is computed on the frozen 2026-11-22 basis"
+        )
     if a.basis:
         print(json.dumps(set_basis(a.basis)))
     if a.h1:

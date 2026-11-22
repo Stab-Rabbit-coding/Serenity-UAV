@@ -16,16 +16,23 @@ METHOD
      cavity' = HOLLOW_R + (K - 1) * HOLLOW_SKIN (the SCAD's radial_k_cavity) at Z * A.  A cell
      is live where the cavity is open (not pushed into the duct wall).  wall < 0 means the
      cavity surface lies outside the true skin.
-  3. Real part: for every live cell with grid wall < 2.0 mm, cast a ray from the axis through the
-     published pod (moved to nacelle-local: --pod-local) and the scaled canonical OML (--oml), and
-     classify: skin present >= 2.0 mm / present < 2.0 mm / open but an ESC cover closes it / open
-     with nothing modelled closing it.
+  3. Real part: for EVERY live cell (not only those the grid flags -- the grid is the model under
+     test), cast a ray from the axis through the pod (nacelle-local: --pod-local).  The skin is
+     present where the pod's outermost surface lies outside the cavity's INNER surface (bore +
+     duct wall): a ray that leaves through the cavity ends at that inner surface.  Its thickness
+     is the outermost solid layer.  With --pod-nocavity (the same pod rendered with
+     hollow_cavity() commented out), a thin layer the cavity did not change is a feature of
+     another cut (pocket floor, register bore) and is listed as "feature_thin"; a cell open in
+     both renders is a designed opening ("feature_open").  Neither is gated here.
+     Classify: skin present >= 0.079 in (2.0 mm) / present < 2.0 mm /
+     open but an ESC cover closes it / open with nothing modelled closing it.
   The map is written to docs/figures/nacelle64_hollow_skin_check.png.
 
-Usage:  /usr/bin/python3 tools/nacelle64_hollow_skin_check.py --pod-local POD.stl --oml OML.stl
-            --covers C0.stl C1.stl [--json OUT]
+Usage:  /usr/bin/python3 tools/nacelle64_hollow_skin_check.py --pod-local POD.stl
+            [--pod-nocavity POD_NOCAV.stl] --covers C0.stl C1.stl [--json OUT]
         All meshes nacelle-local (duct axis = Z, intake face Z 0), starboard.  Exit 2 if any cell
-        is open with nothing closing it, or any skin is thinner than 2.0 mm.
+        is open with nothing closing it, any skin is thinner than 2.0 mm, or the grid puts the
+        cavity outside the true skin at a cell no ESC cover closes.
 Requires: numpy, trimesh, matplotlib.
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (GitHub Stab-Rabbit-coding) -- owner direction.
@@ -79,16 +86,22 @@ def near_skin(z_list, naz):
 
 
 def radial_hits(mesh, z, a):
-    o = np.array([[0.0, 0.0, z]])
-    d = np.array([[math.cos(a), math.sin(a), 0.0]])
-    loc = np.asarray(mesh.ray.intersects_location(o, d)[0]).reshape(-1, 3)
-    return np.sort(np.hypot(loc[:, 0], loc[:, 1]))
+    return radial_hits_many(mesh, [(z, a)])[0]
+
+
+def radial_hits_many(mesh, za) -> list:
+    """Sorted hit radii of rays from the axis at (z, azimuth rad), one array per ray."""
+    o = np.array([[0.0, 0.0, z] for z, _ in za])
+    d = np.array([[math.cos(a), math.sin(a), 0.0] for _, a in za])
+    loc, idx, _ = mesh.ray.intersects_location(o, d, multiple_hits=True)
+    r = np.hypot(loc[:, 0], loc[:, 1])
+    return [np.sort(r[idx == i]) for i in range(len(za))]
 
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Hollow-cavity skin check of the 64 mm pod.")
     ap.add_argument("--pod-local", type=Path, required=True)
-    ap.add_argument("--oml", type=Path, required=True)
+    ap.add_argument("--pod-nocavity", type=Path, help="same pod without hollow_cavity()")
     ap.add_argument("--covers", type=Path, nargs="*", default=[])
     ap.add_argument("--json", type=Path)
     ap.add_argument(
@@ -108,20 +121,43 @@ def main(argv=None) -> int:
     live = cav >= inner - 0.1
     wall = np.where(live, k_r * true - cav, np.nan)
 
-    pod, oml = trimesh.load(a.pod_local), trimesh.load(a.oml)
+    pod = trimesh.load(a.pod_local)
     covers = [trimesh.load(c) for c in a.covers]
-    cls: dict[str, list] = {"skin_ok": [], "thin": [], "covered": [], "uncovered": []}
+    cls: dict[str, list] = {
+        "skin_ok": [],
+        "thin": [],
+        "feature_thin": [],
+        "feature_open": [],
+        "covered": [],
+        "uncovered": [],
+    }
     naz = r50.shape[1]
-    for k, j in np.argwhere(wall < MIN_WALL):
-        z, az = float(z50[k] * k_a), j * 360.0 / naz
-        rr, ro = radial_hits(pod, z, math.radians(az)), radial_hits(oml, z, math.radians(az))
-        r_oml = float(ro[-1]) if len(ro) else 0.0
-        row = [round(z, 1), az, round(float(wall[k, j]), 2)]
-        if len(rr) and rr[-1] > r_oml - 0.8:
-            t = float(rr[-1] - rr[-2]) if len(rr) > 1 else 99.0
-            cls["skin_ok" if t >= MIN_WALL else "thin"].append(row + [round(t, 2)])
-        elif any(len(radial_hits(c, z, math.radians(az))) for c in covers):
+    cells = np.argwhere(live)
+    za = [(float(z50[k] * k_a), math.radians(j * 360.0 / naz)) for k, j in cells]
+    hp_ = radial_hits_many(pod, za)
+    hn_ = radial_hits_many(trimesh.load(a.pod_nocavity), za) if a.pod_nocavity else None
+    hc_ = [radial_hits_many(c, za) for c in covers]
+    flagged = 0
+    for n, (k, j) in enumerate(cells):
+        rr = hp_[n]
+        row = [round(za[n][0], 1), j * 360.0 / naz, round(float(wall[k, j]), 2)]
+        flagged += bool(wall[k, j] < MIN_WALL)
+        # Skin present unless the ray left through the cavity (it then ends on the cavity's
+        # inner surface); its thickness is the outermost solid layer.
+        if len(rr) > 1 and rr[-1] > inner[k, 0] + 0.5:
+            t = float(rr[-1] - rr[-2])
+            if t >= MIN_WALL and wall[k, j] >= MIN_WALL:
+                continue  # grid and part agree: not plotted
+            key = "skin_ok" if t >= MIN_WALL else "thin"
+            if key == "thin" and hn_ is not None and len(hn_[n]) > 1:
+                rn = hn_[n]
+                if abs(rn[-1] - rr[-1]) < 0.3 and abs((rn[-1] - rn[-2]) - t) < 0.3:
+                    key = "feature_thin"  # the cavity did not make this layer
+            cls[key].append(row + [round(t, 2)])
+        elif any(len(h[n]) for h in hc_):
             cls["covered"].append(row)
+        elif hn_ is not None and not (len(hn_[n]) > 1 and hn_[n][-1] > inner[k, 0] + 0.5):
+            cls["feature_open"].append(row)  # open without the cavity too: a designed opening
         else:
             cls["uncovered"].append(row)
 
@@ -135,11 +171,18 @@ def main(argv=None) -> int:
         "wall_below_2mm": int((w_live < MIN_WALL).sum()),
         **{f"n_{k}": len(v) for k, v in cls.items()},
         "uncovered_with_cavity_outside": sum(1 for r in cls["uncovered"] if r[2] < 0),
+        "cells_probed": len(cells),
+        "grid_flagged": flagged,
         "classified": cls,
     }
     print(
         f"tool skin over the near-side truth: max {res['tool_skin_over_truth_max_mm']:.2f} mm, "
         f"{res['cells_tool_over_0p3']} of {res['cells']} cells > 0.3 mm"
+    )
+    print(
+        f"not gated (other cuts): designed openings {res['n_feature_open']}, "
+        f"< 2.0 mm walls made by another cut {res['n_feature_thin']}"
+        + ("" if a.pod_nocavity else " (pass --pod-nocavity to separate them)")
     )
     print(
         f"live cavity cells {res['live']}: cavity outside the true skin "
@@ -154,7 +197,7 @@ def main(argv=None) -> int:
     if a.json:
         a.json.write_text(json.dumps(res, indent=1, default=float))
     figure(a.fig, wall, z50 * k_a, naz, cls)
-    return 2 if (cls["uncovered"] or cls["thin"]) else 0
+    return 2 if (cls["uncovered"] or cls["thin"] or res["uncovered_with_cavity_outside"]) else 0
 
 
 def figure(path: Path, wall, zs, naz, cls) -> None:
@@ -170,7 +213,9 @@ def figure(path: Path, wall, zs, naz, cls) -> None:
         j * 360.0 / naz, zs[k], s=10, c="0.85", marker="s", label="cavity cell, wall OK by grid"
     )
     for key, col, lab in (
-        ("thin", "#e08a00", "pod skin present but < 0.079 in (2.0 mm)"),
+        ("feature_open", "#7a7a7a", "designed opening (open without the cavity too)"),
+        ("feature_thin", "#b58cd0", "< 2.0 mm wall made by another cut, not the cavity"),
+        ("thin", "#e08a00", "cavity leaves pod skin < 0.079 in (2.0 mm)"),
         ("uncovered", "#d01c1c", "NO skin, nothing modelled closes it"),
         ("covered", "#2a6fdb", "no skin, but an ESC cover closes it (designed bay)"),
     ):
@@ -183,8 +228,8 @@ def figure(path: Path, wall, zs, naz, cls) -> None:
     p.invert_yaxis()
     p.legend(loc="lower right", fontsize=8.5)
     p.set_title(
-        "As-built starboard 64 mm pod: outer skin vs the canonical skin\n(every hollow-cavity grid "
-        "cell whose wall the grid leaves < 2.0 mm, checked on the real STL)",
+        "As-built starboard 64 mm pod: every live hollow-cavity cell ray-cast on the real STL\n"
+        "(cells where grid and part both leave >= 2.0 mm are grey)",
         loc="left",
         fontsize=10,
     )

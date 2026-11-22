@@ -2345,11 +2345,11 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
                   re-sited.
                   Generator 2026-11-22: `tools/nacelle64_esc_housing.py` (+ tests) -- 2.0 mm
                   plate + 0.4 mm clearance (AGENTS.md sec. 7; the bay design's 1.5 mm cover is
-                  below the rule), 1.171 in3, max 0.30 in (7.5 mm) proud, Z 57-159.3 mm, no
-                  clash (nearest 0.94 mm to the F1 nozzle housing / ring), ESC B covered.
-                  Housings ~15.4 g (2.0 mm shell, ESTIMATE) replace ESC B's two covers.
+                  below the rule), 1.344 in3, max 0.31 in (8.0 mm) proud, Z 56.6-159.8 mm, no
+                  clash (nearest 0.44 mm to the F1 nozzle housing / ring, S4 fix), ESC B covered.
+                  Housings ~16.4 g (2.0 mm shell, ESTIMATE) replace ESC B's two covers.
                   H1 pivot on the fixed pod (`tools/esc_f1_pivot_iter.py --basis --h1`):
-                  Z 109.30 mm (pre-fix basis 109.70 = G1's 109.73).  Pod SCAD integration
+                  Z 109.31 mm after the S4 housing fix (109.30 before; pre-fix basis 109.70 = G1's 109.73).  Pod SCAD integration
                   waits for the G1 bays to be built (S4).
                   Concept done 2026-11-22 (brief H, `docs/figures/h1_esc_housing_canonical.png`):
                   faceted housings parallel to the board panels, 45/30/60 deg edges, panel lines,
@@ -2359,7 +2359,8 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
                   11.5 mm proud of the canonical OML.
             - [x] Wall check of the as-built pod done 2026-11-22 -> NAC-64-HOLLOW-SKIN below.
         - [x] **NAC-64-HOLLOW-SKIN — CLOSED 2026-11-22 (S3 re-bake): source fixed, pivot
-            re-converged to 118.2 mm, published pods re-baked; skin check 0 open / 0 thin cells.**
+            re-converged to 118.2 mm, published pods re-baked.  (The "0 open / 0 thin" gate result is
+            withdrawn: see NAC-64-HOLLOW-SKIN-2.)**
             Original finding: **the as-built 64 mm pod STLs had
             OPENINGS and thin patches in the outer skin.**  `tools/nacelle_hollow_profile.py`
             casts each ray through the axis and keeps the largest hit (same bug as
@@ -2398,7 +2399,33 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
                   `check_nacelle_deps.py` PASS; `nacelle64_hollow_skin_check.py` 0 open / 0 thin;
                   assembly check unchanged except pod-side wire lengths (-0.7 mm);
                   `auw_ledger.py --write` then `--check` PASS: hover AUW 6,886.6 -> 6,951.1 g
-                  (15.18 -> 15.32 lbm), T/W 1.38 -> 1.36.  The WARNING above is lifted.
+                  (15.18 -> 15.32 lbm), T/W 1.38 -> 1.36.  The WARNING above was lifted, then
+                  re-imposed by NAC-64-HOLLOW-SKIN-2.
+        - [ ] **NAC-64-HOLLOW-SKIN-2 — S3 skin gate was a false pass (found 2026-11-22, S4
+            code-review fix).**  The S3 check ray-cast only the cells the cavity GRID flagged
+            (the grid is the model under test) and tested "open" against the canonical OML, so a
+            pod surface recessed by another cut read as open and a real breach elsewhere went
+            unprobed.  `tools/nacelle64_hollow_skin_check.py` now probes all 1,312 live cells,
+            calls a cell open only when the ray leaves through the cavity, gates on cavity-
+            outside-skin cells, and (with `--pod-nocavity`, the same pod rendered with
+            `hollow_cavity()` commented out) separates cavity-made defects from other cuts.
+            On the published (S3 re-baked) starboard pod:
+            - Cavity-made, gated: 2 open cells, Z 3.25 in (82.6 mm) inboard, az 7.5 / 345 deg;
+              2 slivers 0.012 in (0.31-0.32 mm), Z 82.6 mm az 180 deg (outboard, nav-light
+              pocket edge, NAV_LIGHT_Z 79.1 mm, pocket Ø7 x 2.5 mm deep) and Z 86.2 mm az 7.5 deg.
+            - Not made by the cavity (open or thin in the no-cavity render too): 20 designed
+              openings (trunnion register bore, inboard, Z 107-130 mm; Z 61 mm inboard) and
+              **33 walls below the 2.0 mm rule** -- inboard face az 345-22 deg, Z 68-130 mm,
+              0.58-1.68 mm (trunnion collar / boss-shave region); ventral-inboard az 52-67 deg,
+              Z 82-104 mm, 0.17-1.39 mm (ESC bay rim).
+            Map: `docs/figures/nacelle64_hollow_skin_check.png`.
+            WARNING: the S3 statement "skin check 0 open / 0 thin" above is withdrawn; do not
+            print the 64 mm pods until this item closes.
+            - [ ] Keep-outs for the nav-light pocket and the inboard Z 80-87 mm feature in
+                  `hollow_cavity()`; fold into the G1 bay rebuild (NAC-64-ESC-BLISTER), then
+                  re-bake and re-run the gate with `--pod-nocavity`.
+            - [ ] Disposition the 33 other-cut walls < 2.0 mm (trunnion collar wall, bay rims):
+                  thicken, or document the load case that permits them (AGENTS.md sec. 7).
         - [ ] **NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A with two CM07s (2026-11-21).**
             `docs/POWER_DISTRIBUTION.md` section 3.3 total 4.2 A + 2 x 0.67 A exceeds the BEC's 5 A
             continuous (inside the 7 A / 100 ms burst).  Size the F_NOZ fuses and confirm the burst

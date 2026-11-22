@@ -257,7 +257,11 @@ def brief_a(res: dict) -> None:
     od3_covers = sum((b["z"][1] - b["z"][0] + 2 * CUR_LEDGE)
                      * (ESC_MOUNT_R * math.radians(b["az"][1] - b["az"][0]) + 2 * CUR_LEDGE)
                      for b in bays.values()) * g_per_mm2
+    if lay["unfit"]:
+        print(f"brief A: OD-3 bays that do not fit the near-side skin: {lay['unfit']}",
+              file=sys.stderr)
     res["A"] = {
+        "unfit_bays": lay["unfit"],
         "bays_port_frame": {k: {"z": v["z"], "az": v["az"], "area_mm2": v["area"]}
                             for k, v in bays.items()},
         "need_outline_mm2_per_esc": lay["need_outline_mm2"],
@@ -446,7 +450,7 @@ def brief_b(res: dict) -> None:
         mx = sum(v[2] * v[0] for v in cp.values()) + sum(v[2] * v[0] for v in cs.values())
         my = sum(v[2] * v[1] for v in cp.values()) + sum(v[2] * v[1] for v in cs.values())
         lat[rule] = {"dx_aircraft_mm": mx / auw, "dz_aircraft_mm": -my / auw, "cp": cp, "cs": cs}
-    res["B"] = {"bay_length_mm_by_rule": fit,
+    res["B"] = {"bay_length_mm_by_rule": fit, "unfit_bays": lay["unfit"],
                 "aircraft_cg_shift_mm": {k: (v["dx_aircraft_mm"], v["dz_aircraft_mm"])
                                          for k, v in lat.items()}}
 

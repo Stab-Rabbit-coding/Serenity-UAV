@@ -3411,7 +3411,7 @@ stitch_vias.py — stitch_vias.py – place stitching vias every 2.5 mm around t
 sync_operators_manual.py — Keep docs/OPERATORS_MANUAL.md in step with the flight envelope and other limits. [build-tooling]
 tail_edf_flow.py — tail_edf_flow.py -- installed thrust, flow, flow split and pressure margin of the [build-tooling, propulsion]
 tail_strike_requirement.py — tail_strike_requirement.py -- 4 ft drop tail strike on the aft skids, and the [build-tooling]
-theme_n_od_briefs.py — Python script [build-tooling]
+theme_n_od_briefs.py — theme_n_od_briefs.py -- numbers and figures for the Theme N Owner Decision Briefs (2026-11-21). [build-tooling]
 tilt_actuator_options.py — tilt_actuator_options.py -- the three nacelle-tilt actuator options, side by [build-tooling]
 TODO.md — Serenity UAV — Build Tools & Automation Work Breakdown Structure [build-tooling, documentation, project-tracking]
 TOOL_REFERENCE.md — Build Tool Reference — Usage, Output Locations, and Pre-Commit Checklists [build-tooling, documentation, emi-hardening, redundancy-failover, security, specification]

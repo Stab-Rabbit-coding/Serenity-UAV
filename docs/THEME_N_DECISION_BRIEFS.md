@@ -577,7 +577,8 @@ Each of ESC B's bays is covered by a faceted housing:
 
 - its two outer faces run parallel to the hinged power and logic board panels, at the 1.9 mm wall;
 - 45° side chamfers, a 30° fairing ramp forward and a 60° aft face;
-- the logic housing is square-cut at Z 159.3 mm, where it abuts the F1 nozzle housing;
+- the logic housing is square-cut at Z 159.3 mm, where it abuts the F1 nozzle housing (concept;
+  the generator moves it to 159.8 mm for a full aft wall, see the update below);
 - panel-line grooves every 0.79 in (20 mm), lined up with the canonical rib band;
 - four louvres, 0.10 × 0.37 in (2.5 × 9.5 mm), on the power face. They are the ESC cooling outlets,
   with the same 0.147 in² (95 mm²) as the design's four Ø5.5 mm bleed holes.
@@ -604,12 +605,16 @@ Still to verify:
 
 - **Plate:** 2.0 mm plus 0.4 mm clearance, per AGENTS.md §7. The bay design's 1.5 mm cover is
   below that rule.
-- **Size:** 1.171 in³ (19,195 mm³), at most 0.30 in (7.5 mm) proud.
-- **Clashes:** none. The nearest approach is 0.94 mm to the F1 nozzle housing and ring.
-- **Mass:** about 15.4 g as a 2.0 mm shell (ESTIMATE). The housings replace ESC B's two covers.
+- **Size:** 1.344 in³ (22,032 mm³), at most 0.31 in (8.0 mm) proud, Z 2.23–6.29 in (56.6–159.8 mm).
+  (S4 review fix: the outer plate now carries the 0.45 mm panel-line depth, so it is still 2.0 mm
+  under a groove; the logic housing gets a full aft wall; no groove crosses a louvre.)
+- **Clashes:** none. The nearest approach is 0.017 in (0.44 mm) to the F1 nozzle housing and
+  unison ring (was 0.94 mm before the aft wall was completed): at the 0.4 mm running clearance.
+  CAUTION: the unison ring moves; confirm this gap on the printed parts before first actuation.
+- **Mass:** about 16.4 g as a 2.0 mm shell (ESTIMATE). The housings replace ESC B's two covers.
 
 With the hollow-cavity fix (NAC-64-HOLLOW-SKIN), the as-built tilting group is 1,144.6 g, with its
-CG at Z 118.23 mm. **The H1 pivot is Z 109.30 mm**, against G1's 109.73 on the pre-fix pod; the
+CG at Z 118.23 mm. **The H1 pivot is Z 109.31 mm** (109.30 before the S4 housing fix), against G1's 109.73 on the pre-fix pod; the
 same tool reproduces 109.70 on the pre-fix basis. Pod SCAD integration waits for the G1 bays to
 be built (S4).
 
@@ -673,3 +678,7 @@ that needs its own study.
   group to 1,144.6 g / CG Z 118.23; H1 pivot Z 109.30 mm.
 - 2026-11-22 — Retired 1.5 in landing gear removed from the briefs' hover-clearance figures and text: the
   3.0 in flight gear (hull_datums GROUND_Z_3IN; LANDING_GEAR_ANALYSIS §4.8) is the only configuration cited.
+- 2026-11-22 — S4 code-review fixes to the H1 housing generator: full 2.0 mm plate under the
+  panel lines, full logic aft wall (Z 159.8 mm), louvres checked open to air, wall measured on the
+  built solid; housing 1.344 in³, 0.31 in proud, H1 pivot 109.31 mm.  Hollow-skin gate widened to
+  every cavity cell: the S3 "0 open / 0 thin" result is withdrawn (WBS NAC-64-HOLLOW-SKIN-2).

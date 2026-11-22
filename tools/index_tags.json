@@ -17220,7 +17220,7 @@
       "archived": false
     },
     "tools/theme_n_od_briefs.py": {
-      "description": "Python script",
+      "description": "theme_n_od_briefs.py -- numbers and figures for the Theme N Owner Decision Briefs (2026-11-21).",
       "tags": [
         "build-tooling"
       ],
