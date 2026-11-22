@@ -2307,11 +2307,19 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             forward to the Z 47.9 web (skin-limited to Z 67.4) and the pivot re-converged to
             Z 109.73 (-9.1 mm from today; corrected 2026-11-22 to the off-axis CG basis) ->
             ESC A -0.94 mm, ESC B -15.7 mm (logic, between the trunnion keep-out and the
-            housing); per ESC +81 / -29 mm2 (both faces), so the remaining gap is mostly
+            housing); per ESC +81 / -29 mm2 per face, so the remaining gap is mostly
             power/logic partitioning.  Pivot move: hover clearance -7.1 mm (1.5 in gear) /
-            +34.8 mm (3.0 in gear); re-run tilt-sweep and OD-17 checks.  Options: brief G
-            (docs/THEME_N_DECISION_BRIEFS.md), awaiting the owner.  The motor-2 lead slot then moves to the ESC-B bay azimuth and ends
-            at the F1 pocket face (Z 160.25).
+            +34.8 mm (3.0 in gear).  **Owner decision 2026-11-22: G1** (brief G,
+            docs/THEME_N_DECISION_BRIEFS.md): bays forward to the Z 47.9 web, pivot to
+            Z 109.73.  Issue #23 updated to the G1 per-bay envelope (2026-11-22).
+            - [ ] Lead slot re-sited to the ESC-B bay azimuth, ending at the F1 pocket face
+                  (Z 160.25); B80 re-checked.
+            - [ ] PIVOT_Z_64 -> 109.73 via PIVOT-RC; hull re-bake; tilt-sweep (-5..+135 deg),
+                  OD-17 fairing and canonical nacelle-to-wing placement re-checks; AUW ledger.
+            - [ ] F1-B review fixes: dia 6 mm bellcrank bosses; CM07 pocket-to-liner wall
+                  (1.33 mm < 2.0 mm); cam re-derived so the F1 flaps clear the unison ring.
+            - [ ] Lateral (cross-axis) CG check added to the nacelle roll-up.
+            - [ ] Await the shorter-board layout from Open-Secure-ESC issue #23.
         - [ ] **NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A with two CM07s (2026-11-21).**
             `docs/POWER_DISTRIBUTION.md` section 3.3 total 4.2 A + 2 x 0.67 A exceeds the BEC's 5 A
             continuous (inside the 7 A / 100 ms burst).  Size the F_NOZ fuses and confirm the burst

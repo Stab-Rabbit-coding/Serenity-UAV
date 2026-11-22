@@ -626,6 +626,11 @@ def _assess_v2(p, zs, skin, sel, by_phi, by_phi_pow, pow_env_differs, loops,
                         "reserve_fwd_aft_mm": [round(fwd, 1), round(aft, 1)],
                         "bays_az": [b[0] for b in bay_ids],
                         "fitted_area_mm2": round(sum(a[0] + a[1] for a in avail), 0),
+                        # per bay (power bay first), ONE face: panel areas after reserves
+                        "bays": [{"az": b[0], "z": [round(q[3][0], 1), round(q[3][1], 1)],
+                                  "run_mm": round(q[2], 1), "power_panel_mm2": round(q[0], 0),
+                                  "signal_panel_mm2": round(q[1], 0)}
+                                 for b, q in zip(bay_ids, avail)],
                         "end_power_w_mm": [round(end_w[0], 2), round(end_w[1], 2)],
                         "z_centre_mm": round(sum((a[3][0] + a[3][1]) / 2 for a in avail)
                                              / len(avail), 1)}

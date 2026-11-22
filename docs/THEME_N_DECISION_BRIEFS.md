@@ -339,7 +339,7 @@ channel, 2.3 mm forward of it) move with it.
 only; on that basis F1 alone moves it to 111.68 mm (−7.18 mm, not −6.76). The values above are the
 re-run on the corrected basis. Full option comparison: brief G.*
 
-**Per ESC** at the converged forward case (fitted board area, both faces, against 2,802 mm² needed):
+**Per ESC** at the converged forward case (fitted board area per face, against 2,802 mm² per face needed):
 
 - **ESC A:** 2,883 mm², +81. It fits if some logic area moves to the power board.
 - **ESC B:** 2,773 mm², −29 (1.0 % short).
@@ -420,7 +420,7 @@ unreviewed.*
 | Check | G1 forward to the Z 47.9 web | G2 today's forward limit | G3 hold the pivot with ballast |
 |---|---|---|---|
 | **Statics and dynamics** (panel 1) | The weight acts at the pivot by construction: zero tilt moment in hover. The F1-B chain loads are unchanged by G (see the drive checks below). | Same. | Same. The ballast puts 172 g more weight on the tilt bearings and the wing. |
-| **Function** (panel 2): ESC logic-section length margin | ESC A −0.94 mm, ESC B −15.7 mm. Per ESC (both faces): A +81 mm², B −29 mm² (1.0 % short). This is a partitioning fix. Hotter ESC 164.8 °F (73.8 °C). | ESC A −14.3 mm, ESC B −15.7 mm. Per ESC −373 / −480 mm². This needs a much smaller board. 173.3 °F (78.5 °C). | ESC A −4.7 mm, ESC B −25.7 mm. The keep-outs stay aft, so the bays are **worse** than in G1. |
+| **Function** (panel 2): ESC logic-section length margin | ESC A −0.94 mm, ESC B −15.7 mm. Per ESC (per face): A +81 mm², B −29 mm² (1.0 % short). This is a partitioning fix. Hotter ESC 164.8 °F (73.8 °C). | ESC A −14.3 mm, ESC B −15.7 mm. Per ESC −373 / −480 mm². This needs a much smaller board. 173.3 °F (78.5 °C). | ESC A −4.7 mm, ESC B −25.7 mm. The keep-outs stay aft, so the bays are **worse** than in G1. |
 | **Structural integrity** (panel 3) | Same F1 / F1-B parts for all three options. Two walls fail the 0.079 in (2.0 mm) SLS PA CF minimum (`AGENTS.md` §7). The bellcrank bosses are 1.1–1.5 mm: make them Ø6 mm. The CM07 pocket-to-liner wall is 1.33 mm: move the pocket 0.7 mm outboard (OML clearance not yet checked), or carry the liner as the wall and get an engineering waiver. The flaps (2.5 mm) pass. | Same. | Same. Add a ballast pocket. |
 | **Mechanism and component interactions** (panel 4) | B80 × F1 housing (2,938 mm³) and the lead slot × housing (411 mm³) clear once the bays and the slot move forward (task NAC-64-NOZ-ROOT-ESC). Still open for every option: F1 flaps × unison ring, 81–115 mm³, so the cam must be re-derived for F1. Also open: flaps × throat, 1,717–1,875 mm³ (the existing TABBOSS item). The trunnion, cavity bore and nav channel move with PIVOT_Z, so re-run the tilt sweep (−5…+135°). | Same; the bays move less. | Keep-outs unchanged, but the ballast pocket at Z 200 must clear the CM07, the bellcrank and the motor-2 leads (not checked). |
 | **Weight and balance** (panel 5) | −0.175 lbm (−79.5 g) per nacelle and −0.350 lbm (−159 g) AUW from F1. The ESCs moving forward add no mass. Pivot −9.1 mm. Hover reach 4.41 in (112.1 mm). Clearance −0.28 in (−7.1 mm) on the 1.5 in gear and +1.37 in (+34.8 mm) on the 3.0 in gear (today −1.04 / +0.61 in). | Pivot −8.7 mm; clearance −0.26 / +1.39 in (−6.7 / +35.2 mm). | Pivot unchanged; clearance +0.08 / +1.73 in (+2.0 / +43.9 mm). F1's AUW saving is all but erased (−159 + 172 = +13 g). |
@@ -457,16 +457,18 @@ unreviewed.*
   - P64_Z_NOZ consumers: edf_motor_mount, nacelle_64_scale, nozzle_servo, servo_options_context, the
     pod SCAD, and five tools.
 
+**Decision (owner, 2026-11-22): G1**, with Open-Secure-ESC issue #23 updated to the G1 envelope.
+
 **Recommendation: G1.** It gives the most ESC room: B's shortfall falls to 1.0 % of board area,
 which is a partitioning job for issue #23 rather than a new board. It keeps all of F1's mass saving.
 Its hover clearance is within 0.02 in (0.4 mm) of G2's. G3 costs 172 g and fits the ESCs **worse**,
 because holding the pivot aft also holds the trunnion keep-out aft. G2 needs a board about 15 %
 smaller for the same pivot move.
 
-**If G1 is chosen** (each is a work item, none is done):
+**G1 work items** (tracked in `airframe/wings-nacelles/WBS.md` NAC-64-NOZ-ROOT-ESC; none is done):
 
-1. Update issue #23 with the G1 envelope: ESC A 2,883 mm² and ESC B 2,773 mm² fitted, against
-   2,802 mm² needed. ESC B's logic section is the constraint.
+1. ~~Update issue #23 with the G1 envelope~~ — done 2026-11-22: per face, ESC A 2,883 mm² and ESC B
+   2,773 mm² fitted, against 2,802 mm² needed. ESC B's logic section is the constraint.
 2. Re-site the motor-2 lead slot to the ESC-B bay azimuth, ending at Z 160.25 mm. Re-check B80.
 3. PIVOT_Z_64 → 109.73 mm through the PIVOT-RC procedure. Hull re-bake, tilt-sweep and OD-17
    re-checks, and the AUW ledger.
@@ -506,3 +508,5 @@ smaller for the same pivot move.
 - 2026-11-22 — Brief G added (ESC fit and pivot under F1; options G1/G2/G3, recommendation G1)
   after `/ce-code-review` and the statics, aeronautical, 3-D print and OpenSCAD checks. The brief F
   CG basis is corrected: F1 pivot 111.68 mm (−7.18 mm), not 112.10 mm (−6.76 mm).
+- 2026-11-22 — owner decision: G1. Issue #23 updated to the G1 per-bay envelope. Per-ESC area labels
+  corrected to "per face" (the optimiser's `fitted_area_mm2` is one face).
