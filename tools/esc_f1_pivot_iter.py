@@ -26,7 +26,8 @@ METHOD
     disconnect bay stays inside the inboard keep-out.
   * Iterate until the pivot moves < 0.05 mm; exit 2 if not converged in 12 iterations.
 
-Usage:  /usr/bin/python3 tools/esc_f1_pivot_iter.py Z_MIN [--json PATH]
+Usage:  /usr/bin/python3 tools/esc_f1_pivot_iter.py Z_MIN [--json PATH] [--basis BRIEF.json]
+        /usr/bin/python3 tools/esc_f1_pivot_iter.py --basis BRIEF.json --h1 HOUSING.stl
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (GitHub Stab-Rabbit-coding) -- owner direction.
 AI note: Analysis and tool by Claude (Claude Opus 5.5, Anthropic), 2026-11-22, per AGENTS.md
@@ -125,11 +126,57 @@ def iterate(z_min, tag):
     return hist, False
 
 
+# G1 bay stations (owner decision 2026-11-22, brief G): per-ESC centroid of its two bays and the
+# optimiser's ESC mass estimate, from esc80_cooptimize at pivot 109.73 / z_min 49.41.
+G1_ESC_Z = {"A": 109.9, "B": 125.0}
+G1_ESC_G = 47.6
+
+
+def set_basis(path: Path) -> dict:
+    """Replace the hard-coded F1 basis with tools/nozzle64_hinge_root_brief.py --json output."""
+    global M_OFF0, P0, DM_F1, DMZ_F1, M_F1, MOM_F1, P_F1, M_REST, MOM_REST
+    w = json.loads(path.read_text())["weight"]
+    M_OFF0, P0, DM_F1, DMZ_F1 = w["M0_g"], w["cg0"], w["dM_g"], w["dMz_gmm"]
+    M_F1 = M_OFF0 + DM_F1
+    MOM_F1 = M_OFF0 * P0 + DMZ_F1
+    P_F1 = MOM_F1 / M_F1
+    M_REST = M_F1 - sum(m for m, _ in ESC_ROWS) - COVERS[0]
+    MOM_REST = MOM_F1 - sum(m * z for m, z in ESC_ROWS) - COVERS[0] * COVERS[1]
+    return {"M_off0_g": M_OFF0, "cg0": P0, "F1_pivot": P_F1}
+
+
+def h1_pivot(housing_stl: Path) -> dict:
+    """Pivot under H1: ESCs at the G1 stations; ESC B's two covers replaced by the ventral
+    housings, taken as a 2.0 mm shell over half the housing's closed surface (ESTIMATE)."""
+    import trimesh
+
+    import nacelle_mass_cg as base
+
+    h = trimesh.load_mesh(housing_stl, force="mesh")
+    m_h = h.area / 2.0 * 2.0 * base.RHO_PRINT
+    z_h = float(h.center_mass[2])
+    m_cov_a = COVERS[0] / 2.0  # ESC A keeps its two covers
+    z_cov_a = G1_ESC_Z["A"]
+    mom = MOM_REST + G1_ESC_G * (G1_ESC_Z["A"] + G1_ESC_Z["B"]) + m_cov_a * z_cov_a + m_h * z_h
+    m = M_REST + 2 * G1_ESC_G + m_cov_a + m_h
+    return {"pivot_z": mom / m, "off_axis_g": m, "housing_g_est": m_h, "housing_z": z_h}
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("z_min", type=float)
+    ap.add_argument("z_min", type=float, nargs="?", default=49.41)
     ap.add_argument("--json", type=Path)
+    ap.add_argument("--basis", type=Path, help="nozzle64_hinge_root_brief.py --json output")
+    ap.add_argument("--h1", type=Path, help="H1 housing STL: report the fixed-bay H1 pivot only")
     a = ap.parse_args(argv)
+    if a.basis:
+        print(json.dumps(set_basis(a.basis)))
+    if a.h1:
+        r = h1_pivot(a.h1)
+        print(json.dumps({k: round(v, 2) for k, v in r.items()}))
+        if a.json:
+            a.json.write_text(json.dumps(r, indent=1))
+        return 0
     h, ok = iterate(a.z_min, f"z{int(a.z_min)}")
     if a.json:
         a.json.write_text(json.dumps({"converged": ok, "history": h}, indent=1))

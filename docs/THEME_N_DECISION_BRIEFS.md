@@ -600,8 +600,19 @@ Still to verify:
 - ground clearance on the belly;
 - the cover seats and screws.
 
-The geometry is from the session's scratch meshes. The next step is a repo generator for the
-housing, built into the pod SCAD.
+**Update 2026-11-22 (owner: "make it so"):** the housing is now generated in the repo by
+`tools/nacelle64_esc_housing.py` (with tests).
+
+- **Plate:** 2.0 mm plus 0.4 mm clearance, per AGENTS.md §7. The bay design's 1.5 mm cover is
+  below that rule.
+- **Size:** 1.171 in³ (19,195 mm³), at most 0.30 in (7.5 mm) proud.
+- **Clashes:** none. The nearest approach is 0.94 mm to the F1 nozzle housing and ring.
+- **Mass:** about 15.4 g as a 2.0 mm shell (ESTIMATE). The housings replace ESC B's two covers.
+
+With the hollow-cavity fix (NAC-64-HOLLOW-SKIN), the as-built tilting group is 1,144.6 g, with its
+CG at Z 118.23 mm. **The H1 pivot is Z 109.30 mm**, against G1's 109.73 on the pre-fix pod; the
+same tool reproduces 109.70 on the pre-fix basis. Pod SCAD integration waits for the G1 bays to
+be built (S4).
 
 **Recommendation: H1.** It keeps everything already decided: the G1 bays and pivot, the lead-slot
 plan, and issue #23's envelope (now with the blister stated as a condition). Its shape cost is
@@ -659,3 +670,5 @@ that needs its own study.
 - 2026-11-22 — owner decision: H1, with the blister styled to the QMx blueprints and Henning renders.
 - 2026-11-22 — H1 ESC B housing styled to REF-CAD-003 / REF-CAD-002 (faceted cowl housing, panel lines,
   louvres = cooling outlets); figure `docs/figures/h1_esc_housing_canonical.png`.
+- 2026-11-22 — H1 housing generator committed (2.0 mm plate); hollow-cavity fix moves the as-built tilting
+  group to 1,144.6 g / CG Z 118.23; H1 pivot Z 109.30 mm.

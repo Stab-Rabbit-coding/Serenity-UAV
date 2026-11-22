@@ -123,15 +123,22 @@ def od3_layout() -> dict:
     a_p = math.degrees(math.atan2(wp / 2, eo.MOUNT_R))
     a_s = math.degrees(math.atan2(ws / 2, eo.MOUNT_R))
     bays = {}
+    unfit = []
     for esc, phis in (("A", (324.0, 258.0)), ("B", (80.0, 22.0))):
         for phi in phis:
             pr = eo.bay_profile(zs, skin, phi, env, wp, ws, p.get("fmin", 0.6))
+            if not pr:
+                # NAC-64-ESC-SKIN-RAY (2026-11-22): on the corrected (near-side) skin some OD-3
+                # bays no longer fit at all; list them instead of failing.
+                unfit.append(f"{esc}{phi:.0f}")
+                continue
             bays[f"{esc}{phi:.0f}"] = {
                 "esc": esc, "hinge": phi, "z": (pr[0][0], pr[-1][0] + eo.DZ),
                 "az": (phi - 2 * a_s, phi + 2 * a_p),
                 "area": sum((r[1] + r[2]) * eo.DZ for r in pr)}
     need = eo.needs_v2(p)
-    return {"bays": bays, "keepouts": eo.KEEPOUTS, "need_outline_mm2": (need[0] + need[1]) / 2.0,
+    return {"bays": bays, "unfit": unfit, "keepouts": eo.KEEPOUTS,
+            "need_outline_mm2": (need[0] + need[1]) / 2.0,
             "need_both_faces_mm2": need[0] + need[1], "env_mm": env}
 
 

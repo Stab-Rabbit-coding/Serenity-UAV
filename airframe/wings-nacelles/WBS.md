@@ -2342,6 +2342,14 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             - [ ] NAC-64-ESC-BLISTER: canonical-styled ventral blisters over ESC B's G1 bays;
                   ESC A panel corners trimmed; ESC B logic x stage-2 cartridge clash (19.1 mm3)
                   re-sited.
+                  Generator 2026-11-22: `tools/nacelle64_esc_housing.py` (+ tests) -- 2.0 mm
+                  plate + 0.4 mm clearance (AGENTS.md sec. 7; the bay design's 1.5 mm cover is
+                  below the rule), 1.171 in3, max 0.30 in (7.5 mm) proud, Z 57-159.3 mm, no
+                  clash (nearest 0.94 mm to the F1 nozzle housing / ring), ESC B covered.
+                  Housings ~15.4 g (2.0 mm shell, ESTIMATE) replace ESC B's two covers.
+                  H1 pivot on the fixed pod (`tools/esc_f1_pivot_iter.py --basis --h1`):
+                  Z 109.30 mm (pre-fix basis 109.70 = G1's 109.73).  Pod SCAD integration
+                  waits for the G1 bays to be built (S4).
                   Concept done 2026-11-22 (brief H, `docs/figures/h1_esc_housing_canonical.png`):
                   faceted housings parallel to the board panels, 45/30/60 deg edges, panel lines,
                   4 louvres = 95 mm2 cooling outlets; 0.27 in max proud; no clash.  Next: repo
@@ -2368,11 +2376,21 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             outside.  Port pod not checked separately (mirror; REQUIRES VERIFICATION).
             WARNING: do not print or fly the current 64 mm pod STLs; an open belly exposes the
             cavity and wiring to the airflow and leaves the skin load path broken.
-            - [ ] Fix the near-side filter in `nacelle_hollow_profile.py`, regenerate the
-                  cavity, re-render and re-export both pods (owner approval: production
-                  geometry; it also changes pod mass, the CG and so PIVOT_Z).
-            - [ ] Re-run this check on the regenerated pods; then re-run the mass roll-up and
-                  the pivot fixed point (brief G numbers move again).
+            - [x] Source fixed 2026-11-22 (owner: "make it so"): near-side filter in
+                  `nacelle_hollow_profile.py` (+ tests/test_nacelle_hollow_profile.py, red
+                  before / green after); cavity regenerated (`--emit`) and swapped into the
+                  flattened pod SCAD.  Render of the fixed source: skin check 0 cells < 2.0 mm,
+                  0 open; exterior skin < 2.0 mm 8.25 % -> 2.48 % of samples, of which 44
+                  samples (~0.3 % of the exterior, 1.34-2.0 mm, mostly Z 180-190) sit over
+                  the cavity at canonical recesses finer than the 3 mm x 7.5 deg grid
+                  (residual: denser grid or local margin at the re-bake).
+                  Mass (nacelle_mass_cg_64): tilting group 1,112.5 -> 1,144.6 g per nacelle
+                  (+0.071 lbm / +32.1 g; AUW +64 g), CG/pivot 118.86 -> 118.23 mm; hover
+                  clearance 1.5 in gear -30.4 -> -31.0 mm (as-built nozzle).
+            - [ ] The published `nacelle_{stbd,port}_64mm.stl` are still the PRE-FIX meshes
+                  (render of the pre-fix source = published volume, 387,682 mm3); re-export
+                  with NAC-64-CANON-01.b once NAC-64-PIVOT-RC converges, as planned.  The
+                  WARNING above stands until then.
         - [ ] **NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A with two CM07s (2026-11-21).**
             `docs/POWER_DISTRIBUTION.md` section 3.3 total 4.2 A + 2 x 0.67 A exceeds the BEC's 5 A
             continuous (inside the 7 A / 100 ms burst).  Size the F_NOZ fuses and confirm the burst

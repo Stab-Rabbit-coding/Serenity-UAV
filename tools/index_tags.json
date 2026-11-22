@@ -16520,6 +16520,14 @@
       ],
       "archived": false
     },
+    "tools/nacelle64_esc_housing.py": {
+      "description": "nacelle64_esc_housing.py -- canonical-styled ventral ESC B housings for the 64 mm nacelle (H1).",
+      "tags": [
+        "build-tooling",
+        "power"
+      ],
+      "archived": false
+    },
     "tools/nacelle64_hollow_skin_check.py": {
       "description": "nacelle64_hollow_skin_check.py -- does the 64 mm pod's hollow cavity leave a real outer skin?",
       "tags": [
@@ -17108,6 +17116,14 @@
       "description": "Unit tests for tools/nacelle64_assembly_check.py (geometry helpers; no meshes needed).",
       "tags": [
         "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_nacelle64_esc_housing.py": {
+      "description": "Characterization tests for tools/nacelle64_esc_housing.py (H1, WBS NAC-64-ESC-BLISTER).",
+      "tags": [
+        "build-tooling",
+        "power"
       ],
       "archived": false
     },
@@ -19658,6 +19674,7 @@
       "tools/brief_h_esc_skin_fig.py",
       "tools/esc_f1_pivot_iter.py",
       "tools/nacelle64_esc_bay_check.py",
+      "tools/nacelle64_esc_housing.py",
       "tools/nacelle_esc_bay_fit.py",
       "tools/nacelle_esc_service.py",
       "tools/nacelle_esc_thermal.py",
@@ -19665,6 +19682,7 @@
       "tools/plot_battery_bay.py",
       "tools/tests/fixtures/open_secure_esc/README.md",
       "tools/tests/fixtures/open_secure_esc/open_secure_esc_6s_50a_can485_faraday.kicad_pcb",
+      "tools/tests/test_nacelle64_esc_housing.py",
       "tools/tests/test_nacelle_esc_service.py"
     ],
     "comms-protocol": [
@@ -21440,6 +21458,7 @@
       "tools/mirror_claude_memory.py",
       "tools/nacelle64_assembly_check.py",
       "tools/nacelle64_esc_bay_check.py",
+      "tools/nacelle64_esc_housing.py",
       "tools/nacelle64_hollow_skin_check.py",
       "tools/nacelle64_od1_figure.py",
       "tools/nacelle64_optD_aft_fairing.py",
@@ -21519,6 +21538,7 @@
       "tools/tests/test_hover_trim_rcs.py",
       "tools/tests/test_joint_register.py",
       "tools/tests/test_nacelle64_assembly_check.py",
+      "tools/tests/test_nacelle64_esc_housing.py",
       "tools/tests/test_nacelle_esc_service.py",
       "tools/tests/test_nacelle_hollow_profile.py",
       "tools/tests/test_nonfo_simon_fit.py",

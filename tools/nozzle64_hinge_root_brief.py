@@ -821,9 +821,17 @@ def figure(res: dict[str, Any]) -> Path:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--json", type=Path)
+    ap.add_argument(
+        "--pod-local",
+        type=Path,
+        help="rendered starboard pod, nacelle-local (default: the published pod, un-baked)",
+    )
+    ap.add_argument("--no-figure", action="store_true", help="do not rewrite the brief F figure")
     a = ap.parse_args(argv)
+    if a.pod_local:
+        tb._LOCAL["stbd"] = trimesh.load_mesh(a.pod_local, force="mesh")
     res = compute()
-    out = figure(res)
+    out = figure(res) if not a.no_figure else None
     pub = {k: v for k, v in res.items() if k != "_plot"}
     txt = json.dumps(pub, indent=1, default=float)
     if a.json:
@@ -862,7 +870,8 @@ def main(argv: list[str] | None = None) -> int:
     )
     for r in w["rows"]:
         print("   %-48s %6.1f g @ %6.1f -> %6.1f g @ %6.1f" % r)
-    print(f"wrote {out}")
+    if out:
+        print(f"wrote {out}")
     return 0
 
 

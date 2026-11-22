@@ -7,7 +7,7 @@ WHY THIS EXISTS
 each ray through the duct axis and keeping the LARGEST hit, so its skin grid at an azimuth is the
 larger of that side and the opposite side.  The committed cavity grid (HOLLOW_R_* / HOLLOW_SKIN_*
 in nacelle_pod_64mm_tandem.scad) was therefore cut to the fatter side's skin.  This tool measures
-the consequence on the published pod STL.
+the consequence on a pod mesh (published or freshly rendered).
 
 METHOD
   1. Near-side truth: re-cast the canonical shell (same file, frame and grid as the hollow tool),
@@ -147,7 +147,7 @@ def main(argv=None) -> int:
         f"wall < 2.0 mm {res['wall_below_2mm']}"
     )
     print(
-        f"on the published pod: skin >= 2.0 {res['n_skin_ok']}, skin < 2.0 {res['n_thin']}, "
+        f"on the pod mesh: skin >= 2.0 {res['n_skin_ok']}, skin < 2.0 {res['n_thin']}, "
         f"open + ESC cover {res['n_covered']}, OPEN with nothing closing it {res['n_uncovered']} "
         f"({res['uncovered_with_cavity_outside']} where the cavity is outside the skin)"
     )
