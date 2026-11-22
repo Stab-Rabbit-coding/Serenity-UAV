@@ -2512,12 +2512,41 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             Map: `docs/figures/nacelle64_hollow_skin_check.png`.
             WARNING: the S3 statement "skin check 0 open / 0 thin" above is withdrawn; do not
             print the 64 mm pods until this item closes.
-            - [ ] Keep-outs for the nav-light pocket and the inboard Z 80-87 mm feature in
-                  `hollow_cavity()`; fold into the G1 bay rebuild (NAC-64-ESC-BLISTER), then
-                  re-bake and re-run the gate with `--pod-nocavity`.
-            - [ ] Disposition the 34 other-cut walls < 2.0 mm: owner 2026-11-22 ("carry on" on
-                  the recommendation) -- thicken the trunnion collar wall to 2.0 mm; the bay rims
-                  are rebuilt with the G1 bays (S4.1).
+            - [x] S4.3 2026-11-22, on the G1 pod source: **cavity gate PASS** (0 open, 0 thin
+                  cells made by the cavity; 40 cells closed by the four G1 covers).
+                  Attribution fixed in `nacelle64_hollow_skin_check.py`: a no-cavity ray that
+                  leaves > 1.0 mm inside the canonical skin is "open" (the old test only asked
+                  for solid past the duct wall, and blamed the cavity for the OD-17 breach, item
+                  below); thin cells that are open without the cavity are attributed to that
+                  cut; a ray meeting the outer surface > 60 deg off its normal is "grazing", not a
+                  wall.  Of the original 4 "cavity" cells: the 2 inboard open cells and the Z 86.2
+                  thin cell are the OD-17 breach; the outboard Z 82.6 cell was the cavity under a
+                  narrow canonical recess (Z 82-87, about +/-4 deg, skin r 40.25) next to the
+                  nav-light pocket -- fixed by `nav_pocket_keepout()` (recess Ø + 2 mm, 2.0 mm
+                  floor, run aft to Z 90).
+            - [x] Trunnion collar lip (owner "carry on" on the recommendation): the Ø42.6 gear
+                  cavity ran 1.5 mm short of the flange seat face (1.0 mm along the oblique).  It
+                  now ends `TRUNNION_LIP` 2.0 mm short and the register bore starts there:
+                  lip 1.99 mm measured.  Trunnion clash re-check at S4.5.
+            - [ ] The ray method cannot settle the remaining "< 2.0 mm walls made by another
+                  cut" (44 cells): radial rays graze window edges and pocket rims, and the
+                  inscribed-sphere and surface-normal measures fail at sharp edges (both read
+                  ~0 on every ESC window edge).  Run a real wall-thickness analysis (voxel / SDF,
+                  or the service bureau's DFM) on the re-baked pod before release.  Candidates:
+                  ESC A logic window edges (az 247-307, Z 64-86), ESC B power signal-side edge
+                  (az 45, Z 82-115), outboard skin over the nav channel (az 180, Z 104-122,
+                  ~0.4-1.0 mm), inboard skin over the OD-17 channels (az 345-22, Z 68-100).
+        - [ ] **NAC-64-OD17-BREACH — the OD-17 wire channels break through the inboard skin
+            (found 2026-11-22, S4.3; pre-existing since the 2026-11-11 channels).**  At Z 3.11-
+            3.39 in (79-86 mm), az ~345 and ~7.5 deg, the four 10 AWG channels (Ø6.5 mm,
+            `od17_wire_channels()`) run at r 40-43 mm where the canonical skin is ~43 mm: the
+            channel void is open to air, with or without the cavity (point tests on no-cavity
+            renders before and after G1 agree).  The annulus there is 8.5 mm (duct wall r 34.5 to
+            skin r 43) against 9.5 mm needed (channel 6.5 + 1.5 mm walls).  Options: a local
+            fairing on the inboard face over the run (OML departure, under the wing-root
+            junction?), re-routing the fan-out where the skin is deeper (az 0 +/- 4 deg reaches
+            r 45), or a smaller conductor bundle.  Owner decision (OD-17 is an owner decision).
+            WARNING: as published, the inboard skin is open over the 10 AWG run.
             - [x] FRAME fix 2026-11-22: the check read the STBD cavity grid against the SCAD's
                   default render, which imports the LEFT shell and cuts HOLLOW_*_PORT (the two
                   grids differ by up to 12.7 mm unmirrored).  `--side` added (default PORT);

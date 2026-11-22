@@ -1977,6 +1977,24 @@ module nav_light_pocket(pylon_side = PYLON_SIDE) {
     if (-pylon_side > 0) _nav_light_pocket_posX();
     else mirror([1, 0, 0]) _nav_light_pocket_posX();
 }
+// Cavity keep-out around the emitter recess: the recess Ø plus 2.0 mm all round, from the outer
+// face inward to the recess depth plus a 2.0 mm floor (AGENTS.md sec. 7 fallback; the pod skin's
+// load category is not stated in docs/SLS_MIN_WALL_THICKNESS.md terms).  The wire bore still cuts
+// through it (Zone B subtraction).  It runs aft to NAV_KEEPOUT_Z1: just aft of the pocket the
+// canonical shell has a narrow recess (Z 82-87 mm, about +/-4 deg, skin down to r 40.25) that
+// the 7.5 deg cavity grid cannot resolve -- the cavity left 0.32 mm there (2026-11-22).
+NAV_POCKET_FLOOR = 2.0;   // [mm]
+NAV_KEEPOUT_Z1   = 90.0;  // [mm] aft end of the keep-out
+module nav_pocket_keepout(pylon_side = PYLON_SIDE) {
+    module k() {
+        hull() for (z = [NAV_LIGHT_Z, NAV_KEEPOUT_Z1 - NAV_LIGHT_POCKET_D / 2 - 2.0])
+            translate([NACELLE_FACE_X_FAR + 1.0, 0, z])
+                rotate([0, -90, 0])
+                    cylinder(r = NAV_LIGHT_POCKET_D / 2 + 2.0,
+                             h = 1.0 + NACELLE_FACE_X_FAR - 38.0, $fn = 48);
+    }
+    if (-pylon_side > 0) k(); else mirror([1, 0, 0]) k();
+}
 module _nav_light_pocket_posX() {
     // Emitter recess: short cylinder bored inward (−X) from the +X outer face.
     translate([NACELLE_FACE_X_FAR + 0.01, 0, NAV_LIGHT_Z])
@@ -2099,6 +2117,10 @@ module hollow_cavity() {
 
         // Keep the disconnect-bay floor solid (NAC-64-ASM-03, 2026-11-08).
         esc_disc_floor_keepout(pylon_side = PYLON_SIDE);
+
+        // Keep a 2.0 mm floor under the nav-light pocket (NAC-64-HOLLOW-SKIN-2, 2026-11-22):
+        // the cavity left 0.3 mm between the 2.5 mm-deep emitter recess and the cavity.
+        nav_pocket_keepout(pylon_side = PYLON_SIDE);
 
         // Keep the vestigial-boss cleanup region solid.  smooth_boss_shave()
         // trims the canonical shell back to a MEASURED contour at this station,
@@ -2937,14 +2959,21 @@ module motor_lead_routes() {
 // about the DUCT axis (rotate([0,0,i*120]) applied after translation), which
 // puts two of the three on the wrong side of the pod — found 2026-10-03 by the
 // in-context check (WBS NAC-64-TILT-03).
+// TRUNNION_LIP (2026-11-22, NAC-64-HOLLOW-SKIN-2; owner "carry on" on the recommendation to
+// thicken the collar wall): the Ø42.6 gear cavity ran to COLLAR_X0, 1.5 mm short of the flange
+// seat face, so the annulus Ø38.1-42.6 behind the seat was a 1.5 mm lip (1.0 mm measured along
+// the oblique).  The cavity now ends TRUNNION_LIP short of the seat face and the register bore
+// starts at the same station (so the spar path stays open).  Gear band is X ~40-50, well clear.
+TRUNNION_LIP    = 2.0;    // [mm] AGENTS.md sec. 7 fallback (insert / joint walls keep 2.0)
+TRUNNION_REG_X0 = min(COLLAR_X0, COLLAR_X1 - TRUNNION_LIP);
 module trunnion_collar_cut() {
     sgn = PYLON_SIDE;
-    translate([sgn * COLLAR_X0, 0, PIVOT_Z]) rotate([0, sgn * 90, 0])
-        cylinder(d = TRUNNION_REG_D, h = (WING_TIP_FACE_X - COLLAR_X0) + 1);
+    translate([sgn * TRUNNION_REG_X0, 0, PIVOT_Z]) rotate([0, sgn * 90, 0])
+        cylinder(d = TRUNNION_REG_D, h = (WING_TIP_FACE_X - TRUNNION_REG_X0) + 1);
     // OD-17 option D: this Ø42.6 void is also the 0.96 in (24.3 mm) bend chamber in which the
     // four 10 AWG wires turn from the spar axis toward the disconnect bay.
     translate([sgn * TRUNNION_CAV_X0, 0, PIVOT_Z]) rotate([0, sgn * 90, 0])
-        cylinder(d = TRUNNION_CAV_D, h = COLLAR_X0 - TRUNNION_CAV_X0 + 0.01);
+        cylinder(d = TRUNNION_CAV_D, h = TRUNNION_REG_X0 - TRUNNION_CAV_X0 + 0.01);
     part_frame() for (a = T_BOLTS) rotate([0, 0, a])
         translate([COLLAR_BOLT_D / 2, 0,
                    COLLAR_X1 - TRUNNION_X0 - M3_INSERT_L - 0.01])

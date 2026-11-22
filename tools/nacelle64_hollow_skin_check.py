@@ -60,7 +60,11 @@ import nacelle_hollow_profile as hp
 
 REPO = Path(__file__).resolve().parents[1]
 SCAD = REPO / "airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad"
-MIN_WALL = 2.0  # AGENTS.md sec. 7
+MIN_WALL = 2.0  # AGENTS.md sec. 7 fallback (the pod skin's load category is not stated)
+NOCAV_OPEN_DR = 1.0  # [mm] a no-cavity ray leaving this far inside the canonical skin is "open"
+GRAZE_COS = 0.5  # a ray meeting the outer surface > 60 deg off its normal measures a chord, not a
+#                  wall (found 2026-11-22 at the nav-pocket rim and the ESC window edges); reported
+#                  as "grazing", not gated.  A true wall check needs a thickness analysis.
 
 
 def scad_array(src: str, name: str) -> np.ndarray:
@@ -87,6 +91,22 @@ def near_skin(z_list, naz, side: str = "PORT"):
     out = np.full(len(o), np.nan)
     np.fmax.at(out, idx[keep], np.hypot(loc[keep, 0], loc[keep, 1]))
     return out.reshape(len(z_list), naz)
+
+
+def outer_cos(mesh, za) -> list:
+    """|cos| between each ray and the face normal at its outermost hit (1 = square-on,
+    0 = grazing); NaN where the ray misses."""
+    o = np.array([[0.0, 0.0, z] for z, _ in za])
+    d = np.array([[math.cos(a), math.sin(a), 0.0] for _, a in za])
+    loc, idx, tri = mesh.ray.intersects_location(o, d, multiple_hits=True)
+    out = np.full(len(za), np.nan)
+    r = np.hypot(loc[:, 0], loc[:, 1])
+    for i in range(len(za)):
+        sel = np.where(idx == i)[0]
+        if len(sel):
+            j = sel[np.argmax(r[sel])]
+            out[i] = abs(float(np.dot(mesh.face_normals[tri[j]], d[i])))
+    return list(out)
 
 
 def radial_hits(mesh, z, a):
@@ -137,6 +157,7 @@ def main(argv=None) -> int:
     cls: dict[str, list] = {
         "skin_ok": [],
         "thin": [],
+        "grazing": [],
         "feature_thin": [],
         "feature_open": [],
         "covered": [],
@@ -160,15 +181,27 @@ def main(argv=None) -> int:
             if t >= MIN_WALL and wall[k, j] >= MIN_WALL:
                 continue  # grid and part agree: not plotted
             key = "skin_ok" if t >= MIN_WALL else "thin"
+            if (
+                key == "thin"
+                and hn_ is not None
+                and (len(hn_[n]) < 2 or hn_[n][-1] < k_r * true[k, j] - NOCAV_OPEN_DR)
+            ):
+                key = "feature_open"  # open without the cavity too: another cut's defect
             if key == "thin" and hn_ is not None and len(hn_[n]) > 1:
                 rn = hn_[n]
                 if abs(rn[-1] - rr[-1]) < 0.3 and abs((rn[-1] - rn[-2]) - t) < 0.3:
                     key = "feature_thin"  # the cavity did not make this layer
+            if key == "thin" and outer_cos(pod, [za[n]])[0] < GRAZE_COS:
+                key = "grazing"  # the ray skims a wall (pocket rim, window edge): not a wall
             cls[key].append(row + [round(t, 2)])
         elif any(len(h[n]) for h in hc_):
             cls["covered"].append(row)
-        elif hn_ is not None and not (len(hn_[n]) > 1 and hn_[n][-1] > inner[k, 0] + 0.5):
-            cls["feature_open"].append(row)  # open without the cavity too: a designed opening
+        elif hn_ is not None and (len(hn_[n]) < 2 or hn_[n][-1] < k_r * true[k, j] - NOCAV_OPEN_DR):
+            # Open without the cavity too: the no-cavity ray leaves well inside the canonical
+            # skin, so another cut opened it (a designed opening, or a defect of that cut).
+            # (Until 2026-11-22 this asked only whether any solid lay past the duct wall, which
+            # blamed the cavity for the OD-17 wire channels' breach -- WBS NAC-64-OD17-BREACH.)
+            cls["feature_open"].append(row)
         else:
             cls["uncovered"].append(row)
 
