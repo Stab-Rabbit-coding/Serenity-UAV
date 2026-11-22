@@ -10,8 +10,12 @@ skin, styled after the canonical nacelle: QMx Official Serenity Blueprints (REF-
 nacelle mid-body; the Nick Henning engine renders (REF-CAD-002) show overlapping cowl plates with
 stepped lips, panel lines and louvre groups.  Both are internal references only.
 
-GEOMETRY (starboard nacelle-local frame: duct axis +Z from the intake face, az 270 dorsal; the
-port pod is the X-mirror, as tools/prep_nacelle_64_bake.py makes it)
+GEOMETRY -- in the frame nacelle_pod_64mm_tandem.scad renders by default (NACELLE_SIDE = +1:
+left shell, HOLLOW_*_PORT grid): duct axis +Z from the intake face, azimuth from local +X, the
+CM07 at az ~270.  Bay azimuths are the optimiser's port-frame azimuths unchanged, so the housing
+unions straight onto the pod render; the other pod is that render's X-mirror
+(tools/prep_nacelle_64_bake.py).  (Until 2026-11-22 this tool worked in the mirrored, right-shell
+frame, local az = 180 - port az; the geometry is the same, mirrored.)
   * Each ESC B bay is a hinged board pair (power 0.79 in / 20 mm + logic 0.55 in / 14 mm panels)
     whose inner face sits at the mount radius 1.46 in (37.2 mm), stack 0.24 in (6.0 mm, power bay)
     / 0.26 in (6.65 mm, logic bay) outward (tools/esc70_design_f1.json).  The housing's outer
@@ -72,7 +76,7 @@ Z_F1_HOUSING = 160.25  # F1 nozzle housing forward face
 LOUVRE = (2.5, 9.5, 4, 4.5)  # length along Z, width, count, pitch (mm)
 X_BURY = 36.0  # housing base buried inside the skin (r), so the union is clean
 
-# G1 bays (port frame azimuth = hinge azimuth; Z = board span incl. harness reserves)
+# G1 bays (port-frame = render-frame hinge azimuth; Z = board span incl. harness reserves)
 G1_BAYS: dict[str, list[dict[str, Any]]] = {
     "A": [{"az": 336.0, "z": [109.4, 157.4]}, {"az": 262.0, "z": [67.4, 105.4]}],
     "B": [{"az": 78.0, "z": [73.4, 133.7]}, {"az": 136.0, "z": [135.4, 157.4]}],
@@ -96,9 +100,9 @@ def tmesh(x: mf.Manifold) -> trimesh.Trimesh:
 
 
 def canonical_oml() -> mf.Manifold:
-    """Scaled canonical starboard shell, nacelle-local (as the 64 mm pod imports it)."""
-    sh = trimesh.load_mesh(REPO / "airframe/stls/nacelles/eng_right_shell24_50mm_repaired.stl")
-    sh.apply_translation([-155.02, 190.79, 0.0])
+    """Scaled canonical LEFT shell in the pod's render frame (as the 64 mm pod imports it)."""
+    sh = trimesh.load_mesh(REPO / "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl")
+    sh.apply_translation([-42.72, 190.79, 0.0])  # nacelle_hollow_profile.SHELLS["PORT"], BORE_CY
     sh.vertices *= [ns.get("P64_K"), ns.get("P64_K"), ns.get("P64_A")]
     m = man(sh)
     if m.status() != mf.Error.NoError or m.volume() <= 0.0:
@@ -107,10 +111,11 @@ def canonical_oml() -> mf.Manifold:
 
 
 def panel_angles(b: dict) -> list:
-    """(width, local centre azimuth) of the power and signal panels; port -> local is 180 - a."""
+    """(width, centre azimuth) of the power and signal panels: power on the +az side of the
+    hinge, as esc80_cooptimize and the pod SCAD's esc_bay_footprint() place it."""
     ap = math.degrees(math.atan2(W_POWER / 2, MOUNT_R))
     as_ = math.degrees(math.atan2(W_SIGNAL / 2, MOUNT_R))
-    return [(W_POWER, 180.0 - (b["az"] + ap)), (W_SIGNAL, 180.0 - (b["az"] - as_))]
+    return [(W_POWER, b["az"] + ap), (W_SIGNAL, b["az"] - as_)]
 
 
 def board(b: dict, env: float) -> mf.Manifold:

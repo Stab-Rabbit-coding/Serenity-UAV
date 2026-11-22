@@ -30,7 +30,11 @@ METHOD
 
 Usage:  /usr/bin/python3 tools/nacelle64_hollow_skin_check.py --pod-local POD.stl
             [--pod-nocavity POD_NOCAV.stl] --covers C0.stl C1.stl [--json OUT]
-        All meshes nacelle-local (duct axis = Z, intake face Z 0), starboard.  Exit 2 if any cell
+        All meshes in the frame the pod was rendered in (duct axis = Z, intake face Z 0).
+        FRAME (fixed 2026-11-22): the SCAD's default render (NACELLE_SIDE = +1) imports the
+        left shell and cuts the HOLLOW_*_PORT grid; --side must match the render (default PORT).
+        Before this fix the check read the STBD grid against that render: cell selection was
+        mirrored (the two grids differ by up to 12.7 mm unmirrored).  Exit 2 if any cell
         is open with nothing closing it, any skin is thinner than 2.0 mm, or the grid puts the
         cavity outside the true skin at a cell no ESC cover closes.
 Requires: numpy, trimesh, matplotlib.
@@ -67,17 +71,17 @@ def scad_array(src: str, name: str) -> np.ndarray:
     return np.array(json.loads(re.sub(r",\s*\]", "]", body)), float)
 
 
-def near_skin(z_list, naz):
-    name, cx = hp.SHELLS["STBD"]
+def near_skin(z_list, naz, side: str = "PORT"):
+    name, cx = hp.SHELLS[side]
     mesh = trimesh.load_mesh(REPO / "airframe/stls/nacelles" / name, force="mesh")
     mesh.apply_translation([-cx, hp.BORE_CY, 0.0])
-    o, d = [], []
+    ol, dl = [], []
     for z in z_list:
         for j in range(naz):
             a = math.radians(j * 360.0 / naz)
-            o.append([200 * math.cos(a), 200 * math.sin(a), z])
-            d.append([-math.cos(a), -math.sin(a), 0.0])
-    o, d = np.array(o), np.array(d)
+            ol.append([200 * math.cos(a), 200 * math.sin(a), z])
+            dl.append([-math.cos(a), -math.sin(a), 0.0])
+    o, d = np.array(ol), np.array(dl)
     loc, idx, _ = mesh.ray.intersects_location(o, d, multiple_hits=True)
     keep = (loc[:, :2] * -d[idx, :2]).sum(1) > 0.0
     out = np.full(len(o), np.nan)
@@ -101,6 +105,13 @@ def radial_hits_many(mesh, za) -> list:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Hollow-cavity skin check of the 64 mm pod.")
     ap.add_argument("--pod-local", type=Path, required=True)
+    ap.add_argument(
+        "--side",
+        choices=("PORT", "STBD"),
+        default="PORT",
+        help="shell and cavity grid the pod was rendered with: the SCAD default "
+        "(NACELLE_SIDE = +1) imports the LEFT shell and cuts HOLLOW_*_PORT -> PORT",
+    )
     ap.add_argument("--pod-nocavity", type=Path, help="same pod without hollow_cavity()")
     ap.add_argument("--covers", type=Path, nargs="*", default=[])
     ap.add_argument("--json", type=Path)
@@ -113,10 +124,10 @@ def main(argv=None) -> int:
     zi = src.index("HOLLOW_Z = [")
     z0, z1 = zi + 11, src.index("];", zi) + 1
     z50 = np.array(json.loads(src[z0:z1]))
-    r50, sk50 = scad_array(src, "HOLLOW_R_STBD"), scad_array(src, "HOLLOW_SKIN_STBD")
+    r50, sk50 = scad_array(src, f"HOLLOW_R_{a.side}"), scad_array(src, f"HOLLOW_SKIN_{a.side}")
     k_r, k_a = ns.get("P64_K"), ns.get("P64_A")
     cav = r50 + (k_r - 1) * sk50
-    true = near_skin(z50, r50.shape[1])
+    true = near_skin(z50, r50.shape[1], a.side)
     inner = np.array([hp.bore_r(float(z)) + hp.DUCT_WALL for z in z50])[:, None] * k_r
     live = cav >= inner - 0.1
     wall = np.where(live, k_r * true - cav, np.nan)

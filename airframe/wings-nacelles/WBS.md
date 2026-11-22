@@ -2413,9 +2413,9 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             - Cavity-made, gated: 2 open cells, Z 3.25 in (82.6 mm) inboard, az 7.5 / 345 deg;
               2 slivers 0.012 in (0.31-0.32 mm), Z 82.6 mm az 180 deg (outboard, nav-light
               pocket edge, NAV_LIGHT_Z 79.1 mm, pocket Ø7 x 2.5 mm deep) and Z 86.2 mm az 7.5 deg.
-            - Not made by the cavity (open or thin in the no-cavity render too): 20 designed
+            - Not made by the cavity (open or thin in the no-cavity render too): 21 designed
               openings (trunnion register bore, inboard, Z 107-130 mm; Z 61 mm inboard) and
-              **33 walls below the 2.0 mm rule** -- inboard face az 345-22 deg, Z 68-130 mm,
+              **34 walls below the 2.0 mm rule** -- inboard face az 345-22 deg, Z 68-130 mm,
               0.58-1.68 mm (trunnion collar / boss-shave region); ventral-inboard az 52-67 deg,
               Z 82-104 mm, 0.17-1.39 mm (ESC bay rim).
             Map: `docs/figures/nacelle64_hollow_skin_check.png`.
@@ -2424,8 +2424,15 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             - [ ] Keep-outs for the nav-light pocket and the inboard Z 80-87 mm feature in
                   `hollow_cavity()`; fold into the G1 bay rebuild (NAC-64-ESC-BLISTER), then
                   re-bake and re-run the gate with `--pod-nocavity`.
-            - [ ] Disposition the 33 other-cut walls < 2.0 mm (trunnion collar wall, bay rims):
-                  thicken, or document the load case that permits them (AGENTS.md sec. 7).
+            - [ ] Disposition the 34 other-cut walls < 2.0 mm: owner 2026-11-22 ("carry on" on
+                  the recommendation) -- thicken the trunnion collar wall to 2.0 mm; the bay rims
+                  are rebuilt with the G1 bays (S4.1).
+            - [x] FRAME fix 2026-11-22: the check read the STBD cavity grid against the SCAD's
+                  default render, which imports the LEFT shell and cuts HOLLOW_*_PORT (the two
+                  grids differ by up to 12.7 mm unmirrored).  `--side` added (default PORT);
+                  counts above are from the corrected run.  The H1 housing generator moved to
+                  the same render frame (left shell, port-frame bay azimuths); geometry
+                  unchanged, mirrored.
         - [ ] **NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A with two CM07s (2026-11-21).**
             `docs/POWER_DISTRIBUTION.md` section 3.3 total 4.2 A + 2 x 0.67 A exceeds the BEC's 5 A
             continuous (inside the 7 A / 100 ms burst).  Size the F_NOZ fuses and confirm the burst
