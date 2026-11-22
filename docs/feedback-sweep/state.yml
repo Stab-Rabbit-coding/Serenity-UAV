@@ -1,7 +1,160 @@
 schema_version: 1
 lease:
   writer: "sweep-ccr-0174NeiAyPX2-2026-11-22"
-  timestamp: "2026-11-22T18:08:25.464194+00:00"
+  timestamp: "2026-11-22T18:12:30.420869+00:00"
   ttl_minutes: 60
-sources: {}
-items: {}
+sources:
+  gh-ose:
+    cursor: "2026-11-22T13:05:59Z"
+  gh-serenity:
+    cursor: "2026-11-16T17:17:39Z"
+items:
+  "gh-ose:23":
+    source: "gh-ose"
+    status: "in_plan"
+    sensitive: false
+    body: "Shorter 70 A 6S ESC: space requirements for the Serenity-UAV 64 mm nacelle bays (F1); open work is power/logic partitioning plus thermal/qualification of any re-partitioned board."
+    author_class: "teammate"
+    existing_ack: true
+    id: "23"
+    media: []
+    origin: "https://github.com/Stab-Rabbit-coding/Open-Secure-ESC/issues/23"
+    plan_ref: "docs/plans/feedback-sweep-plan.md"
+    updated_at: "2026-11-22T13:05:59Z"
+  "gh-serenity:273":
+    source: "gh-serenity"
+    status: "in_plan"
+    sensitive: false
+    body: "Observer PCB: 9 hard copper-to-edge clearance violations (KiCad CI failing on PR #271 after an outline reshape; layout owner decision needed)."
+    author_class: "teammate"
+    decision: "2026-11-22 owner: keep the new outline, pull copper inward to restore 0.5 mm edge clearance"
+    existing_ack: true
+    id: "273"
+    media: []
+    origin: "https://github.com/Stab-Rabbit-coding/Serenity-UAV/issues/273"
+    plan_ref: "docs/plans/feedback-sweep-plan.md"
+    updated_at: "2026-11-01T15:46:01Z"
+  "gh-serenity:290":
+    source: "gh-serenity"
+    status: "in_plan"
+    sensitive: false
+    body: "fuselage cooling: aft-fuselage cooling fan using the deferred tail EDF thrust tube, external intakes, capped RCS pipes, printed removable intake covers."
+    author_class: "teammate"
+    existing_ack: true
+    id: "290"
+    media: []
+    origin: "https://github.com/Stab-Rabbit-coding/Serenity-UAV/issues/290"
+    plan_ref: "docs/plans/feedback-sweep-plan.md"
+    updated_at: "2026-11-14T12:39:03Z"
+  "gh-serenity:292":
+    source: "gh-serenity"
+    status: "in_plan"
+    sensitive: false
+    body: "Serenity Rev U execution and shared gates: coordinate the S42-S53 tail-EDF sprints with the master plan behind design, safety and owner gates."
+    author_class: "teammate"
+    existing_ack: true
+    id: "292"
+    media: []
+    origin: "https://github.com/Stab-Rabbit-coding/Serenity-UAV/issues/292"
+    plan_ref: "docs/plans/feedback-sweep-plan.md"
+    updated_at: "2026-11-16T14:43:44Z"
+  "gh-serenity:293":
+    source: "gh-serenity"
+    status: "in_plan"
+    sensitive: false
+    body: "NoNFO-Pilot-PB2 board to Serenity integration: track SecureControllers S35-S40 and the Serenity S41 handoff with released board data and checks."
+    author_class: "teammate"
+    existing_ack: true
+    id: "293"
+    media: []
+    origin: "https://github.com/Stab-Rabbit-coding/Serenity-UAV/issues/293"
+    plan_ref: "docs/plans/feedback-sweep-plan.md"
+    updated_at: "2026-11-16T14:45:45Z"
+  "gh-serenity:294":
+    source: "gh-serenity"
+    status: "in_plan"
+    sensitive: false
+    body: "70 A tail ESC: select, analyze and qualify the Open-Secure-ESC build for the tail EDF (current, thermal, protection, interface) before fabrication."
+    author_class: "teammate"
+    existing_ack: true
+    id: "294"
+    media: []
+    origin: "https://github.com/Stab-Rabbit-coding/Serenity-UAV/issues/294"
+    plan_ref: "docs/plans/feedback-sweep-plan.md"
+    updated_at: "2026-11-16T14:30:03Z"
+  "gh-serenity:295":
+    source: "gh-serenity"
+    status: "in_plan"
+    sensitive: false
+    body: "SG90-sized OpenServoCore actuator fit for nozzle and RCS: fit, torque, control interface; gated before release or procurement."
+    author_class: "teammate"
+    existing_ack: true
+    id: "295"
+    media: []
+    origin: "https://github.com/Stab-Rabbit-coding/Serenity-UAV/issues/295"
+    plan_ref: "docs/plans/feedback-sweep-plan.md"
+    updated_at: "2026-11-16T14:31:03Z"
+  "gh-serenity:296":
+    source: "gh-serenity"
+    status: "in_plan"
+    sensitive: false
+    body: "Winch actuator boundary: retain the larger winch actuator; reconcile winch spec and BOM with the controller project's status."
+    author_class: "teammate"
+    existing_ack: true
+    id: "296"
+    media: []
+    origin: "https://github.com/Stab-Rabbit-coding/Serenity-UAV/issues/296"
+    plan_ref: "docs/plans/feedback-sweep-plan.md"
+    updated_at: "2026-11-16T14:31:45Z"
+  "gh-serenity:297":
+    source: "gh-serenity"
+    status: "in_plan"
+    sensitive: false
+    body: "Procurement and fabrication release: gate orders on released part numbers, sourcing evidence, fit approval, inspection plans, WBS traceability."
+    author_class: "teammate"
+    existing_ack: true
+    id: "297"
+    media: []
+    origin: "https://github.com/Stab-Rabbit-coding/Serenity-UAV/issues/297"
+    plan_ref: "docs/plans/feedback-sweep-plan.md"
+    updated_at: "2026-11-16T14:32:20Z"
+  "gh-serenity:298":
+    source: "gh-serenity"
+    status: "in_plan"
+    sensitive: false
+    body: "Implement OpenServoCore-Secure on the X06H servo as well as the SG90 (title only)."
+    author_class: "teammate"
+    existing_ack: true
+    id: "298"
+    media: []
+    origin: "https://github.com/Stab-Rabbit-coding/Serenity-UAV/issues/298"
+    plan_ref: "docs/plans/feedback-sweep-plan.md"
+    updated_at: "2026-11-16T14:48:22Z"
+  "gh-serenity:299":
+    source: "gh-serenity"
+    status: "in_plan"
+    sensitive: false
+    body: "Nozzle Servo Selection and Secure Servo Integration plan: choose the nozzle servo on measured evidence; move nozzle and RCS servos to the secure command chain."
+    author_class: "teammate"
+    existing_ack: true
+    id: "299"
+    media: []
+    origin: "https://github.com/Stab-Rabbit-coding/Serenity-UAV/issues/299"
+    plan_ref: "docs/plans/feedback-sweep-plan.md"
+    updated_at: "2026-11-16T17:17:39Z"
+last_run:
+  timestamp: "2026-11-22T18:12:30Z"
+  outcome: "completed"
+  writer: "sweep-ccr-0174NeiAyPX2-2026-11-22"
+  counts:
+    closed: 0
+    gh-ose:
+      acknowledged: 1
+      ingested: 1
+    gh-pe-skills:
+      ingested: 0
+    gh-secure:
+      ingested: 0
+    gh-serenity:
+      acknowledged: 10
+      ingested: 10
