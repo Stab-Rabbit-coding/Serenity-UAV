@@ -14,7 +14,8 @@ off-axis CG to a fixed point.
 METHOD
   * Pivot = CG of everything OFF the tilt axis (nacelle_mass_cg_64.roll_up: on-axis items cannot
     move it).  Start: today's roll-up (1,052.5 g off-axis, CG 118.86) plus the F1 deltas of
-    tools/nozzle64_hinge_root_brief.py (-79.47 g, CG 112.10); the two ESC rows (52.7 g each) and
+    tools/nozzle64_hinge_root_brief.py (-79.47 g, off-axis CG 111.68); the two ESC rows
+    (52.7 g each) and
     the four covers (29.7 g) are removed and re-placed at the optimiser's per-ESC centroids with
     its ESC mass estimate.
   * Pivot-tied keep-outs (esc70_design.json "Inboard/nav measured"): the inboard trunnion /
@@ -23,7 +24,7 @@ METHOD
   * Forward limit (z_min): 75.85 = today's (aft face of the Z 74.3 cavity web), or 49.41 = the aft
     face of the Z 47.9 web.  The 74.3 web is bay-tied (it moves with the bays); the 10 AWG
     disconnect bay stays inside the inboard keep-out.
-  * Iterate until the pivot moves < 0.05 mm.
+  * Iterate until the pivot moves < 0.05 mm; exit 2 if not converged in 12 iterations.
 
 Usage:  /usr/bin/python3 tools/esc_f1_pivot_iter.py Z_MIN [--json PATH]
 
@@ -47,9 +48,12 @@ TR_AFT, NAV_FWD = 144.16 - 118.9, 118.9 - 116.6
 
 # off-axis mass, today (nacelle_mass_cg_64 roll-up): total 1112.5 g incl. 60.0 g on axis
 M_OFF0 = 1112.5 - 60.0
-# F1 deltas (nozzle64_hinge_root_brief.py, brief F): mass -79.47 g, CG 118.86 -> 112.10
-M_F1 = M_OFF0 - 79.47
-MOM_F1 = M_F1 * 112.10
+# F1 deltas (nozzle64_hinge_root_brief.py --json: weight.dM_g / weight.dMz_gmm, off-axis basis,
+# corrected 2026-11-22): mass -79.47 g, moment -16,433 g*mm -> off-axis CG 118.86 -> 111.68.
+DM_F1, DMZ_F1 = -79.47, -16433.3
+M_F1 = M_OFF0 + DM_F1
+MOM_F1 = M_OFF0 * P0 + DMZ_F1
+P_F1 = MOM_F1 / M_F1
 # remove today's ESC rows and covers (they move with the bays)
 ESC_ROWS = [(52.7, 125.4), (52.7, 136.4)]
 COVERS = (29.7, 130.9)
@@ -72,11 +76,13 @@ def run(pivot, z_min, tag):
             text=True,
             cwd=REPO / "tools",
         )
+    if not out.stdout.strip():
+        raise RuntimeError(f"esc80_cooptimize failed (rc {out.returncode}): {out.stderr[-400:]}")
     return json.loads(out.stdout)
 
 
 def iterate(z_min, tag):
-    p = 112.10
+    p = P_F1
     hist = []
     for it in range(12):
         r = run(p, z_min, f"{tag}_{it}")
@@ -111,20 +117,22 @@ def iterate(z_min, tag):
         )
         print(json.dumps(hist[-1]), flush=True)
         if abs(p_new - p) < 0.05:
-            break
+            return hist, True
         p = p_new
-    return hist
+    return hist, False
 
 
 def main(argv=None) -> int:
-    ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("z_min", type=float)
     ap.add_argument("--json", type=Path)
     a = ap.parse_args(argv)
-    h = iterate(a.z_min, f"z{int(a.z_min)}")
+    h, ok = iterate(a.z_min, f"z{int(a.z_min)}")
     if a.json:
-        a.json.write_text(json.dumps(h, indent=1))
-    return 0
+        a.json.write_text(json.dumps({"converged": ok, "history": h}, indent=1))
+    if not ok:
+        print("NOT CONVERGED in 12 iterations", file=sys.stderr)
+    return 0 if ok else 2
 
 
 if __name__ == "__main__":

@@ -264,7 +264,7 @@ plain liner tube (Z 136–196 mm, no structure) is trimmed to the housing face.
 | **Function** | Panel 2. Exit 75 % / 105 % on the flow surface (met, load study rev 2). Convergence half-angle 12.9° closed. | Exit 75 % / 105 % met by construction; gentler convergence (9.9° closed). The motor-2 can tail (Z 176.9 mm) sits 0.07 in (1.6 mm) aft of the hinge, inside the petal zone: the pod's R11 fit-gate assert (`EDF2_Z_EXIT <= NOZZLE_RING_Z`) has to be restated, since the can stays 0.69 in (17.6 mm) inside the petals' inner face. Nozzle still slides off aft under the dorsal cowl tongue (housing OD 3.35 in (85.2 mm) under a tongue of outer radius 1.85–1.89 in (47–48 mm)). |
 | **Structural integrity** | Today's ring + housing stack is 0.417 in (10.6 mm) radial outside the bore. | Panel 3. At the new station the canonical skin leaves **0.298 in (7.6 mm)** from the bore to the outer mould line at its tightest (r 1.558 in / 39.58 mm, az 345°). Today's stack does not fit inside it. With the 0.079 in (2.0 mm) minimum walls (`AGENTS.md` §7) no stack fits fully inside canon there; a compact ring and housing reduces the proud band but does not remove it (estimate, not modelled). Cam pin load × 1.67: pin bearing in PA CF already "requires verification". |
 | **Mechanism and component interactions** | Clash check (2026-11-21, 25 stroke points): no hard clash; the CM07 issues sit at the servo, not the nozzle. | Panel 4. **A1 bay B80 overlaps the new housing zone by 0.248 in³ (4,060 mm³)** and its aft end touches the petals (0.07 mm): B80 (Z 112–182 mm) would have to end near Z 158 mm, 46 of its 70 mm board run, or be re-sited (re-run the OD-3 optimiser with the new aft limit). A1 bay A324 ends 0.40 mm from the housing; the CM07 at today's position 0.48 mm from it (no room for a wall; the servo moves forward about 2 mm, which the A1 layout allows). The motor-2 lead slot crosses the housing (392 mm³) and is re-routed. Brief E's new home for cover screw 1 (Z 165 mm) lands in the ring zone and is re-sited. The ring ear moves to Z ≈ 6.47 in (164.3 mm), about 0.18 in (4.5 mm) aft of the servo: the drive becomes a short direct link (no long rod), re-solved from scratch; the L1 near-toggle result (641 N per N·m at closed) would give ×1.60 over the 1.5 factor against F1's 401 if a similar profile is reached. |
-| **Weight and balance** | Tilting group 2.453 lbm (1,112.5 g), CG and pivot Z 4.68 in (118.9 mm), converged. Hover: pivot to open tip 5.17 in (131.2 mm); clearance −1.04 in (−26.3 mm) on the 1.5 in gear, +0.61 in (+15.6 mm) on the 3.0 in gear. | Panel 5. **−0.175 lbm (−79.5 g) per nacelle, −0.350 lbm (−159 g) AUW**: pod skin aft of the root, the housing pocket and 1.42 in (36 mm) of cartridge liner go; flaps +6.4 g. Tilting CG moves **−0.266 in (−6.8 mm)**: PIVOT_Z re-converges forward (or 0.190 lbm (86 g) of ballast at Z 200 mm per nacelle holds it). Hover reach 4.32 in (109.7 mm): clearance −0.19 in (−4.8 mm) on the 1.5 in gear, +1.46 in (+37.1 mm) on the 3.0 in gear. Ledger picks it up at the re-bake. |
+| **Weight and balance** | Tilting group 2.453 lbm (1,112.5 g), CG and pivot Z 4.68 in (118.9 mm), converged. Hover: pivot to open tip 5.17 in (131.2 mm); clearance −1.04 in (−26.3 mm) on the 1.5 in gear, +0.61 in (+15.6 mm) on the 3.0 in gear. | Panel 5. **−0.175 lbm (−79.5 g) per nacelle, −0.350 lbm (−159 g) AUW**: pod skin aft of the root, the housing pocket and 1.42 in (36 mm) of cartridge liner go; flaps +6.4 g. Tilting (off-axis) CG moves **−0.283 in (−7.2 mm)** *(corrected 2026-11-22 from −6.8 mm: off-axis mass basis)*: PIVOT_Z re-converges forward (or 0.190 lbm (86 g) of ballast at Z 200 mm per nacelle holds it). Hover reach 4.34 in (110.1 mm): clearance −0.20 in (−5.2 mm) on the 1.5 in gear, +1.45 in (+36.7 mm) on the 3.0 in gear. Ledger picks it up at the re-bake. |
 | **Canonical shape** | Panel 6. Housing proud at 72 of 72 azimuths, up to 0.278 in (7.06 mm); petals 1.14 in (29.0 mm) past the canonical tail. | Hinge on the canonical root; open petals end 0.03 in (0.7 mm) past the canonical tail. Housing proud at 26 of 72 azimuths, up to 0.119 in (3.02 mm), around az 345° and the ventral side (less with a compact stack). The axisymmetric petals sit inside the non-round canonical petal skin; matching it exactly would need a shaped outer fairing on each flap (not evaluated). |
 
 ### F1-B — the bellcrank drive for F1 (2026-11-22)
@@ -331,40 +331,33 @@ channel, 2.3 mm forward of it) move with it.
 
 | Forward limit | Converged pivot | ESC A margin | ESC B margin | Hotter ESC, est. |
 |---|---|---|---|---|
-| today's, Z 75.85 mm | Z 4.356 in (110.65 mm) | −14.3 mm (logic) | −17.7 mm (logic) | 175.3 °F (79.6 °C) |
-| Z 47.9 mm web (aft face Z 49.41) | **Z 4.338 in (110.19 mm)** | **−0.94 mm (logic)**; power +3.3 | **−17.7 mm (logic)**; power +14.8 | 166.5 °F (74.7 °C) |
+| today's, Z 75.85 mm | Z 4.338 in (110.19 mm) | −14.3 mm (logic) | −15.7 mm (logic) | 173.3 °F (78.5 °C) |
+| Z 47.9 mm web (aft face Z 49.41) | **Z 4.320 in (109.73 mm)** | **−0.94 mm (logic)**; power +3.3 | **−15.7 mm (logic)**; power +14.8 | 164.8 °F (73.8 °C) |
 
-The canonical skin limits the forward gain to about 0.33 in (8.4 mm): bays start at Z 67.4 mm, not
-49.4. Per face at the converged forward case:
+*Corrected 2026-11-22 (code review): the first run of this table started from an F1 pivot of
+112.10 mm, which mixed the total mass with the off-axis CG. The pivot is the CG of the off-axis mass
+only; on that basis F1 alone moves it to 111.68 mm (−7.18 mm, not −6.76). The values above are the
+re-run on the corrected basis. Full option comparison: brief G.*
 
-| Bay | Run | Available | Needed | Margin |
-|---|---|---|---|---|
-| A power | 1.890 in (48.0 mm) | 1,632 mm² | 1,520 | +112 |
-| A logic | 1.496 in (38.0 mm) | 1,251 mm² | 1,282 | −31 |
-| B power | 2.374 in (60.3 mm) | 2,025 mm² | 1,520 | +505 |
-| B logic | 0.787 in (20.0 mm) | 680 mm² | 1,282 | −602 |
+**Per ESC** at the converged forward case (fitted board area, both faces, against 2,802 mm² needed):
 
-**Per ESC:**
-
-- **ESC A:** 2,883 against 2,802 mm² needed, +81. It fits if some logic area moves to the power
-  board.
-- **ESC B:** 2,705 against 2,802, −97 (3.5 % short).
+- **ESC A:** 2,883 mm², +81. It fits if some logic area moves to the power board.
+- **ESC B:** 2,773 mm², −29 (1.0 % short).
 
 The shortfall is now mostly partitioning. B's logic bay sits between the trunnion keep-out and the
 housing and cannot grow forward.
 
 **What the pivot move costs:**
 
-- **Size:** the pivot moves −0.343 in (−8.7 mm) from today: F1's −6.76 mm plus −1.9 mm from the
+- **Size:** the pivot moves −0.360 in (−9.1 mm) from today: F1's −7.18 mm plus −1.95 mm from the
   ESCs moving forward.
-- **Hover:** reach from the pivot to the open tip is 4.395 in (111.6 mm). Ground clearance is
-  −0.26 in (−6.7 mm) on the 1.5 in gear and +1.39 in (+35.2 mm) on the 3.0 in gear (today −1.04 /
+- **Hover:** reach from the pivot to the open tip is 4.413 in (112.1 mm). Ground clearance is
+  −0.28 in (−7.1 mm) on the 1.5 in gear and +1.37 in (+34.8 mm) on the 3.0 in gear (today −1.04 /
   +0.61 in).
 - **What moves with it:** the trunnion, the cavity trunnion bore and the nav channel end, all
   through the single-sourced PIVOT_Z (PIVOT-RC procedure and a hull re-bake).
 - **Checks to re-run:** the tilt-sweep clearances and the OD-17 fairing, with the nacelle sitting
-  8.7 mm further aft on the wing. The 10 AWG disconnect bay stays clear of the trunnion (49.1 mm
-  apart, against 28.3 mm needed).
+  9.1 mm further aft on the wing. The 10 AWG disconnect bay stays clear of the trunnion.
 
 **What F1 changes, if chosen** (each is a work item, none is done):
 
@@ -376,7 +369,7 @@ housing and cannot grow forward.
    about 2 mm, cover screw 1 re-sited, motor-2 lead slot re-routed.
 4. A1 bay B80 re-sited or shortened (OD-3 optimiser re-run with Z_MAX ≈ 158 mm), A324 checked for a
    2.0 mm wall to the housing.
-5. PIVOT_Z re-converged (−6.8 mm) with the tilt-joint gates; hull re-bake; AUW ledger.
+5. PIVOT_Z re-converged (−7.2 mm; −9.1 mm with the ESC bays forward, brief G) with the tilt-joint gates; hull re-bake; AUW ledger.
 6. Load study and servo margins re-run on the rendered F1 flaps (replacing the ratio estimate).
 
 **Decision (owner, 2026-11-22): F1.** Owner direction with it: add a bellcrank (or gear) to the servo
@@ -385,7 +378,7 @@ motor-2 lead-slot clashes.
 
 **Recommendation: F1**, as the owner directed, built in the order above. It puts the hinge on the
 canonical root and the tail on the canonical tail, removes 0.350 lbm (159 g) from the aircraft and
-gives 0.85 in (21.5 mm) more hover ground clearance. Its costs are a 28 % higher closed gas load at
+gives 0.83 in (21.1 mm) more hover ground clearance. Its costs are a 28 % higher closed gas load at
 the ear, a drive and pocket rework, and a conflict with A1's bay B80 that has to be resolved before
 the bays are built.
 
@@ -393,6 +386,103 @@ the bays are built.
 not rendered flaps; flap and module masses are scaled, not rendered; the A1 bay envelopes are
 optimiser outlines, not boards; the B80 re-site is not run; the drive at the new station is not
 solved; pin bearing in PA CF; CFD of the longer petal zone with the motor tail inside it.
+
+---
+
+## Brief G — 70 A ESC fit and the tilt pivot under F1 (2026-11-22)
+
+**Question for the owner.** Under F1 the pod ends at the new housing face (Z 160.25 mm), so the
+OD-3 bays (A1) lose their aft end and the 70 A ESC does not fit. Where do the bays go, and what
+does the pivot do? The pivot is an output: it is the CG of the off-axis mass, so moving the ESCs
+moves the pivot, and the pivot-tied keep-outs (inboard trunnion, outboard nav channel) move with it.
+
+**Checked by** (owner direction 2026-11-22): `/ce-code-review` on the F1 tools, plus the
+statics-and-dynamics, aeronautical-engineering, 3d-print-design and openscad skills. The review
+found that brief F's F1 CG used the total mass against the off-axis CG; the corrected F1 pivot is
+Z 111.68 mm (−7.18 mm), and every number below uses the corrected basis.
+
+![Brief G six checks](figures/brief_g_esc_pivot.png)
+
+*Figure: `tools/brief_g_esc_pivot_fig.py`; numbers from `tools/esc_f1_pivot_iter.py`,
+`tools/nozzle64_hinge_root_brief.py --json` and `tools/nozzle64_f1_drive.py`. Analytical,
+unreviewed.*
+
+**Options.**
+
+- **G1:** move the bays forward to the Z 47.9 mm web (aft face Z 49.41 mm). The pivot re-converges
+  to **Z 4.320 in (109.73 mm)**, −0.360 in (−9.1 mm) from today. The ESC board is re-partitioned
+  through Open-Secure-ESC issue #23.
+- **G2:** keep today's forward limit (aft face of the Z 74.3 mm web, Z 75.85 mm). The pivot
+  converges at Z 4.338 in (110.19 mm). The board must shrink much more.
+- **G3:** hold the pivot at today's Z 4.68 in (118.86 mm) with ballast. This takes at least 0.190 lbm
+  (86 g) per nacelle at Z 200 mm, +0.38 lbm (172 g) AUW. The bays are run forward as in G1.
+
+| Check | G1 forward to the Z 47.9 web | G2 today's forward limit | G3 hold the pivot with ballast |
+|---|---|---|---|
+| **Statics and dynamics** (panel 1) | The weight acts at the pivot by construction: zero tilt moment in hover. The F1-B chain loads are unchanged by G (see the drive checks below). | Same. | Same. The ballast puts 172 g more weight on the tilt bearings and the wing. |
+| **Function** (panel 2): ESC logic-section length margin | ESC A −0.94 mm, ESC B −15.7 mm. Per ESC (both faces): A +81 mm², B −29 mm² (1.0 % short). This is a partitioning fix. Hotter ESC 164.8 °F (73.8 °C). | ESC A −14.3 mm, ESC B −15.7 mm. Per ESC −373 / −480 mm². This needs a much smaller board. 173.3 °F (78.5 °C). | ESC A −4.7 mm, ESC B −25.7 mm. The keep-outs stay aft, so the bays are **worse** than in G1. |
+| **Structural integrity** (panel 3) | Same F1 / F1-B parts for all three options. Two walls fail the 0.079 in (2.0 mm) SLS PA CF minimum (`AGENTS.md` §7). The bellcrank bosses are 1.1–1.5 mm: make them Ø6 mm. The CM07 pocket-to-liner wall is 1.33 mm: move the pocket 0.7 mm outboard (OML clearance not yet checked), or carry the liner as the wall and get an engineering waiver. The flaps (2.5 mm) pass. | Same. | Same. Add a ballast pocket. |
+| **Mechanism and component interactions** (panel 4) | B80 × F1 housing (2,938 mm³) and the lead slot × housing (411 mm³) clear once the bays and the slot move forward (task NAC-64-NOZ-ROOT-ESC). Still open for every option: F1 flaps × unison ring, 81–115 mm³, so the cam must be re-derived for F1. Also open: flaps × throat, 1,717–1,875 mm³ (the existing TABBOSS item). The trunnion, cavity bore and nav channel move with PIVOT_Z, so re-run the tilt sweep (−5…+135°). | Same; the bays move less. | Keep-outs unchanged, but the ballast pocket at Z 200 must clear the CM07, the bellcrank and the motor-2 leads (not checked). |
+| **Weight and balance** (panel 5) | −0.175 lbm (−79.5 g) per nacelle and −0.350 lbm (−159 g) AUW from F1. The ESCs moving forward add no mass. Pivot −9.1 mm. Hover reach 4.41 in (112.1 mm). Clearance −0.28 in (−7.1 mm) on the 1.5 in gear and +1.37 in (+34.8 mm) on the 3.0 in gear (today −1.04 / +0.61 in). | Pivot −8.7 mm; clearance −0.26 / +1.39 in (−6.7 / +35.2 mm). | Pivot unchanged; clearance +0.08 / +1.73 in (+2.0 / +43.9 mm). F1's AUW saving is all but erased (−159 + 172 = +13 g). |
+| **Canonical shape** (panel 6) | Nacelle OML is the F1 shell, unchanged. The pivot is fixed on the wing spar, so the nacelle sits 0.36 in (9.1 mm) further aft relative to the wing; check against the canonical placement (REQUIRES VERIFICATION). The OD-17 fairing re-check is part of this. | 0.34 in (8.7 mm) aft. | No change. |
+
+**The F1 / F1-B checks behind the table.** These are the same for every G option.
+
+- **Statics:**
+  - A free-body equilibrium solve of the chain matches virtual work within 0.2 % mid-stroke.
+  - At the closed end, virtual work overstates the servo torque by about 13 % (14.2 against
+    16.1 mN·m), so the published closed margin is conservative.
+  - The link is in tension at every position.
+  - The rod is at most 3.28 lbf (14.6 N) in compression. That is far below its Euler limit of
+    about 1,280 lbf (5.7 kN) for Ø0.079 in (2 mm) steel, 0.65 in (16.4 mm) long.
+  - The bellcrank pin peak is 4.33 lbf (19.3 N), about 465 psi (3.2 MPa) bearing. The PA CF bearing
+    allowable is not in `allowables.json` (requires verification).
+- **Aeronautical:**
+  - Closed exit at M 0.445 (295 kt): the 1-D incompressible model under-reads the gas load by
+    4.6–5.1 %.
+  - With that correction the F1 gas load at the ear is about 2.32 lbf (10.3 N).
+  - The F1-B continuous margin over ×1.5 is then about 1.74 closed (about 1.97 by the equilibrium
+    torque). Open stays 2.46.
+  - The lateral CG (the off-axis CG's offset across the tilt axis) is not checked: the roll-up
+    carries axial stations only.
+- **3-D print:**
+  - The walls are as in the Structural row.
+  - The horn ball link clears the CM07 case by 0.41 mm, below the 0.5 mm SLS clearance. These are
+    bought parts; confirm on hardware.
+  - State the flap print orientation and a warp allowance in the build guide.
+- **OpenSCAD:**
+  - `nacelle_nozzle_iris_64mm.scad` builds F1 at FLAP_LENGTH 46.6 mm. The asserts pass and the PHI
+    solve echoes 9.93° / −1.97°. Meshes are watertight.
+  - Single-sourced parameters to change: P64_Z_NOZ, then PIVOT_Z_64 (after this decision).
+  - P64_Z_NOZ consumers: edf_motor_mount, nacelle_64_scale, nozzle_servo, servo_options_context, the
+    pod SCAD, and five tools.
+
+**Recommendation: G1.** It gives the most ESC room: B's shortfall falls to 1.0 % of board area,
+which is a partitioning job for issue #23 rather than a new board. It keeps all of F1's mass saving.
+Its hover clearance is within 0.02 in (0.4 mm) of G2's. G3 costs 172 g and fits the ESCs **worse**,
+because holding the pivot aft also holds the trunnion keep-out aft. G2 needs a board about 15 %
+smaller for the same pivot move.
+
+**If G1 is chosen** (each is a work item, none is done):
+
+1. Update issue #23 with the G1 envelope: ESC A 2,883 mm² and ESC B 2,773 mm² fitted, against
+   2,802 mm² needed. ESC B's logic section is the constraint.
+2. Re-site the motor-2 lead slot to the ESC-B bay azimuth, ending at Z 160.25 mm. Re-check B80.
+3. PIVOT_Z_64 → 109.73 mm through the PIVOT-RC procedure. Hull re-bake, tilt-sweep and OD-17
+   re-checks, and the AUW ledger.
+4. F1-B fixes from the review: Ø6 mm bellcrank bosses, the pocket wall, and the cam re-derived to
+   clear the ring.
+5. A lateral-CG check added to the roll-up.
+
+**Still unverified.**
+
+- The ESC bays are optimiser envelopes, not boards.
+- The cover mass is moved, not re-sized.
+- The gas load is a 1-D model, calibrated to F0, with a compressibility correction.
+- The PA CF pin bearing allowable.
+- The canonical nacelle-to-wing placement after the pivot move.
+- The lateral CG.
+- The output-arm dead-centre margin is 20.08° against a 20.0° gate.
 
 ---
 
@@ -411,4 +501,8 @@ solved; pin bearing in PA CF; CFD of the longer petal zone with the motor tail i
 - 2026-11-22 — F1 × A1: the 70 A ESC no longer fits the OD-3 bays under F1's aft limit. Owner: shorter
   board (option 2); space requirements raised in Open-Secure-ESC.
 - 2026-11-22 — forward room with the pivot at the CG (`tools/esc_f1_pivot_iter.py`): pivot Z 110.19,
-  ESC A −0.94 mm, ESC B −17.7 mm (logic); per-ESC totals +81 / −97 mm² per face.
+  ESC A −0.94 mm, ESC B −17.7 mm (logic); per-ESC totals +81 / −97 mm² per face. *Superseded the
+  same day (CG basis corrected): pivot Z 109.73, ESC B −15.7 mm, per ESC +81 / −29 mm².*
+- 2026-11-22 — Brief G added (ESC fit and pivot under F1; options G1/G2/G3, recommendation G1)
+  after `/ce-code-review` and the statics, aeronautical, 3-D print and OpenSCAD checks. The brief F
+  CG basis is corrected: F1 pivot 111.68 mm (−7.18 mm), not 112.10 mm (−6.76 mm).

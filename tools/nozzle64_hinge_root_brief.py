@@ -414,7 +414,9 @@ def compute() -> dict[str, Any]:
         ),
         ("cartridge liner aft of the housing face", crm.volume() * rho_c, _cz(crm), 0.0, 0.0),
     ]
-    M0, Z0 = ru["total_g"], ru["cg_z"]
+    # The pivot is the CG of the OFF-axis mass only (roll_up: on-axis items cannot move it), so
+    # the moment balance uses the off-axis mass; the AUW delta is unchanged.
+    M0, Z0 = sum(r[1] for r in ru["rows"]), ru["cg_z"]
     dM = sum(r[3] - r[1] for r in deltas)
     dMz = sum(r[3] * r[4] - r[1] * r[2] for r in deltas)
     M1 = M0 + dM
@@ -431,6 +433,8 @@ def compute() -> dict[str, Any]:
         "cg0": Z0,
         "cg1": Z1,
         "pivot_shift_mm": Z1 - Z0,
+        "dM_g": dM,
+        "dMz_gmm": dMz,
         "auw_delta_g": 2 * dM,
         "arm0": arm0,
         "arm1": arm1,

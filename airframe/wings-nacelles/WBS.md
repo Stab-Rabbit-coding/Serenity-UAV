@@ -2281,7 +2281,7 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             Z 6.90 in (175.3 mm) on the sides and ventral surface, dorsal cowl to Z 7.76 in
             (197 mm), tail Z 8.71 in (221.1 mm); today's hinge is 1.53 in (38.9 mm) aft of the
             root.  F1: flaps 46.6 mm, P64_Z_NOZ 199.13 -> 160.25, gas at the ear x 1.28, -159 g
-            AUW, pivot -6.8 mm, hover clearance +21.5 mm.  Blocking conflict: A1 bay B80 overlaps
+            AUW, pivot -7.2 mm, hover clearance +21.1 mm (corrected 2026-11-22: off-axis CG basis).  Blocking conflict: A1 bay B80 overlaps
             the new housing zone (4,060 mm3); also A324 0.40 mm, CM07 0.48 mm, motor-2 lead slot,
             brief E's cover-screw site, R11 assert.  Supersedes the drive geometry of
             NAC-64-SERVO-L1 if adopted.
@@ -2305,10 +2305,12 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             1,520 (power) and 1,282 (logic incl. creepage and interconnect) needed.
             Forward room with the pivot at the CG (`tools/esc_f1_pivot_iter.py`, 2026-11-22): bays
             forward to the Z 47.9 web (skin-limited to Z 67.4) and the pivot re-converged to
-            Z 110.19 (-8.7 mm from today) -> ESC A -0.94 mm, ESC B -17.7 mm (logic bay 20 mm
-            between the trunnion keep-out and the housing); per ESC +81 / -97 mm2 per face, so the
-            remaining gap is mostly power/logic partitioning.  Pivot move: hover clearance
-            -6.7 mm (1.5 in gear) / +35.2 mm (3.0 in gear); re-run tilt-sweep and OD-17 checks.  The motor-2 lead slot then moves to the ESC-B bay azimuth and ends
+            Z 109.73 (-9.1 mm from today; corrected 2026-11-22 to the off-axis CG basis) ->
+            ESC A -0.94 mm, ESC B -15.7 mm (logic, between the trunnion keep-out and the
+            housing); per ESC +81 / -29 mm2 (both faces), so the remaining gap is mostly
+            power/logic partitioning.  Pivot move: hover clearance -7.1 mm (1.5 in gear) /
+            +34.8 mm (3.0 in gear); re-run tilt-sweep and OD-17 checks.  Options: brief G
+            (docs/THEME_N_DECISION_BRIEFS.md), awaiting the owner.  The motor-2 lead slot then moves to the ESC-B bay azimuth and ends
             at the F1 pocket face (Z 160.25).
         - [ ] **NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A with two CM07s (2026-11-21).**
             `docs/POWER_DISTRIBUTION.md` section 3.3 total 4.2 A + 2 x 0.67 A exceeds the BEC's 5 A
