@@ -17120,6 +17120,14 @@
       ],
       "archived": false
     },
+    "tools/tests/test_nacelle_hollow_profile.py": {
+      "description": "Regression tests for tools/nacelle_hollow_profile.py (WBS NAC-64-HOLLOW-SKIN).",
+      "tags": [
+        "build-tooling",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "tools/tests/test_nonfo_simon_fit.py": {
       "description": "Mesh-free tests for tools/nonfo_simon_fit.py (the hull fit itself runs as a tool).",
       "tags": [
@@ -19467,6 +19475,7 @@
       "tools/prep_nacelle_64_bake.py",
       "tools/tail_edf_flow.py",
       "tools/tests/test_nacelle_esc_service.py",
+      "tools/tests/test_nacelle_hollow_profile.py",
       "tools/tests/test_nozzle_servo_linkage.py",
       "tools/tests/test_tail_edf_flow.py"
     ],
@@ -21511,6 +21520,7 @@
       "tools/tests/test_joint_register.py",
       "tools/tests/test_nacelle64_assembly_check.py",
       "tools/tests/test_nacelle_esc_service.py",
+      "tools/tests/test_nacelle_hollow_profile.py",
       "tools/tests/test_nonfo_simon_fit.py",
       "tools/tests/test_nozzle_servo_linkage.py",
       "tools/tests/test_pace_balance.py",

@@ -153,13 +153,19 @@ def skin_grid(side: str, dz: float = DZ, n_az: int = N_AZ):
                     t = np.radians(a + dda)
                     origins.append([200.0 * np.cos(t), 200.0 * np.sin(t), z + ddz])
                     dirs.append([-np.cos(t), -np.sin(t), 0.0])
-    origins = np.asarray(origins)  # type: ignore[assignment]
-    dirs = np.asarray(dirs)  # type: ignore[assignment]
-    loc, ray_idx, _ = mesh.ray.intersects_location(origins, dirs, multiple_hits=True)
+    o_arr = np.asarray(origins)
+    d_arr = np.asarray(dirs)
+    loc, ray_idx, _ = mesh.ray.intersects_location(o_arr, d_arr, multiple_hits=True)
 
-    outer = np.zeros(len(origins))
-    radii = np.hypot(loc[:, 0], loc[:, 1])
-    np.maximum.at(outer, ray_idx, radii)
+    # NEAR-side hits only (WBS NAC-64-HOLLOW-SKIN, 2026-11-22).  Each ray runs on through the
+    # duct axis to the far wall; keeping the largest hit made skin(az) = max(skin(az),
+    # skin(az + 180)), so the cavity was cut to the opposite, fatter side's skin and broke
+    # through the 64 mm pod's belly.  A hit is near-side when it lies on the ray's own side of
+    # the axis (positive projection on the outward azimuth).
+    near = (loc[:, :2] * -d_arr[ray_idx, :2]).sum(axis=1) > 0.0
+    outer = np.zeros(len(o_arr))
+    radii = np.hypot(loc[near, 0], loc[near, 1])
+    np.maximum.at(outer, ray_idx[near], radii)
     if (outer == 0).any():
         raise ValueError(f"{side}: {(outer == 0).sum()} rays missed the shell")
     outer = outer.reshape(len(zs), n_az, 9).min(axis=2)
