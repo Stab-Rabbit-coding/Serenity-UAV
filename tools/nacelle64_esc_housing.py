@@ -19,13 +19,18 @@ frame, local az = 180 - port az; the geometry is the same, mirrored.)
   * Each ESC B bay is a hinged board pair (power 0.79 in / 20 mm + logic 0.55 in / 14 mm panels)
     whose inner face sits at the mount radius 1.46 in (37.2 mm), stack 0.24 in (6.0 mm, power bay)
     / 0.26 in (6.65 mm, logic bay) outward (tools/esc70_design_f1.json).  The housing's outer
-    faces run parallel to those panels: 0.016 in (0.4 mm) running clearance, then a 0.079 in
-    (2.0 mm) plate (AGENTS.md sec. 7 SLS minimum) plus the 0.018 in (0.45 mm) panel-line groove
-    depth, so the plate is still 2.0 mm under a groove.  Side walls are clearance + 2.0 mm.
-    NOTE: the bay design (esc70_design_f1.json cover_t 1.5) assumed a 1.5 mm cover, which is
-    below the 2.0 mm rule; the housing uses 2.0 mm.
+    faces run parallel to those panels: 0.016 in (0.4 mm) running clearance, then a 0.059 in
+    (1.5 mm) plate plus the 0.018 in (0.45 mm) panel-line groove depth, so the plate keeps its
+    full thickness under a groove.  Side walls are clearance + plate.
+    PLATE THICKNESS is taken from the SLS material study, not assumed:
+    docs/SLS_MIN_WALL_THICKNESS.md
+    (OD-25 option A, AGENTS.md sec. 7) via tools/sls_min_wall.py, for a NON-LOAD-BEARING,
+    FREE-STANDING DuraForm PA CF panel, print orientation not fixed, at the widest free span of a
+    housing face (the power face, 0.82 in / 20.8 mm).  The study's handling load needs 0.93 mm
+    (rupture) / 1.01 mm (deflection), so its 0.059 in (1.5 mm) interim process floor governs --
+    the same 1.5 mm the bay design used (esc70_design_f1.json cover_t).
   * 45 deg side chamfers, a 30 deg fairing ramp forward, a 60 deg aft face; the logic housing is
-    square-cut one wall aft of its board (Z 6.29 in / 159.8 mm), 0.018 in (0.45 mm) short of the
+    square-cut one wall aft of its board (Z 6.27 in / 159.3 mm), 0.037 in (0.95 mm) short of the
     F1 nozzle housing face (Z 6.31 in / 160.25 mm).
   * Panel-line grooves (0.031 in / 0.8 mm wide, 0.018 in / 0.45 mm deep) every 0.79 in (20 mm),
     kept clear of the louvre band.
@@ -41,7 +46,7 @@ tools/esc70_design_f1.json with the G1 keep-outs -- the per-bay "bays" output, p
 Usage:  /usr/bin/python3 tools/nacelle64_esc_housing.py --out HOUSING.stl [--json REPORT]
         Exit 2, writing no STL, if the canonical OML or the housing is not a valid solid, a board
         is left outside the housed skin, the measured wall over any board is below clearance +
-        2.0 mm, a louvre is blocked, or the logic housing reaches the F1 nozzle housing.
+        the study plate, a louvre is blocked, or the logic housing reaches the F1 nozzle housing.
 Requires: numpy, trimesh, manifold3d.
 
 Author:  Steve Griffing, PE(CSE), CISSP-ISSEP, CPP (GitHub Stab-Rabbit-coding) -- owner direction.
@@ -62,16 +67,28 @@ import numpy as np
 import trimesh
 
 import nacelle_64_scale as ns
+import sls_min_wall as smw
 
 REPO = Path(__file__).resolve().parents[1]
 MOUNT_R = 37.2  # esc80_cooptimize.MOUNT_R (board inner face)
-COVER_T = 2.0  # housing plate: AGENTS.md sec. 7 SLS default minimum wall (load case not stated)
+W_POWER, W_SIGNAL = 20.0, 14.0
 COVER_CLR = 0.4  # running clearance, as esc80_cooptimize.overrides_64mm (SKIN_WALL = cover_t + 0.4)
-SKIN_WALL = COVER_T + COVER_CLR  # 2.4 mm side/aft wall; esc70_design_f1.json assumed cover 1.5
+
+
+def study_wall(span_mm: float) -> float:
+    """Minimum wall (mm) from the SLS material study for a non-load-bearing, free-standing
+    PA CF panel of this span, orientation not fixed (docs/SLS_MIN_WALL_THICKNESS.md)."""
+    e, s = smw.props("any")
+    r = smw.case_free(span_mm / smw.MM_IN, e, s, smw.FOS_NLB)
+    return max(smw.T_PROC, r["t_rupture_mm"], r["t_defl_mm"])
+
+
+# Housing plate: the study wall at the widest free span (power face), rounded up to 0.05 mm.
+COVER_T = math.ceil(study_wall(W_POWER + 2 * COVER_CLR) / 0.05 - 1e-9) * 0.05  # = 1.5
+SKIN_WALL = COVER_T + COVER_CLR  # 1.9 mm side/aft wall
 GROOVE_PITCH, GROOVE_W, GROOVE_D = 20.0, 0.8, 0.45
 TOP_WALL = SKIN_WALL + GROOVE_D  # outer face: the plate is still COVER_T under a groove
-W_POWER, W_SIGNAL = 20.0, 14.0
-ENV = {"power": 6.0, "logic": 6.65}  # stack + cooling lane; power bay capped at 2.0 mm parts
+ENV = {"power": 6.0, "logic": 6.65}  # stack + cooling lane; power bay parts capped at 2.0 mm tall
 Z_F1_HOUSING = 160.25  # F1 nozzle housing forward face
 LOUVRE = (2.5, 9.5, 4, 4.5)  # length along Z, width, count, pitch (mm)
 X_BURY = 36.0  # housing base buried inside the skin (r), so the union is clean
@@ -81,7 +98,7 @@ G1_BAYS: dict[str, list[dict[str, Any]]] = {
     "A": [{"az": 336.0, "z": [109.4, 157.4]}, {"az": 262.0, "z": [67.4, 105.4]}],
     "B": [{"az": 78.0, "z": [73.4, 133.7]}, {"az": 136.0, "z": [135.4, 157.4]}],
 }
-Z_LOGIC_AFT = G1_BAYS["B"][1]["z"][1] + SKIN_WALL  # 159.8: one full wall aft of the logic board
+Z_LOGIC_AFT = G1_BAYS["B"][1]["z"][1] + SKIN_WALL  # 159.3: one full wall aft of the logic board
 assert Z_LOGIC_AFT <= Z_F1_HOUSING - 0.4, "logic housing would reach the F1 nozzle housing"
 
 

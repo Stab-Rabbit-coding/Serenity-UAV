@@ -74,5 +74,8 @@ def test_outer_faces_sit_one_wall_above_the_boards(built):
 
 
 def test_wall_meets_the_sls_minimum():
-    assert g.COVER_T >= 2.0  # AGENTS.md sec. 7 default SLS wall
-    assert g.TOP_WALL - g.GROOVE_D - g.COVER_CLR >= 2.0  # still 2.0 mm under a panel line
+    # docs/SLS_MIN_WALL_THICKNESS.md via tools/sls_min_wall.py, every housing face's free span
+    for w in (g.W_POWER, g.W_SIGNAL):
+        assert g.COVER_T >= g.study_wall(w + 2 * g.COVER_CLR) - 1e-9
+    assert g.COVER_T >= 1.5  # the study's interim process floor
+    assert g.TOP_WALL - g.GROOVE_D - g.COVER_CLR >= g.COVER_T - 1e-9  # full plate under a line

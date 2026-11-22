@@ -553,7 +553,7 @@ Measured on the meshes:*
 |---|---|---|---|---|
 | **Statics and dynamics** (panel 1) | Suction on the largest cover at V_NE: q 0.178 psi (1.23 kPa), Cp −1 (ASSUMED), ×1.5 → 0.85 lbf (3.8 N), reacted by the cover screws. Drag of a 0.24 in blister at 87 kt is negligible (about 0.02 lbf / 0.08 N each, Cd 0.3 ASSUMED). | Same covers, flush. | Pod loads grow with size; tilt-joint moments re-run. | 12 phase leads (2 motors × 3, both nacelles) cross the tilt joint and flex through −5…+135° on every tilt cycle. |
 | **Function** (panel 2) | ESC A 103 %, ESC B 99 % of the area needed per face, as in G1. ESC B's 1 % is a partitioning fix (issue #23). Board 165 °F (74 °C). | 32 / 57 % at best. Does not fit. | Expected to fit as H1 does (not run). | Fits wherever the new bay is put (not designed). |
-| **Structural integrity** (panel 3) | Blister walls 2.0 mm (AGENTS.md §7); the cover seats move out with the blister. | — | All walls scale; the pod needs re-checking. | Pod bays closed; a new bay elsewhere. |
+| **Structural integrity** (panel 3) | Blister walls 1.5 mm (SLS material study, non-load-bearing cover; was 2.0 mm, §7 fallback); the cover seats move out with the blister. | — | All walls scale; the pod needs re-checking. | Pod bays closed; a new bay elsewhere. |
 | **Mechanism and component interactions** (panel 4) | The G1 lead-slot plan stands: motor 2's slot goes into ESC B's power bay. The blister must clear the ground on landing and in hover (belly; not yet checked). | — | Everything that references pod stations moves. | Tilt-joint harness: bend radius, wear and cycle life (OD-17 route already carries 10 AWG). |
 | **Weight and balance** (panel 5) | About +0.004–0.009 lbm (2–4 g) per nacelle (ESTIMATE); pivot moves < 0.1 mm. | — | Pod skin mass about +65 % (area ~ scale², ×1.29/×1.06); pivot and hover reach re-converge. | −0.21 lbm (−95 g) per nacelle from the tilting group; the pivot moves forward. |
 | **Canonical shape** (panel 6) | Two belly blisters per nacelle, departing from REF-CAD-003. They are smaller than the bulge the as-built ventral ESC cover already has: up to 0.45 in (11.5 mm), which the faulty skin model hid. | None. | Silhouette kept, size grows. | None on the nacelle. |
@@ -578,7 +578,7 @@ Each of ESC B's bays is covered by a faceted housing:
 - its two outer faces run parallel to the hinged power and logic board panels, at the 1.9 mm wall;
 - 45° side chamfers, a 30° fairing ramp forward and a 60° aft face;
 - the logic housing is square-cut at Z 159.3 mm, where it abuts the F1 nozzle housing (concept;
-  the generator moves it to 159.8 mm for a full aft wall, see the update below);
+  the generator keeps 159.3 mm with a full 1.9 mm aft wall, see the update below);
 - panel-line grooves every 0.79 in (20 mm), lined up with the canonical rib band;
 - four louvres, 0.10 × 0.37 in (2.5 × 9.5 mm), on the power face. They are the ESC cooling outlets,
   with the same 0.147 in² (95 mm²) as the design's four Ø5.5 mm bleed holes.
@@ -603,18 +603,22 @@ Still to verify:
 **Update 2026-11-22 (owner: "make it so"):** the housing is now generated in the repo by
 `tools/nacelle64_esc_housing.py` (with tests).
 
-- **Plate:** 2.0 mm plus 0.4 mm clearance, per AGENTS.md §7. The bay design's 1.5 mm cover is
-  below that rule.
-- **Size:** 1.344 in³ (22,032 mm³), at most 0.31 in (8.0 mm) proud, Z 2.23–6.29 in (56.6–159.8 mm).
-  (S4 review fix: the outer plate now carries the 0.45 mm panel-line depth, so it is still 2.0 mm
-  under a groove; the logic housing gets a full aft wall; no groove crosses a louvre.)
-- **Clashes:** none. The nearest approach is 0.017 in (0.44 mm) to the F1 nozzle housing and
-  unison ring (was 0.94 mm before the aft wall was completed): at the 0.4 mm running clearance.
-  CAUTION: the unison ring moves; confirm this gap on the printed parts before first actuation.
-- **Mass:** about 16.4 g as a 2.0 mm shell (ESTIMATE). The housings replace ESC B's two covers.
+- **Plate:** 0.059 in (1.5 mm) plus 0.016 in (0.4 mm) clearance, from the SLS material study
+  (owner direction 2026-11-22: "use the thicknesses derived from the material studies"):
+  `docs/SLS_MIN_WALL_THICKNESS.md` (OD-25 option A, AGENTS.md §7) via `tools/sls_min_wall.py`,
+  non-load-bearing free-standing PA CF, orientation not fixed, at the widest face span
+  0.82 in (20.8 mm). The handling load needs 0.93 mm (rupture) / 1.01 mm (deflection), so the
+  study's 1.5 mm process floor governs -- the bay design's 1.5 mm cover. (A 2.0 mm plate was used
+  briefly on 22 Nov from §7's fallback for an unstated category; withdrawn.)
+- **Size:** 1.083 in³ (17,748 mm³), at most 0.27 in (6.8 mm) proud, Z 2.26–6.27 in (57.3–159.3 mm).
+  The outer plate carries the 0.45 mm panel-line depth, so it keeps the full 1.5 mm under a
+  groove; the logic housing has a full aft wall; no groove crosses a louvre.
+- **Clashes:** none. The nearest approach is 0.037 in (0.94 mm) to the F1 nozzle housing and
+  unison ring.
+- **Mass:** about 11.0 g as a 1.5 mm shell (ESTIMATE). The housings replace ESC B's two covers.
 
 With the hollow-cavity fix (NAC-64-HOLLOW-SKIN), the as-built tilting group is 1,144.6 g, with its
-CG at Z 118.23 mm. **The H1 pivot is Z 109.31 mm** (109.30 before the S4 housing fix), against G1's 109.73 on the pre-fix pod; the
+CG at Z 118.23 mm. **The H1 pivot is Z 109.25 mm** (1.5 mm study plate; 109.30 with a 2.0 mm shell), against G1's 109.73 on the pre-fix pod; the
 same tool reproduces 109.70 on the pre-fix basis. Pod SCAD integration waits for the G1 bays to
 be built (S4).
 
@@ -626,7 +630,7 @@ that needs its own study.
 
 **If H1 is chosen** (each is a work item, none is done):
 
-1. Design the blisters: G1 ESC B bays (port 78° and 136°), 2.0 mm walls, faired leading and trailing
+1. Design the blisters: G1 ESC B bays (port 78° and 136°), 1.5 mm walls (SLS study), faired leading and trailing
    edges. Trim ESC A's panel corners.
 2. Fix the hollow cavity first (NAC-64-HOLLOW-SKIN). Then re-export the pods, re-run the mass
    roll-up and the pivot fixed point, and re-issue issue #23's envelope with the blister condition.
@@ -682,3 +686,7 @@ that needs its own study.
   panel lines, full logic aft wall (Z 159.8 mm), louvres checked open to air, wall measured on the
   built solid; housing 1.344 in³, 0.31 in proud, H1 pivot 109.31 mm.  Hollow-skin gate widened to
   every cavity cell: the S3 "0 open / 0 thin" result is withdrawn (WBS NAC-64-HOLLOW-SKIN-2).
+- 2026-11-22 — Owner: "use the thicknesses derived from the material studies". H1 housing plate
+  1.5 mm from `docs/SLS_MIN_WALL_THICKNESS.md` via `tools/sls_min_wall.py` (non-load-bearing cover);
+  housing 1.083 in³, 0.27 in proud, nearest 0.94 mm to the nozzle housing; H1 pivot 109.25 mm.
+  The 2.0 mm plate in the two entries above is withdrawn.

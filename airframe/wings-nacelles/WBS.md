@@ -2296,6 +2296,14 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             (`nozzle_servo_linkage_64.py`) and SCAD with the F1 station, pocket / cover / screw 1
             moved forward, ring rod-clearance cut re-made, horn standoff confirmed on hardware.
             Supersedes NAC-64-SERVO-L1.
+            - [ ] Re-check the F1 / F1-B walls against the SLS material study (owner 2026-11-22:
+                  "use the thicknesses derived from the material studies"), not the 2.0 mm
+                  fallback used in brief G panel 3: docs/SLS_MIN_WALL_THICKNESS.md gives
+                  LOAD-BEARING free-standing PA CF 0.110 in (2.8 mm) any orientation, 0.077 in
+                  (2.0 mm) with XY fixed on the drawing (stiffness parity), before each part's own
+                  load check.  The 2.5 mm gas-loaded flaps pass only if the drawing fixes XY;
+                  bellcrank bosses and the CM07 pocket-to-liner wall are joint/boss walls (the
+                  study excludes them: insert wall >= 2.0 mm rule).
         - [ ] **NAC-64-NOZ-ROOT-ESC — F1 x A1: the 70 A ESC does not fit the OD-3 bays under F1
             (2026-11-22; owner decision: shorter 70 A board; space requirements in
             Stab-Rabbit-coding/Open-Secure-ESC issue #23).**
@@ -2343,13 +2351,16 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             - [ ] NAC-64-ESC-BLISTER: canonical-styled ventral blisters over ESC B's G1 bays;
                   ESC A panel corners trimmed; ESC B logic x stage-2 cartridge clash (19.1 mm3)
                   re-sited.
-                  Generator 2026-11-22: `tools/nacelle64_esc_housing.py` (+ tests) -- 2.0 mm
-                  plate + 0.4 mm clearance (AGENTS.md sec. 7; the bay design's 1.5 mm cover is
-                  below the rule), 1.344 in3, max 0.31 in (8.0 mm) proud, Z 56.6-159.8 mm, no
-                  clash (nearest 0.44 mm to the F1 nozzle housing / ring, S4 fix), ESC B covered.
-                  Housings ~16.4 g (2.0 mm shell, ESTIMATE) replace ESC B's two covers.
+                  Generator 2026-11-22: `tools/nacelle64_esc_housing.py` (+ tests) -- plate
+                  0.059 in (1.5 mm) + 0.4 mm clearance from the SLS material study (owner
+                  2026-11-22: "use the thicknesses derived from the material studies";
+                  docs/SLS_MIN_WALL_THICKNESS.md via tools/sls_min_wall.py, non-load-bearing
+                  free-standing, span 20.8 mm -> process floor 1.5 mm), 1.083 in3, max 0.27 in
+                  (6.8 mm) proud, Z 57.3-159.3 mm, no clash (nearest 0.94 mm to the F1 nozzle
+                  housing / ring), ESC B covered.  Housings ~11.0 g (1.5 mm shell, ESTIMATE)
+                  replace ESC B's two covers.
                   H1 pivot on the fixed pod (`tools/esc_f1_pivot_iter.py --basis --h1`):
-                  Z 109.31 mm after the S4 housing fix (109.30 before; pre-fix basis 109.70 = G1's 109.73).  Pod SCAD integration
+                  Z 109.25 mm (109.30 with a 2.0 mm shell; pre-fix basis 109.70 = G1's 109.73).  Pod SCAD integration
                   waits for the G1 bays to be built (S4).
                   Concept done 2026-11-22 (brief H, `docs/figures/h1_esc_housing_canonical.png`):
                   faceted housings parallel to the board panels, 45/30/60 deg edges, panel lines,

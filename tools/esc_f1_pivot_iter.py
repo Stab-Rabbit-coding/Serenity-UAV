@@ -147,13 +147,15 @@ def set_basis(path: Path) -> dict:
 
 def h1_pivot(housing_stl: Path) -> dict:
     """Pivot under H1: ESCs at the G1 stations; ESC B's two covers replaced by the ventral
-    housings, taken as a 2.0 mm shell over half the housing's closed surface (ESTIMATE)."""
+    housings, taken as a shell of the housing plate (nacelle64_esc_housing.COVER_T, from the SLS
+    material study) over half the housing's closed surface (ESTIMATE)."""
     import trimesh
 
+    import nacelle64_esc_housing as hsg
     import nacelle_mass_cg as base
 
     h = trimesh.load_mesh(housing_stl, force="mesh")
-    m_h = h.area / 2.0 * 2.0 * base.RHO_PRINT
+    m_h = h.area / 2.0 * hsg.COVER_T * base.RHO_PRINT
     z_h = float(h.center_mass[2])
     m_cov_a = COVERS[0] / 2.0  # ESC A keeps its two covers
     z_cov_a = G1_ESC_Z["A"]
