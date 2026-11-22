@@ -27,7 +27,9 @@ ground clearance."
 The tilt pivot sits at the rotating assembly's CG, so removing mass FORWARD of
 the CG moves the pivot AFT, which shortens the pivot-to-nozzle-tip arm one for
 one and lifts the nozzle in hover.  With the pod solid, that tip sits 10.5 mm
-BELOW the ground plane on the active 1.5 in gear.
+BELOW the ground plane on the then-active 1.5 in gear (HISTORY, 2026-08-31: that gear
+was retired 2026-09-06, LG-31 / LANDING_GEAR_ANALYSIS.md sec. 4.8; the 3.0 in flight gear is the
+only configuration, and the clearances below are the historical 1.5 in figures).
 
 Measured, the trade is:
 

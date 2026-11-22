@@ -1491,7 +1491,7 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     forward-biased hollowing moved `PIVOT_Z` to 113.8 and recovered 7.9 mm of the
     deficit; the in-nacelle harness (22.9 g, all aft of the pivot, never counted
     in any previous roll-up) accounts for part of that. **Remaining: −2.55 mm on
-    the 1.5 in gear, +39.35 mm on the 3.0 in.** Plan 005's already-settled
+    the 1.5 in gear, +39.35 mm on the 3.0 in.** [1.5 in gear RETIRED 2026-09-06 (LG-31; LANDING_GEAR_ANALYSIS.md sec. 4.8) -- the 3.0 in flight gear is the only configuration] Plan 005's already-settled
     40 → 30 mm flap trim is worth 10 mm and takes it to **+6.41 mm** — short of
     the +9.8 mm previously accepted, so the owner should re-confirm the margin
     rather than inherit it. Levers remaining: the flap trim, KD5's deferred
@@ -1945,7 +1945,7 @@ Rev S1b spar-station decision in §1.1.2.1 above.
 **1.456** (root t/c 17.7 %), `THICKNESS_SCALE_TIP` **2.190** (tip t/c 26.6 %),
 `SPAR_Z` **66.85**, `PIVOT_Z` **116.1** (= CG after ESC1 relocates aft),
 canonical offset **−31.1 mm**, hover clearance **+9.8 mm on the 1.5 in gear —
-owner-accepted**. Trunnion ring envelope **measured**: 53.4 mm OD at X 28.
+owner-accepted** [1.5 in gear RETIRED 2026-09-06 (LG-31; LANDING_GEAR_ANALYSIS.md sec. 4.8) -- the 3.0 in flight gear is the only configuration]. Trunnion ring envelope **measured**: 53.4 mm OD at X 28.
 
 The station is a **three-way** trade (airfoil / canonical offset / hover
 clearance), not the two-way one first recorded — the bore rides the camber
@@ -2105,7 +2105,8 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     fills the shell to 178.8 of 185.2, leaving **6.4 mm** for a nozzle that
     measures **58.1 mm** — a variable-area iris cannot fit inside a
     canonical-length nacelle. It is reduced and the residual documented.
-    **OQ1 RESOLVED 2026-08-29 (owner-accepted):** **+9.8 mm on the 1.5 in gear**,
+    **OQ1 RESOLVED 2026-08-29 (owner-accepted):** **+9.8 mm on the 1.5 in gear**
+    [1.5 in gear RETIRED 2026-09-06 (LG-31; LANDING_GEAR_ANALYSIS.md sec. 4.8) -- the 3.0 in flight gear is the only configuration],
     reached by combining the 30 mm flaps with station 28.0 and the ESC1
     relocation. ~1 cm is the accepted margin — downstream geometry changes must
     not silently trade it away. The compact gear stays viable.
@@ -2308,8 +2309,8 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             Z 109.73 (-9.1 mm from today; corrected 2026-11-22 to the off-axis CG basis) ->
             ESC A -0.94 mm, ESC B -15.7 mm (logic, between the trunnion keep-out and the
             housing); per ESC +81 / -29 mm2 per face, so the remaining gap is mostly
-            power/logic partitioning.  Pivot move: hover clearance -7.1 mm (1.5 in gear) /
-            +34.8 mm (3.0 in gear).  **Owner decision 2026-11-22: G1** (brief G,
+            power/logic partitioning.  Pivot move: hover clearance +34.8 mm on the 3.0 in
+            flight gear.  **Owner decision 2026-11-22: G1** (brief G,
             docs/THEME_N_DECISION_BRIEFS.md): bays forward to the Z 47.9 web, pivot to
             Z 109.73.  Issue #23 updated to the G1 per-bay envelope (2026-11-22).
             - [ ] Lead slot re-sited to the ESC-B bay azimuth, ending at the F1 pocket face
@@ -2386,7 +2387,7 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
                   (residual: denser grid or local margin at the re-bake).
                   Mass (nacelle_mass_cg_64): tilting group 1,112.5 -> 1,144.6 g per nacelle
                   (+0.071 lbm / +32.1 g; AUW +64 g), CG/pivot 118.86 -> 118.23 mm; hover
-                  clearance 1.5 in gear -30.4 -> -31.0 mm (as-built nozzle).
+                  clearance, 3.0 in flight gear, +11.5 -> +10.9 mm (as-built nozzle).
             - [ ] The published `nacelle_{stbd,port}_64mm.stl` are still the PRE-FIX meshes
                   (render of the pre-fix source = published volume, 387,682 mm3); re-export
                   with NAC-64-CANON-01.b once NAC-64-PIVOT-RC converges, as planned.  The
@@ -2933,7 +2934,7 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     assembly (pre-existing, found 2026-08-29). The rotating assembly reaches
     nacelle-local Z **221.3** (the iris seats at 166.25 and runs 55.1 beyond —
     36.1 mm proud of the 185.2 mm shell). In hover the tip swings to hull Z
-    **−41.39** against a **−38.1 mm** ground plane on the 1.5 in gear that
+    **−41.39** against a **−38.1 mm** ground plane on the 1.5 in gear [1.5 in gear RETIRED 2026-09-06 (LG-31; LANDING_GEAR_ANALYSIS.md sec. 4.8) -- the 3.0 in flight gear is the only configuration] that
     `serenity_assembly.py` L505-518 calls "the ACTIVE (compact, default)
     variant" — a **3.3 mm strike on every vertical takeoff and landing**. The
     3.0 in gear clears by +38.6 mm. Either make the 3.0 in gear mandatory rather

@@ -649,7 +649,7 @@ PIVOT_Z         = PIVOT_Z_64;   // [mm] pivot axial centre = full-assembly CG st
                            //               with the sleeves)
                            //        105.8  pod MEASURED solid at 285 g — the CG
                            //               moved FORWARD, and hover clearance
-                           //               with it, to -10.5 mm on the 1.5 in gear
+                           //               with it, to -10.5 mm on the 1.5 in gear (retired)
                            //        113.8  pod hollowed with a forward-biased
                            //               wall, plus the in-nacelle HARNESS,
                            //               which no previous roll-up counted at
@@ -914,7 +914,9 @@ NAV_CHAN_INSET  =  3.0;    // [mm] channel wall sits this far inboard of the out
 // it drags the pivot AFT, which shortens the pivot-to-nozzle-tip arm one for one
 // and lifts the nozzle in hover.  Measured (tools/nacelle_mass_cg.py):
 //
-//   configuration                     pod g   PIVOT_Z   hover clr, 1.5 in gear
+//   HISTORY (50 mm pod, 2026-08-31): measured against the 1.5 in gear, RETIRED 2026-09-06
+//   (LG-31; LANDING_GEAR_ANALYSIS.md sec. 4.8).  The 3.0 in flight gear is the only configuration.
+//   configuration                     pod g   PIVOT_Z   hover clr, 1.5 in gear (retired)
 //   solid, as built                   285.0     105.9      -10.47  STRIKES
 //   uniform 2.5 mm wall               105.0     113.7       -1.31  strikes
 //   THIS: 2.5 fwd -> 8.0 aft          155.9     114.4       -1.92  strikes

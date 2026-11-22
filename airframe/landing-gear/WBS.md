@@ -872,3 +872,18 @@ Derivation: `docs/LANDING_GEAR_ANALYSIS.md` §4.8. Gate:
     107.5 and the measured 107.45 (`tools/nacelle_mass_cg.py`). Not edited from
     the landing-gear side — the file's nacelle rows are owned elsewhere.
     Documentation-integrity item, no geometry change expected.
+- [ ] **LG-RETIRE-1P5-REFS — retire the 1.5 in gear from live tools (2026-11-22, owner direction:
+    cite the current 3.0 in configuration only).** Done: `tools/nacelle_mass_cg.py`
+    GROUND_PLANES carries only the 3.0 in flight gear (`GEAR_3IN`); `nacelle_mass_cg_64.py`,
+    `nozzle64_hinge_root_brief.py`, `brief_g_esc_pivot_fig.py` (+ figures), the Theme N briefs,
+    `docs/NACELLE_64MM_VERIFICATION.md` and the wings-nacelles WBS cite 3.0 in only;
+    `tools/middle_layout_fit.py` now checks against `lg_r6_3_0in_hull_legs.stl`; the da Vinci Jr
+    proto batch J slices the 3.0 in leg (assembled corner at 0.80 for the 150 mm bed);
+    `docs/LANDING_GEAR_ANALYSIS.md` STL table marks the 1.5 in meshes RETIRED.  Dated plans,
+    `CLAUDE-MEMORY.md` and the retirement analysis itself keep their history (labelled).
+    - [ ] **NEW CLASH, exposed by the switch:** against the 3.0 in flight legs,
+          `tools/middle_layout_fit.py` reports harness envelopes fouling the legs (extra-obstacle
+          volume): ESC E1 flange-face drop 2,757 mm3, ESC E3 under-wheel trough 662 mm3, ESC E34
+          rise 1,565 mm3, tilt feed T1 971 mm3 -- each port and starboard.  Against the retired
+          1.5 in legs these read 0 (E1/E3 already failed the 2.0 mm shell gap; E34 and T1 are
+          new).  Re-route these runs around the 3.0 in legs, or confirm the legs mesh station.

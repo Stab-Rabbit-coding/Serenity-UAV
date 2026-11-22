@@ -138,7 +138,7 @@ owner-approved change to R11 (2026-10-03).
 | Pod (measured) | 0.584 lbm (265 g), CG 94.6 mm |
 | Rotating assembly | **2.05 lbm (929 g)** per nacelle (1.28 × 185.2 mm design: 954 g) |
 | CG = PIVOT_Z | **4.32 in (109.7 mm)**, converged on both pods (residual +0.02 mm, iteration 2) |
-| Hover clearance, 3.0 in flight gear | **+0.54 in (+13.7 mm)** (floor 0.5 in, Claude-chosen); the retired 1.5 in gear strikes |
+| Hover clearance, 3.0 in flight gear | **+0.54 in (+13.7 mm)** (floor 0.5 in, Claude-chosen) |
 | 10 AWG disconnect bay | Z 57.6 mm, between the Z 45.2 and 70.1 bulkheads, clear of the trunnion cavity |
 
 Rows marked ASSUMED or SCALED (rotors, 80 A ESCs, sleeves, nozzle) must be weighed or

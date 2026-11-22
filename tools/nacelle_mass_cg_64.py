@@ -223,10 +223,7 @@ def roll_up(pod_stl: Path) -> dict:
     tip = base.WING_SPAR_HULL_Z - arm
     return {"rows": rows, "total_g": total, "cg_z": cg,
             "pivot_z": round(cg, 1), "arm": arm, "tip_hull_z": tip,
-            "clear_3in": tip - base.GROUND_PLANES[
-                "3.0 in gear (kept, not wired in)"],
-            "clear_1p5in": tip - base.GROUND_PLANES[
-                "1.5 in gear (ACTIVE default)"]}
+            "clear_3in": tip - base.GROUND_PLANES[base.GEAR_3IN]}
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -259,9 +256,7 @@ def main(argv: list[str] | None = None) -> int:
           f"{res['cg_z']:.2f}, residual {delta:+.2f} mm -> {state}")
     print(f"Hover: arm {res['arm']:.1f} mm, nozzle tip at hull Z "
           f"{res['tip_hull_z']:+.1f} mm; clearance 3.0 in gear "
-          f"{res['clear_3in'] / 25.4:+.2f} in ({res['clear_3in']:+.1f} mm), "
-          f"1.5 in gear {res['clear_1p5in'] / 25.4:+.2f} in "
-          f"({res['clear_1p5in']:+.1f} mm)")
+          f"{res['clear_3in'] / 25.4:+.2f} in ({res['clear_3in']:+.1f} mm)")
     return 0 if res["clear_3in"] > 0 else 2
 
 

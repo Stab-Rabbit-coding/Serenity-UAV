@@ -424,8 +424,7 @@ def compute() -> dict[str, Any]:
     base = nac64.base
     arm0 = res["tip_z_open"]["F0"] - Z0
     arm1 = res["tip_z_open"]["F1"] - Z1
-    g15 = base.GROUND_PLANES["1.5 in gear (ACTIVE default)"]
-    g30 = base.GROUND_PLANES["3.0 in gear (kept, not wired in)"]
+    g30 = base.GROUND_PLANES[base.GEAR_3IN]  # 3.0 in flight gear, the only configuration
     res["weight"] = {
         "rows": deltas,
         "M0_g": M0,
@@ -438,8 +437,6 @@ def compute() -> dict[str, Any]:
         "auw_delta_g": 2 * dM,
         "arm0": arm0,
         "arm1": arm1,
-        "clear_1p5_F0": base.WING_SPAR_HULL_Z - arm0 - g15,
-        "clear_1p5_F1": base.WING_SPAR_HULL_Z - arm1 - g15,
         "clear_3_F0": base.WING_SPAR_HULL_Z - arm0 - g30,
         "clear_3_F1": base.WING_SPAR_HULL_Z - arm1 - g30,
         "ballast_to_hold_pivot_g_at_z200": M1 * (Z0 - Z1) / (200.0 - Z0),
@@ -727,8 +724,7 @@ def figure(res: dict[str, Any]) -> Path:
         f"mm); holding it "
         f"needs {wb['ballast_to_hold_pivot_g_at_z200']:.0f} g ballast at Z 200 per nacelle\n"
         f"hover reach pivot -> open tip {wb['arm0']:.1f} -> {wb['arm1']:.1f} mm; clearance, "
-        f"1.5 in gear "
-        f"{i2(wb['clear_1p5_F0']):+.2f} -> {i2(wb['clear_1p5_F1']):+.2f} in, 3.0 in gear "
+        f"3.0 in gear "
         f"{i2(wb['clear_3_F0']):+.2f} -> {i2(wb['clear_3_F1']):+.2f} in",
         transform=ax.transAxes,
         fontsize=7,
@@ -864,8 +860,8 @@ def main(argv: list[str] | None = None) -> int:
     print(
         f"mass {w['M0_g']:.1f} -> {w['M1_g']:.1f} g, CG {w['cg0']:.2f} -> {w['cg1']:.2f}, "
         f"AUW {w['auw_delta_g']:+.0f} g,"
-        f" arm {w['arm0']:.1f} -> {w['arm1']:.1f}, clear 1.5 {w['clear_1p5_F0']:.1f} -> "
-        f"{w['clear_1p5_F1']:.1f} mm,"
+        f" arm {w['arm0']:.1f} -> {w['arm1']:.1f}, clear 3.0 in gear {w['clear_3_F0']:.1f} -> "
+        f"{w['clear_3_F1']:.1f} mm,"
         f" ballast {w['ballast_to_hold_pivot_g_at_z200']:.0f} g"
     )
     for r in w["rows"]:

@@ -332,7 +332,7 @@ ORIENT = {
         'H'),
     'fuselage/landing-gear/lg_r6_1_5in_leg_frame.stl': (
         'Z', 'PA CF',
-        'bench/handling article',
+        'RETIRED 1.5 in variant (LG-31) -- not a flight or print article',
         'R-PLATE',
         'H'),
     'fuselage/landing-gear/lg_r6_common_foot.stl': (

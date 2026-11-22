@@ -75,7 +75,7 @@ MIDDLE_SHELL = os.path.join(REPO, "airframe", "stls", "fuselage", "middle_shell2
 FLANGE_PORT = os.path.join(REPO, "airframe", "stls", "fuselage", "wing_root_flange_port.stl")
 FLANGE_STBD = os.path.join(REPO, "airframe", "stls", "fuselage", "wing_root_flange_stbd.stl")
 LG_LEGS = os.path.join(
-    REPO, "airframe", "stls", "fuselage", "landing-gear", "lg_r6_1_5in_hull_legs.stl"
+    REPO, "airframe", "stls", "fuselage", "landing-gear", "lg_r6_3_0in_hull_legs.stl"
 )
 STATIC_GAP = 2.0  # static part against the fixed hull (cargo_layout_fit convention)
 

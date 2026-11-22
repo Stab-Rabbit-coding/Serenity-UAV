@@ -216,11 +216,12 @@ def tip_reach(flap_len: float) -> float:
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import hull_datums as hd  # noqa: E402  aircraft datum R2 (2026-10-19)
 WING_SPAR_HULL_Z = hd.SPAR_Z  # [mm] built spar height (R1 66.851)
-# Ground plane per gear variant, aircraft datum: the 3.0 in flight gear IS the
-# datum ground (Z 0); the retired 1.5 in gear stands the belly 41.9 mm lower.
-# (Keys kept for the scripts that index them.)
-GROUND_PLANES = {"1.5 in gear (ACTIVE default)": hd.BELLY_Z - 38.1,
-                 "3.0 in gear (kept, not wired in)": hd.GROUND_Z_3IN}
+# Ground plane, aircraft datum: the 3.0 in flight gear IS the datum ground (Z 0)
+# (tools/hull_datums.py GROUND_Z_3IN; docs/LANDING_GEAR_ANALYSIS.md sec. 4.8 retired the
+# compact variant from the flight article).  The 3.0 in gear is the only configuration
+# carried; the retired variant is not evaluated.
+GEAR_3IN = "3.0 in gear (flight article)"
+GROUND_PLANES = {GEAR_3IN: hd.GROUND_Z_3IN}
 
 #: Deleted at Rev T4, kept so the delta is legible rather than implied.
 DELETED = [

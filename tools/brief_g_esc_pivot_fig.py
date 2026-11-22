@@ -66,7 +66,7 @@ DATA: dict[str, Any] = {
         ),
     },
     "tip_open_f1": 221.82,  # open-nozzle tip station, F1 (arm1 + cg1)
-    "clr_ref": dict(pivot=111.68, c15=-5.19, c30=36.71),
+    "clr_ref": dict(pivot=111.68, c30=36.71),  # 3.0 in flight gear (hull_datums GROUND_Z_3IN)
     "walls": [
         ("F1 flaps", 2.5),
         ("bellcrank bosses (as drawn)", 1.1),
@@ -84,9 +84,10 @@ DATA: dict[str, Any] = {
 
 
 def clearance(pivot):
-    """Hover tip clearance (mm) for both gear heights; the arm grows 1:1 as the pivot moves fwd."""
+    """Hover tip clearance (mm) on the 3.0 in flight gear; the arm grows 1:1 as the pivot moves
+    forward."""
     d = DATA["clr_ref"]["pivot"] - pivot
-    return DATA["clr_ref"]["c15"] - d, DATA["clr_ref"]["c30"] - d
+    return DATA["clr_ref"]["c30"] - d
 
 
 def figure(out: Path) -> None:
@@ -188,18 +189,9 @@ def figure(out: Path) -> None:
     # 5 Weight and balance: pivot, ballast, hover clearance
     a = ax[1, 1]
     for i, n in enumerate(names):
-        c15, c30 = clearance(o[n]["pivot"])
-        a.bar(i - w / 2, c15, w, color=col[n], alpha=0.55)
-        a.bar(i + w / 2, c30, w, color=col[n])
-        a.text(
-            i - w / 2,
-            c15 - 3,
-            f"{c15 / IN:+.2f} in\n({c15:+.1f})",
-            ha="center",
-            fontsize=8,
-            va="top",
-        )
-        a.text(i + w / 2, c30 + 1, f"{c30 / IN:+.2f} in\n({c30:+.1f})", ha="center", fontsize=8)
+        c30 = clearance(o[n]["pivot"])
+        a.bar(i, c30, 2 * w, color=col[n])
+        a.text(i, c30 + 1, f"{c30 / IN:+.2f} in\n({c30:+.1f})", ha="center", fontsize=8)
         if o[n]["ballast"]:
             a.text(
                 i - 0.55,
@@ -211,10 +203,10 @@ def figure(out: Path) -> None:
             )
     a.axhline(0, color="k")
     a.set_xticks(range(3), names)
-    a.set_ylim(-22, 66)
+    a.set_ylim(0, 66)
     a.set_ylabel("hover nozzle-tip ground clearance, mm")
     a.set_title(
-        "5  Weight and balance - hover clearance (light = 1.5 in gear, dark = 3.0 in gear)",
+        "5  Weight and balance - hover nozzle-tip clearance, 3.0 in flight gear",
         loc="left",
         fontsize=10,
     )
