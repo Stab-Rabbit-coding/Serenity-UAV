@@ -495,6 +495,77 @@ smaller for the same pivot move.
 
 ---
 
+## Brief H — The 70 A ESC on the corrected skin (2026-11-22)
+
+**Question for the owner.** With the skin read correctly (WBS NAC-64-ESC-SKIN-RAY), the 70 A ESC
+does not fit inside the canonical 64 mm pod. ESC B's two bays sit in the ventral half, where the skin
+is only r 1.57–1.73 in (40–44 mm). A board panel needs r ≥ 1.85 in (46.9 mm) at its corner. How
+should the ESCs be housed?
+
+**How the options were measured.**
+
+- **Inside the skin:** the bay optimiser (`tools/esc80_cooptimize.py`, `tools/esc70_design_f1.json`)
+  was re-run on the corrected skin with the G1 keep-outs (pivot Z 109.73 mm). Variants tried:
+  - two bays per ESC, as G1;
+  - one bay per ESC;
+  - wider panels;
+  - narrower 16/12 mm panels.
+- **Blister:** the height a blister needs was measured from the G1 board panels against the
+  corrected skin.
+- **As-built covers:** the published cover meshes were measured against the scaled canonical OML.
+- **Air load:** taken at V_NE 87 kt (`current-specification/flight_limits.json`, REF-FAA-002
+  §107.51).
+
+![Brief H six checks](figures/brief_h_esc_skin.png)
+
+*Figure: `tools/brief_h_esc_skin_fig.py`. Analytical, unreviewed.*
+
+**Options.**
+
+- **H1:** keep the G1 bays and pivot and give ESC B's two bays a ventral blister,
+  0.10–0.24 in (2.6–6.2 mm) proud. Trim the few corners of ESC A's panels that touch the skin.
+- **H2:** keep inside the canonical skin and shrink the ESC. The best layout found fits 32 % (ESC A)
+  and 57 % (ESC B) of the board area per face. The boards would run at about 270 °F (132 °C), past
+  the 185 °F (85 °C) thermal cut-back.
+- **H3:** grow the nacelle scale from ×1.06 to about ×1.22, so the ventral skin clears the G1 bays.
+  This is an estimate from the 6.2 mm worst blister over a ~43 mm skin.
+- **H4:** move the ESCs off the tilting nacelle, into the wing root or the fuselage, and run the
+  phase leads across the tilt joint. This needs its own study.
+
+| Check | H1 G1 bays + blister | H2 inside the skin | H3 bigger nacelle | H4 ESCs off the pod |
+|---|---|---|---|---|
+| **Statics and dynamics** (panel 1) | Suction on the largest cover at V_NE: q 0.178 psi (1.23 kPa), Cp −1 (ASSUMED), ×1.5 → 0.85 lbf (3.8 N), reacted by the cover screws. Drag of a 0.24 in blister at 87 kt is negligible (about 0.02 lbf / 0.08 N each, Cd 0.3 ASSUMED). | Same covers, flush. | Pod loads grow with size; tilt-joint moments re-run. | 12 phase leads (2 motors × 3, both nacelles) cross the tilt joint and flex through −5…+135° on every tilt cycle. |
+| **Function** (panel 2) | ESC A 103 %, ESC B 99 % of the area needed per face, as in G1. ESC B's 1 % is a partitioning fix (issue #23). Board 165 °F (74 °C). | 32 / 57 % at best. Does not fit. | Expected to fit as H1 does (not run). | Fits wherever the new bay is put (not designed). |
+| **Structural integrity** (panel 3) | Blister walls 2.0 mm (AGENTS.md §7); the cover seats move out with the blister. | — | All walls scale; the pod needs re-checking. | Pod bays closed; a new bay elsewhere. |
+| **Mechanism and component interactions** (panel 4) | The G1 lead-slot plan stands: motor 2's slot goes into ESC B's power bay. The blister must clear the ground on landing and in hover (belly; not yet checked). | — | Everything that references pod stations moves. | Tilt-joint harness: bend radius, wear and cycle life (OD-17 route already carries 10 AWG). |
+| **Weight and balance** (panel 5) | About +0.004–0.009 lbm (2–4 g) per nacelle (ESTIMATE); pivot moves < 0.1 mm. | — | Pod skin mass about +30 %; pivot and hover reach re-converge. | −0.21 lbm (−95 g) per nacelle from the tilting group; the pivot moves forward. |
+| **Canonical shape** (panel 6) | Two belly blisters per nacelle, departing from REF-CAD-003. They are smaller than the bulge the as-built ventral ESC cover already has: up to 0.45 in (11.5 mm), which the faulty skin model hid. | None. | Silhouette kept, size grows. | None on the nacelle. |
+
+**Recommendation: H1.** It keeps everything already decided: the G1 bays and pivot, the lead-slot
+plan, and issue #23's envelope (now with the blister stated as a condition). Its shape cost is
+smaller than the bulge the as-built pod already has. H2 cannot fit or cool the 70 A ESC. H3 changes
+the whole nacelle to fix one local problem. H4 trades a bay problem for a tilt-joint harness problem
+that needs its own study.
+
+**If H1 is chosen** (each is a work item, none is done):
+
+1. Design the blisters: G1 ESC B bays (port 78° and 136°), 2.0 mm walls, faired leading and trailing
+   edges. Trim ESC A's panel corners.
+2. Fix the hollow cavity first (NAC-64-HOLLOW-SKIN). Then re-export the pods, re-run the mass
+   roll-up and the pivot fixed point, and re-issue issue #23's envelope with the blister condition.
+3. Re-site the motor-2 lead slot into ESC B's power bay (the paused task).
+4. Ground-clearance and tilt-sweep check of the blisters.
+
+**Still unverified.**
+
+- The H3 scale factor is an estimate, and H4 is not studied.
+- The blister mass is an estimate.
+- The cover Cp is assumed.
+- The thermal figures are from the aspirated-lane bay model.
+- The as-built cover bulge was measured on meshes only.
+
+---
+
 ## Changelog
 
 - 2026-11-21 — first issue: briefs A–E (Claude Opus 5.5).
@@ -519,3 +590,5 @@ smaller for the same pivot move.
   corrected to "per face" (the optimiser's `fitted_area_mm2` is one face).
 - 2026-11-22 — WARNING added: the bay tools' skin ray cast kept the far-side hit (NAC-64-ESC-SKIN-RAY);
   the G1 bay envelopes and issue #23's areas are invalid until re-planned.
+- 2026-11-22 — Brief H added (70 A ESC on the corrected skin; options H1 blister / H2 shrink / H3 bigger
+  nacelle / H4 off-pod; recommendation H1).

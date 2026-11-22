@@ -10746,6 +10746,14 @@
       ],
       "archived": false
     },
+    "docs/figures/brief_h_esc_skin.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "power"
+      ],
+      "archived": false
+    },
     "docs/figures/nacelle64_bay_stud_after.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -15901,6 +15909,14 @@
       ],
       "archived": false
     },
+    "tools/brief_h_esc_skin_fig.py": {
+      "description": "brief_h_esc_skin_fig.py -- six-check figure for Owner Decision Brief H (ESC bays, true skin).",
+      "tags": [
+        "build-tooling",
+        "power"
+      ],
+      "archived": false
+    },
     "tools/build_head_shell.py": {
       "description": "build_head_shell.py \u2014 apply head-shell features (bosses + aperture cuts) to",
       "tags": [
@@ -17475,6 +17491,7 @@
       "docs/failsafe_thresholds.md",
       "docs/figures/battery_bay_twin_tray.png",
       "docs/figures/brief_g_esc_pivot.png",
+      "docs/figures/brief_h_esc_skin.png",
       "docs/figures/nacelle64_bay_stud_after.png",
       "docs/figures/nacelle64_bay_stud_interaction.png",
       "docs/figures/nacelle64_hollow_skin_check.png",
@@ -19592,6 +19609,7 @@
       "docs/POWER_DISTRIBUTION.md",
       "docs/figures/battery_bay_twin_tray.png",
       "docs/figures/brief_g_esc_pivot.png",
+      "docs/figures/brief_h_esc_skin.png",
       "docs/figures/od3_esc_current.png",
       "docs/figures/od3_esc_fit_mass.png",
       "docs/figures/od3_esc_path.png",
@@ -19610,6 +19628,7 @@
       "gcs/skipper/hardware/docs/skipper_power_budget.md",
       "graphical-build-guide/build_guide_14_power_routing.svg",
       "tools/brief_g_esc_pivot_fig.py",
+      "tools/brief_h_esc_skin_fig.py",
       "tools/esc_f1_pivot_iter.py",
       "tools/nacelle64_esc_bay_check.py",
       "tools/nacelle_esc_bay_fit.py",
@@ -21314,6 +21333,7 @@
       "tools/bhd02_option_study.py",
       "tools/bhd10_aft_strip_options.py",
       "tools/brief_g_esc_pivot_fig.py",
+      "tools/brief_h_esc_skin_fig.py",
       "tools/build_head_shell.py",
       "tools/build_landing_gear_views.py",
       "tools/cargo_bay_envelope.py",

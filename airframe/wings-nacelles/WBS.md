@@ -2334,8 +2334,11 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             ventral bay (local az 68) is skin-tight: boards reach r 42.8 mm against a ventral
             OML of 42.9 mm (0.041 in3 / 40.9 mm3 of board outside the OML).  Owner decisions
             needed before the lead slot (task above) can be placed.
-            - [ ] Re-plan the ESC bays with the corrected skin (dorsal/flank sectors against
-                  the servo, trunnion and nav keep-outs; narrower panels; or a fairing).
+            - [x] Re-planned 2026-11-22: no layout fits inside the canonical skin (best 32 / 57 %
+                  of the area per face, 270 F / 132 C).  Options in brief H (H1 G1 bays + ventral
+                  blister 2.6-6.2 mm, recommended; H2 shrink; H3 bigger nacelle; H4 off-pod),
+                  awaiting the owner.  The as-built ventral ESC cover already stands up to
+                  11.5 mm proud of the canonical OML.
             - [x] Wall check of the as-built pod done 2026-11-22 -> NAC-64-HOLLOW-SKIN below.
         - [ ] **NAC-64-HOLLOW-SKIN — WARNING (found 2026-11-22): the as-built 64 mm pod STLs have
             OPENINGS and thin patches in the outer skin.**  `tools/nacelle_hollow_profile.py`
