@@ -678,6 +678,10 @@ def main_v2(p) -> int:
     P64_K, P64_A = 1.21 * s_n, 1.13 * s_n
     Z_MAX = 160.0 * P64_A
     LOOP_Z_MAX = (166.25 * 1.13 - 16.25) * s_n
+    # F1 (owner 2026-11-22, brief F): the nozzle housing face moves to Z 160.25, so bays and harness
+    # loops end ahead of it.  Absolute pod stations, NOT scaled by nacelle_scale.
+    Z_MAX = p.get("z_max_mm", Z_MAX)
+    LOOP_Z_MAX = p.get("loop_z_max_mm", LOOP_Z_MAX)
     if "keepouts" in p:
         KEEPOUTS = [(a0, a1, z0 * s_n, z1 * s_n) for a0, a1, z0, z1 in p["keepouts"]]
     zs, skin = skin64(p.get("z_min", Z_MIN_V2 * s_n))

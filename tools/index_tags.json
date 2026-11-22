@@ -16032,8 +16032,15 @@
       ],
       "archived": false
     },
+    "tools/esc70_design_f1.json": {
+      "description": "JSON data (43 top-level keys)",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/esc80_cooptimize.py": {
-      "description": "Python script",
+      "description": "esc80_cooptimize.py \u2014 score one 80 A ESC + 64 mm nacelle bay design point.",
       "tags": [
         "build-tooling"
       ],
@@ -21284,6 +21291,7 @@
       "tools/datum_regression.py",
       "tools/dorsal_shroud_resize_64.py",
       "tools/esc70_design.json",
+      "tools/esc70_design_f1.json",
       "tools/esc80_cooptimize.py",
       "tools/esc80_design.json",
       "tools/esc80_design_m2.json",

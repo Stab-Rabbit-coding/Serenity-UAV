@@ -2295,6 +2295,13 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             (`nozzle_servo_linkage_64.py`) and SCAD with the F1 station, pocket / cover / screw 1
             moved forward, ring rod-clearance cut re-made, horn standoff confirmed on hardware.
             Supersedes NAC-64-SERVO-L1.
+        - [ ] **NAC-64-NOZ-ROOT-ESC — F1 x A1: the 70 A ESC does not fit the OD-3 bays under F1
+            (2026-11-22; owner decision needed).**  `tools/esc80_cooptimize.py
+            tools/esc70_design_f1.json` (bays and loops end at Z 158.25, servo keep-out moved with
+            F1-B): ESC A -14.3 mm, ESC B -23.7 mm (logic); today +3.2 / +18.1.  Bays forward to
+            Z 60 recover A to -2.7 but not B.  Options: three bays per ESC, a shorter board, or
+            ESCs off the pod.  The motor-2 lead slot then moves to the ESC-B bay azimuth and ends
+            at the F1 pocket face (Z 160.25).
         - [ ] **NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A with two CM07s (2026-11-21).**
             `docs/POWER_DISTRIBUTION.md` section 3.3 total 4.2 A + 2 x 0.67 A exceeds the BEC's 5 A
             continuous (inside the 7 A / 100 ms burst).  Size the F_NOZ fuses and confirm the burst

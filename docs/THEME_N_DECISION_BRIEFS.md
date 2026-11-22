@@ -313,6 +313,16 @@ the push-only rod into the ring's open cup.
 pending); real CM07 horn geometry and standoff; pin bearing in PA CF at the 14.6 N rod load; the
 drive is not yet built into `nozzle_servo_linkage_64.py` / the SCAD (WBS NAC-64-SERVO-F1B).
 
+**F1 × A1, the B80 clash (2026-11-22).** Re-running the OD-3 optimiser (`tools/esc80_cooptimize.py
+tools/esc70_design_f1.json`) with F1's aft limit (bays and harness loops end at Z 6.23 in /
+158.25 mm, 2 mm ahead of the housing face) and the servo keep-out moved forward with F1-B: **the
+70 A ESC no longer fits.** ESC A is 0.563 in (14.3 mm) short, ESC B 0.933 in (23.7 mm) short (logic
+board); today's limit gives +3.2 / +18.1 mm. Letting the bays run forward to Z 60 mm recovers ESC A
+to −2.7 mm but not ESC B (−23.7 mm). The B80 clash is therefore not a bay re-site: it needs a
+decision on where the ESC length comes from (three bays per ESC, a shorter board, or the ESCs off
+the pod). The motor-2 lead slot follows ESC B: its vane and slot move to the ESC-B bay azimuth under
+A1 anyway, and under F1 the slot ends at the new pocket face, Z 160.25 mm.
+
 **What F1 changes, if chosen** (each is a work item, none is done):
 
 1. `nacelle_nozzle_iris_64mm.scad`: flap length 46.6 mm; cam re-derived for the 9.93° / −1.97°
@@ -355,3 +365,4 @@ solved; pin bearing in PA CF; CFD of the longer petal zone with the motor tail i
   brief before geometry). Corrects the earlier misreading that the hinge stays where it is.
 - 2026-11-22 — owner decision: F1. Drive with a bellcrank first; B80 and the lead slot after.
 - 2026-11-22 — F1-B bellcrank drive designed and checked (`tools/nozzle64_f1_drive.py`).
+- 2026-11-22 — F1 × A1: the 70 A ESC no longer fits the OD-3 bays under F1's aft limit; owner decision needed.
