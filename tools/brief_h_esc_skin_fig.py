@@ -168,8 +168,8 @@ def figure(out: Path) -> None:
         "< 0.1 mm.  The G1 pivot (Z 109.73 mm) stands until the hollow-cavity fix\n"
         "(NAC-64-HOLLOW-SKIN) re-runs the pod mass, which moves it again.\n\n"
         "H2: no change from G1, but the boards do not fit.\n"
-        "H3 (bigger nacelle, ~x1.22 instead of x1.06): every pod station and mass grows;\n"
-        "pod skin mass ~+30 % (area ~ scale^2), the pivot and hover reach re-converge.\n"
+        "H3 (bigger nacelle, radial x1.22 on x1.06, ~x1.29): every pod station and mass grows;\n"
+        "pod skin mass ~+65 % (area ~ scale^2), the pivot and hover reach re-converge.\n"
         "H4 (ESCs off the pod): -0.21 lbm (-95 g) per nacelle of ESC mass leaves the tilting\n"
         "group; the pivot moves forward; phase leads cross the tilt joint (study needed).",
         fontsize=9,

@@ -520,6 +520,23 @@ should the ESCs be housed?
 
 *Figure: `tools/brief_h_esc_skin_fig.py`. Analytical, unreviewed.*
 
+![Brief H X-ray: canon, H1, H2, H3](figures/brief_h_xray.png)
+
+*X-ray, owner request 2026-11-22: the canonical skin translucent, with the G1 (or H2) boards, the
+duct and stage-2 cartridge, the aft motor, the F1 nozzle, the CM07 and the F1-B drive. Red is board
+through the canonical skin; orange is the H1 blister or the H3 grown skin; magenta is a clash.
+Measured on the meshes:*
+
+- *Canon: 0.200 in³ (3,284 mm³) of board through the skin.*
+- *H1: blisters 0.676 in³ (11,077 mm³), at most 0.22 in (5.5 mm) proud on the mesh (the grid
+  estimate above is 6.2 mm), with no board left outside.*
+- *H2: no departure, but 32 / 57 % of the board area.*
+- *H3: 39.6 in³ (648,683 mm³) of grown skin.*
+- *Clash in every G1 option: ESC B's logic board against a stage-2 cartridge feature, 0.0012 in³
+  (19.1 mm³) at Z 135–157 mm; to re-site. H2: 0.0004 in³ (7.3 mm³).*
+
+*The renders come from the session's assembly meshes (scratch), not from a committed tool.*
+
 **Options.**
 
 - **H1:** keep the G1 bays and pivot and give ESC B's two bays a ventral blister,
@@ -527,8 +544,9 @@ should the ESCs be housed?
 - **H2:** keep inside the canonical skin and shrink the ESC. The best layout found fits 32 % (ESC A)
   and 57 % (ESC B) of the board area per face. The boards would run at about 270 °F (132 °C), past
   the 185 °F (85 °C) thermal cut-back.
-- **H3:** grow the nacelle scale from ×1.06 to about ×1.22, so the ventral skin clears the G1 bays.
-  This is an estimate from the 6.2 mm worst blister over a ~43 mm skin.
+- **H3:** grow the nacelle so the skin clears the G1 bays with its 1.9 mm wall. That takes radial
+  ×1.22 on top of today's ×1.06, about ×1.29 if the scale is uniform. This was measured on the
+  meshes (X-ray below); it replaces the first estimate of ×1.22 overall.
 - **H4:** move the ESCs off the tilting nacelle, into the wing root or the fuselage, and run the
   phase leads across the tilt joint. This needs its own study.
 
@@ -538,7 +556,7 @@ should the ESCs be housed?
 | **Function** (panel 2) | ESC A 103 %, ESC B 99 % of the area needed per face, as in G1. ESC B's 1 % is a partitioning fix (issue #23). Board 165 °F (74 °C). | 32 / 57 % at best. Does not fit. | Expected to fit as H1 does (not run). | Fits wherever the new bay is put (not designed). |
 | **Structural integrity** (panel 3) | Blister walls 2.0 mm (AGENTS.md §7); the cover seats move out with the blister. | — | All walls scale; the pod needs re-checking. | Pod bays closed; a new bay elsewhere. |
 | **Mechanism and component interactions** (panel 4) | The G1 lead-slot plan stands: motor 2's slot goes into ESC B's power bay. The blister must clear the ground on landing and in hover (belly; not yet checked). | — | Everything that references pod stations moves. | Tilt-joint harness: bend radius, wear and cycle life (OD-17 route already carries 10 AWG). |
-| **Weight and balance** (panel 5) | About +0.004–0.009 lbm (2–4 g) per nacelle (ESTIMATE); pivot moves < 0.1 mm. | — | Pod skin mass about +30 %; pivot and hover reach re-converge. | −0.21 lbm (−95 g) per nacelle from the tilting group; the pivot moves forward. |
+| **Weight and balance** (panel 5) | About +0.004–0.009 lbm (2–4 g) per nacelle (ESTIMATE); pivot moves < 0.1 mm. | — | Pod skin mass about +65 % (area ~ scale², ×1.29/×1.06); pivot and hover reach re-converge. | −0.21 lbm (−95 g) per nacelle from the tilting group; the pivot moves forward. |
 | **Canonical shape** (panel 6) | Two belly blisters per nacelle, departing from REF-CAD-003. They are smaller than the bulge the as-built ventral ESC cover already has: up to 0.45 in (11.5 mm), which the faulty skin model hid. | None. | Silhouette kept, size grows. | None on the nacelle. |
 
 **Recommendation: H1.** It keeps everything already decided: the G1 bays and pivot, the lead-slot
@@ -592,3 +610,5 @@ that needs its own study.
   the G1 bay envelopes and issue #23's areas are invalid until re-planned.
 - 2026-11-22 — Brief H added (70 A ESC on the corrected skin; options H1 blister / H2 shrink / H3 bigger
   nacelle / H4 off-pod; recommendation H1).
+- 2026-11-22 — Brief H X-ray added (canon / H1 / H2 / H3, clashes and mould-line departures); H3 corrected
+  to radial ×1.22 on ×1.06 (≈ ×1.29 uniform); ESC B logic × cartridge clash found (19.1 mm³).
