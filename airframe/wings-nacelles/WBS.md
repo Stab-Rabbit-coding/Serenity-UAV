@@ -2336,12 +2336,31 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             needed before the lead slot (task above) can be placed.
             - [ ] Re-plan the ESC bays with the corrected skin (dorsal/flank sectors against
                   the servo, trunnion and nav keep-outs; narrower panels; or a fairing).
-            - [ ] `tools/nacelle_hollow_profile.py` has the same max-hit ray cast and generates
-                  the pod cavity (`nacelle_hollow_profile.scad`): check the as-built ventral
-                  wall against the 2.0 mm minimum (AGENTS.md sec. 7) with a proper thickness
-                  analysis.  A coarse ray sample found outer segments < 2.0 mm, which may be
-                  steps or cover seats rather than thin walls.  Not changed: it is production
-                  geometry.
+            - [x] Wall check of the as-built pod done 2026-11-22 -> NAC-64-HOLLOW-SKIN below.
+        - [ ] **NAC-64-HOLLOW-SKIN — WARNING (found 2026-11-22): the as-built 64 mm pod STLs have
+            OPENINGS and thin patches in the outer skin.**  `tools/nacelle_hollow_profile.py`
+            casts each ray through the axis and keeps the largest hit (same bug as
+            NAC-64-ESC-SKIN-RAY), so its skin grid reads up to 0.39 in (9.8 mm) too large in
+            936 of 2,304 cells and the committed cavity (`HOLLOW_R_*`, `HOLLOW_SKIN_*`) was cut
+            to the opposite, fatter side's skin.  Checked on `nacelle_stbd_64mm.stl`
+            (387,682 mm3, the published part): in 458 of 1,718 live cavity cells the cavity
+            surface lies OUTSIDE the true skin, and 652 leave less than the 2.0 mm minimum
+            (AGENTS.md sec. 7; design intent 2.5-8.0 mm).  On the real STL those 652 cells are:
+            278 skin >= 2.0 mm (other keep-outs held material), 121 skin present but < 2.0 mm,
+            54 open but closed by an ESC cover (the designed bay), and **199 open with nothing
+            modelled closing them** (166 of them where the grid puts the cavity outside the
+            skin).  Regions: ventral and flanks, Z 60-160 mm, local az 0-175 deg; forward
+            dorsal, Z 25-55 mm, az 215-315 deg.  Tool `tools/nacelle64_hollow_skin_check.py`;
+            map `docs/figures/nacelle64_hollow_skin_check.png`.
+            Sections at Z 35 / 78 / 120 mm confirm the cavity floor (r 34.5 mm) exposed to the
+            outside.  Port pod not checked separately (mirror; REQUIRES VERIFICATION).
+            WARNING: do not print or fly the current 64 mm pod STLs; an open belly exposes the
+            cavity and wiring to the airflow and leaves the skin load path broken.
+            - [ ] Fix the near-side filter in `nacelle_hollow_profile.py`, regenerate the
+                  cavity, re-render and re-export both pods (owner approval: production
+                  geometry; it also changes pod mass, the CG and so PIVOT_Z).
+            - [ ] Re-run this check on the regenerated pods; then re-run the mass roll-up and
+                  the pivot fixed point (brief G numbers move again).
         - [ ] **NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A with two CM07s (2026-11-21).**
             `docs/POWER_DISTRIBUTION.md` section 3.3 total 4.2 A + 2 x 0.67 A exceeds the BEC's 5 A
             continuous (inside the 7 A / 100 ms burst).  Size the F_NOZ fuses and confirm the burst

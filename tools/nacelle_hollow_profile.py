@@ -153,8 +153,8 @@ def skin_grid(side: str, dz: float = DZ, n_az: int = N_AZ):
                     t = np.radians(a + dda)
                     origins.append([200.0 * np.cos(t), 200.0 * np.sin(t), z + ddz])
                     dirs.append([-np.cos(t), -np.sin(t), 0.0])
-    origins = np.asarray(origins)
-    dirs = np.asarray(dirs)
+    origins = np.asarray(origins)  # type: ignore[assignment]
+    dirs = np.asarray(dirs)  # type: ignore[assignment]
     loc, ray_idx, _ = mesh.ray.intersects_location(origins, dirs, multiple_hits=True)
 
     outer = np.zeros(len(origins))

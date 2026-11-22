@@ -10760,6 +10760,13 @@
       ],
       "archived": false
     },
+    "docs/figures/nacelle64_hollow_skin_check.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/figures/nacelle64_od17_aft_fairing_horizontal.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -16482,6 +16489,13 @@
       ],
       "archived": false
     },
+    "tools/nacelle64_hollow_skin_check.py": {
+      "description": "nacelle64_hollow_skin_check.py -- does the 64 mm pod's hollow cavity leave a real outer skin?",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/nacelle64_od1_figure.py": {
       "description": "nacelle64_od1_figure.py -- picture of the OD-1 decision: nozzle spigot vs stage-2 cartridge.",
       "tags": [
@@ -17463,6 +17477,7 @@
       "docs/figures/brief_g_esc_pivot.png",
       "docs/figures/nacelle64_bay_stud_after.png",
       "docs/figures/nacelle64_bay_stud_interaction.png",
+      "docs/figures/nacelle64_hollow_skin_check.png",
       "docs/figures/nacelle64_od17_aft_fairing_horizontal.png",
       "docs/figures/nacelle64_od17_aft_fairing_section.png",
       "docs/figures/nacelle64_od17_aft_fairing_vertical.png",
@@ -21378,6 +21393,7 @@
       "tools/mirror_claude_memory.py",
       "tools/nacelle64_assembly_check.py",
       "tools/nacelle64_esc_bay_check.py",
+      "tools/nacelle64_hollow_skin_check.py",
       "tools/nacelle64_od1_figure.py",
       "tools/nacelle64_optD_aft_fairing.py",
       "tools/nacelle64_optD_concept.py",
