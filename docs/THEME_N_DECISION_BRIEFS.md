@@ -324,6 +324,48 @@ forward to Z 60 mm recovers ESC A to −4.7 mm but not ESC B (−25.7 mm). **Own
 Stab-Rabbit-coding/Open-Secure-ESC issue #23. The motor-2 lead slot follows ESC B: its vane and slot move to the ESC-B bay azimuth under
 A1 anyway, and under F1 the slot ends at the new pocket face, Z 160.25 mm.
 
+**Forward room, with the pivot at the CG (2026-11-22, owner direction).** `tools/esc_f1_pivot_iter.py`
+runs the bay optimiser and the off-axis CG to a fixed point. The pivot stays at the CG, and the
+pivot-tied keep-outs (the inboard trunnion keep-out, 25.3 mm aft of the pivot, and the outboard nav
+channel, 2.3 mm forward of it) move with it.
+
+| Forward limit | Converged pivot | ESC A margin | ESC B margin | Hotter ESC, est. |
+|---|---|---|---|---|
+| today's, Z 75.85 mm | Z 4.356 in (110.65 mm) | −14.3 mm (logic) | −17.7 mm (logic) | 175.3 °F (79.6 °C) |
+| Z 47.9 mm web (aft face Z 49.41) | **Z 4.338 in (110.19 mm)** | **−0.94 mm (logic)**; power +3.3 | **−17.7 mm (logic)**; power +14.8 | 166.5 °F (74.7 °C) |
+
+The canonical skin limits the forward gain to about 0.33 in (8.4 mm): bays start at Z 67.4 mm, not
+49.4. Per face at the converged forward case:
+
+| Bay | Run | Available | Needed | Margin |
+|---|---|---|---|---|
+| A power | 1.890 in (48.0 mm) | 1,632 mm² | 1,520 | +112 |
+| A logic | 1.496 in (38.0 mm) | 1,251 mm² | 1,282 | −31 |
+| B power | 2.374 in (60.3 mm) | 2,025 mm² | 1,520 | +505 |
+| B logic | 0.787 in (20.0 mm) | 680 mm² | 1,282 | −602 |
+
+**Per ESC:**
+
+- **ESC A:** 2,883 against 2,802 mm² needed, +81. It fits if some logic area moves to the power
+  board.
+- **ESC B:** 2,705 against 2,802, −97 (3.5 % short).
+
+The shortfall is now mostly partitioning. B's logic bay sits between the trunnion keep-out and the
+housing and cannot grow forward.
+
+**What the pivot move costs:**
+
+- **Size:** the pivot moves −0.343 in (−8.7 mm) from today: F1's −6.76 mm plus −1.9 mm from the
+  ESCs moving forward.
+- **Hover:** reach from the pivot to the open tip is 4.395 in (111.6 mm). Ground clearance is
+  −0.26 in (−6.7 mm) on the 1.5 in gear and +1.39 in (+35.2 mm) on the 3.0 in gear (today −1.04 /
+  +0.61 in).
+- **What moves with it:** the trunnion, the cavity trunnion bore and the nav channel end, all
+  through the single-sourced PIVOT_Z (PIVOT-RC procedure and a hull re-bake).
+- **Checks to re-run:** the tilt-sweep clearances and the OD-17 fairing, with the nacelle sitting
+  8.7 mm further aft on the wing. The 10 AWG disconnect bay stays clear of the trunnion (49.1 mm
+  apart, against 28.3 mm needed).
+
 **What F1 changes, if chosen** (each is a work item, none is done):
 
 1. `nacelle_nozzle_iris_64mm.scad`: flap length 46.6 mm; cam re-derived for the 9.93° / −1.97°
@@ -368,3 +410,5 @@ solved; pin bearing in PA CF; CFD of the longer petal zone with the motor tail i
 - 2026-11-22 — F1-B bellcrank drive designed and checked (`tools/nozzle64_f1_drive.py`).
 - 2026-11-22 — F1 × A1: the 70 A ESC no longer fits the OD-3 bays under F1's aft limit. Owner: shorter
   board (option 2); space requirements raised in Open-Secure-ESC.
+- 2026-11-22 — forward room with the pivot at the CG (`tools/esc_f1_pivot_iter.py`): pivot Z 110.19,
+  ESC A −0.94 mm, ESC B −17.7 mm (logic); per-ESC totals +81 / −97 mm² per face.

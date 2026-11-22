@@ -16060,6 +16060,14 @@
       ],
       "archived": false
     },
+    "tools/esc_f1_pivot_iter.py": {
+      "description": "esc_f1_pivot_iter.py -- forward ESC-bay room under F1, with the tilt pivot held at the CG.",
+      "tags": [
+        "build-tooling",
+        "power"
+      ],
+      "archived": false
+    },
     "tools/eval_nozzle_drive_64.py": {
       "description": "Measurement harness for the 64 mm nozzle-drive optimisation (ce-optimize).",
       "tags": [
@@ -19568,6 +19576,7 @@
       "docs/solutions/design-patterns/annular-esc-bay-length-is-set-by-radial-stack-not-panel-width.md",
       "gcs/skipper/hardware/docs/skipper_power_budget.md",
       "graphical-build-guide/build_guide_14_power_routing.svg",
+      "tools/esc_f1_pivot_iter.py",
       "tools/nacelle64_esc_bay_check.py",
       "tools/nacelle_esc_bay_fit.py",
       "tools/nacelle_esc_service.py",
@@ -21295,6 +21304,7 @@
       "tools/esc80_cooptimize.py",
       "tools/esc80_design.json",
       "tools/esc80_design_m2.json",
+      "tools/esc_f1_pivot_iter.py",
       "tools/eval_nozzle_drive_64.py",
       "tools/export-specctra-dsn.py",
       "tools/export_assembly_meshes.py",

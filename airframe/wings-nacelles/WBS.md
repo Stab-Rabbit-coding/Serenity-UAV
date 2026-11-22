@@ -2302,7 +2302,13 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             keep-out moved with F1-B): ESC A -14.3 mm (logic; power -4.7), ESC B -25.7 mm (logic
             bay 12 mm long); today +3.2 / +18.1.  Bays forward to Z 60 recover A to -4.7 but not B.
             Per-face envelope: A power 1,360 / A logic 796 / B power 1,574 / B logic 408 mm2 against
-            1,520 (power) and 1,282 (logic incl. creepage and interconnect) needed.  The motor-2 lead slot then moves to the ESC-B bay azimuth and ends
+            1,520 (power) and 1,282 (logic incl. creepage and interconnect) needed.
+            Forward room with the pivot at the CG (`tools/esc_f1_pivot_iter.py`, 2026-11-22): bays
+            forward to the Z 47.9 web (skin-limited to Z 67.4) and the pivot re-converged to
+            Z 110.19 (-8.7 mm from today) -> ESC A -0.94 mm, ESC B -17.7 mm (logic bay 20 mm
+            between the trunnion keep-out and the housing); per ESC +81 / -97 mm2 per face, so the
+            remaining gap is mostly power/logic partitioning.  Pivot move: hover clearance
+            -6.7 mm (1.5 in gear) / +35.2 mm (3.0 in gear); re-run tilt-sweep and OD-17 checks.  The motor-2 lead slot then moves to the ESC-B bay azimuth and ends
             at the F1 pocket face (Z 160.25).
         - [ ] **NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A with two CM07s (2026-11-21).**
             `docs/POWER_DISTRIBUTION.md` section 3.3 total 4.2 A + 2 x 0.67 A exceeds the BEC's 5 A
