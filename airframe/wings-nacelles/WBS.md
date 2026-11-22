@@ -2469,8 +2469,10 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             map `docs/figures/nacelle64_hollow_skin_check.png`.
             Sections at Z 35 / 78 / 120 mm confirm the cavity floor (r 34.5 mm) exposed to the
             outside.  Port pod not checked separately (mirror; REQUIRES VERIFICATION).
-            WARNING: do not print or fly the current 64 mm pod STLs; an open belly exposes the
-            cavity and wiring to the airflow and leaves the skin load path broken.
+            CAUTION: do not fly the pre-fix 64 mm pod STLs: the open belly exposes the cavity and
+            wiring to the airflow and breaks the skin load path (aircraft loss; per AGENTS.md sec. 6
+            a WARNING only if people are under the hover).  Note: do not print them either.
+            (Issued as a WARNING 2026-11-22; re-graded the same day.)
             - [x] Source fixed 2026-11-22 (owner: "make it so"): near-side filter in
                   `nacelle_hollow_profile.py` (+ tests/test_nacelle_hollow_profile.py, red
                   before / green after); cavity regenerated (`--emit`) and swapped into the
@@ -2490,8 +2492,8 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
                   `check_nacelle_deps.py` PASS; `nacelle64_hollow_skin_check.py` 0 open / 0 thin;
                   assembly check unchanged except pod-side wire lengths (-0.7 mm);
                   `auw_ledger.py --write` then `--check` PASS: hover AUW 6,886.6 -> 6,951.1 g
-                  (15.18 -> 15.32 lbm), T/W 1.38 -> 1.36.  The WARNING above was lifted, then
-                  re-imposed by NAC-64-HOLLOW-SKIN-2.
+                  (15.18 -> 15.32 lbm), T/W 1.38 -> 1.36.  The CAUTION above was lifted; the
+                  print hold is carried as a Note by NAC-64-HOLLOW-SKIN-2.
         - [ ] **NAC-64-HOLLOW-SKIN-2 — S3 skin gate was a false pass (found 2026-11-22, S4
             code-review fix).**  The S3 check ray-cast only the cells the cavity GRID flagged
             (the grid is the model under test) and tested "open" against the canonical OML, so a
@@ -2510,8 +2512,9 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
               0.58-1.68 mm (trunnion collar / boss-shave region); ventral-inboard az 52-67 deg,
               Z 82-104 mm, 0.17-1.39 mm (ESC bay rim).
             Map: `docs/figures/nacelle64_hollow_skin_check.png`.
-            WARNING: the S3 statement "skin check 0 open / 0 thin" above is withdrawn; do not
-            print the 64 mm pods until this item closes.
+            Note: the S3 statement "skin check 0 open / 0 thin" above is withdrawn; do not print
+            the 64 mm pods until this item closes.  (Issued as a WARNING; re-graded 2026-11-22 per
+            AGENTS.md sec. 6: a print hold is not a hazard to people.)
             - [x] S4.3 2026-11-22, on the G1 pod source: **cavity gate PASS** (0 open, 0 thin
                   cells made by the cavity; 40 cells closed by the four G1 covers).
                   Attribution fixed in `nacelle64_hollow_skin_check.py`: a no-cavity ray that
@@ -2546,7 +2549,11 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             fairing on the inboard face over the run (OML departure, under the wing-root
             junction?), re-routing the fan-out where the skin is deeper (az 0 +/- 4 deg reaches
             r 45), or a smaller conductor bundle.  Owner decision (OD-17 is an owner decision).
-            WARNING: as published, the inboard skin is open over the 10 AWG run.
+            CAUTION: as published, the inboard skin is open over the 10 AWG power feed.  Airflow
+            into the open channel and chafe on its edges can damage the insulation; a short on the
+            feed loses a fan (aircraft loss; per AGENTS.md sec. 6 a WARNING only if people are
+            under the hover, as NAC-64-FUSE-COORD).  Do not fly until closed.  (Issued as a WARNING
+            2026-11-22; re-graded the same day.)
             - [x] FRAME fix 2026-11-22: the check read the STBD cavity grid against the SCAD's
                   default render, which imports the LEFT shell and cuts HOLLOW_*_PORT (the two
                   grids differ by up to 12.7 mm unmirrored).  `--side` added (default PORT);
