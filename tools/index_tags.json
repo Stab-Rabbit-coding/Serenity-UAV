@@ -10730,6 +10730,13 @@
       ],
       "archived": false
     },
+    "docs/feedback-sweep/state.yml": {
+      "description": "YAML config",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/figures/battery_bay_twin_tray.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -17528,6 +17535,7 @@
       "docs/conversation histories/2026-10-17-103355-this-session-is-being-continued-from-a-previous-c.txt",
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
+      "docs/feedback-sweep/state.yml",
       "docs/figures/battery_bay_twin_tray.png",
       "docs/figures/brief_g_esc_pivot.png",
       "docs/figures/brief_h_esc_skin.png",

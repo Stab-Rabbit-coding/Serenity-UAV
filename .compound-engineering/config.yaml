@@ -1,0 +1,18 @@
+# Compound Engineering -- tracked project config (shared by every checkout and session).
+# Sweep (ce-sweep) settings, configured 2026-11-22 by interactive setup.
+# NOTE: ce-sweep reads its settings from the gitignored config.local.yaml at Phase 0.
+# This tracked copy keeps them durable across ephemeral cloud containers: in a fresh
+# checkout, copy the block below into .compound-engineering/config.local.yaml (or run
+# /ce-sweep setup) before the first sweep.
+# --- Sweep (ce-sweep) --- configured 2026-11-22 (interactive setup)
+
+feedback_sources:
+  - { type: github-issues, id: gh-serenity, target: Stab-Rabbit-coding/Serenity-UAV, ack_action: "feedback:ack", closeout_action: "feedback:resolved", sensitive: false, approved: true }
+  - { type: github-issues, id: gh-ose, target: Stab-Rabbit-coding/Open-Secure-ESC, ack_action: "feedback:ack", closeout_action: "feedback:resolved", sensitive: false, approved: true }
+  - { type: github-issues, id: gh-secure, target: Stab-Rabbit-coding/SecureControllers, ack_action: "feedback:ack", closeout_action: "feedback:resolved", sensitive: false, approved: true }
+  - { type: github-issues, id: gh-pe-skills, target: Griffing-Technology-LLC/engineering-pe-skills, ack_action: "feedback:ack", closeout_action: "feedback:resolved", sensitive: false, approved: true }
+
+sweep_state_path: docs/feedback-sweep/state.yml   # committed
+sweep_ack_cap: 25
+sweep_lease_ttl_minutes: 60
+sweep_shared_branch: true

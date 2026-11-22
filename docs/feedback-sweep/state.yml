@@ -1,0 +1,7 @@
+schema_version: 1
+lease:
+  writer: "sweep-ccr-0174NeiAyPX2-2026-11-22"
+  timestamp: "2026-11-22T18:08:25.464194+00:00"
+  ttl_minutes: 60
+sources: {}
+items: {}
