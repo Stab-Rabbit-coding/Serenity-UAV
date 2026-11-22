@@ -3136,6 +3136,16 @@
       ],
       "archived": false
     },
+    "airframe/stls/nacelles/esc/h1_esc_housing_64mm_solid.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "power",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_a.stl": {
       "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 EscCover64_Port_A 2026-06-11",
       "tags": [
@@ -18932,6 +18942,7 @@
       "airframe/stls/nacelles/edf_motor_mount_64mm_stage2_stbd.stl",
       "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl",
       "airframe/stls/nacelles/eng_right_shell24_50mm_repaired.stl",
+      "airframe/stls/nacelles/esc/h1_esc_housing_64mm_solid.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_a.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_b.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_a.stl",
@@ -19255,6 +19266,7 @@
       "airframe/stls/nacelles/edf_motor_mount_64mm_stage2_stbd.stl",
       "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl",
       "airframe/stls/nacelles/eng_right_shell24_50mm_repaired.stl",
+      "airframe/stls/nacelles/esc/h1_esc_housing_64mm_solid.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_a.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_b.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_a.stl",
@@ -19357,6 +19369,7 @@
       "airframe/stls/nacelles/edf_motor_mount_64mm_stage2_stbd.stl",
       "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl",
       "airframe/stls/nacelles/eng_right_shell24_50mm_repaired.stl",
+      "airframe/stls/nacelles/esc/h1_esc_housing_64mm_solid.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_a.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_b.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_a.stl",
@@ -19654,6 +19667,7 @@
       "airframe/placeholders/propulsion/ESC_80A_6S_BLHeli32_deferred.stl",
       "airframe/stls/fuselage/battery_tray.stl",
       "airframe/stls/fuselage/cargo/battery_cradle.stl",
+      "airframe/stls/nacelles/esc/h1_esc_housing_64mm_solid.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_a.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_b.stl",
       "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_a.stl",

@@ -40,9 +40,31 @@ def test_logic_housing_has_a_full_aft_wall():
 def test_every_louvre_opens_to_air(built):
     _, rep = built
     assert rep["louvres_blocked"] == []
-    assert len(g.louvre_z(g.G1_BAYS["B"][0])) * g.LOUVRE[0] * g.LOUVRE[1] == pytest.approx(
-        rep["design_bleed_area_mm2"], abs=0.5
+    assert rep["louvre_gross_area_mm2"] >= g.FOD_SCREEN_GROSS_MIN
+
+
+def test_louvre_slot_matches_the_flat_covers():
+    """One FOD criterion for every ESC louvre: the pod SCAD's ESC_LOUVRE_W / _L / _P."""
+    import re
+
+    src = (g.REPO / "airframe/openscad/nacelles/nacelle_pod_64mm_tandem.scad").read_text()
+
+    def val(name):
+        return float(re.search(rf"^{name}\s*=\s*([0-9.]+)", src, re.M).group(1))
+
+    assert (g.LOUVRE_W, g.LOUVRE_L, g.LOUVRE_P) == (
+        val("ESC_LOUVRE_W"),
+        val("ESC_LOUVRE_L"),
+        val("ESC_LOUVRE_P"),
     )
+
+
+def test_louvre_fields_bracket_the_discharge_ports():
+    """Forward field ahead of, aft field behind, the Z 96.54 ports (6.5 mm slots): no field sits
+    over the ports, so neither short-circuits."""
+    fwd, aft = g.louvre_fields(g.G1_BAYS["B"][0])
+    assert max(fwd) + g.LOUVRE_W / 2 < 96.54 - 6.5 / 2
+    assert min(aft) - g.LOUVRE_W / 2 > 96.54 + 6.5 / 2
 
 
 @pytest.mark.slow
@@ -57,7 +79,7 @@ def test_no_panel_line_crosses_a_louvre():
     gz, lz = g.groove_z(b, "power"), g.louvre_z(b)
     assert gz, "power face lost all its panel lines"
     for z in gz:
-        assert all(abs(z - zc) > g.LOUVRE[0] / 2 + g.GROOVE_W / 2 for zc in lz)
+        assert all(abs(z - zc) > g.LOUVRE_W / 2 + g.GROOVE_W / 2 for zc in lz)
 
 
 @pytest.mark.slow

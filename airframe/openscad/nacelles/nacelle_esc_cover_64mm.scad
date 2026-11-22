@@ -42,11 +42,27 @@
 
 include <nacelle_pod_64mm_tandem.scad>
 P64_NO_RENDER  = true;    // the pod wrapper renders unless this is defined
-RENDER_BAY     = 0;       // index into ESC_BAYS: 0 = ESC A power, 1 = ESC A logic
+RENDER_BAY     = 0;       // index into ESC_BAYS: 0 / 1 = ESC A power / logic (flat covers),
+                          //   2 / 3 = ESC B power / logic (H1 housing-covers)
+
+// ESC B: the generator's housing solid covers both B bays as one styled shell.  It is cut into
+// TWO covers by a radial half-plane midway between the two boards (H1_SPLIT_AZ), because one
+// cover over two boards 58 deg apart cannot be lifted off in any single direction (checked
+// 2026-11-22: ~200 mm3 of board interference along every direction tried).  Each cover lifts
+// along its own bay's panel bisector, which carries it AWAY from the split plane, so either can
+// come off first.
+H1_SOLID       = "../../stls/nacelles/esc/h1_esc_housing_64mm_solid.stl";  // reference input,
+                          //   tools/nacelle64_esc_housing.py --out (regenerate, never hand-edit)
+ESC_COVER_CLR  = 0.4;     // [mm] running clearance board -> cover (as the housing generator)
+H1_BAYS        = [for (b = ESC_BAYS) if (bay_is_housed(b)) b];
+H1_LIFT_T      = 15.0;    // [mm] removal stroke the hollow is swept along
+// split: midway between the power bay's far panel edge and the logic bay's near one (seat radius)
+H1_SPLIT_AZ    = (bay_az(H1_BAYS[0]) + 2 * esc_a_pow() + bay_az(H1_BAYS[1]) - 2 * esc_a_sig()) / 2;
 
 COVER_BAY = ESC_BAYS[RENDER_BAY];
 COVER_AZ  = bay_az(COVER_BAY);
-assert(!bay_is_housed(COVER_BAY), "this bay is closed by an H1 housing, not a flat cover");
+// lift direction of a cover: the bisector of its two panels' normals
+function cover_lift_az(b) = bay_az(b) + (esc_a_pow() - esc_a_sig()) / 2;
 
 // The material between the mould line and d_in inside it, on the pod's own scaled skin.
 module cover64_shell(d_out, d_in) {
@@ -75,7 +91,41 @@ module cover64_mesh_rebate() {
                   cover64_louvre_span() + 2 * ESC_MESH_MARGIN]);
 }
 
+// ── Partition between neighbouring covers ────────────────────────────────────────────────────
+// Adjacent G1 bays' landing bands overlap (the pod rebates simply merge), so each cover is cut
+// to its own side of every neighbour (overlaps found 2026-11-22: 31-151 mm3): by a Z-plane
+// midway between two axially separate bays, else by a radial half-plane midway between the
+// facing panel edges.  The two H1 halves use the same rule (= H1_SPLIT_AZ).
+function wrap180(a) = a - 360 * floor((a + 180) / 360);
+module half_plane_az(lo) {             // the 180 deg wedge [lo, lo + 180]
+    translate([0, 0, -1]) linear_extrude(260)
+        polygon(concat([[0, 0]], [for (i = [0 : 36]) let(t = lo + 180 * i / 36)
+                                     [90 * cos(t), 90 * sin(t)]]));
+}
+// Radial split when the two bays' panels do not overlap in azimuth (the usual case, and the
+// one the H1 halves need: a Z-plane between ESC B's bays handed the logic housing's forward
+// ramp to the power cover as a loose piece); a Z-plane only when they do.
+function cover_split(b, o) =
+    let(d = wrap180(bay_az(o) - bay_az(b)),
+        edge_b = d > 0 ? bay_az(b) + 2 * esc_a_pow() : bay_az(b) - 2 * esc_a_sig(),
+        edge_o = d > 0 ? bay_az(o) - 2 * esc_a_sig() : bay_az(o) + 2 * esc_a_pow(),
+        gap = d > 0 ? wrap180(edge_o - edge_b) : wrap180(edge_b - edge_o))
+    [d, gap, edge_b + wrap180(edge_o - edge_b) / 2];
+module cover_side_of(b, o) {
+    c = cover_split(b, o);
+    if (c[1] > 0)
+        half_plane_az(c[0] > 0 ? c[2] - 180 : c[2]);
+    else if (bay_z1(b) < bay_z0(o))
+        translate([-100, -100, -1]) cube([200, 200, 1 + (bay_z1(b) + bay_z0(o)) / 2]);
+    else
+        translate([-100, -100, (bay_z1(o) + bay_z0(b)) / 2]) cube([200, 200, 300]);
+}
+module cover_region(b) {
+    intersection_for(o = [for (x = ESC_BAYS) if (x != b) x]) cover_side_of(b, o);
+}
+
 module nacelle_esc_cover_64mm() {
+    assert(!bay_is_housed(COVER_BAY), "a housed bay takes the H1 housing-cover");
     assert(ESC_COVER_T >= ESC_CBORE_DEPTH + 1.5,
            "counterbore leaves under the 1.5 mm study floor beneath the screw head");
     assert(!bay_is_power(COVER_BAY) || cover64_louvre_z0() > bay_z0(COVER_BAY),
@@ -98,6 +148,7 @@ module nacelle_esc_cover_64mm() {
                 }
             }
             esc_bay_footprint(COVER_BAY, 60.0, ESC_LEDGE_W - ESC_COVER_FIT);
+            cover_region(COVER_BAY);
         }
         esc_boss_cylinders(COVER_BAY, ESC_SCREW_D);
         if (ESC_CBORE_DEPTH > 0) intersection() {
@@ -112,4 +163,68 @@ module nacelle_esc_cover_64mm() {
     }
 }
 
-nacelle_esc_cover_64mm();
+// ── ESC B housing-cover (H1) ─────────────────────────────────────────────────────────────────
+// The board envelope + running clearance, per housed bay (the cover's hollow).
+module h1_board_clearance(b) {
+    env = bay_env(b) + ESC_COVER_CLR;
+    union() {
+        esc_panel_slab(ESC_W_POWER + 2 * ESC_COVER_CLR, bay_az(b) + esc_a_pow(),
+                       ESC_MOUNT_R - 1.0, ESC_MOUNT_R + env,
+                       bay_z0(b) - ESC_COVER_CLR, bay_z1(b) + ESC_COVER_CLR);
+        esc_panel_slab(ESC_W_SIGNAL + 2 * ESC_COVER_CLR, bay_az(b) - esc_a_sig(),
+                       ESC_MOUNT_R - 1.0, ESC_MOUNT_R + env,
+                       bay_z0(b) - ESC_COVER_CLR, bay_z1(b) + ESC_COVER_CLR);
+        intersection() {
+            esc_fold_sector(b, ESC_MOUNT_R + env, ESC_COVER_CLR);
+            translate([0, 0, bay_z0(b) - ESC_COVER_CLR])
+                cylinder(r = ESC_MOUNT_R + env, h = bay_z1(b) - bay_z0(b) + 2 * ESC_COVER_CLR,
+                         $fn = 180);
+        }
+    }
+}
+
+// the board clearance swept back along the lift: what the cover must not contain as it lifts
+module h1_hollow(b) {
+    a = cover_lift_az(b);
+    hull() {
+        h1_board_clearance(b);
+        translate(-H1_LIFT_T * [cos(a), sin(a), 0]) h1_board_clearance(b);
+    }
+}
+
+module nacelle_esc_housing_cover_64mm(b) {
+    assert(len(H1_BAYS) == 2, "ESC B should have exactly two housed bays");
+    assert(bay_is_housed(b), "not a housed bay");
+    intersection() { difference() {
+        union() {
+            // flange: the flat-cover plate in this bay's rebate
+            intersection() {
+                cover64_shell(0.0, ESC_COVER_T);
+                esc_bay_footprint(b, 60.0, ESC_LEDGE_W - ESC_COVER_FIT);
+            }
+            // this bay's side of the canonical-styled housing, standing ESC_COVER_FIT off the skin
+            // outside the rebate (seats on the flange, not face-to-face on the curved skin); its
+            // forward feather edge starts at the doubler band, ahead of which the 0.25 mm
+            // stand-off left loose slivers (Z 57-62, 2026-11-22)
+            intersection() {
+                import(H1_SOLID, convexity = 10);
+                translate([0, 0, bay_z0(b) - ESC_LEDGE_W - 3.0]) cylinder(r = 90, h = 200);
+            }
+        }
+        difference() {
+            grid_solid(offset_grid(ESC_SKIN, -ESC_COVER_FIT), hollow_zs(), HOLLOW_N_AZ);
+            esc_bay_footprint(b, 60.0, ESC_LEDGE_W - ESC_COVER_FIT);
+        }
+        h1_hollow(b);
+        esc_boss_cylinders(b, ESC_SCREW_D);
+        // spotfaces: every screw head bears on the flange, at the skin
+        difference() {
+            esc_boss_cylinders(b, ESC_CBORE_D);
+            grid_solid(ESC_SKIN, hollow_zs(), HOLLOW_N_AZ);
+        }
+    }
+    cover_region(b); }
+}
+
+if (bay_is_housed(COVER_BAY)) nacelle_esc_housing_cover_64mm(COVER_BAY);
+else nacelle_esc_cover_64mm();

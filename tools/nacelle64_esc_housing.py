@@ -33,10 +33,16 @@ frame, local az = 180 - port az; the geometry is the same, mirrored.)
     square-cut one wall aft of its board (Z 6.27 in / 159.3 mm), 0.037 in (0.95 mm) short of the
     F1 nozzle housing face (Z 6.31 in / 160.25 mm).
   * Panel-line grooves (0.031 in / 0.8 mm wide, 0.018 in / 0.45 mm deep) every 0.79 in (20 mm),
-    kept clear of the louvre band.
-  * Four louvres on the power face, 0.098 x 0.374 in (2.5 x 9.5 mm) each (0.147 in2 / 95 mm2 =
-    the design's four 5.5 mm bleed holes), from the board face out through clearance and plate:
-    they are the ESC cooling outlets.  The build checks each one opens to air.
+    kept clear of the louvre fields.
+  * Louvres on the power face -- the cooling circuit's INLET (ambient -> bay -> discharge ports
+    into the inter-stage at Z 96.5, which is BELOW ambient; nacelle_pod_64mm_tandem.scad
+    "Cooling").  Same slot as the flat covers, so the FOD screen sizing holds: 1.2 mm (0.047 in)
+    wide along Z x 18 mm (0.71 in) circumferential, 3.0 mm pitch, 11 slots = 237.6 mm2
+    (0.368 in2) gross >= the 230.4 mm2 the no-see-um screen needs.  The ports sit mid-bay, so the
+    slots are split into a forward field (4) and an aft field (7); each field's air traverses its
+    end of the board to the ports.  Cut from the board face out through clearance and plate; the
+    build checks each slot opens to air.  (Until 2026-11-22: 4 x 2.5 x 9.5 mm = 95 mm2, mislabelled
+    as outlets, and 2.5 mm wide -- over the 1.2 mm FOD slot.)
   The housing is the solid outside the canonical skin; the pod/cover integration (seats, screws)
   is a separate step (WBS NAC-64-ESC-BLISTER).
 
@@ -90,7 +96,11 @@ GROOVE_PITCH, GROOVE_W, GROOVE_D = 20.0, 0.8, 0.45
 TOP_WALL = SKIN_WALL + GROOVE_D  # outer face: the plate is still COVER_T under a groove
 ENV = {"power": 6.0, "logic": 6.65}  # stack + cooling lane; power bay parts capped at 2.0 mm tall
 Z_F1_HOUSING = 160.25  # F1 nozzle housing forward face
-LOUVRE = (2.5, 9.5, 4, 4.5)  # length along Z, width, count, pitch (mm)
+# Louvre slot = the flat covers' (pod ESC_LOUVRE_W / _L / _P; tests assert equality).
+LOUVRE_W, LOUVRE_L, LOUVRE_P = 1.2, 18.0, 3.0  # Z width, circumferential length, pitch (mm)
+LOUVRE_FWD_N, LOUVRE_AFT_N = 4, 7  # slots per field (power face)
+LOUVRE_END = 4.0  # field inset from the bay end (= ESC_LEDGE_W / 2, as the flat cover)
+FOD_SCREEN_GROSS_MIN = 230.4  # mm2: nacelle_pod_64mm_tandem.scad FOD screen sizing
 X_BURY = 36.0  # housing base buried inside the skin (r), so the union is clean
 
 # G1 bays (port-frame = render-frame hinge azimuth; Z = board span incl. harness reserves)
@@ -169,19 +179,27 @@ def facet(w: float, a: float, z0: float, z1: float, env: float, aft_square: floa
     return mf.Manifold.batch_hull(pts).rotate([0, 0, a]), xt
 
 
+def louvre_fields(b: dict) -> list:
+    """Slot-centre stations per field (power face): [forward field, aft field]."""
+    fwd = [b["z"][0] + LOUVRE_END + LOUVRE_W / 2 + i * LOUVRE_P for i in range(LOUVRE_FWD_N)]
+    aft = [b["z"][1] - LOUVRE_END - LOUVRE_W / 2 - i * LOUVRE_P for i in range(LOUVRE_AFT_N)]
+    return [fwd, aft]
+
+
 def louvre_z(b: dict) -> list:
-    """Louvre centre stations (power face, aft end of the power bay)."""
-    return [b["z"][1] - 3.0 - i * LOUVRE[3] for i in range(LOUVRE[2])]
+    """All louvre slot-centre stations on the power face."""
+    return [z for f in louvre_fields(b) for z in f]
 
 
 def groove_z(b: dict, role: str) -> list:
-    """Panel-line stations: every GROOVE_PITCH, skipping the louvre group on the power face."""
+    """Panel-line stations: every GROOVE_PITCH, skipping the louvre fields on the power face."""
     zz = np.arange(b["z"][0] + 4.0, b["z"][1] - 2.0, GROOVE_PITCH)
-    lz = louvre_z(b) if role == "power" else []
-    if not lz:
-        return [float(z) for z in zz]
-    lo, hi = min(lz) - LOUVRE[0] - GROOVE_W, max(lz) + LOUVRE[0] + GROOVE_W
-    return [float(z) for z in zz if not lo <= z <= hi]
+    bands = (
+        [(min(f) - LOUVRE_W - GROOVE_W, max(f) + LOUVRE_W + GROOVE_W) for f in louvre_fields(b)]
+        if role == "power"
+        else []
+    )
+    return [float(z) for z in zz if not any(lo <= z <= hi for lo, hi in bands)]
 
 
 def housing(b: dict, role: str) -> mf.Manifold:
@@ -201,11 +219,10 @@ def housing(b: dict, role: str) -> mf.Manifold:
             cuts = g if cuts is None else cuts + g
     if role == "power":
         w, a, _, xt = facets[0]
-        ln, wd = LOUVRE[0], LOUVRE[1]
         for zc in louvre_z(b):
             c = (
-                mf.Manifold.cube([TOP_WALL + 0.6, wd, ln])
-                .translate([xt - TOP_WALL, -wd / 2, zc - ln / 2])  # board face out through plate
+                mf.Manifold.cube([TOP_WALL + 0.6, LOUVRE_L, LOUVRE_W])
+                .translate([xt - TOP_WALL, -LOUVRE_L / 2, zc - LOUVRE_W / 2])  # board face out
                 .rotate([0, 0, a])
             )
             cuts = c if cuts is None else cuts + c
@@ -223,7 +240,10 @@ def build():
     boards_b = board(G1_BAYS["B"][0], ENV["power"]) + board(G1_BAYS["B"][1], ENV["logic"])
     m = tmesh(proud)
     v = m.vertices
-    wall_min, blocked = measure(tmesh(housed))
+    # Walls on housing + skin; louvres on the housing alone: inside the bay window the pod skin
+    # is cut away, so the canonical OML there is not material a slot can be blocked by.
+    wall_min, _ = measure(tmesh(housed))
+    _, blocked = measure(tmesh(hs))
     rep = {
         "status_ok": proud.status() == mf.Error.NoError,
         "housing_volume_mm3": round(proud.volume(), 1),
@@ -231,8 +251,8 @@ def build():
         "esc_b_board_outside_mm3": round((boards_b - housed).volume(), 3),
         "wall_over_boards_min_mm": round(wall_min, 3),
         "louvres_blocked": blocked,
-        "louvre_open_area_mm2": LOUVRE[0] * LOUVRE[1] * LOUVRE[2],
-        "design_bleed_area_mm2": round(4 * math.pi * 5.5**2 / 4, 1),
+        "louvre_gross_area_mm2": round(len(louvre_z(G1_BAYS["B"][0])) * LOUVRE_W * LOUVRE_L, 1),
+        "fod_screen_gross_min_mm2": FOD_SCREEN_GROSS_MIN,
     }
     return proud, rep
 
@@ -259,7 +279,7 @@ def measure(housed: trimesh.Trimesh) -> tuple:
             for z in np.concatenate([zs, grooves]):
                 for y in np.linspace(-w / 2 + 0.5, w / 2 - 0.5, 7):
                     in_louvre = k == 0 and any(
-                        abs(z - zc) <= LOUVRE[0] / 2 + 0.3 and abs(y) <= LOUVRE[1] / 2 + 0.3
+                        abs(z - zc) <= LOUVRE_W / 2 + 0.3 and abs(y) <= LOUVRE_L / 2 + 0.3
                         for zc in lz
                     )
                     if not in_louvre:
@@ -299,6 +319,7 @@ def main(argv=None) -> int:
     ok = rep["status_ok"] and rep["esc_b_board_outside_mm3"] < 0.05
     ok = ok and rep["z_extent_mm"][1] <= Z_LOGIC_AFT + 0.01
     ok = ok and rep["wall_over_boards_min_mm"] >= SKIN_WALL - 0.05 and not rep["louvres_blocked"]
+    ok = ok and rep["louvre_gross_area_mm2"] >= FOD_SCREEN_GROSS_MIN
     if ok:
         tmesh(proud).export(a.out)
     print(

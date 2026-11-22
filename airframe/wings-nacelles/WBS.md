@@ -2364,10 +2364,25 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
                   floor) -- mesh thickness vs the 0.4 mm clearance REQUIRES VERIFICATION.
             - [ ] ESC A board corners enter the cover's 0.4 mm clearance: 137 mm3 (power), 61 mm3
                   (logic) -- corner trim on the board outline (S4.4, issue #23 envelope).
-            - [ ] H1 housing as ESC B's cover: hollow it (board + 0.4 mm), flange into the 1.5 mm
-                  rebate, screw holes on `esc_boss_z`, louvres to the FOD-screen spec (>= 230 mm2
-                  gross, 1.2 mm slots; today's 4 x 2.5 x 9.5 mm are 95 mm2 and 2.5 mm wide) and
-                  fed so both ends of the 60 mm power bay traverse to the Z 96.5 ports (S4.2).
+            - [x] H1 housings as ESC B's covers (2026-11-22, `nacelle_esc_cover_64mm.scad`
+                  RENDER_BAY 2 / 3): the generator's housing solid
+                  (`airframe/stls/nacelles/esc/h1_esc_housing_64mm_solid.stl`, reference input,
+                  NOT_PRINT) + a 1.5 mm flange in each bay's rebate, standing 0.25 mm off the skin
+                  outside the rebate; hollow = board + 0.4 mm swept 15 mm along the lift; M3
+                  holes spotfaced to the skin.  TWO covers, not one: a single cover over both B
+                  boards (58 deg apart) could not be lifted off in any direction (~200 mm3 board
+                  interference); split radially midway between the boards.  Neighbouring covers
+                  are partitioned (radial split unless panels overlap in azimuth, else Z-plane):
+                  no cover overlaps another.  Louvres moved to the FOD-screen spec in the
+                  generator: 1.2 x 18 mm slots, 3 mm pitch, forward field 4 + aft field 7 =
+                  237.6 mm2 gross, bracketing the Z 96.5 ports (was 4 x 2.5 x 9.5 = 95 mm2,
+                  mislabelled as outlets).  Checks: all four covers watertight, one body each,
+                  0 mm3 into the pod; B covers 0 mm3 into board + 0.39 and lift off clean over
+                  15 mm (<= 0.2 mm3); masses ~5.3 / 5.2 / 9.5 / 5.7 g (A pwr, A logic, B pwr,
+                  B logic).  ESC A covers' only interference is the board corners (below).
+                  The published cover STLs (a/b per side) are the Rev-T pair: re-export as four
+                  per side at S4.5 and add their orientations (the orientation gate already
+                  fails on the old covers -- pre-existing).
             - [ ] Cavity slivers + trunnion collar wall (NAC-64-HOLLOW-SKIN-2, S4.3); re-bake and
                   gates (S4.5).
         - [ ] **NAC-64-ESC-KEEPOUT-FRAME — inboard / nav keep-outs were mirrored; G1's ESC A power
