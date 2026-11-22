@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-21",
+  "generated": "2026-11-22",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -10878,6 +10878,13 @@
       ],
       "archived": false
     },
+    "docs/figures/nozzle64_f1_drive.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/figures/nozzle64_flap_loads.json": {
       "description": "JSON data (9 top-level keys)",
       "tags": [
@@ -16601,6 +16608,13 @@
       ],
       "archived": false
     },
+    "tools/nozzle64_f1_drive.py": {
+      "description": "nozzle64_f1_drive.py -- F1 nozzle drive: CM07, horn, link, bellcrank, push rod, ring ear.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/nozzle64_flap_loads.py": {
       "description": "nozzle64_flap_loads.py -- exhaust gas load on the 64 mm iris nozzle flaps, carried to the servo.",
       "tags": [
@@ -17435,6 +17449,7 @@
       "docs/figures/nacelle64_od1_spigot_cartridge.png",
       "docs/figures/nacelle64_sections.png",
       "docs/figures/nacelle64_war10_options.png",
+      "docs/figures/nozzle64_f1_drive.png",
       "docs/figures/nozzle64_flap_loads.json",
       "docs/figures/nozzle64_flap_loads.png",
       "docs/figures/nozzle64_linkage_ma.png",
@@ -21345,6 +21360,7 @@
       "tools/nacelle_tilt_dynamics.py",
       "tools/node_thermal_forced_air.py",
       "tools/nonfo_simon_fit.py",
+      "tools/nozzle64_f1_drive.py",
       "tools/nozzle64_flap_loads.py",
       "tools/nozzle64_hinge_root_brief.py",
       "tools/nozzle64_linkage_ma.py",

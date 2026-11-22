@@ -2228,8 +2228,8 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             with x 1.45 over the 1.5 factor but holds closed continuously at only x 0.38.  At today's
             hinge station (brief F moves it to the canonical root).  Recommended: the L1 near-toggle linkage
             (NAC-64-SERVO-L1), continuous x 1.96 closed and x 1.94 open, 6.0 V rail.
-            - [ ] **NAC-64-SERVO-L1 — adopt the L1 near-toggle phasing (owner decision pending;
-                computed at today's hinge station, superseded by NAC-64-NOZ-ROOT if F1 is adopted).**
+            - [x] **NAC-64-SERVO-L1 — SUPERSEDED 2026-11-22 by NAC-64-SERVO-F1B (F1 adopted; L1 was
+                computed at the old hinge station).**
                 `tools/nozzle64_linkage_ma.py`: horn 4.0 mm kept, re-indexed to -82 deg at closed;
                 link 39.1 mm (was 35.5); bellcrank input arm 5.0 mm (was 4.49) at +35 deg on the
                 bellcrank; servo sweep 109 deg of 120.  Continuous margin x 1.96 closed / x 1.94
@@ -2276,7 +2276,8 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             CFD (openfoam-cfd) before moving the hinge; >= 13 mm the gas closes the nozzle.
         - [ ] **NAC-64-NOZ-ROOT — nozzle hinge at the canonical petal root, petals to the canonical
             tip (owner direction 2026-11-21; brief first: `docs/THEME_N_DECISION_BRIEFS.md` brief F,
-            `tools/nozzle64_hinge_root_brief.py`; owner decision on F1 pending).** Canonical root
+            `tools/nozzle64_hinge_root_brief.py`; DECIDED F1, owner 2026-11-22: bellcrank drive first, then
+            the B80 and lead-slot clashes).** Canonical root
             Z 6.90 in (175.3 mm) on the sides and ventral surface, dorsal cowl to Z 7.76 in
             (197 mm), tail Z 8.71 in (221.1 mm); today's hinge is 1.53 in (38.9 mm) aft of the
             root.  F1: flaps 46.6 mm, P64_Z_NOZ 199.13 -> 160.25, gas at the ear x 1.28, -159 g
@@ -2284,6 +2285,16 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             the new housing zone (4,060 mm3); also A324 0.40 mm, CM07 0.48 mm, motor-2 lead slot,
             brief E's cover-screw site, R11 assert.  Supersedes the drive geometry of
             NAC-64-SERVO-L1 if adopted.
+        - [ ] **NAC-64-SERVO-F1B — F1 nozzle drive: bellcrank design done 2026-11-22 (owner direction:
+            add a bellcrank for mechanical advantage); build it into the tools and SCAD.**
+            `tools/nozzle64_f1_drive.py` (PASS): CM07 shaft az 275.9 deg, Z 137.35 (17.9 mm
+            forward); 7.5 mm horn, 13.9 mm link, radial-pin bellcrank at az 268.2, Z 146.0,
+            r 42.5 (arms 10.8 / 9.8 mm), 16.4 mm push rod into the open cup.  Continuous x 1.83
+            closed and x 2.46 open over the 1.5 factor, 6 V stall x 1.70, >= 20 deg from dead
+            centre.  Mesh check: no clash with retained parts (brief F, F1-B).  To do: generator
+            (`nozzle_servo_linkage_64.py`) and SCAD with the F1 station, pocket / cover / screw 1
+            moved forward, ring rod-clearance cut re-made, horn standoff confirmed on hardware.
+            Supersedes NAC-64-SERVO-L1.
         - [ ] **NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A with two CM07s (2026-11-21).**
             `docs/POWER_DISTRIBUTION.md` section 3.3 total 4.2 A + 2 x 0.67 A exceeds the BEC's 5 A
             continuous (inside the 7 A / 100 ms burst).  Size the F_NOZ fuses and confirm the burst

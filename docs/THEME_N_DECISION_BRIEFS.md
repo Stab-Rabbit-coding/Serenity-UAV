@@ -22,7 +22,7 @@ so and why.
 | C | As-built fairing drag | OD17-FAIR-BORE | **C1** (leave; release the HOLD) — **DECIDED C1** |
 | D | Nozzle-servo rail voltage for the CM07 | D-SV-2 | **D1** (6.0 V), and see the holding-margin finding |
 | E | CM07 pocket in the dorsal spine | NAC-64-SERVO-01, plan U4 | **E2** (shaft az 282°) |
-| F | Nozzle hinge at the canonical petal root, petals to the canonical tip | NAC-64-NOZ-ROOT | **F1** (owner direction); resolve the A1 bay B80 conflict first |
+| F | Nozzle hinge at the canonical petal root, petals to the canonical tip | NAC-64-NOZ-ROOT | **F1** — **DECIDED F1** (owner 2026-11-22); bellcrank drive first, then the B80 and lead-slot clashes |
 
 Briefs A and B are linked: B's rule is how A's layout is placed on the starboard pod.
 
@@ -267,6 +267,52 @@ plain liner tube (Z 136–196 mm, no structure) is trimmed to the housing face.
 | **Weight and balance** | Tilting group 2.453 lbm (1,112.5 g), CG and pivot Z 4.68 in (118.9 mm), converged. Hover: pivot to open tip 5.17 in (131.2 mm); clearance −1.04 in (−26.3 mm) on the 1.5 in gear, +0.61 in (+15.6 mm) on the 3.0 in gear. | Panel 5. **−0.175 lbm (−79.5 g) per nacelle, −0.350 lbm (−159 g) AUW**: pod skin aft of the root, the housing pocket and 1.42 in (36 mm) of cartridge liner go; flaps +6.4 g. Tilting CG moves **−0.266 in (−6.8 mm)**: PIVOT_Z re-converges forward (or 0.190 lbm (86 g) of ballast at Z 200 mm per nacelle holds it). Hover reach 4.32 in (109.7 mm): clearance −0.19 in (−4.8 mm) on the 1.5 in gear, +1.46 in (+37.1 mm) on the 3.0 in gear. Ledger picks it up at the re-bake. |
 | **Canonical shape** | Panel 6. Housing proud at 72 of 72 azimuths, up to 0.278 in (7.06 mm); petals 1.14 in (29.0 mm) past the canonical tail. | Hinge on the canonical root; open petals end 0.03 in (0.7 mm) past the canonical tail. Housing proud at 26 of 72 azimuths, up to 0.119 in (3.02 mm), around az 345° and the ventral side (less with a compact stack). The axisymmetric petals sit inside the non-round canonical petal skin; matching it exactly would need a shaped outer fairing on each flap (not evaluated). |
 
+### F1-B — the bellcrank drive for F1 (2026-11-22)
+
+![F1-B drive](figures/nozzle64_f1_drive.png)
+
+**Reproduce:** `/usr/bin/python3 tools/nozzle64_f1_drive.py` (re-solves and re-checks the design; exits
+2 on any failed check).
+
+**Why a bellcrank and not a gear.** A gear is a fixed ratio: the CM07's 120° over the ring's 23.75°
+caps it at 5.05:1, about 130 N at the ear per N·m, against the 401 N per N·m the CM07 needs to hold
+the closed F1 nozzle on its continuous rating. A meshed gear also holds the ring if the servo seizes,
+which breaks the KTD3 fail-open. A bellcrank phased near toggle reaches the hold torque and keeps
+the push-only rod into the ring's open cup.
+
+**F1-B** (chosen from a two-stage search and a penalised hill climb; constants in the tool):
+
+| | |
+|---|---|
+| Chain | CM07 → 0.296 in (7.5 mm) horn → 0.548 in (13.9 mm) link → bellcrank on a radial Ø2 pin at az 268.2°, Z 5.75 in (146.0 mm), r 1.673 in (42.5 mm); input arm 0.426 in (10.8 mm), output arm 0.387 in (9.8 mm) → 0.647 in (16.4 mm) push rod → ring ear ball (Z 164.25 mm) |
+| Servo | shaft at az 275.9°, Z 5.41 in (137.35 mm): **0.71 in (17.9 mm) forward of today's**; aft face 0.72 in (18.4 mm) ahead of the nozzle housing |
+| Stroke | servo 114.9° of the CM07's 120°; bellcrank 88.2°; monotonic |
+| Advantage at the ear | 736 N per N·m closed, 51 open (virtual work) |
+| Continuous margin over × 1.5 | **closed × 1.83** (× 1.66 on the coarser search grid), **open × 2.46**; holds continuously for the last 1.2° of ring travel, a 26° servo window round the closed command |
+| 6.0 V stall margin over × 1.5 | **× 1.70** at the worst point |
+| Mid-stroke | short-time duty (worst × 0.43 of continuous); the firmware dwell limit stands |
+| Dead-centre margins | output arm 20.1°, input arm 28.0°, horn 24.2°; push rod at most 57° off the ear's tangent |
+| Forces at closed, design load | ear push 2.65 lbf (11.8 N), rod 3.28 lbf (14.6 N), link 1.03 lbf (4.6 N), servo 2.3 ozf·in (16 mN·m); peak link 2.18 lbf (9.7 N) mid-stroke |
+| Envelope | inside the skin and cover with ≥ 0.124 in (3.15 mm) margin, outside the 36.4 mm pocket floor, forward of the housing face; only the rod enters the ear window |
+
+**Mesh verification** (F1 assembly, 25 stroke points, hardware-size parts: Ø4.6 mm ball links,
+Ø4.2 mm bellcrank arms, Ø6 mm horn hub, Ø1.6 mm link, Ø2.0 mm rod):
+
+- **No clash with anything that stays.** Every drive part stays inside the outer mould line.
+- **Retires with A1:** the horn and link sweep the as-built ESC bay at az 248° (34 and 7 mm³). That
+  bay is replaced by the A1 four-bay layout; F1-B clears every A1 bay by ≥ 6 mm.
+- **Re-cut:** the ring's rod-clearance cut moves to the new rod path (0.4 mm³ against today's cut);
+  the pod's servo pocket, drive sweep and cover opening move forward with the servo (the CM07 at its
+  new position overlaps 2,921 mm³ of today's pod, inside the skin).
+- **Tight, to confirm on hardware:** the horn-end ball link rides 0.41 mm over the CM07 case top
+  (set by the real horn's standoff); the bellcrank passes the case at 1.04 mm.
+- **Next, per the owner:** the relocated CM07 sits 0.72 mm from the motor-2 lead slot and over
+  cover screw 1 (both being re-sited); then the A1 bay B80 clash.
+
+**Still unverified.** F1 loads are the calibrated ratio estimate (the rendered-flap load run is
+pending); real CM07 horn geometry and standoff; pin bearing in PA CF at the 14.6 N rod load; the
+drive is not yet built into `nozzle_servo_linkage_64.py` / the SCAD (WBS NAC-64-SERVO-F1B).
+
 **What F1 changes, if chosen** (each is a work item, none is done):
 
 1. `nacelle_nozzle_iris_64mm.scad`: flap length 46.6 mm; cam re-derived for the 9.93° / −1.97°
@@ -279,6 +325,10 @@ plain liner tube (Z 136–196 mm, no structure) is trimmed to the housing face.
    2.0 mm wall to the housing.
 5. PIVOT_Z re-converged (−6.8 mm) with the tilt-joint gates; hull re-bake; AUW ledger.
 6. Load study and servo margins re-run on the rendered F1 flaps (replacing the ratio estimate).
+
+**Decision (owner, 2026-11-22): F1.** Owner direction with it: add a bellcrank (or gear) to the servo
+linkage for more mechanical advantage; design the bellcrank first, then settle the A1 bay B80 and
+motor-2 lead-slot clashes.
 
 **Recommendation: F1**, as the owner directed, built in the order above. It puts the hinge on the
 canonical root and the tail on the canonical tail, removes 0.350 lbm (159 g) from the aircraft and
@@ -303,3 +353,5 @@ solved; pin bearing in PA CF; CFD of the longer petal zone with the motor tail i
   the study, section 4; D and E are re-opened for an owner decision on that basis.
 - 2026-11-21 — brief F added (owner direction: hinge at the canonical petal root, canonical tip;
   brief before geometry). Corrects the earlier misreading that the hinge stays where it is.
+- 2026-11-22 — owner decision: F1. Drive with a bellcrank first; B80 and the lead slot after.
+- 2026-11-22 — F1-B bellcrank drive designed and checked (`tools/nozzle64_f1_drive.py`).

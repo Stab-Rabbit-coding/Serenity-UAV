@@ -141,7 +141,8 @@
 - [ ] NAC-64-SERVO-HOLD — servo cannot hold the closed nozzle (load study)
 - [x] NAC-64-NOZ-EXIT — exit targets set on the flow surface (75.0 % / 104.5 % measured)
 - [x] NAC-64-NOZ-BALANCE — rejected: the owner wants the hinge forward at the canonical petal root
-- [ ] NAC-64-NOZ-ROOT — hinge at the canonical petal root, canonical tip (brief F; decision pending)
+- [ ] NAC-64-NOZ-ROOT — DECIDED F1: hinge at the canonical petal root, canonical tip (brief F)
+- [ ] NAC-64-SERVO-F1B — F1 bellcrank drive designed (PASS); build into tools and SCAD
 - [ ] NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A > 5 A BEC continuous
 - [ ] NAC-64-SERVO-PAIR — servo power pair missing from spar-bore census
 - [ ] LG-CLR-TOOL-64 — port landing_gear_ground_clearance.py to 64 mm
