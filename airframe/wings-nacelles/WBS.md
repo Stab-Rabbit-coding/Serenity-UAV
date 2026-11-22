@@ -2320,6 +2320,28 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
                   (1.33 mm < 2.0 mm); cam re-derived so the F1 flaps clear the unison ring.
             - [ ] Lateral (cross-axis) CG check added to the nacelle roll-up.
             - [ ] Await the shorter-board layout from Open-Secure-ESC issue #23.
+        - [ ] **NAC-64-ESC-SKIN-RAY — BLOCKER (found 2026-11-22): the ESC bay tools read the
+            skin on the wrong side of the pod.**  `esc80_cooptimize.skin64()` and
+            `nacelle_esc_bay_fit.skin_grid()` cast each ray from r 250 inward, through the axis,
+            and kept the LARGEST hit radius, so skin(az) = max(skin(az), skin(az + 180)): the
+            thin ventral skin (port az 45-150, r 40-44 mm) was read as the thick dorsal one
+            (r 47-55 mm).  Verified ray by ray (cached value = far-side hit at every sample).
+            Fixed (near-side hits only).  With the fix the optimiser finds NO usable bay for
+            today's design or F1/G1: a 20 mm power panel at the 37.2 mm mount radius needs skin
+            r >= 46.9 mm at its corner, which only the dorsal half (port az ~195-345) and a strip
+            near az 0 offer.  Invalidated: the OD-3/A1 bay envelopes, brief G's G1/G2/G3 numbers
+            and Open-Secure-ESC issue #23's envelope (ESC B's bays are ventral).  The as-built
+            ventral bay (local az 68) is skin-tight: boards reach r 42.8 mm against a ventral
+            OML of 42.9 mm (0.041 in3 / 40.9 mm3 of board outside the OML).  Owner decisions
+            needed before the lead slot (task above) can be placed.
+            - [ ] Re-plan the ESC bays with the corrected skin (dorsal/flank sectors against
+                  the servo, trunnion and nav keep-outs; narrower panels; or a fairing).
+            - [ ] `tools/nacelle_hollow_profile.py` has the same max-hit ray cast and generates
+                  the pod cavity (`nacelle_hollow_profile.scad`): check the as-built ventral
+                  wall against the 2.0 mm minimum (AGENTS.md sec. 7) with a proper thickness
+                  analysis.  A coarse ray sample found outer segments < 2.0 mm, which may be
+                  steps or cover seats rather than thin walls.  Not changed: it is production
+                  geometry.
         - [ ] **NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A with two CM07s (2026-11-21).**
             `docs/POWER_DISTRIBUTION.md` section 3.3 total 4.2 A + 2 x 0.67 A exceeds the BEC's 5 A
             continuous (inside the 7 A / 100 ms burst).  Size the F_NOZ fuses and confirm the burst

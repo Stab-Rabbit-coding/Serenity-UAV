@@ -78,7 +78,10 @@ def run(pivot, z_min, tag):
         )
     if not out.stdout.strip():
         raise RuntimeError(f"esc80_cooptimize failed (rc {out.returncode}): {out.stderr[-400:]}")
-    return json.loads(out.stdout)
+    res = json.loads(out.stdout)
+    if res.get("error"):
+        raise RuntimeError(f"esc80_cooptimize: {res['error']}")
+    return res
 
 
 def iterate(z_min, tag):

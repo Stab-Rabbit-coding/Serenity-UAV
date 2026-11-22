@@ -161,7 +161,7 @@ def skin64(z_min=None):
     z_lo = Z_MIN if z_min is None else z_min
     CACHE_DIR.mkdir(mode=0o700, parents=True, exist_ok=True)
     # key the cache on everything that shapes the grid, not just z_min
-    key = f"K{P64_K}_A{P64_A}_dz{DZ}_n{bay.N_AZ_SAMPLE}_z{z_lo:.2f}_{Z_MAX:.2f}"
+    key = f"v2near_K{P64_K}_A{P64_A}_dz{DZ}_n{bay.N_AZ_SAMPLE}_z{z_lo:.2f}_{Z_MAX:.2f}"
     cache = CACHE_DIR / f"esc80_skin64_{key}.npz"
     if cache.exists():
         d = np.load(cache, allow_pickle=False)
@@ -180,8 +180,13 @@ def skin64(z_min=None):
             dirs.append([-math.cos(a), -math.sin(a), 0.0])
     loc, ray, _ = mesh.ray.intersects_location(np.asarray(org), np.asarray(dirs),
                                                multiple_hits=True)
+    # Each ray runs on through the axis to the far side.  Keep only near-side hits (positive
+    # projection on the ray's outward azimuth), or the skin at az becomes max(skin(az),
+    # skin(az + 180)) -- the ventral skin read as the dorsal one (found 2026-11-22).
+    out_dir = -np.asarray(dirs)[ray, :2]
+    near = (loc[:, :2] * out_dir).sum(axis=1) > 0.0
     out = np.zeros(len(org))
-    np.maximum.at(out, ray, np.hypot(loc[:, 0], loc[:, 1]))
+    np.maximum.at(out, ray[near], np.hypot(loc[near, 0], loc[near, 1]))
     if (out == 0).any():
         raise ValueError(f"{(out == 0).sum()} rays missed the scaled shell")
     skin = out.reshape(len(zs), bay.N_AZ_SAMPLE)

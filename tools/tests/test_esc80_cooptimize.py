@@ -118,7 +118,23 @@ def _run(design):
 def test_model1_golden_unchanged():
     """Model 2 work must not move model 1 (ce-optimize phase-1 best point)."""
     _, out = _run("esc80_design.json")
-    assert out["fit_margin_mm"] == pytest.approx(-6.51, abs=0.01)
+    # Re-pinned 2026-11-22 (WBS NAC-64-ESC-SKIN-RAY): -6.51 was computed with the skin ray cast
+    # keeping the far-side hit (skin(az) = max(skin(az), skin(az + 180))).  With near-side hits
+    # only the same design point is -60.51.  The golden still guards model 1 against model 2 work.
+    assert out["fit_margin_mm"] == pytest.approx(-60.51, abs=0.01)
+
+
+@pytest.mark.slow
+def test_skin64_reads_the_near_side():
+    """Regression (NAC-64-ESC-SKIN-RAY): the ventral skin must not read as the dorsal one.
+
+    Port frame, dorsal = 270.  The canonical nacelle is fatter dorsally (spine), so at a
+    mid-pod ring the dorsal radius must exceed the ventral one by several mm; the old far-side
+    bug made skin(90) == skin(270)."""
+    zs, skin = h.skin64()
+    k = int(np.argmin(abs(zs - 120.0)))
+    assert skin[k, 270] - skin[k, 90] > 4.0
+    assert skin[k, 90] != pytest.approx(skin[k, 270], abs=0.05)
 
 
 @pytest.mark.slow

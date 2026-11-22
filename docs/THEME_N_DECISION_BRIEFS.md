@@ -391,6 +391,13 @@ solved; pin bearing in PA CF; CFD of the longer petal zone with the motor tail i
 
 ## Brief G — 70 A ESC fit and the tilt pivot under F1 (2026-11-22)
 
+> **WARNING** — The ESC bay numbers in this brief (and in brief A's OD-3 layout and Open-Secure-ESC
+> issue #23) were computed with a skin model that read the ventral skin as the dorsal one
+> (WBS NAC-64-ESC-SKIN-RAY, found 2026-11-22). With the skin corrected, no bay of the 70 A
+> design fits in the ventral half of the pod, where ESC B's bays sit. The G1 decision stands
+> for the pivot rule, but its board areas are **invalid** until the bays are re-planned. Do not
+> build or lay out a board to these envelopes.
+
 **Question for the owner.** Under F1 the pod ends at the new housing face (Z 160.25 mm), so the
 OD-3 bays (A1) lose their aft end and the 70 A ESC does not fit. Where do the bays go, and what
 does the pivot do? The pivot is an output: it is the CG of the off-axis mass, so moving the ESCs
@@ -510,3 +517,5 @@ smaller for the same pivot move.
   CG basis is corrected: F1 pivot 111.68 mm (−7.18 mm), not 112.10 mm (−6.76 mm).
 - 2026-11-22 — owner decision: G1. Issue #23 updated to the G1 per-bay envelope. Per-ESC area labels
   corrected to "per face" (the optimiser's `fitted_area_mm2` is one face).
+- 2026-11-22 — WARNING added: the bay tools' skin ray cast kept the far-side hit (NAC-64-ESC-SKIN-RAY);
+  the G1 bay envelopes and issue #23's areas are invalid until re-planned.
