@@ -559,6 +559,50 @@ Measured on the meshes:*
 | **Weight and balance** (panel 5) | About +0.004–0.009 lbm (2–4 g) per nacelle (ESTIMATE); pivot moves < 0.1 mm. | — | Pod skin mass about +65 % (area ~ scale², ×1.29/×1.06); pivot and hover reach re-converge. | −0.21 lbm (−95 g) per nacelle from the tilting group; the pivot moves forward. |
 | **Canonical shape** (panel 6) | Two belly blisters per nacelle, departing from REF-CAD-003. They are smaller than the bulge the as-built ventral ESC cover already has: up to 0.45 in (11.5 mm), which the faulty skin model hid. | None. | Silhouette kept, size grows. | None on the nacelle. |
 
+**Decision (owner, 2026-11-22): H1.** Owner direction with it: use the QMx blueprints (REF-CAD-003)
+and the Nick Henning renders (REF-CAD-002) to make the blister look canonical.
+
+**H1 canonical styling (2026-11-22).**
+
+![H1 ESC housing styled to the canonical nacelle](figures/h1_esc_housing_canonical.png)
+
+The styling takes its cues from two canonical sources, used for internal reference only:
+
+- **QMx blueprints (REF-CAD-003):** Sheet 5, the ventral surface plan view, and Sheet 3, the stern
+  elevation. The nacelle mid-body carries raised rectangular machinery housings standing off the
+  round body ("Cooling Drive", "Engine Locking Clamp").
+- **Nick Henning engine renders (REF-CAD-002):** the cowl is built from overlapping plates with
+  stepped lips, panel lines and small louvre groups.
+
+Each of ESC B's bays is covered by a faceted housing:
+
+- its two outer faces run parallel to the hinged power and logic board panels, at the 1.9 mm wall;
+- 45° side chamfers, a 30° fairing ramp forward and a 60° aft face;
+- the logic housing is square-cut at Z 159.3 mm, where it abuts the F1 nozzle housing;
+- panel-line grooves every 0.79 in (20 mm), lined up with the canonical rib band;
+- four louvres, 0.10 × 0.37 in (2.5 × 9.5 mm), on the power face. They are the ESC cooling outlets,
+  with the same 0.147 in² (95 mm²) as the design's four Ø5.5 mm bleed holes.
+
+Measured on the meshes:
+
+- 0.936 in³ (15,332 mm³) outside the canonical skin;
+- at most 0.27 in (6.9 mm) proud, against 0.22 in (5.5 mm) for the plain blister: a constant-height
+  plate is the cost of the canonical look;
+- Z 58–159 mm;
+- no clash with the duct and cartridge, motor, F1 nozzle, ring, petals, CM07, F1-B drive or servo
+  cover;
+- ESC B's boards fully covered;
+- ESC A's panel corners still 0.014 in³ (232 mm³) outside the skin, to be trimmed (not housed).
+
+Still to verify:
+
+- the louvre position in the thermal model;
+- ground clearance on the belly;
+- the cover seats and screws.
+
+The geometry is from the session's scratch meshes. The next step is a repo generator for the
+housing, built into the pod SCAD.
+
 **Recommendation: H1.** It keeps everything already decided: the G1 bays and pivot, the lead-slot
 plan, and issue #23's envelope (now with the blister stated as a condition). Its shape cost is
 smaller than the bulge the as-built pod already has. H2 cannot fit or cool the 70 A ESC. H3 changes
@@ -612,3 +656,6 @@ that needs its own study.
   nacelle / H4 off-pod; recommendation H1).
 - 2026-11-22 — Brief H X-ray added (canon / H1 / H2 / H3, clashes and mould-line departures); H3 corrected
   to radial ×1.22 on ×1.06 (≈ ×1.29 uniform); ESC B logic × cartridge clash found (19.1 mm³).
+- 2026-11-22 — owner decision: H1, with the blister styled to the QMx blueprints and Henning renders.
+- 2026-11-22 — H1 ESC B housing styled to REF-CAD-003 / REF-CAD-002 (faceted cowl housing, panel lines,
+  louvres = cooling outlets); figure `docs/figures/h1_esc_housing_canonical.png`.

@@ -2336,8 +2336,17 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             needed before the lead slot (task above) can be placed.
             - [x] Re-planned 2026-11-22: no layout fits inside the canonical skin (best 32 / 57 %
                   of the area per face, 270 F / 132 C).  Options in brief H (H1 G1 bays + ventral
-                  blister 2.6-6.2 mm, recommended; H2 shrink; H3 bigger nacelle; H4 off-pod),
-                  awaiting the owner.  The as-built ventral ESC cover already stands up to
+                  blister 2.6-6.2 mm, recommended; H2 shrink; H3 bigger nacelle; H4 off-pod).
+                  **Owner decision 2026-11-22: H1**, blister styled canonical from REF-CAD-003 /
+                  REF-CAD-002.
+            - [ ] NAC-64-ESC-BLISTER: canonical-styled ventral blisters over ESC B's G1 bays;
+                  ESC A panel corners trimmed; ESC B logic x stage-2 cartridge clash (19.1 mm3)
+                  re-sited.
+                  Concept done 2026-11-22 (brief H, `docs/figures/h1_esc_housing_canonical.png`):
+                  faceted housings parallel to the board panels, 45/30/60 deg edges, panel lines,
+                  4 louvres = 95 mm2 cooling outlets; 0.27 in max proud; no clash.  Next: repo
+                  generator + pod SCAD integration, thermal check of the louvres, ground
+                  clearance, cover seats/screws, ESC A corner trim.  The as-built ventral ESC cover already stands up to
                   11.5 mm proud of the canonical OML.
             - [x] Wall check of the as-built pod done 2026-11-22 -> NAC-64-HOLLOW-SKIN below.
         - [ ] **NAC-64-HOLLOW-SKIN — WARNING (found 2026-11-22): the as-built 64 mm pod STLs have

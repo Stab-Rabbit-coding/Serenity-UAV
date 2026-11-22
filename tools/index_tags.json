@@ -10761,6 +10761,14 @@
       ],
       "archived": false
     },
+    "docs/figures/h1_esc_housing_canonical.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "power"
+      ],
+      "archived": false
+    },
     "docs/figures/nacelle64_bay_stud_after.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -17500,6 +17508,7 @@
       "docs/figures/brief_g_esc_pivot.png",
       "docs/figures/brief_h_esc_skin.png",
       "docs/figures/brief_h_xray.png",
+      "docs/figures/h1_esc_housing_canonical.png",
       "docs/figures/nacelle64_bay_stud_after.png",
       "docs/figures/nacelle64_bay_stud_interaction.png",
       "docs/figures/nacelle64_hollow_skin_check.png",
@@ -19618,6 +19627,7 @@
       "docs/figures/battery_bay_twin_tray.png",
       "docs/figures/brief_g_esc_pivot.png",
       "docs/figures/brief_h_esc_skin.png",
+      "docs/figures/h1_esc_housing_canonical.png",
       "docs/figures/od3_esc_current.png",
       "docs/figures/od3_esc_fit_mass.png",
       "docs/figures/od3_esc_path.png",
