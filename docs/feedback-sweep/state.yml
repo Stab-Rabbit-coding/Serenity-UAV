@@ -1,8 +1,4 @@
 schema_version: 1
-lease:
-  writer: "sweep-ccr-0174NeiAyPX2-2026-11-22"
-  timestamp: "2026-11-22T18:12:30.420869+00:00"
-  ttl_minutes: 60
 sources:
   gh-ose:
     cursor: "2026-11-22T13:05:59Z"
