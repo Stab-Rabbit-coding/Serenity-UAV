@@ -95,7 +95,9 @@ X_BURY = 36.0  # housing base buried inside the skin (r), so the union is clean
 
 # G1 bays (port-frame = render-frame hinge azimuth; Z = board span incl. harness reserves)
 G1_BAYS: dict[str, list[dict[str, Any]]] = {
-    "A": [{"az": 336.0, "z": [109.4, 157.4]}, {"az": 262.0, "z": [67.4, 105.4]}],
+    # ESC A re-sited 2026-11-22 (keep-out frame fix): was 336 / 262, which put its power board
+    # 2,229 mm3 into the trunnion gear cavity (inboard keep-out had been mirrored to az 180).
+    "A": [{"az": 210.0, "z": [111.1, 157.4]}, {"az": 268.0, "z": [67.4, 105.4]}],
     "B": [{"az": 78.0, "z": [73.4, 133.7]}, {"az": 136.0, "z": [135.4, 157.4]}],
 }
 Z_LOGIC_AFT = G1_BAYS["B"][1]["z"][1] + SKIN_WALL  # 159.3: one full wall aft of the logic board

@@ -79,3 +79,19 @@ def test_wall_meets_the_sls_minimum():
         assert g.COVER_T >= g.study_wall(w + 2 * g.COVER_CLR) - 1e-9
     assert g.COVER_T >= 1.5  # the study's interim process floor
     assert g.TOP_WALL - g.GROOVE_D - g.COVER_CLR >= g.COVER_T - 1e-9  # full plate under a line
+
+
+def test_no_g1_board_enters_the_trunnion_gear_cavity():
+    """NAC-64-ESC-KEEPOUT-FRAME: the inboard keep-out was mirrored and ESC A's power bay sat in
+    the tilt-pinion gear cavity.  Cavity per nacelle_pod_64mm_tandem.scad (echoed 2026-11-22):
+    TRUNNION_CAV_D 42.6 from X = TRUNNION_CAV_X0 36.81 to WING_TIP_FACE_X 81.31, on the pivot
+    (H1, Z 109.27); inboard is +X in the render frame (PYLON_SIDE +1)."""
+    mf = g.mf
+    cav = (
+        mf.Manifold.cylinder(81.31 - 36.81, 21.3, 21.3, 96)
+        .rotate([0, 90, 0])
+        .translate([36.81, 0.0, 109.27])
+    )
+    for esc in ("A", "B"):
+        for role, b in zip(("power", "logic"), g.G1_BAYS[esc]):
+            assert (g.board(b, g.ENV[role]) ^ cav).volume() < 0.01, (esc, role)

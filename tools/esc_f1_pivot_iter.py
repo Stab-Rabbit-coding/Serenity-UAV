@@ -66,8 +66,11 @@ def run(pivot, z_min, tag):
     d = json.loads((REPO / "tools/esc70_design_f1.json").read_text())
     d["z_min"] = z_min
     ko = d["keepouts"]
-    ko[1] = [146.0, 214.0, 40.0, (pivot + TR_AFT) / SN]  # inboard trunnion / disconnect
-    ko[2] = [350.0, 370.0, 70.0, (pivot - NAV_FWD) / SN]  # outboard nav light / channel
+    # Optimiser frame = pod render frame (left shell, PYLON_SIDE +1): INBOARD is az 0 (+X), the
+    # outboard nav light az 180.  Until 2026-11-22 these two sat at 146-214 / 350-370 -- measured
+    # on the starboard pod, mirrored -- so G1 put ESC A's power bay in the trunnion gear cavity.
+    ko[1] = [326.0, 394.0, 40.0, (pivot + TR_AFT) / SN]  # inboard trunnion / disconnect
+    ko[2] = [170.0, 190.0, 70.0, (pivot - NAV_FWD) / SN]  # outboard nav light / channel
     with tempfile.TemporaryDirectory() as td:
         f = Path(td) / f"fwd_{tag}.json"
         f.write_text(json.dumps(d))
@@ -128,7 +131,9 @@ def iterate(z_min, tag):
 
 # G1 bay stations (owner decision 2026-11-22, brief G): per-ESC centroid of its two bays and the
 # optimiser's ESC mass estimate, from esc80_cooptimize at pivot 109.73 / z_min 49.41.
-G1_ESC_Z = {"A": 109.9, "B": 125.0}
+# ESC A re-sited 2026-11-22 with the keep-outs in the optimiser's own frame (bays 210 / 268,
+# centroid 110.3; was 336 / 262, 109.9, inside the trunnion gear cavity).  ESC B is H1-housed.
+G1_ESC_Z = {"A": 110.3, "B": 125.0}
 G1_ESC_G = 47.6
 
 

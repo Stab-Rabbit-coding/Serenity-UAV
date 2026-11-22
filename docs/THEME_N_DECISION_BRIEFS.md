@@ -690,3 +690,6 @@ that needs its own study.
   1.5 mm from `docs/SLS_MIN_WALL_THICKNESS.md` via `tools/sls_min_wall.py` (non-load-bearing cover);
   housing 1.083 in³, 0.27 in proud, nearest 0.94 mm to the nozzle housing; H1 pivot 109.25 mm.
   The 2.0 mm plate in the two entries above is withdrawn.
+- 2026-11-22 — S4.1 keep-out frame fix (WBS NAC-64-ESC-KEEPOUT-FRAME): the inboard / nav keep-outs were
+  mirrored, so G1's ESC A power bay (az 336) sat in the trunnion gear cavity (2,229 mm³). ESC A re-sited to
+  az 210 / 268 (margin −1.78 mm, was −0.94); ESC B (H1) unchanged; H1 pivot Z 109.27 mm. G1 and H1 stand.

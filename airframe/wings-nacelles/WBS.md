@@ -2329,6 +2329,30 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
                   (1.33 mm < 2.0 mm); cam re-derived so the F1 flaps clear the unison ring.
             - [ ] Lateral (cross-axis) CG check added to the nacelle roll-up.
             - [ ] Await the shorter-board layout from Open-Secure-ESC issue #23.
+        - [ ] **NAC-64-ESC-KEEPOUT-FRAME — inboard / nav keep-outs were mirrored; G1's ESC A power
+            bay sat in the trunnion gear cavity (found 2026-11-22, S4.1).**  The bay optimiser
+            (`tools/esc80_cooptimize.py`) works on the LEFT shell in the pod's render frame, where
+            the inboard face (trunnion, disconnect bay; PYLON_SIDE +1) is az 0 and the nav light
+            az 180.  The "Inboard/nav measured" keep-outs in `tools/esc70_design_f1.json` and
+            `tools/esc_f1_pivot_iter.py` were 146-214 / 350-370 deg -- the starboard pod's
+            azimuths, mirrored.  The CM07 servo keep-out (244-298) is symmetric and was right.
+            Consequence: G1's ESC A power bay (az 336, Z 109.4-157.4) overlaps the trunnion gear
+            cavity (Ø42.6 mm, X >= 36.8, at the pivot) by 0.136 in3 (2,229 mm3); the tilt pinion
+            runs there.  ESC B is unaffected (H1-housed at 78 / 136, clear of both keep-outs).
+            - [x] Fixed 2026-11-22: keep-outs moved to 326-394 / 170-190 in both files.  Re-run
+                  (esc80_cooptimize, z_min 49.41): **ESC A re-sited to power az 210 (Z 111.1-
+                  157.4), logic az 268 (Z 67.4-105.4)**, margin -1.78 mm (power -0.65, logic
+                  -1.78; G1 had -0.94), centroid Z 110.3.  No clash with the gear cavity, CM07,
+                  F1-B drive or cartridge; board + 1.5 mm flat cover leaves 102 mm3 of panel
+                  corner outside the canonical skin (corner trim, S4.4).  H1 pivot Z 109.27 mm.
+                  Inside the canonical skin the ventral sector (az 60-160) holds no bay at all,
+                  so ESC B stays H1-housed.  `nacelle64_esc_housing.G1_BAYS` and
+                  `esc_f1_pivot_iter.G1_ESC_Z` updated.
+            - [ ] ESC A's logic shortfall grows from 0.94 to 1.78 mm: carry into the issue #23
+                  envelope re-issue (S4).
+            - [ ] `tools/esc70_design.json` (OD-3, brief A) carries the same mirrored keep-outs;
+                  brief A's bay figures were computed with them.  Superseded for bay positions by
+                  G1; re-run brief A only if OD-3 numbers are cited again.
         - [ ] **NAC-64-ESC-SKIN-RAY — BLOCKER (found 2026-11-22): the ESC bay tools read the
             skin on the wrong side of the pod.**  `esc80_cooptimize.skin64()` and
             `nacelle_esc_bay_fit.skin_grid()` cast each ray from r 250 inward, through the axis,
