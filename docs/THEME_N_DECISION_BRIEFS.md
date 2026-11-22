@@ -320,8 +320,8 @@ tools/esc70_design_f1.json`) with F1's aft limit (bays and harness loops end at 
 4.7 mm short), ESC B 1.013 in (25.7 mm) short (logic board, a bay only 0.472 in (12.0 mm) long between
 the pivot keep-out and the housing); today's limit gives +3.2 / +18.1 mm. Letting the bays run
 forward to Z 60 mm recovers ESC A to −4.7 mm but not ESC B (−25.7 mm). **Owner decision
-(2026-11-22): option 2, a shorter 70 A board**; the space requirement is raised as an issue in
-Open-Secure-ESC. The motor-2 lead slot follows ESC B: its vane and slot move to the ESC-B bay azimuth under
+(2026-11-22): option 2, a shorter 70 A board**; the space requirement is raised as
+Stab-Rabbit-coding/Open-Secure-ESC issue #23. The motor-2 lead slot follows ESC B: its vane and slot move to the ESC-B bay azimuth under
 A1 anyway, and under F1 the slot ends at the new pocket face, Z 160.25 mm.
 
 **What F1 changes, if chosen** (each is a work item, none is done):

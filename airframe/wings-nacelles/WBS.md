@@ -2296,7 +2296,8 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             moved forward, ring rod-clearance cut re-made, horn standoff confirmed on hardware.
             Supersedes NAC-64-SERVO-L1.
         - [ ] **NAC-64-NOZ-ROOT-ESC — F1 x A1: the 70 A ESC does not fit the OD-3 bays under F1
-            (2026-11-22; owner decision: shorter 70 A board, raised in Open-Secure-ESC).**
+            (2026-11-22; owner decision: shorter 70 A board; space requirements in
+            Stab-Rabbit-coding/Open-Secure-ESC issue #23).**
             `tools/esc80_cooptimize.py tools/esc70_design_f1.json` (bays end by Z 158.25, servo
             keep-out moved with F1-B): ESC A -14.3 mm (logic; power -4.7), ESC B -25.7 mm (logic
             bay 12 mm long); today +3.2 / +18.1.  Bays forward to Z 60 recover A to -4.7 but not B.
