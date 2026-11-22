@@ -1,48 +1,48 @@
 {
  "configs": {
   "cargo_2800_payload": {
-   "I_pitch_gmm2": 74774682.431985,
-   "T_W": 1.354983,
+   "I_pitch_gmm2": 74785712.579301,
+   "T_W": 1.342615,
    "cg": [
-    -0.106928,
-    347.627099,
-    157.099463
+    -0.105952,
+    347.552002,
+    157.005916
    ],
-   "k_pitch_mm": 103.38084,
-   "mass_g": 6996.397353
+   "k_pitch_mm": 102.91552,
+   "mass_g": 7060.848518
   },
   "heaviest_4000_payload": {
-   "I_pitch_gmm2": 75133974.592769,
-   "T_W": 1.336077,
+   "I_pitch_gmm2": 75145187.734968,
+   "T_W": 1.32405,
    "cg": [
-    -0.105436,
-    347.223487,
-    157.544562
+    -0.104487,
+    347.153062,
+    157.448301
    ],
-   "k_pitch_mm": 102.903423,
-   "mass_g": 7095.397353
+   "k_pitch_mm": 102.446864,
+   "mass_g": 7159.848518
   },
   "hover_4000": {
-   "I_pitch_gmm2": 74924251.632664,
-   "T_W": 1.380194,
+   "I_pitch_gmm2": 74936500.360696,
+   "T_W": 1.367364,
    "cg": [
-    -0.108918,
-    346.917178,
-    158.483797
+    -0.107905,
+    346.847297,
+    158.375656
    ],
-   "k_pitch_mm": 104.442481,
-   "mass_g": 6868.597353
+   "k_pitch_mm": 103.964384,
+   "mass_g": 6933.048518
   },
   "hover_twin_2200": {
-   "I_pitch_gmm2": 83501177.890454,
-   "T_W": 1.376587,
+   "I_pitch_gmm2": 83510358.206314,
+   "T_W": 1.363823,
    "cg": [
-    -0.108633,
-    337.921835,
-    158.750009
+    -0.107626,
+    337.93554,
+    158.639679
    ],
-   "k_pitch_mm": 110.114359,
-   "mass_g": 6886.597353
+   "k_pitch_mm": 109.608697,
+   "mass_g": 6951.048518
   }
  },
  "cooling_airflow": {
@@ -85,7 +85,7 @@
  "nacelle_printed_unit_g": {
   "PRINT-NAC64-CARTRIDGE": 65.12,
   "PRINT-NAC64-ESC-COVER": 7.44,
-  "PRINT-NAC64-POD": 429.97,
+  "PRINT-NAC64-POD": 462.66,
   "PRINT-NAC64-TRUNNION": 9.84,
   "PRINT-NOZ64-FLAP": 3.21,
   "PRINT-NOZ64-FLAP-SEAL": 3.45,
@@ -93,10 +93,10 @@
   "PRINT-NOZ64-THROAT": 26.29
  },
  "pitch_inertia": {
-  "I_kg_m2": 0.083501,
-  "I_lbm_in2": 285.338111,
+  "I_kg_m2": 0.08351,
+  "I_lbm_in2": 285.369482,
   "config": "hover_twin_2200",
-  "k_pitch_in": 4.335211
+  "k_pitch_in": 4.315303
  },
  "rows_hover": [
   {
@@ -694,7 +694,7 @@
     146.9
    ],
    "kind": "NACELLE",
-   "mass_g": 1112.5,
+   "mass_g": 1144.73,
    "name": "Nacelle port rotating assembly (64 mm)",
    "ref": "NACELLE",
    "source": "tools/nacelle_mass_cg_64.py roll-up at the hull pivot"
@@ -706,7 +706,7 @@
     146.9
    ],
    "kind": "NACELLE",
-   "mass_g": 1112.5,
+   "mass_g": 1144.73,
    "name": "Nacelle stbd rotating assembly (64 mm)",
    "ref": "NACELLE",
    "source": "tools/nacelle_mass_cg_64.py roll-up at the hull pivot"
@@ -2287,8 +2287,8 @@
  "subtotals_hover_g": {
   "BOM": 2386.904,
   "GAP": 295.9714,
-  "NACELLE": 2232.80244,
-  "PRINT": 1952.919512
+  "NACELLE": 2297.253605,
+  "PRINT": 1952.919513
  },
  "thrust_gf": 9480.0,
  "unclassified": []

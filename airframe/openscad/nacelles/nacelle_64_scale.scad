@@ -36,4 +36,4 @@ P64_JOINT_SHIFT = 23.0;                 // [mm] 0.91 in; the 18 mm first propose
 // tools/nacelle_mass_cg_64.py, re-iterated to a fixed point whenever the pod changes.  Single source
 // (2026-11-21, S3 NAC-64-GEOM-05): the pod, the trunnion context, the bake and every gate read it
 // here; it was re-typed as 109.7 in six places before.  109.7 (Rev T6, x1.00 pod) -> see the value.
-PIVOT_Z_64      = 118.9;                // [mm] 4.68 in; S3 NAC-64-PIVOT-RC, x1.06 pod (2026-11-21)
+PIVOT_Z_64      = 118.2;                // [mm] 4.65 in; re-converged 2026-11-22 after the hollow-cavity fix (NAC-64-HOLLOW-SKIN); was 118.9 (S3 2026-11-21)

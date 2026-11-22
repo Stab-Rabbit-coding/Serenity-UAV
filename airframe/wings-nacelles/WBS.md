@@ -2358,7 +2358,9 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
                   clearance, cover seats/screws, ESC A corner trim.  The as-built ventral ESC cover already stands up to
                   11.5 mm proud of the canonical OML.
             - [x] Wall check of the as-built pod done 2026-11-22 -> NAC-64-HOLLOW-SKIN below.
-        - [ ] **NAC-64-HOLLOW-SKIN — WARNING (found 2026-11-22): the as-built 64 mm pod STLs have
+        - [x] **NAC-64-HOLLOW-SKIN — CLOSED 2026-11-22 (S3 re-bake): source fixed, pivot
+            re-converged to 118.2 mm, published pods re-baked; skin check 0 open / 0 thin cells.**
+            Original finding: **the as-built 64 mm pod STLs had
             OPENINGS and thin patches in the outer skin.**  `tools/nacelle_hollow_profile.py`
             casts each ray through the axis and keeps the largest hit (same bug as
             NAC-64-ESC-SKIN-RAY), so its skin grid reads up to 0.39 in (9.8 mm) too large in
@@ -2388,10 +2390,15 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
                   Mass (nacelle_mass_cg_64): tilting group 1,112.5 -> 1,144.6 g per nacelle
                   (+0.071 lbm / +32.1 g; AUW +64 g), CG/pivot 118.86 -> 118.23 mm; hover
                   clearance, 3.0 in flight gear, +11.5 -> +10.9 mm (as-built nozzle).
-            - [ ] The published `nacelle_{stbd,port}_64mm.stl` are still the PRE-FIX meshes
-                  (render of the pre-fix source = published volume, 387,682 mm3); re-export
-                  with NAC-64-CANON-01.b once NAC-64-PIVOT-RC converges, as planned.  The
-                  WARNING above stands until then.
+            - [x] Re-baked 2026-11-22: PIVOT_Z_64 re-converged 118.9 -> 118.2 mm (residual +0.01,
+                  gate 0.25); pods, trunnions and pinions re-staged (`prep_nacelle_64_bake.py`,
+                  port = X-mirror of the stbd render) and re-baked (`bake_hull_frame.py`).
+                  Published pods 416,815 mm3 = source render (S3 gate +/-0.1 %);
+                  `validate_stls.py` 114/114 watertight; `check_datum_drift.py` PASS;
+                  `check_nacelle_deps.py` PASS; `nacelle64_hollow_skin_check.py` 0 open / 0 thin;
+                  assembly check unchanged except pod-side wire lengths (-0.7 mm);
+                  `auw_ledger.py --write` then `--check` PASS: hover AUW 6,886.6 -> 6,951.1 g
+                  (15.18 -> 15.32 lbm), T/W 1.38 -> 1.36.  The WARNING above is lifted.
         - [ ] **NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A with two CM07s (2026-11-21).**
             `docs/POWER_DISTRIBUTION.md` section 3.3 total 4.2 A + 2 x 0.67 A exceeds the BEC's 5 A
             continuous (inside the 7 A / 100 ms burst).  Size the F_NOZ fuses and confirm the burst
@@ -2842,7 +2849,8 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             reversed flow; the old r 45.05 ring was 2 points better at r/R 0.95
             (2.1 % vs 4.2 %) — traded for canon. Pod shell mass -0.7 g
             (389.4 -> 388.7 g, PA CF), CG +0.09 mm.
-        - [ ] **NAC-64-CANON-01.b — re-bake the published pod STLs**
+        - [x] **NAC-64-CANON-01.b — re-bake the published pod STLs — DONE 2026-11-22** with the
+            NAC-64-HOLLOW-SKIN re-bake (pivot 118.2 converged).  Original item:
             (`nacelle_{stbd,port}_64mm.stl`, `tools/prep_nacelle_64_bake.py` ->
             `tools/bake_hull_frame.py`) from the new source. Held with
             NAC-64-PIVOT-RC: the mass tool reports PIVOT_Z residual +9.1 mm at
