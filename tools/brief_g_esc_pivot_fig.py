@@ -23,6 +23,7 @@ License: MIT -- see LICENSES/MIT (SPDX-License-Identifier: MIT)
 import argparse
 import sys
 from pathlib import Path
+from typing import Any
 
 import matplotlib
 
@@ -35,7 +36,7 @@ G_PER_LBM = 453.59237
 
 # Source of every number: see the module docstring.  Margins are mm of logic-section length
 # (negative = short); the pivot is the off-axis CG (mm from the intake face, nacelle-local Z).
-DATA = {
+DATA: dict[str, Any] = {
     "today_pivot": 118.86,
     "f1_pivot_no_move": 111.68,  # F1 with today's ESC bays (hinge_root_brief weight.cg1)
     "opts": {
