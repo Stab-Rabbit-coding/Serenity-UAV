@@ -2329,6 +2329,47 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
                   (1.33 mm < 2.0 mm); cam re-derived so the F1 flaps clear the unison ring.
             - [ ] Lateral (cross-axis) CG check added to the nacelle roll-up.
             - [ ] Await the shorter-board layout from Open-Secure-ESC issue #23.
+        - [ ] **NAC-64-ESC-BAYS — G1 four-bay layout built into the pod SCAD (S4.1/S4.2, 2026-11-22).**
+            `nacelle_pod_64mm_tandem.scad` `ESC_BAYS` table (same rows as
+            `tools/nacelle64_esc_housing.G1_BAYS`): ESC A power az 210 Z 111.1-157.4, ESC A logic
+            az 268 Z 67.4-105.4 (flat covers); ESC B power az 78 Z 73.4-133.7, ESC B logic az 136
+            Z 135.4-157.4 (H1 housings).  Panels 20 / 14 mm; envelope 6.0 / 6.65 mm.  Every bay
+            gets the same pod geometry (window, 1.5 mm rebate, doubler, insert bosses; two boss
+            rows on bays < 30 mm).  Render: watertight, 387,647 mm3; all four boards clear of pod
+            material; visual check four sides.
+            - [x] Cover 1.5 mm from the SLS material study (was 2.5 FDM-era); counterbore 0 --
+                  M3 button heads 0.065 in (1.65 mm) proud (deliberate, quantified deviation).
+            - [x] Discharge: per power bay, two stadium slots at the inter-stage station Z 96.54
+                  (6.5 x 8.70 mm, same 95 mm2 throat; panel now 20 mm).  ESC A's power bay starts
+                  aft of the cartridge front, so a 5.5 x 18.9 mm (104 mm2) channel outside the
+                  sleeve-zone duct wall joins it to its ports.  Logic bays: no ports, no louvres
+                  (ESTIMATE: logic dissipation low; REQUIRES the thermal model per bay).
+            - [x] Dorsal shroud (`nsv_pod_adds`, Zone C) refilled 2,592 mm3 of ESC A's power bay:
+                  the bay is now cut through the shroud too, and the flat cover restores the shroud
+                  surface (flush where the shroud is up to 1.6 mm proud).
+            - [x] Fold sector added to the bay footprint (loose 2.65 mm3 strip along the az 78
+                  hinge on the thin ventral skin).  Residual loose bodies: 1.17 mm3 facet sliver
+                  at r 37.2, az 211, Z 158-171 (two near-coincident cylinders aft of ESC A's seat
+                  keep-out) and the pre-existing 0.76 mm3 body (az 319, Z 148-153) -- to clear
+                  before the re-bake gate.
+            - [x] Motor leads re-clocked (`edf_motor_mount_64mm.scad` lead_az 78 / 210, pod
+                  `motor_lead_routes`): motor 1 -> ESC B power via the stage-1 conduit (open
+                  Z 46-77.4), motor 2 -> ESC A power via the stage-2 slot (opens into the bay at
+                  Z 119+).  Stage-2 cartridge STL must be re-exported (S4.5).
+            - [x] Cavity webs: forward bay-tied web 54.4 (asserted); aft web keeps 139.85.
+            - [x] ESC A flat covers (`nacelle_esc_cover_64mm.scad`, RENDER_BAY 0 / 1 into
+                  ESC_BAYS): watertight, ~5.7 / 5.6 g, no clash with the pod; louvres 11 x 1.2 x
+                  18 mm = 237.6 mm2 gross (power only; `nacelle_esc_thermal.py` synced); screen
+                  bonded flat (mesh rebate 0: a 0.6 rebate left 0.9 mm ribs, under the study
+                  floor) -- mesh thickness vs the 0.4 mm clearance REQUIRES VERIFICATION.
+            - [ ] ESC A board corners enter the cover's 0.4 mm clearance: 137 mm3 (power), 61 mm3
+                  (logic) -- corner trim on the board outline (S4.4, issue #23 envelope).
+            - [ ] H1 housing as ESC B's cover: hollow it (board + 0.4 mm), flange into the 1.5 mm
+                  rebate, screw holes on `esc_boss_z`, louvres to the FOD-screen spec (>= 230 mm2
+                  gross, 1.2 mm slots; today's 4 x 2.5 x 9.5 mm are 95 mm2 and 2.5 mm wide) and
+                  fed so both ends of the 60 mm power bay traverse to the Z 96.5 ports (S4.2).
+            - [ ] Cavity slivers + trunnion collar wall (NAC-64-HOLLOW-SKIN-2, S4.3); re-bake and
+                  gates (S4.5).
         - [ ] **NAC-64-ESC-KEEPOUT-FRAME — inboard / nav keep-outs were mirrored; G1's ESC A power
             bay sat in the trunnion gear cavity (found 2026-11-22, S4.1).**  The bay optimiser
             (`tools/esc80_cooptimize.py`) works on the LEFT shell in the pod's render frame, where

@@ -1191,9 +1191,13 @@ CAVITY_DUCT_WALL  =  2.5;  // [mm] wall left on the duct side of the cavity
 // them.  The 138 web costs almost nothing: the wall is already at 8 mm there so
 // the cavity, and therefore the web, is nearly closed.
 // [flattened] CAVITY_BULKHEAD_Z: value from its last assignment (override), kept at the first position
+// G1 (2026-11-22): the bay group now runs Z 67.4-157.4.  The forward bay-tied web sits 4 mm
+// ahead of the forward doubler band (ESC_BAY_Z0 - ESC_LEDGE_W - ESC_DOUBLER_LAP - 4 = 54.4; literal
+// because ESC_BAYS is declared later -- asserted in nacelle_pod()).  The aft web keeps its Rev-T
+// station (139.85): it now crosses the aft bays, which cut through it.
 CAVITY_BULKHEAD_Z = [40.0 * P64_A, 62.0 * P64_A,
-                     95.0 * P64_A - 21.0 - 8.0 - 4.0,     // = 74.35
-                     95.0 * P64_A + 21.0 + 8.0 + 3.5];
+                     54.4,                                // forward bay-tied web
+                     95.0 * P64_A + 21.0 + 8.0 + 3.5];    // = 139.85
 CAVITY_BULKHEAD_T =  3.0;  // [mm] web thickness
 // Each web must be VENTED or it seals a compartment.  The first render of the
 // hollowed pod exported a −17,227 mm³ inverted body between Z 41.5 and 60.5 —
@@ -1315,32 +1319,37 @@ CAVITY_TRUNNION_X1 = 40.0 + P64_AXIS_SHIFT + P64_STUB_EXTRA + P64_JOINT_SHIFT; /
 // visible.
 // =============================================================================
 
-ESC_BAY_AZ      = [68, 248];  // [deg] hinge azimuth of each bay.  NOT free: 105
-                              //   and 285 are the pod's two DEEP LOBES (annulus
-                              //   alive aft to Z 163 at 6.2–6.4 mm, against
-                              //   Z 135–147 elsewhere) and are where the EDF
-                              //   spider arms are clocked, so each bay sits
-                              //   directly over its own phase-lead crossing with
-                              //   no circumferential run.  Also clear of the nav
-                              //   cableway (az 0) and of the trunnion and
-                              //   disconnect bay (az 180).
-ESC_W_POWER     =  23.0;  // [mm] power panel width   (owner direction)
-ESC_W_SIGNAL    =  10.0;  // [mm] signal panel width  (owner direction)
+// ── G1 BAYS (S4.1, 2026-11-22) — two bays per ESC, one hinged board pair per bay ──────────────
+// Owner decisions G1 (bays forward to the Z 47.9 web) and H1 (ESC B in canonical-styled ventral
+// housings), docs/THEME_N_DECISION_BRIEFS.md briefs G and H.  Positions from
+// tools/esc80_cooptimize.py on tools/esc70_design_f1.json (per-bay "bays" output, power bay
+// first) with the inboard / nav keep-outs in this file's frame (WBS NAC-64-ESC-KEEPOUT-FRAME):
+// this render (NACELLE_SIDE +1, left shell) has the inboard face at az 0 and the nav light at
+// az 180.  The same table drives tools/nacelle64_esc_housing.py (G1_BAYS); keep them equal.
+//   [hinge az (deg), z0, z1 (mm), radial envelope incl. cooling lane (mm), esc (0 A, 1 B),
+//    role (0 power, 1 logic), cover (0 flat flush, 1 H1 housing)]
+// Envelope: PCB 1.6 + outer parts (power 2.0 / logic 2.65) + inner parts 1.1 + mount 0.3
+// + lane 1.0 (esc70_design_f1.json).
+ESC_BAYS = [
+    [210.0, 111.1, 157.4, 6.00, 0, 0, 0],   // ESC A power
+    [268.0,  67.4, 105.4, 6.65, 0, 1, 0],   // ESC A logic
+    [ 78.0,  73.4, 133.7, 6.00, 1, 0, 1],   // ESC B power (H1 housing)
+    [136.0, 135.4, 157.4, 6.65, 1, 1, 1],   // ESC B logic (H1 housing)
+];
+function bay_az(b)  = b[0];
+function bay_z0(b)  = b[1];
+function bay_z1(b)  = b[2];
+function bay_env(b) = b[3];
+function bay_is_power(b)   = b[5] == 0;
+function bay_is_housed(b)  = b[6] == 1;
+ESC_W_POWER     =  20.0;  // [mm] power panel width  (esc70_design_f1.json w_power)
+ESC_W_SIGNAL    =  14.0;  // [mm] signal panel width (esc70_design_f1.json w_signal)
 ESC_PCB_T       =   1.6;  // [mm] PCB thickness
-ESC_STACK       =   4.0;  // [mm] radial envelope: PCB + parts both faces + mount
 // [flattened] ESC_MOUNT_R: value from its last assignment (override), kept at the first position
 ESC_MOUNT_R     = P64_BORE_R + P64_WALL + 0.2 + P64_WALL;  // [mm] board inner face — equals the pod's
                           //   SLEEVE_BORE_R + CAVITY_DUCT_WALL, asserted there
-// [flattened] ESC_BAY_Z0: value from its last assignment (override), kept at the first position
-ESC_BAY_Z0      = 95.0 * P64_A - 21.0;  // [mm] bay forward end
-// [flattened] ESC_BAY_Z1: value from its last assignment (override), kept at the first position
-ESC_BAY_Z1      = 95.0 * P64_A + 21.0;  // [mm] bay aft end — 44 mm of board.  This was 134
-                          //   (62 mm) until 2026-09-06, and the 18 mm came off
-                          //   for two reasons that had both been missed; see
-                          //   THE RADIAL BUDGET below.
-ESC_FLOW_LANE   =   1.0;  // [mm] clear lane above the component stack, for the
-                          //   cooling air.  Set this to 0 and the board grows
-                          //   back to 56 mm — see the trade below.
+ESC_BAY_Z0      = min([for (b = ESC_BAYS) bay_z0(b)]);   // [mm] forward end of the bay group (67.4)
+ESC_BAY_Z1      = max([for (b = ESC_BAYS) bay_z1(b)]);   // [mm] aft end of the bay group (157.4)
 ESC_FIT         =   0.6;  // [mm] clearance per side around the board
 
 // ── Access ───────────────────────────────────────────────────────────────────
@@ -1349,7 +1358,12 @@ ESC_FIT         =   0.6;  // [mm] clearance per side around the board
 // drops into a rebate and finishes flush with the mould line.  The window is the
 // union of the two panel footprints, so it is chevron-shaped and follows the
 // fold — a rectangular window would either foul the fold or waste skin.
-ESC_COVER_T     =   2.5;  // [mm] cover thickness — the repo minimum wall, and
+// ESC_COVER_T: SLS material study (owner 2026-11-22, "use the thicknesses derived from the
+// material studies"): docs/SLS_MIN_WALL_THICKNESS.md via tools/sls_min_wall.py, non-load-bearing
+// free-standing PA CF, orientation not fixed, span ~1.46 in (37 mm) across the folded window:
+// rupture 1.12 / deflection 1.48 mm, so the 0.059 in (1.5 mm) interim process floor governs.
+// The 2.5 mm below is the FDM CF-PETG history.
+ESC_COVER_T     =   1.5;  // [mm] cover thickness (was 2.5: FDM-era repo minimum wall, and
                           //   every 0.5 mm above it costs ~10 mm of board
                           //   LENGTH (see the radial budget).  The M3 button
                           //   head therefore sits 0.65 mm proud rather than
@@ -1361,7 +1375,10 @@ ESC_BOSS_OD     =   7.0;  // [mm] insert boss OD
 ESC_BOSS_INSET  =   4.0;  // [mm] boss centre inset from the window edge
 ESC_SCREW_D     =   3.4;  // [mm] M3 clearance through the cover
 ESC_CBORE_D     =   6.2;  // [mm] counterbore for an M3 BUTTON head (Ø5.7×1.65)
-ESC_CBORE_DEPTH =   1.0;  // [mm] counterbore depth.  An M3 button head is
+// ESC_CBORE_DEPTH (2026-11-22): 0.  A counterbore in the 1.5 mm cover would leave less than the
+// study's 1.5 mm floor under the head, so the M3 button head (1.65 mm) stands fully proud --
+// a deliberate, quantified OML deviation (was 0.65 mm proud on the 2.5 mm FDM cover).
+ESC_CBORE_DEPTH =   0.0;  // [mm] counterbore depth (was 1.0).  An M3 button head is
                           //   1.65 mm tall, so it stands 0.65 mm PROUD — a
                           //   deliberate, quantified deviation.  Sinking it
                           //   flush would need a 3.0 mm cover, and that costs
@@ -1453,11 +1470,15 @@ ESC_BOSS_DEPTH  = ESC_INSERT_L + 1.0;  // [mm] 6.0 of insert plus 1.0 of materia
 // short-circuit: the forward field sat directly over the discharge ports at
 // Z 76-88, so air would have entered and left again without ever crossing the
 // board.  One field at the aft end forces the full-length traverse.
-ESC_LOUVRE_N    =   8;    // [count] slots, aft field only
+// G1 (2026-11-22): the power panel is 20 mm (was 23), so the 24 mm slots would run past the
+// window onto the cover's landing band.  Slots shortened to the window (20 - 2 x 1.0 margin) and
+// the count raised to keep the gross area >= the 230 mm2 the FOD screen sizing needs (below):
+// 11 x 1.2 x 18 = 237.6 mm2 (was 8 x 1.2 x 24 = 230.4).  Flat-cover power bays only (ESC A).
+ESC_LOUVRE_N    =  11;    // [count] slots, aft field only (was 8)
 ESC_LOUVRE_W    =   1.2;  // [mm] slot width (Z).  TWO CRITERIA MEET HERE: two
                           //   extrusions at a 0.6 mm nozzle, AND the coarse FOD
                           //   limit — see the screen note below.
-ESC_LOUVRE_L    =  24.0;  // [mm] slot length (circumferential)
+ESC_LOUVRE_L    =  18.0;  // [mm] slot length (circumferential; was 24.0)
 ESC_LOUVRE_P    =   3.0;  // [mm] slot pitch (1.8 mm rib)
 
 // ── FOD screen (owner direction, 2026-09-06) ─────────────────────────────────
@@ -1486,7 +1507,11 @@ ESC_LOUVRE_P    =   3.0;  // [mm] slot pitch (1.8 mm rib)
 // **No-see-um (0.6 mm) is the selection**: it bounds FOD at 0.6 mm in BOTH
 // dimensions for 4 % of the flow, where the coarse mesh only matches the slot.
 // The fine 0.4 mm mesh is where the trade breaks down.
-ESC_MESH_REBATE   = 0.6;  // [mm] rebate depth in the cover's inner face
+// ESC_MESH_REBATE (2026-11-22): 0.  A 0.6 mm rebate in the 1.5 mm study cover would leave 0.9 mm
+// louvre ribs, under the SLS study's 1.5 mm floor.  The screen bonds flat to the inner face and
+// takes part of the 0.4 mm running clearance: mesh thickness ASSUMED ~0.25 mm, REQUIRES
+// VERIFICATION against the board's tallest outer part under the louvre field.
+ESC_MESH_REBATE   = 0.0;  // [mm] rebate depth in the cover's inner face (was 0.6)
 ESC_MESH_MARGIN   = 3.0;  // [mm] rebate oversize around the louvre field
 
 // ── Discharge ports (Rev T4d, 2026-09-06; direction corrected same day) ─────
@@ -1521,11 +1546,20 @@ ESC_BLEED_Z     = [ for (z = [76.0, 80.0, 84.0, 88.0]) z + 95.0 * (P64_A - 1) ];
 // round-ended slots side by side across the power panel at ONE station, with the same throat
 // area (4 x pi x 5.5^2 / 4 = 95.0 mm2), so tools/nacelle_esc_thermal.py's circuit is unchanged.
 // No teardrop apex: the flight pod is SLS (AGENTS.md section 7), which needs no overhang relief.
-ESC_DSLOT_H      = ESC_BLEED_D;                       // [mm] axial height (Z) = the old port diameter
+// G1 (2026-11-22): the power panel is 20 mm (was 23), so the slots are taller and shorter for the
+// same throat: 2 x 8.70 + 1.5 web = 18.9 mm across the panel; Z 93.3-99.8, 3.9 mm ahead of the
+// cartridge.
+ESC_DSLOT_H      = 6.5;                               // [mm] axial height (Z); was ESC_BLEED_D 5.5
 ESC_DSLOT_AREA   = ESC_BLEED_N * PI * ESC_BLEED_D * ESC_BLEED_D / 4 / 2;   // [mm2] per slot = 47.5
 ESC_DSLOT_L      = ESC_DSLOT_H + (ESC_DSLOT_AREA - PI * ESC_DSLOT_H * ESC_DSLOT_H / 4) / ESC_DSLOT_H;  // = 9.82
 ESC_DSLOT_WEB    = 1.5;                               // [mm] web between the two slots (seat support)
-ESC_DSLOT_Z      = ESC_BAY_Z0 + 1.0 + ESC_DSLOT_H / 2;  // [mm] = 96.54: 1.0 mm inside the bay's forward end
+// G1 (2026-11-22): the station stays at Z 96.54, where the pod's own bore is the flow boundary
+// (inter-stage, ahead of the stage-2 cartridge at STATOR_SLV_Z_START); it is no longer tied to a
+// bay end.  A power bay that does not reach this station (ESC A, Z 111.1-157.4) is joined to its
+// ports by a discharge channel (esc_discharge_ports()).
+ESC_DSLOT_Z      = 96.54;                             // [mm] slot centre (unchanged station)
+ESC_DCHAN_D      = 5.5;                               // [mm] channel radial depth: 5.5 x 18.9 mm
+                                                      //   = 104 mm2 >= the 95 mm2 throat
 ESC_DSLOT_CART_MARGIN = 1.0;                          // [mm] min. axial land ahead of the cartridge
 
 
@@ -1543,16 +1577,35 @@ function esc_a_sig() = atan((ESC_W_SIGNAL / 2) / ESC_MOUNT_R);
 // lets one footprint serve as the board pocket, the access window, and the
 // cover's own outline — which is the point: three features that must match
 // cannot be drawn three times.
-module esc_bay_footprint(az_hinge, r_out, pad = 0) {
+// The two panel slabs meet at the hinge only along a line; outside the fold they diverge and
+// leave a V of uncut material between them.  On the thin ventral skin (G1, ESC B) that V was cut
+// free of the skin by the rebate and left loose strips in the render (2026-11-22, 2.65 mm3 along
+// the az 78 hinge).  The sector below, between the two panel centre-lines from the hinge radius
+// outward, fills the V; it lies inside the slab union everywhere else.
+function esc_hinge_r() = sqrt(ESC_MOUNT_R * ESC_MOUNT_R + (ESC_W_POWER / 2) * (ESC_W_POWER / 2));
+module esc_fold_sector(b, r_out, pad) {
+    a1 = bay_az(b) - esc_a_sig();
+    a2 = bay_az(b) + esc_a_pow();
+    r0 = esc_hinge_r() - pad;
+    n  = 12;
+    translate([0, 0, bay_z0(b) - pad])
+        linear_extrude(bay_z1(b) - bay_z0(b) + 2 * pad)
+            polygon(concat(
+                [for (i = [0 : n]) let(a = a1 + (a2 - a1) * i / n) [r0 * cos(a), r0 * sin(a)]],
+                [for (i = [n : -1 : 0]) let(a = a1 + (a2 - a1) * i / n)
+                    [r_out * cos(a), r_out * sin(a)]]));
+}
+module esc_bay_footprint(b, r_out, pad = 0) {
     union() {
+        esc_fold_sector(b, r_out, pad);
         esc_panel_slab(ESC_W_POWER + 2 * (ESC_FIT + pad),
-                       az_hinge + esc_a_pow(),
+                       bay_az(b) + esc_a_pow(),
                        ESC_MOUNT_R - pad, r_out,
-                       ESC_BAY_Z0 - pad, ESC_BAY_Z1 + pad);
+                       bay_z0(b) - pad, bay_z1(b) + pad);
         esc_panel_slab(ESC_W_SIGNAL + 2 * (ESC_FIT + pad),
-                       az_hinge - esc_a_sig(),
+                       bay_az(b) - esc_a_sig(),
                        ESC_MOUNT_R - pad, r_out,
-                       ESC_BAY_Z0 - pad, ESC_BAY_Z1 + pad);
+                       bay_z0(b) - pad, bay_z1(b) + pad);
     }
 }
 
@@ -1561,11 +1614,15 @@ module esc_bay_footprint(az_hinge, r_out, pad = 0) {
 // Six fastener positions per bay as long radial cylinders, to be clipped against
 // the skin by the caller.  Three down each long side of the WIDE panel's window
 // — the narrow panel's sides sit too close to the fold to carry a Ø7 boss.
-module esc_boss_cylinders(az_hinge, dia) {
+// Bays shorter than 30 mm (ESC B logic, 22 mm) take two rows, not three: three rows of Ø7
+// bosses 5 mm apart would merge.
+function esc_boss_z(b) = (bay_z1(b) - bay_z0(b) >= 30)
+    ? [bay_z0(b) + 6, (bay_z0(b) + bay_z1(b)) / 2, bay_z1(b) - 6]
+    : [bay_z0(b) + 5, bay_z1(b) - 5];
+module esc_boss_cylinders(b, dia) {
     off = ESC_W_POWER / 2 + ESC_FIT + ESC_BOSS_INSET;
-    for (dy = [-off, off],
-         z  = [ESC_BAY_Z0 + 6, (ESC_BAY_Z0 + ESC_BAY_Z1) / 2, ESC_BAY_Z1 - 6])
-        rotate([0, 0, az_hinge + esc_a_pow()])
+    for (dy = [-off, off], z = esc_boss_z(b))
+        rotate([0, 0, bay_az(b) + esc_a_pow()])
             translate([0, dy, z])
                 rotate([0, 90, 0])
                     cylinder(d = dia, h = 60, center = false);
@@ -2070,7 +2127,7 @@ ESC_SKIN = radial_k_grid((NACELLE_SIDE > 0) ? HOLLOW_SKIN_PORT : HOLLOW_SKIN_STB
 // same module the covers drill their clearance holes with, so a boss and its
 // hole cannot end up on different centres.
 module esc_boss_cylinders_local(dia) {
-    for (az_hinge = ESC_BAY_AZ) esc_boss_cylinders(az_hinge, dia);
+    for (b = ESC_BAYS) esc_boss_cylinders(b, dia);
 }
 
 // The shell of material between two radial offsets of the measured skin.
@@ -2101,8 +2158,8 @@ ESC_DOUBLER_LAP = 1.0;   // [mm]
 module esc_cover_doubler() {
     intersection() {
         _esc_skin_shell(0.0, ESC_COVER_T + ESC_LEDGE_T);
-        union() for (az = ESC_BAY_AZ)
-            esc_bay_footprint(az, 60.0, ESC_LEDGE_W + ESC_DOUBLER_LAP);
+        union() for (b = ESC_BAYS)
+            esc_bay_footprint(b, 60.0, ESC_LEDGE_W + ESC_DOUBLER_LAP);
     }
     intersection() {
         _esc_skin_shell(0.0, ESC_COVER_T + ESC_BOSS_DEPTH);
@@ -2126,7 +2183,7 @@ module esc_bay_cut() {
     // SEAT outward, so it automatically carries ESC_STACK + ESC_FLOW_LANE: the
     // lane is the gap between the top of the component stack and the cover's
     // inner face, and it is what the cooling air actually flows through.
-    for (az = ESC_BAY_AZ) esc_bay_footprint(az, 60.0);
+    for (b = ESC_BAYS) esc_bay_footprint(b, 60.0);
 
     // rebate — a cover's thickness deep, over window + landing band
     intersection() {
@@ -2137,7 +2194,7 @@ module esc_bay_cut() {
             grid_solid(offset_grid(ESC_SKIN, ESC_COVER_T),
                        hollow_zs(), HOLLOW_N_AZ);
         }
-        union() for (az = ESC_BAY_AZ) esc_bay_footprint(az, 60.0, ESC_LEDGE_W);
+        union() for (b = ESC_BAYS) esc_bay_footprint(b, 60.0, ESC_LEDGE_W);
     }
 
     // insert bores — opening on the rebate floor
@@ -2157,20 +2214,33 @@ module esc_bay_cut() {
 // intake-face-down — so the unsupported top arc of each horizontal hole becomes
 // a self-supporting 45° roof.
 module esc_discharge_ports() {
-    // Two stadium slots per bay, centred on the power panel, radial through the duct wall.
-    // Tangential offsets are taken at the duct wall (r = EDF_BORE_R) and turned into azimuth.
+    // Per POWER bay: two stadium slots centred on the power panel, radial through the duct wall
+    // at the inter-stage station.  Tangential offsets are taken at the duct wall (r = EDF_BORE_R)
+    // and turned into azimuth.  (Logic bays carry no ports: ESTIMATE, see WBS NAC-64-ESC-BAYS.)
     off = (ESC_DSLOT_L + ESC_DSLOT_WEB) / 2;
-    for (az_hinge = ESC_BAY_AZ, k = [-1, 1])
-        rotate([0, 0, az_hinge + esc_a_pow() + k * atan(off / EDF_BORE_R)])
-            translate([EDF_BORE_R - 1.0, 0, ESC_DSLOT_Z])
-                rotate([0, 90, 0])
-                    linear_extrude(ESC_MOUNT_R - EDF_BORE_R + 3.0)
-                        hull() for (t = [-1, 1])
-                            translate([0, t * (ESC_DSLOT_L - ESC_DSLOT_H) / 2])
-                                circle(d = ESC_DSLOT_H, $fn = 32);
+    for (b = ESC_BAYS) if (bay_is_power(b)) {
+        for (k = [-1, 1])
+            rotate([0, 0, bay_az(b) + esc_a_pow() + k * atan(off / EDF_BORE_R)])
+                translate([EDF_BORE_R - 1.0, 0, ESC_DSLOT_Z])
+                    rotate([0, 90, 0])
+                        linear_extrude(ESC_MOUNT_R - EDF_BORE_R + ESC_DCHAN_D)
+                            hull() for (t = [-1, 1])
+                                translate([0, t * (ESC_DSLOT_L - ESC_DSLOT_H) / 2])
+                                    circle(d = ESC_DSLOT_H, $fn = 32);
+        // Discharge channel for a bay that starts aft of the ports (ESC A power): axial, outside
+        // the sleeve-zone duct wall (inner face at ESC_MOUNT_R = SLEEVE_BORE_R + 2.5), from the
+        // ports to 2 mm inside the bay's forward end.
+        if (bay_z0(b) > ESC_DSLOT_Z - ESC_DSLOT_H / 2)
+            rotate([0, 0, bay_az(b) + esc_a_pow()])
+                translate([ESC_MOUNT_R, -(2 * ESC_DSLOT_L + ESC_DSLOT_WEB) / 2,
+                           ESC_DSLOT_Z - ESC_DSLOT_H / 2])
+                    cube([ESC_DCHAN_D, 2 * ESC_DSLOT_L + ESC_DSLOT_WEB,
+                          bay_z0(b) + 2.0 - (ESC_DSLOT_Z - ESC_DSLOT_H / 2)]);
+    }
 }
-assert(ESC_DSLOT_Z - ESC_DSLOT_H / 2 >= ESC_BAY_Z0,
-       "ESC discharge slot starts forward of the bay floor");
+for (b = ESC_BAYS) if (bay_is_power(b))
+    assert(bay_z1(b) > ESC_DSLOT_Z + ESC_DSLOT_H / 2,
+           "a power bay ends forward of its discharge ports");
 assert(ESC_DSLOT_Z + ESC_DSLOT_H / 2 + ESC_DSLOT_CART_MARGIN <= STATOR_SLV_Z_START,
        "ESC discharge slot reaches the stage-2 cartridge: it must open into the inter-stage");
 assert(2 * ESC_DSLOT_L + ESC_DSLOT_WEB <= ESC_W_POWER,
@@ -2260,10 +2330,16 @@ module nacelle_pod(swirl_dir = SWIRL_DIR) {
     // it did before, and that assertion then fired on a correct change: the
     // board went 62 -> 44 mm when the cover's own thickness and the cooling lane
     // were finally charged to the same budget.
-    assert(ESC_STACK + ESC_FLOW_LANE + ESC_COVER_T + 0.4 <= 8.0,
-           "ESC radial budget over 8.0 mm - the bay then runs out of depth before length; see nacelle_esc_bay.scad");
-    assert(ESC_BAY_Z1 - ESC_BAY_Z0 >= 40.0,
-           "ESC bay is under 40 mm — below the shortest board considered viable");
+    assert(abs(CAVITY_BULKHEAD_Z[2] - (ESC_BAY_Z0 - ESC_LEDGE_W - ESC_DOUBLER_LAP - 4.0)) < 0.05,
+           "forward bay-tied cavity web has drifted from the bay group");
+    // G1: each bay's radial budget (envelope + 0.4 clearance + cover) and length are outputs of
+    // tools/esc80_cooptimize.py against the measured skin; this guards the table against typos.
+    for (b = ESC_BAYS) {
+        assert(bay_env(b) + 0.4 + ESC_COVER_T <= 8.6,
+               "ESC bay radial budget over 8.6 mm; re-run esc80_cooptimize");
+        assert(bay_z1(b) - bay_z0(b) >= 20.0, "ESC bay under 20 mm long");
+        assert(bay_z1(b) <= 158.25, "ESC bay passes the F1 nozzle housing (Z 160.25 - 2.0 wall)");
+    }
     // NAC-64-ASM-03: every bay stud insert keeps ESC_DISC_MIN_WALL to the flow bore.
     for (i = [0 : ESC_STUD_N - 1])
         assert(norm([NACELLE_FACE_X_PYLON - ESC_DISC_D - ESC_DISC_INSERT_L,
@@ -2592,7 +2668,13 @@ module edf1_nacelle_spider() {
     // Zone C is also where the RESIZED canonical dorsal shroud joins the pod
     // (nacelle_nozzle_servo_64mm.scad nsv_pod_adds; owner rule 2026-10-04).
     $nsv_side = PYLON_SIDE;
-    nsv_pod_adds();
+    // G1 (2026-11-22): ESC A's power bay (az 210, panels to ~238) runs into the shroud's flank
+    // (shroud solid from az ~224, down to r 34.8).  The shroud is added here, after the Zone-B
+    // bay cut, so it refilled 2,592 mm3 of the bay; cut the bay through it as well.
+    difference() {
+        nsv_pod_adds();
+        esc_bay_cut();
+    }
 }
 // The 50 mm motor-lead exit slot sat at STATOR_SLV_Z_START; at 103.7 it would
 // open the duct at the rotor-2 tips.  The lead vanes replace it.
@@ -2609,13 +2691,13 @@ module sleeve_retention_bosses() {}
 // ESC seat keep-out spans the bay (the whole bay is over the sleeve zone) and
 // tracks the larger duct (EDF_BORE_R + 1 instead of the 50 mm literal 26.0).
 module esc_bay_seat_keepout() {
-    for (az_hinge = ESC_BAY_AZ)
+    for (b = ESC_BAYS)
         for (side = [0, 1])
             esc_panel_slab(
                 (side == 0 ? ESC_W_POWER : ESC_W_SIGNAL) + 2 * (ESC_FIT + 2.0),
-                az_hinge + (side == 0 ? esc_a_pow() : -esc_a_sig()),
+                bay_az(b) + (side == 0 ? esc_a_pow() : -esc_a_sig()),
                 EDF_BORE_R + 1.0, ESC_MOUNT_R + 2.0,
-                ESC_BAY_Z0 - 1.0, ESC_BAY_Z1 + 1.0);
+                bay_z0(b) - 1.0, bay_z1(b) + 1.0);
 }
 
 // ── Intake lip profile functions (header) ────────────────────────────────────
@@ -2824,7 +2906,7 @@ module extra_zone_b_cuts() {
 }
 
 // Motor phase-lead routes (WBS NAC-64-SVC-01), PYLON_SIDE-mirrored with the
-// lead vanes (edf_motor_mount_64mm.scad lead_az: 68 / 248 = ESC_BAY_AZ):
+// lead vanes (edf_motor_mount_64mm.scad lead_az: 78 / 210 = the G1 power bays):
 //  * stage 1: the integrated lead vane's channel, out through the duct wall,
 //    then a Ø5 conduit at r 37.5 through the cavity bulkheads aft to the
 //    ESC-1 bay (ESC_BAY_Z0 86.35).  Motor 1 comes out aft, so its leads are
@@ -2835,12 +2917,16 @@ module extra_zone_b_cuts() {
 //    opens into the ESC-2 bay over the bay's Z range.
 LEAD_CONDUIT_R = 37.5;  LEAD_CONDUIT_D = 5.0;
 LEAD_SLOT_W2   = 5.0;   LEAD_SLOT_D2   = 4.8;
+assert(bay_z0(ESC_BAYS[0]) < 119.0 && bay_z1(ESC_BAYS[0]) > 125.0,
+       "stage-2 lead slot (from Z 119) must open into ESC A's power bay");
 module motor_lead_routes() {
     $mm_side = PYLON_SIDE;  $mm_swirl = SWIRL_DIR;
-    az1 = PYLON_SIDE * 68;  az2 = PYLON_SIDE * 248;
+    // G1 (2026-11-22): motor 1 -> ESC B power (ESC_BAYS[2], az 78, from Z 73.4); motor 2 ->
+    // ESC A power (ESC_BAYS[0], az 210, Z 111.1-157.4).  Must equal edf_motor_mount_64mm lead_az.
+    az1 = PYLON_SIDE * bay_az(ESC_BAYS[2]);  az2 = PYLON_SIDE * bay_az(ESC_BAYS[0]);
     lead_channel_stage(1, LEAD_CONDUIT_R + 1.0);
     rotate([0, 0, az1]) translate([LEAD_CONDUIT_R, 0, 46.0])
-        cylinder(d = LEAD_CONDUIT_D, h = ESC_BAY_Z0 + 4.0 - 46.0, $fn = 24);
+        cylinder(d = LEAD_CONDUIT_D, h = bay_z0(ESC_BAYS[2]) + 4.0 - 46.0, $fn = 24);
     rotate([0, 0, az2]) translate([SLEEVE_BORE_R - 0.01, -LEAD_SLOT_W2 / 2, 119.0])
         cube([LEAD_SLOT_D2, LEAD_SLOT_W2, NOZZLE_RING_Z - 119.0 + 1.0]);
 }

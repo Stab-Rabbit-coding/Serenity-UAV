@@ -114,11 +114,15 @@ NR = 8;  NZ = 10;                // surface grid
 // ── Lead vane ─────────────────────────────────────────────────────────────────
 LEAD_T      = 6.0;               // [mm] hollow vane thickness
 LEAD_SLOT_T = 4.4;               // [mm] channel: passes a 4 mm bullet pin
-// Lead-vane azimuth = its ESC bay hinge azimuth (pod ESC_BAY_AZ 68 / 248),
-// mirrored with the pod.  $mm_side lets the pod pass its own PYLON_SIDE.
+// Lead-vane azimuth = the hinge azimuth of the POWER bay its motor feeds (pod ESC_BAYS, G1,
+// 2026-11-22): stage 1 (forward motor) -> ESC B power, az 78 (bay from Z 73.4, reached by the
+// stage-1 conduit); stage 2 (aft motor) -> ESC A power, az 210 (bay Z 111.1-157.4, over the
+// stage-2 vane at Z ~119).  Was 68 / 248, the Rev-T single bays.  Only the vanes and the lead
+// channel rotate with it; plate bolts (BOLT_ANG0) and cartridge keys (KEY_ANGLES) do not.
+// Mirrored with the pod.  $mm_side lets the pod pass its own PYLON_SIDE.
 function mm_side()  = is_undef($mm_side) ? PYLON_SIDE : $mm_side;
 function mm_swirl() = is_undef($mm_swirl) ? SWIRL_DIR : $mm_swirl;
-function lead_az(stage) = mm_side() * (stage == 1 ? 68 : 248);
+function lead_az(stage) = mm_side() * (stage == 1 ? 78 : 210);
 LEAD_EXIT_W = 8.6;               // [mm] wall exit, matches the pod slot
 
 // ── Retention (stage 2 aft face) ──────────────────────────────────────────────

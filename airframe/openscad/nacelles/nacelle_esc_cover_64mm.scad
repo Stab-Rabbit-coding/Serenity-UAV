@@ -25,20 +25,28 @@
 // cover is.  The hull-frame placement is the pod's own bake transform (tools/bake_hull_frame.py);
 // print orientation is a slicer choice (inner face down, see the 50 mm file).
 //
-// RENDER — the same three side flags as the pod it closes, plus the bay index:
-//   stbd A: openscad -o nacelle_esc_cover_64mm_stbd_a.stl nacelle_esc_cover_64mm.scad \
-//           -D SWIRL_DIR=1 -D PYLON_SIDE=1 -D NACELLE_SIDE=1 -D RENDER_BAY=0
-//   stbd B: ... -D RENDER_BAY=1
-//   port A: ... -D SWIRL_DIR=-1 -D PYLON_SIDE=-1 -D NACELLE_SIDE=-1 -D RENDER_BAY=0
-//   port B: ... -D RENDER_BAY=1
-// Bay A = ESC_BAY_AZ[0], bay B = ESC_BAY_AZ[1].
+// RENDER — the same three side flags as the pod it closes, plus the bay index into the pod's
+// ESC_BAYS table (G1, 2026-11-22).  Only the FLAT-cover bays have a cover here: ESC A power
+// (RENDER_BAY = 0, with the louvre field) and ESC A logic (RENDER_BAY = 1, plain: logic bays have
+// no discharge ports).  ESC B's two bays are closed by the H1 housings
+// (tools/nacelle64_esc_housing.py, WBS NAC-64-ESC-BLISTER).
+//   openscad -o nacelle_esc_cover_64mm_a_power.stl nacelle_esc_cover_64mm.scad -D RENDER_BAY=0
+//   openscad -o nacelle_esc_cover_64mm_a_logic.stl nacelle_esc_cover_64mm.scad -D RENDER_BAY=1
+// The other pod's covers are their X-mirror, as the pod is (tools/prep_nacelle_64_bake.py).
+//
+// G1 CHANGES (2026-11-22): cover 1.5 mm (SLS material study; pod ESC_COVER_T), no counterbore
+// (button heads proud), louvres 11 x 1.2 x 18 mm, no mesh rebate (screen bonded flat), and the
+// cover restores any dorsal-shroud material the bay rebate removed, so it finishes flush with
+// the shroud where the shroud stands proud of the canonical skin (ESC A power, az 226-238).
 // =============================================================================
 
 include <nacelle_pod_64mm_tandem.scad>
 P64_NO_RENDER  = true;    // the pod wrapper renders unless this is defined
-RENDER_BAY     = 0;       // 0 = bay A (ESC_BAY_AZ[0]), 1 = bay B (ESC_BAY_AZ[1])
+RENDER_BAY     = 0;       // index into ESC_BAYS: 0 = ESC A power, 1 = ESC A logic
 
-COVER_AZ = ESC_BAY_AZ[RENDER_BAY];
+COVER_BAY = ESC_BAYS[RENDER_BAY];
+COVER_AZ  = bay_az(COVER_BAY);
+assert(!bay_is_housed(COVER_BAY), "this bay is closed by an H1 housing, not a flat cover");
 
 // The material between the mould line and d_in inside it, on the pod's own scaled skin.
 module cover64_shell(d_out, d_in) {
@@ -50,7 +58,7 @@ module cover64_shell(d_out, d_in) {
 
 // Louvre field: the aft-only inlet of the aspirated bay (nacelle_esc_bay.scad "Cooling").
 function cover64_louvre_span() = (ESC_LOUVRE_N - 1) * ESC_LOUVRE_P + ESC_LOUVRE_W;
-function cover64_louvre_z0()   = ESC_BAY_Z1 - ESC_LEDGE_W / 2 - cover64_louvre_span();
+function cover64_louvre_z0()   = bay_z1(COVER_BAY) - ESC_LEDGE_W / 2 - cover64_louvre_span();
 
 module cover64_louvres() {
     for (i = [0 : ESC_LOUVRE_N - 1])
@@ -68,24 +76,36 @@ module cover64_mesh_rebate() {
 }
 
 module nacelle_esc_cover_64mm() {
-    assert(ESC_COVER_T > ESC_CBORE_DEPTH + 1.0,
-           "counterbore leaves under 1 mm of material beneath the screw head");
-    assert(cover64_louvre_z0() > ESC_BAY_Z0,
+    assert(ESC_COVER_T >= ESC_CBORE_DEPTH + 1.5,
+           "counterbore leaves under the 1.5 mm study floor beneath the screw head");
+    assert(!bay_is_power(COVER_BAY) || cover64_louvre_z0() > bay_z0(COVER_BAY),
            "louvre field runs forward of the bay window");
+    assert(ESC_LOUVRE_L <= ESC_W_POWER - 2.0, "louvre slots run past the power-panel window");
     difference() {
         // The cover drops into the pod's rebate (same footprint, less the fit clearance), and
-        // its outer face is the pod's scaled mould line.
+        // its outer face is the pod's scaled mould line -- or the dorsal shroud where that
+        // stands proud (the rebate cut it away too, see edf1_nacelle_spider()).
         intersection() {
-            cover64_shell(0.0, ESC_COVER_T);
-            esc_bay_footprint(COVER_AZ, 60.0, ESC_LEDGE_W - ESC_COVER_FIT);
+            union() {
+                cover64_shell(0.0, ESC_COVER_T);
+                intersection() {
+                    $nsv_side = PYLON_SIDE;
+                    nsv_pod_adds();
+                    difference() {
+                        cylinder(r = 80, h = 400);
+                        grid_solid(offset_grid(ESC_SKIN, ESC_COVER_T), hollow_zs(), HOLLOW_N_AZ);
+                    }
+                }
+            }
+            esc_bay_footprint(COVER_BAY, 60.0, ESC_LEDGE_W - ESC_COVER_FIT);
         }
-        esc_boss_cylinders(COVER_AZ, ESC_SCREW_D);
-        intersection() {
+        esc_boss_cylinders(COVER_BAY, ESC_SCREW_D);
+        if (ESC_CBORE_DEPTH > 0) intersection() {
             cover64_shell(-0.5, ESC_CBORE_DEPTH);
-            esc_boss_cylinders(COVER_AZ, ESC_CBORE_D);
+            esc_boss_cylinders(COVER_BAY, ESC_CBORE_D);
         }
-        cover64_louvres();
-        intersection() {
+        if (bay_is_power(COVER_BAY)) cover64_louvres();
+        if (bay_is_power(COVER_BAY) && ESC_MESH_REBATE > 0) intersection() {
             cover64_shell(ESC_COVER_T - ESC_MESH_REBATE, ESC_COVER_T + 1.0);
             cover64_mesh_rebate();
         }

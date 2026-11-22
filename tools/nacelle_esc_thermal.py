@@ -135,9 +135,9 @@ ESC_BLEED_D = 5.5e-3     # [m]
 
 #: Cover louvres, mirrored from nacelle_esc_bay.scad.  Enlarged at Rev T4e to
 #: carry a FOD screen without the inlet becoming the restriction.
-ESC_LOUVRE_N = 8         # aft field only — slots at both ends short-circuit
+ESC_LOUVRE_N = 11        # aft field only — slots at both ends short-circuit (64 mm G1: was 8)
 ESC_LOUVRE_W = 1.2       # [mm]
-ESC_LOUVRE_L = 24.0      # [mm]
+ESC_LOUVRE_L = 18.0      # [mm] (64 mm G1 20 mm power panel: was 24.0; 237.6 vs 230.4 mm2 gross)
 
 # ── EDF (BOM EDF-50-6S, XFly Galaxy X5 2627-KV3200) ──────────────────────────
 EDF_THRUST_N = 12.16     # [N] 1240 gf per unit, static
