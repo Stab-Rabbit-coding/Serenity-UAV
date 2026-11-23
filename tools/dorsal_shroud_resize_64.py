@@ -152,7 +152,8 @@ def mech_points(p: dict) -> np.ndarray:
         for t in np.linspace(0, 1, n):
             sphere(a + (b - a) * t, d)
 
-    # servo body box (KST X06 L x W x H): L along z, W radial, H tangential (NSL_SERVO_SIDE)
+    # servo body box (NSL_SERVO, KST CM07 L x W x H): L along z, W radial,
+    # H tangential (NSL_SERVO_SIDE)
     L, W, H = p["NSL_SERVO"]
     rs = math.hypot(sh[0], sh[1])
     et = np.array([-math.sin(math.radians(saz)), math.cos(math.radians(saz)), 0])

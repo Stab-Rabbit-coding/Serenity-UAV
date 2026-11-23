@@ -44,16 +44,16 @@
     },
     {
       "Ref": "SERVO-RCS-VALVE",
-      "Description": "RCS bleed-jet proportional valve servo — SG90 class, OpenServoCore control board — first build; Qty 0 until the G1 valve concept fixes the part",
+      "Description": "RCS bleed-jet valve servo — KST CM07 (owner 2026-11-19), gutted, secure slim control board — first build; Qty 0 until the G1 valve concept fixes the part",
       "Category": "Servo",
       "Qty": "0",
-      "Unit_Mass_g": "9",
+      "Unit_Mass_g": "7",
       "Total_Mass_g": "0",
-      "Supplier": "Amazon / AliExpress (servo) + github.com/OpenServoCore/open-servo-core (board, self-build)",
-      "Supplier_PN_or_Search": "SG90 9g micro servo 1.8kg",
-      "Est_Unit_Price_USD": "3.00",
+      "Supplier": "KST distributor / retailer",
+      "Supplier_PN_or_Search": "KST CM07 (kstsz.com)",
+      "Est_Unit_Price_USD": "25.00",
       "Est_Total_Price_USD": "0.00",
-      "Notes": "*** FIRST BUILD (plan 2026-11-15-002 KD8) — Qty 0 until the G1 valve concept and TEDF-11 fix the part and TEDF-14 enters it in the ledger; 4 per aircraft; modulates the 4 RCS jets for pitch/yaw attitude authority; the tail nozzle is fixed *** 2026-08-02: SG90-class micro servos standardise on the OpenServoCore \"OSC SG90 M007\" swap board (REFERENCES.md REF-SENSOR-015) when the part is fixed — inherits the same pre-production-hardware caveat as SERVO-CARGO below."
+      "Notes": "*** FIRST BUILD (plan 2026-11-15-002 KD8) — Qty 0 until the G1 valve concept and TEDF-11 fix the part and TEDF-14 enters it in the ledger; 4 per aircraft; modulates the 4 RCS jets for pitch/yaw attitude authority; the tail nozzle is fixed *** 2026-08-02: SG90-class micro servos standardise on the OpenServoCore \"OSC SG90 M007\" swap board (REFERENCES.md REF-SENSOR-015) when the part is fixed — inherits the same pre-production-hardware caveat as SERVO-CARGO below. *** 2026-11-19 (owner): the RCS valve servo is the KST CM07 (REF-ACT-006), the nacelle nozzle servo, after conflicting heat ratings for SG90/MG90-class bodies (retailer SG90 sheets give 0-55 C); 3 per aircraft under option B (tools/rcs_jets.py), not 4. The OpenServoCore SG90 board no longer applies to these servos."
     },
     {
       "Ref": "SERVO-CARGO",
@@ -2890,17 +2890,17 @@
       "Notes": "Rev U NEW. 52.7 g is the roll-up ESTIMATE (tools/esc80_cooptimize.py on esc70_design.json). Current rating: 70 A, owner decision OD-3 2026-11-12, conditional on WBS NAC-64-ESC70-QUAL. CAUTION: do not substitute any other ESC (commercial or another build) without a full engineering analysis for this motor and bay (current, hot-bay thermal, fit, current limit, fuse coordination); a commercial ESC shall be at least the motor maker's 80 A and still be analysed. Price not recorded. "
     },
     {
-      "Ref": "SERVO-KST-X06",
-      "Description": "KST X06 HV digital micro servo — nozzle servo drive",
+      "Ref": "SERVO-KST-CM07",
+      "Description": "KST CM07 digital micro servo (7.5 mm, coreless, hardened-steel gears) — nacelle nozzle servo drive; gutted, secure slim control board (plan 2026-11-16-001 KTD6)",
       "Category": "Servo",
       "Qty": "2",
-      "Unit_Mass_g": "6",
-      "Total_Mass_g": "12",
-      "Supplier": "Aloft Hobbies / retailer",
-      "Supplier_PN_or_Search": "KST X06 (alofthobbies.com)",
-      "Est_Unit_Price_USD": "0.00",
-      "Est_Total_Price_USD": "0.00",
-      "Notes": "Rev U NEW. 6 g (REF-ACT-005, aggregator values: dimensions and 6 V torque REQUIRE VERIFICATION on a unit before the pocket is printed). Price not recorded. "
+      "Unit_Mass_g": "7",
+      "Total_Mass_g": "14",
+      "Supplier": "KST distributor / retailer",
+      "Supplier_PN_or_Search": "KST CM07 (kstsz.com)",
+      "Est_Unit_Price_USD": "25.00",
+      "Est_Total_Price_USD": "50.00",
+      "Notes": "Owner 2026-11-19 (D-SV-1): replaces SERVO-KST-X06. KST manufacturer sheet 2026-05 (REF-ACT-006): 20.5 x 7.5 x 19 mm, 7 g, 1.80 kgf.cm at 6.0 V, 2.10 at 7.4 V (rated), -10 to +65 C. Continuous torque not stated (D-SV-2, the rail voltage, and the U6 bench hold test settle the margin). Price is the owner's figure."
     },
     {
       "Ref": "HW-NOZ64-LINKAGE",

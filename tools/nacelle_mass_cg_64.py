@@ -189,9 +189,9 @@ def rows_64(pod_stl: Path) -> list[tuple[str, float, float, str]]:
          "MEASURED nacelle_nozzle_ring_64mm_stbd.stl (Rev U)"),
         ("8 x nozzle flap (40 mm)", 4 * noz["flap"] + 4 * noz["flap_seal"], NOZ_Z + 31.95,
          "MEASURED 4 x nacelle_nozzle_flap_64mm.stl + 4 x ..._flap_seal_64mm.stl (Rev U)"),
-        ("Nozzle servo drive (KST X06 + bellcrank)", 6.0 + 1.0 + 1.0 + 1.5,
+        ("Nozzle servo drive (KST CM07 + bellcrank)", 7.0 + 1.0 + 1.0 + 1.5,
          0.5 * (NOZ_Z - 43.86 + NOZ_Z - 8.86),
-         ("KST X06 6 g [REF-ACT-005] + link 1 + spring 1 + bellcrank/pins 1.5 g "
+         ("KST CM07 7 g [REF-ACT-006] + link 1 + spring 1 + bellcrank/pins 1.5 g "
           "(ASSUMED); station midway servo shaft (Z_NOZ - 43.86) .. bellcrank "
           "(Z_NOZ - 8.86), nozzle_servo_linkage_64.py")),
         ("4 x 10 AWG feed",

@@ -4107,6 +4107,13 @@
       ],
       "archived": false
     },
+    "avionics/datasheets/kst/KST_CM07_Technical_Specification_2026-05.pdf": {
+      "description": "PDF document",
+      "tags": [
+        "avionics-hardware"
+      ],
+      "archived": false
+    },
     "avionics/datasheets/linear/2893159.pdf": {
       "description": "PDF document",
       "tags": [
@@ -16023,6 +16030,13 @@
       ],
       "archived": false
     },
+    "tools/cargo_duct_layout_fit.py": {
+      "description": "Python script",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/cargo_layout_fit.py": {
       "description": "Python script",
       "tags": [
@@ -17133,6 +17147,13 @@
     },
     "tools/tests/test_bay_a_thermal_budget.py": {
       "description": "test_bay_a_thermal_budget.py -- lumped thermal network for the Bay A",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_cargo_duct_layout_fit.py": {
+      "description": "Tests for tools/cargo_duct_layout_fit.py (plan 002 U6, TEDF-06).",
       "tags": [
         "build-tooling"
       ],
@@ -18361,6 +18382,7 @@
       "docs/plans/2026-11-11-001-sprint-2-handoff.md",
       "docs/plans/2026-11-14-001-feat-nonfo-pilot-pb2-stern-stack-plan.md",
       "docs/plans/2026-11-16-001-feat-nozzle-servo-selection-osc-integration-plan.md",
+      "docs/plans/2026-11-19-001-feat-flight-engineer-split-relayout-plan.md",
       "docs/solutions/conventions/one-limits-list-drives-the-printout-and-the-exit-code.md",
       "docs/solutions/conventions/pb2-cape-datasheet-verified-footprints-and-courtyard-budget-before-layout.md",
       "docs/solutions/design-patterns/reducing-token-cost-of-federated-agents-md.md",
@@ -19972,6 +19994,7 @@
       "avionics/datasheets/johanson/johanson-2450bp15e0100.pdf",
       "avionics/datasheets/jst/SM04B-SRSS-TB.pdf",
       "avionics/datasheets/jst/eGH.pdf",
+      "avionics/datasheets/kst/KST_CM07_Technical_Specification_2026-05.pdf",
       "avionics/datasheets/linear/2893159.pdf",
       "avionics/datasheets/linear/4370f.pdf",
       "avionics/datasheets/linear/ltc4359.pdf",
@@ -21473,6 +21496,7 @@
       "tools/build_landing_gear_views.py",
       "tools/cargo_bay_envelope.py",
       "tools/cargo_bulkhead_context.py",
+      "tools/cargo_duct_layout_fit.py",
       "tools/cargo_layout_fit.py",
       "tools/cargo_observer_sensor_fit.py",
       "tools/cfd_internal_air_domain.py",
@@ -21622,6 +21646,7 @@
       "tools/tests/test_bay_a_fwd_mounts.py",
       "tools/tests/test_bay_a_fwd_routes.py",
       "tools/tests/test_bay_a_thermal_budget.py",
+      "tools/tests/test_cargo_duct_layout_fit.py",
       "tools/tests/test_check_agents_size.py",
       "tools/tests/test_check_hull_tarballs.py",
       "tools/tests/test_esc80_cooptimize.py",
