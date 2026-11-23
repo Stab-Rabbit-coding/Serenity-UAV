@@ -2578,6 +2578,11 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             fairing on the inboard face over the run (OML departure, under the wing-root
             junction?), re-routing the fan-out where the skin is deeper (az 0 +/- 4 deg reaches
             r 45), or a smaller conductor bundle.  Owner decision (OD-17 is an owner decision).
+            Owner Decision Brief I (`docs/THEME_N_DECISION_BRIEFS.md`, re-issued 2026-11-23 after
+            the adversarial review): at H1 only ESC A + is open (7.4 mm, through a vestigial socket
+            in the canonical shell, Y -6..+1, Z 70-78); ESC B - has 0.54 mm at Z 70.  Recommends
+            X3, filling the socket and padding ESC B - (0.74 g, <= 0.96 mm proud).  OWNER DECISION
+            PENDING.
             CAUTION: as published, the inboard skin is open over the 10 AWG power feed.  Airflow
             into the open channel and chafe on its edges can damage the insulation; a short on the
             feed loses a fan (aircraft loss; per AGENTS.md sec. 6 a WARNING only if people are

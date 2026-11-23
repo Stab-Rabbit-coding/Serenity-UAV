@@ -667,122 +667,151 @@ that needs its own study.
 owner 2026-11-11) break through the 64 mm pod's inboard skin near Z 3.2–3.4 in (82–86 mm). The S2 exit
 check proved bend radius and duct clearance but never the skin.
 
-**If nothing is decided.** The 10 AWG feed runs under skin as thin as 0.54 mm, open to air at one
-point. CAUTION: chafe or airflow damage to the feed insulation can short a fan's power (aircraft loss;
-a WARNING only if people are under the hover).
+**If nothing is decided.** At the decided pivot the ESC A + feed runs 0.29 in (7.4 mm) through open
+air in a socket in the canonical shell, and ESC B − runs under 0.021 in (0.54 mm) of skin beside the
+disconnect bay. CAUTION: chafe or airflow damage to the feed insulation can short a fan's power
+(aircraft loss; a WARNING only if people are under the hover).
 
-**Bound by.** OD-17 option D and its channel paths (owner 2026-11-11); the H1 pivot at Z 109.27 mm
-(owner 2026-11-22, built at S4.5); OD-25 option A SLS wall rule (`docs/SLS_MIN_WALL_THICKNESS.md`,
-owner 2026-11-11) and the owner's 2026-11-22 direction to use the material study's thicknesses.
+**Bound by.** OD-17 option D and its channel paths (owner 2026-11-11); the H1 pivot at Z 4.302 in
+(109.27 mm) (owner 2026-11-22, built at S4.5); OD-25 option A SLS wall rule
+(`docs/SLS_MIN_WALL_THICKNESS.md`, owner 2026-11-11) and the owner's 2026-11-22 direction to use the
+material study's thicknesses.
 
-**Bottom line.** *(HELD: adversarial review did not support this; see below.)* Recommend **X1, a local pad on the inboard skin** that restores 0.079 in (2.0 mm)
-over every channel: about 0.0004 lbm (0.18 g) per nacelle, at most 0.057 in (1.46 mm) outward, no
-change to the decided route.
+**Bottom line.** Recommend **X3: fill the vestigial socket in the canonical shell back to its
+neighbours' contour, plus a local pad over ESC B − only**. Every channel then has at least the study's
+0.059 in (1.5 mm) floor, for about 0.0016 lbm (0.74 g) per nacelle and at most 0.038 in (0.96 mm)
+outward over one short strip. Re-issued 2026-11-23 after the adversarial review (cycle 1 verdict:
+does not stand; see below).
 
 ### What we measured
 
-`tools/brief_od17_breach_fig.py` (this brief's figures and numbers) samples each wire's drawn path
-(`nacelle64_optD_concept.pod_side_path`, the same path the SCAD cuts) and measures the skin between the
-6.5 mm channel and the pod's outer surface on renders with the cavity and the channels removed. Samples
-inside the bend chamber and the disconnect bay, and where the pod's own surface is below r 40 mm (the
-bay's designed open mouth, Z 65–77 mm), are left out.
+`tools/brief_od17_breach_fig.py` samples each wire's drawn path (`nacelle64_optD_concept.pod_side_path`,
+the path the SCAD cuts) every ~0.1 in, on renders with the cavity and the channels removed. At each
+sample it first tests whether the channel centre is inside the pod (**containment**); if not, the
+channel runs in air and the skin is reported negative. Otherwise the skin is the distance from the
+channel's outer edge to the **first** outward surface crossing. Only the bend chamber and the SCAD
+disconnect bay (Z 54.1–68.1 mm, `ESC_DISC_Z` ± `ESC_DISC_H`/2) are left out.
+
+The first issue of this brief used the **outermost** hit and left out everything below r 40 mm as "the
+bay mouth (Z 65–77)". That hid the socket below. The reviewer caught it (finding 1).
 
 ![Skin over each channel, today's and the decided pivot](figures/brief_od17_breach_skin.png)
 
-| Wire | Min skin, pivot 118.2 mm (today's render) | Min skin, pivot 109.27 mm (decided, H1) |
-| --- | --- | --- |
-| ESC A + | −0.41 mm at Z 70.1 (mouth edge) | −0.41 mm at Z 70.1 (mouth edge) |
-| ESC A − | 0.65 mm at Z 83.6 | 1.70 mm at Z 68.9 |
-| ESC B + | 1.41 mm at Z 89.8 | 1.76 mm at Z 80.6 |
-| ESC B − | −1.04 mm at Z 83.6 (open Z 81–85) | **0.54 mm at Z 70.0** |
+| Wire (Y at Z 74) | Min skin, pivot 4.654 in (118.2 mm) | Min skin, H1 pivot 4.302 in (109.27 mm) | Open length at H1 |
+| --- | --- | --- | --- |
+| ESC A + (Y −3.7 mm) | open, −0.275 in (−6.98 mm) in the socket | open, −0.275 in (−6.98 mm) at Z 75.5 | 0.29 in (7.4 mm) |
+| ESC B + (Y +3.7 mm) | 0.056 in (1.41 mm) | 0.068 in (1.72 mm) | 0 |
+| ESC A − (Y −9.5 mm) | 0.026 in (0.65 mm) | 0.066 in (1.67 mm) | 0 |
+| ESC B − (Y +9.5 mm) | open, −0.041 in (−1.04 mm) at Z 83.6 | **0.021 in (0.54 mm)** at Z 70.0 | 0 |
 
-The decided pivot move closes the open run aft of Z 81 (the collar's junction fairing then covers it),
-but not all of it. **Cross-check:** an independent exploratory run sampled more coarsely and found
-ESC B − at 1.59 mm at H1; the denser sampling here finds 0.54 mm near Z 70, where the skin dips beside
-the bay mouth. The adversarial review below takes this up.
+**The socket.** The canonical imported shell (`nacelle_shell_imported()` on its own, clipped to the
+region) has a rectangular socket on the inboard face. It spans Y −6 to +1 mm and Z 70–78 mm, with its
+floor at X 37.3 mm; the surrounding face is at X ≈ 46.8 mm. None of our cuts makes it. Rendering every
+subtractive module alone in that box gave empty geometry for all but `hollow_cavity()`, which is
+removed from the measured render. It is a second vestigial feature like the boss socket that
+`smooth_boss_fill()` already fills at Z 87–101 (Rev R2). Only ESC A + passes through it. The other
+three wires pass beside it, on solid skin.
+
+**The 0.54 vs 1.59 mm cross-check (finding 2).** 0.54 mm is real. It is the ESC B − skin at Z 69–70,
+where the wire leaves the bay lip. The containment method and the first method agree on it, and the
+coarse exploratory run that read 1.59 mm stepped over it. It is not on the socket edge: ESC B − is at
+Y +9.5 mm, outside the socket's Y −6 to +1.
 
 ![Inboard face, X-ray, decided pivot: channels in red from the spar mouth (top) to the four bay studs (bottom)](figures/brief_od17_breach_xray.png)
 
 **What the material study asks of this skin.** Over the channel the skin spans 0.256 in (6.5 mm). The
-study's handling load (10 lbf (44.5 N) on a 0.25 in radius) needs 0.72 mm (rupture) and 0.46 mm
-(deflection) as a non-load-bearing panel, 0.88 / 0.46 mm as load-bearing (`tools/sls_min_wall.py`,
-any orientation). Its 0.059 in (1.5 mm) process floor governs either way. If the owner classes this
-skin as load-bearing, the study's stiffness-parity rule (0.110 in (2.8 mm) any orientation, 0.077 in
-(2.0 mm) with XY fixed on the drawing) applies on top.
+study's handling load (10 lbf (44.5 N) on a 0.25 in radius) needs 0.028 in (0.72 mm) to avoid rupture
+and 0.018 in (0.46 mm) for deflection as a non-load-bearing panel. As load-bearing it needs 0.035 in
+(0.88 mm) and 0.018 in (0.46 mm). Both come from `tools/sls_min_wall.py`, for any print orientation.
+The study's 0.059 in (1.5 mm) process floor governs either way and is this brief's target. If the
+owner classes this skin as load-bearing, the study's stiffness-parity rule applies on top: 0.110 in
+(2.8 mm) in any orientation, or 0.079 in (2.0 mm) with XY fixed.
 
 ### Options
 
-- **X0 — accept the decided pivot move only.** No geometry change beyond S4.5.
-- **X1 — local pad.** Thicken the inboard skin outward over each channel to a 2.0 mm skin
-  (strip 0.42 in (10.5 mm) wide over the channel; Z 68–82 mm; plus a 0.09 in (2.4 mm) rounding at the
-  one ESC A + point on the mouth edge). A 2.8 mm variant (X1-2.8) if the skin is classed load-bearing
-  with no fixed print orientation.
-- **X2 — service slot with a flush cover.** Open the channel run from Z 66 to 82 mm and close it with a
-  1.5 mm flush cover and two screws, as the ESC covers are built; the cover also gives access to thread
+- **X0. Accept the decided pivot move only.** No geometry change beyond S4.5.
+- **X1. Local pad over every channel, no fill.** Thicken the skin outward to 1.5 mm over each channel.
+  Over the socket this means a pad standing up to 0.33 in (8.5 mm) proud. Kept only to show why the
+  fill is needed.
+- **X2. Service slot with a flush cover.** Open the channel run from Z 66 to 82 mm and close it with a
+  1.5 mm flush cover and two screws, built like the ESC covers. The cover also gives access to thread
   the 10 AWG wires through the bends.
-- Considered and not carried: **re-routing** the fan-out to where the skin is deeper (an exploratory run
-  found no path that keeps the 3 × OD bend radius and the stud landing; REQUIRES VERIFICATION) and a
-  **smaller conductor** (the 44–47 A feed already sits at the 10 AWG thermal limit, NAC-64-FEED-THERM).
+- **X3. Fill the socket, plus a pad over ESC B −** (new; reviewer finding 7).
+  - Add a `smooth_socket_fill()` beside `smooth_boss_fill()` that fills the socket to the
+    neighbouring face contour. This restores the shape the canonical model was meant to have.
+  - Add a 0.42 in (10.5 mm) wide pad over ESC B − only, at Z 68–70 and 78–81 mm, up to 0.038 in
+    (0.96 mm) proud.
+- Considered and not carried:
+  - **Re-routing** the fan-out to where the skin is deeper. An exploratory run found no path that
+    keeps the 3 × OD bend radius and the stud landing. REQUIRES VERIFICATION.
+  - **A smaller conductor.** The 44–47 A feed already sits at the 10 AWG thermal limit
+    (NAC-64-FEED-THERM).
 
 ### Six checks
 
 ![Six checks](figures/brief_od17_breach_six_checks.png)
 
-| Check | X0 accept at H1 | X1 pad (2.0 mm) | X2 service cover |
-| --- | --- | --- | --- |
-| **Statics and dynamics** | Skin strip over a 6.5 mm span under the study's 44.5 N handling load: needs 0.72 mm; ESC B − has 0.54 mm. **Fails.** Aero load at 40 kt (q = 259 Pa) on 6.5 mm is negligible. | 2.0 mm everywhere: > 0.88 mm needed even as load-bearing. **Passes.** | Cover 1.5 mm over a 6.5 mm channel: passes the floor; screws carry the cover. **Passes.** |
-| **Function** | Route, 3 × OD bends and stud landing unchanged; one point open to air at the mouth edge. **Fails** (open). | Route unchanged; skin closed. **Passes.** | Route unchanged; adds install access to the bends. **Passes**, better for assembly. |
-| **Structural integrity** | Below the 1.5 mm floor at ESC B − (0.54) and open at ESC A +. **Fails.** | Meets the floor and the XY-fixed parity (2.0); the X1-2.8 variant meets any-orientation parity. Pad is integral to the pod. **Passes.** | Breaks the inboard skin for 16 mm under the junction-fairing footprint (Z ≥ 74.3 at H1): load path through the skin there is interrupted. **Marginal** (needs a load check). |
-| **Mechanism and component interactions** | No change. | Pad outer at X ≈ 48 mm vs the wing-tip face at X 81.3 mm: 1.31 in (33 mm) gap, constant over the tilt sweep (the pod turns about the spar axis). No clash with the disconnect bay or the wires. **Passes.** | Cover flush; screws need bosses clear of the 10 AWG channels and the bay (not yet laid out). **Open.** |
-| **Weight and balance** | 0. | +0.0004 lbm (0.18 g) per nacelle (ESTIMATE, strip model, PA CF 1.11 g/cm³); CG effect nil. | +0.004 lbm (1.8 g) per nacelle (ESTIMATE: cover + 2 × M2 screws + bosses). |
-| **Canonical shape** | Unchanged. | Up to 0.057 in (1.46 mm) outward over a 10.5 mm strip at Z 68–82 on the inboard (pylon) face; 2.4 mm at one point on the mouth edge. Internal to the canonical silhouette except this strip; partly under the junction fairing at H1. | Flush; one panel line. |
+| Check | X0 accept at H1 | X1 pad, no fill | X2 service cover | X3 fill + B − pad |
+| --- | --- | --- | --- | --- |
+| **Statics and dynamics** | ESC A + is open. ESC B − has 0.54 mm against the 0.72 mm the 44.5 N handling load needs. **Fails.** | 1.5 mm everywhere, more than the 0.88 mm needed. **Passes.** | 1.5 mm cover; the screws carry it. **Passes.** | At least 1.67 mm over the filled socket (ESTIMATE until built) and 1.5 mm over ESC B −. **Passes.** |
+| **Function** | Route, bends and studs unchanged. One wire runs 7.4 mm in air. **Fails.** | Route unchanged; closed. **Passes.** | Route unchanged; adds install access to the bends. **Passes**, best for assembly. | Route unchanged; closed. **Passes.** |
+| **Structural integrity** | Below the floor (0.54 mm) and open. **Fails.** | Meets the floor. The 8.5 mm pad is a thick local boss. **Passes**, but poor. | Breaks the skin for 16 mm under the junction-fairing footprint (Z ≥ 74.3 at H1). **Marginal**: no one has shown whether that skin is in the load path. | Integral; restores solid skin where the socket was. **Passes.** |
+| **Mechanism and component interactions** | No change. | An 8.5 mm pad at Z 70–78 sits forward of the fairing (Z ≥ 74.3) and overlaps it in Z. **Open.** | Screw bosses must clear the channels and the bay; not yet laid out. **Open.** | The fill does not go past the neighbouring face. The ESC B − pad at Z 68–70 is forward of the fairing. The Z 78–81 part sits at Y +9.5, inside the fairing's 70 mm footprint, so it needs the assembled clash check. **Open (minor).** |
+| **Weight and balance** | 0. | +0.0017 lbm (0.76 g) per nacelle (ESTIMATE). | +0.004 lbm (1.8 g) per nacelle (ESTIMATE). | +0.0016 lbm (0.74 g) per nacelle (ESTIMATE: socket box 8 × 8.5 × 9.4 mm plus the pad, PA CF 1.11 g/cm³). CG effect nil. |
+| **Canonical shape** | Keeps the socket, a canonical-model artifact. | An 8.5 mm boss on the inboard face. **Poor.** | Flush; one panel line. | The fill restores the intended face. One strip up to 0.96 mm proud at ESC B −. |
 
 ### Recommendation
 
-**X1, the local pad, at 2.0 mm** (X1-2.8 if the skin is classed load-bearing in any print orientation).
-It is the only option that closes the skin to the study's floor and the XY parity value with no new
-part, at 0.18 g and under 1.5 mm of local outward departure, and it leaves the decided route alone.
-X2 is the better option for assembly (threading 10 AWG through closed bends is hard) but breaks the
-skin under the junction fairing and adds a part; take it only if threading proves impractical on the
-first build.
+**X3: fill the socket and pad ESC B −.**
+
+- It closes every channel to the study's floor.
+- It removes a canonical-model artifact rather than building over it. This is the treatment the
+  inboard boss socket got in Rev R2.
+- It departs from the outer surface by under 1 mm on one strip.
+- It costs under 1 g per nacelle and adds no part.
+
+X2 stays the fallback if threading the 10 AWG wires through the closed bends proves impractical on the
+first build. X2 also fixes that threading risk.
 
 ### Adversarial review
 
-Fresh-context reviewer, 1 cycle, verdict: **does not stand**. The brief is **held, not ready for an
-owner decision**, until the re-measurement below is done.
+Fresh-context reviewer, 1 cycle. Cycle 1 verdict on the first issue (X1, a 2.0 mm pad): **does not
+stand**. This re-issue answers every finding.
 
-**Strongest case against X1:** on the no-channel H1 render, a trough about 0.31 in (8 mm) wide
-(Y -6 to +1, floor at X 37.3-38.1) runs at Z 70.8-76.9 mm. All four channels pass through open air
-there. The tool excluded that stretch as the "designed bay mouth" (r < 40 mm), but the SCAD bay is
-at Z 54.1-68.1 (ESC_DISC_Z 61.09, H 14). So the pad as sized does not cover the worst stretch.
+**Strongest case against the first issue:** an open trough at Z 71–77 was hidden by the r < 40 mm
+"bay mouth" exclusion, so the pad as sized did not cover the worst stretch.
 
 | # | Challenge | Class | Response |
 | --- | --- | --- | --- |
-| 1 | Open trough at Z 71-77 hidden by the mouth exclusion; the bay mouth was misstated | open | Find the cut that makes the trough (esc_bay_cut / motor_lead_routes / esc_wire_exit_slot candidates). Re-measure by point containment, with the exclusion limited to the SCAD bay. |
-| 2 | 0.54 vs 1.59 mm on B-: both are artifacts at the trough edge; the true minimum is negative | open | Same re-measurement as #1. |
-| 3 | Fairing coverage aft of Z 88 is asserted, not measured | open | Containment check on pod + collar + fairing across the tilt sweep. |
-| 4 | Bottom line understates departure: A+ needs 0.095 in (2.4 mm) | open | Restate when the brief is re-issued. |
-| 5 | Mechanism check passes by construction (one gap) | open | Assembled clash check of the pad against the fairing, collar and connector. |
-| 6 | X2 under-credited: closes any opening, eases threading, 1.8 g is trivial | open | Re-rank after #1. |
-| 7 | Missing X3: fix or fill the feature cutting the trough | open | Add once #1 identifies the source. |
-| 8 | Port side not measured (earlier mirror error) | open | Run on the STBD/PORT renders. |
-| 9 | Study walls at 6.5 mm span | rebutted | Reviewer re-derived 0.72 / 0.46 mm; the 1.5 mm floor governs. |
-| 10 | mm-only table; "open at one point" wording | open | Fix on re-issue. |
+| 1 | An open trough at Z 71–77 was hidden by the mouth exclusion, and the bay mouth was misstated. | fixed | Traced to a vestigial socket in the canonical shell, not to any of our cuts. The tool now uses containment and first-crossing, and excludes only the SCAD bay (Z 54.1–68.1). X3 added. |
+| 2 | The 0.54 vs 1.59 mm discrepancy: both are artifacts, and the true minimum is negative on all four wires. | partly rebutted | Only ESC A + is in the socket (Y −3.7). The other wires are at Y +3.7 and ±9.5, outside Y −6 to +1, and containment finds no open length on them. 0.54 mm on ESC B − is real; the coarse run missed it. |
+| 3 | Fairing coverage aft of Z 88 was asserted, not measured. | fixed (pod) / open (wing side) | With first-crossing plus containment, no open length aft of Z 81 at H1. The pod's own collar and fairing are in the measured render. The wing-fixed fairing is not needed for closure. |
+| 4 | The bottom line understated the pad (2.4 mm). | fixed | The target is now the study floor (1.5 mm, not 2.0). X3's maximum departure, 0.96 mm, is stated in the bottom line. |
+| 5 | The mechanism check passed by construction (one gap only). | open | Assembled clash check of the ESC B − pad at Z 78–81 against the junction fairing at H1, at S4.5. |
+| 6 | X2 was under-credited. | fixed | X2 is re-rated and kept as the fallback for the threading risk. Its load-path doubt is stated as unknown, not as a fault. |
+| 7 | Missing option: fix the feature that cuts the trough. | fixed | Added as X3 and recommended. |
+| 8 | Port side not measured. | open | Re-run this tool on the port render at S4.5. The socket may be mirrored differently on the other canonical shell. |
+| 9 | Study walls at the 6.5 mm span. | rebutted | Reviewer re-derived 0.72 / 0.46 mm; the 1.5 mm floor governs. |
+| 10 | Units given in mm only; "open at one point" wording. | fixed | Tables are imperial-first; the open length is stated. |
 
 ### Still unverified
 
-- The load category of this skin (owner call: non-load-bearing → 1.5 mm floor; load-bearing → parity
-  2.0 / 2.8 mm).
-- The pad built in the SCAD and re-measured on the re-baked pod at the H1 pivot (S4.5).
-- Threading the four 10 AWG wires through closed channels with 3 × OD bends (first build).
-- The re-route search result (exploratory, not repeated here).
-- Port pod: a mirror of the starboard; not measured separately.
+- **The load category of this skin.** The owner's call: non-load-bearing means the 1.5 mm floor;
+  load-bearing means the parity rule, 2.0 mm with XY fixed or 2.8 mm in any orientation. Under parity,
+  X3's ESC B − pad grows to about 1.5 mm and the filled socket needs 2.0 mm over ESC A +; it gives
+  1.70 mm (ESTIMATE).
+- **The socket fill as built.** The X3 skin over ESC A + is an ESTIMATE from the neighbours' contour.
+  Re-measure on the re-baked H1 pod at S4.5.
+- **The port pod.** Not measured separately (finding 8).
+- **The ESC B − pad against the junction fairing at H1** (finding 5).
+- **Threading** the four 10 AWG wires through closed 3 × OD bends, at the first build.
+- **The re-route search result.** Exploratory; not repeated here.
 
 ### If chosen
 
-1. X1: add the pad to `od17_wire_channels()`'s neighbourhood in `nacelle_pod_64mm_tandem.scad` (a
-   Zone-A strip over each path, 2.0 mm over the channel), re-render, re-run this tool and the skin
-   check at H1, then S4.5 re-bake. WBS NAC-64-OD17-BREACH.
+1. Add `smooth_socket_fill()` to `nacelle_pod_64mm_tandem.scad`, next to `smooth_boss_fill()` in Zone A,
+   and the ESC B − pad. Re-render, re-run this tool on both sides at H1, then the S4.5 re-bake.
+   WBS NAC-64-OD17-BREACH.
 2. Record the owner's classification of the skin in NAC-64-OD17-BREACH.
 
 ## Changelog
@@ -831,4 +860,5 @@ at Z 54.1-68.1 (ESC_DISC_Z 61.09, H 14). So the pad as sized does not cover the 
 - 2026-11-22 — S4.1 keep-out frame fix (WBS NAC-64-ESC-KEEPOUT-FRAME): the inboard / nav keep-outs were
   mirrored, so G1's ESC A power bay (az 336) sat in the trunnion gear cavity (2,229 mm³). ESC A re-sited to
   az 210 / 268 (margin −1.78 mm, was −0.94); ESC B (H1) unchanged; H1 pivot Z 109.27 mm. G1 and H1 stand.
+- 2026-11-23 — Brief I re-issued after the adversarial review: containment measurement, canonical-shell socket found, X3 recommended.
 - 2026-11-23 — Brief I added (NAC-64-OD17-BREACH: close the OD-17 wire-channel skin breach), written with the decision-brief skill.
