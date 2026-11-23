@@ -48,8 +48,9 @@ TARGET = 1.5  # pad target skin, mm = the SLS study floor (non-load-bearing); 2.
 STUDY_FLOOR = smw.T_PROC  # 1.5 mm, docs/SLS_MIN_WALL_THICKNESS.md
 BAY_Z1 = 61.09 + 14.0 / 2  # SCAD ESC_DISC_Z + ESC_DISC_H/2: end of the designed bay opening
 # canonical-shell socket (vestigial, inboard face): Z range and the neighbours' surface radius
-SOCKET = (69.5, 78.0, 46.8)
-SOCKET_MM3 = 8.0 * 8.5 * (46.8 - 37.4)  # ESTIMATE: Y 8 x Z 8.5 x depth to neighbours' contour
+SOCKET = (68.75, 78.25, 46.8)  # Z0, Z1, neighbour face X (ray-cast canonical shell 47.3-47.6; 46.8 conservative)
+SOCKET_Y = (-7.0, 3.0)  # 0.5 mm margin on the measured Y -6.5..+2.5
+SOCKET_MM3 = (SOCKET_Y[1] - SOCKET_Y[0]) * (SOCKET[1] - SOCKET[0]) * (SOCKET[2] - 37.4)  # ESTIMATE: Y 8 x Z 8.5 x depth to neighbours' contour
 PAD_W = 2 * CH_R + 2 * 2.0  # strip width: channel + 2 mm each side
 sys.path.insert(0, str(REPO.parent / "SecureControllers/.claude/skills/decision-brief/scripts"))
 
@@ -74,7 +75,17 @@ def _skin_one(pod, q, pz):
     return (r + d[0]) - (r + CH_R) if d else float("nan")
 
 
-def skin_along(pod: trimesh.Trimesh, pz: float, fill=None) -> dict:
+def filled(pod: trimesh.Trimesh) -> trimesh.Trimesh:
+    """X3: boolean-union a box over the canonical-shell socket out to the neighbour face, so the
+    measurement runs on a real filled solid (cycle-2 review: a per-sample Z-only override leaked the
+    fill credit onto ESC B -, which is outside the socket in Y)."""
+    x0, x1 = 36.0, SOCKET[2]
+    box = trimesh.creation.box(extents=[x1 - x0, SOCKET_Y[1] - SOCKET_Y[0], SOCKET[1] - SOCKET[0]])
+    box.apply_translation([(x0 + x1) / 2, sum(SOCKET_Y) / 2, sum(SOCKET[:2]) / 2])
+    return trimesh.boolean.union([pod, box])
+
+
+def skin_along(pod: trimesh.Trimesh, pz: float) -> dict:
     d.PZ = pz
     out = {}
     for off in d.OFFS:
@@ -86,10 +97,6 @@ def skin_along(pod: trimesh.Trimesh, pz: float, fill=None) -> dict:
         r = np.hypot(p[:, 0], p[:, 1])
         sel = ~((np.hypot(p[:, 1], p[:, 2] - pz) < 21.3) & (p[:, 0] > 36.8)) & (p[:, 2] >= BAY_Z1)
         m = np.array([_skin_one(pod, q, pz) if ok else np.nan for q, ok in zip(p, sel)])
-        if fill is not None:  # X3 estimate: the socket filled to its neighbours' contour
-            for i, q in enumerate(p):
-                if sel[i] and fill[0] <= q[2] <= fill[1]:
-                    m[i] = max(m[i], fill[2] - (r[i] + CH_R))
         ds = np.r_[0.0, np.linalg.norm(np.diff(p, axis=0), axis=1)]
         add = np.nan_to_num(np.clip(TARGET - m, 0, None))
         k = int(np.nanargmin(m))
@@ -123,7 +130,7 @@ def figures(res: dict, study: dict, outdir: Path, x3=None) -> list:
         a.text(92, 2.05, "load-bearing parity, XY fixed 0.079 in (2.0 mm)", fontsize=8)
         a.axvspan(54.1, BAY_Z1, color="0.85", zorder=0)
         a.axvspan(SOCKET[0], SOCKET[1], color="#f4c7c3", zorder=0)
-        a.text(SOCKET[0], -1.3, "canonical-shell\nsocket (open)", fontsize=8)
+        a.text(SOCKET[0], -1.3, "canonical-shell\nsocket, Y -6.5..+2.5", fontsize=8)
         a.set_xlim(62, 112)
         a.set_ylim(-1.5, 6)
         a.set_xlabel("Z from intake face, mm (0.0394 in/mm)")
@@ -209,7 +216,7 @@ def main(argv=None) -> int:
         "118.2": skin_along(trimesh.load(a.pod118), 118.2),
         "109.27": skin_along(trimesh.load(a.pod109), 109.27),
     }
-    x3 = skin_along(trimesh.load(a.pod109), 109.27, fill=SOCKET)
+    x3 = skin_along(filled(trimesh.load(a.pod109)), 109.27)
     study = {}
     for key, fos in (("nlb", smw.FOS_NLB), ("lb", smw.FOS_LB)):
         e, s = smw.props("any")
