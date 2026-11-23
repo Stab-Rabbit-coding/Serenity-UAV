@@ -1449,7 +1449,10 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     (0.24 in (6 mm) convex rounding and concave fillet) at the wing junction; trailing edge keeps the
     **22.8° taper** (the longer-tail trial, 11.9°, gave 19 % less strip drag and was rejected as too small a
     flight-performance gain). CFD: `tools/od17_junction_cfd/`; brief sections "Junction CFD" and "Longer-tail
-    CFD". Sprint 2 implements this; the route entry stays open until `--stage cable` passes on the moved joint.
+    CFD". Sprint 2 implements this; the route entry stays open until `--stage cable` passes on the moved joint
+    *(superseded 2026-11-11 by the reinterpreted exit below: the `wires` stage, owner OD-24 item 1; `cable`
+    still reports no single-bundle route by design -- re-checked 2026-11-23 on the G1 pod source, `wires`
+    and `bay` PASS).*
     **2026-11-11 (Sprint 2, built):** `P64_JOINT_SHIFT` 0.91 in (23 mm) in `nacelle_64_scale.scad`, read by
     the pod, trunnion, assembly check, bake and tilt dynamics. Pod: collar boss to the moved rim, Ø1.68 in
     (42.6 mm) bend chamber, four wire channels (`od17_wire_channels`). New published part
@@ -3258,7 +3261,11 @@ and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
 
 ## Findings 2026-11-11 (code review of the OD-17 tools, Claude Opus 5.5)
 
-- [ ] **OD17-FAIR-WALL — Fairing thickened 0.08 in (2 mm) per side** for
+- [x] **OD17-FAIR-WALL — CLOSED 2026-11-23 by reference:** its conditions are met -- the as-built
+    drag re-run is done (OD17-FAIR-CFD, 2026-11-12), the outer-shape hold was released with the as-built
+    fairing accepted (OD17-FAIR-BORE, owner 2026-11-21), and the skin is 1.5 mm under OD-25 option A
+    (OD17-FAIR-SKIN, owner 2026-11-11).  The one-module refactor it suggested stays open as OD17-TOOLS-01.
+    Original: **Fairing thickened 0.08 in (2 mm) per side** for
     the minimum wall (CFD body had zero wall at the collar bore); drag not re-run (OD-24 item 2).
     **Owner 2026-11-11: CFD re-run first** — see OD17-FAIR-CFD.
 - [x] **OD17-FAIR-CFD — DONE 2026-11-12** (results in `docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md`, "As-built fairing CFD": the as-built assembly is 0.181 lbf (0.806 N) against 0.147 lbf (0.652 N) for the idealised end plate, +23 %, mainly from the open 2.20 in (56 mm) bore beyond the collar; see OD17-FAIR-BORE). Original item: Owner OD-24 item 2 (2026-11-11): re-run the junction drag CFD on the as-built

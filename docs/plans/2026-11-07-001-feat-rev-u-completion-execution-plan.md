@@ -207,6 +207,15 @@ inserts, open mouth.)
   after the bend. Open in S2: the 2026-11-16 brief review close-out (OD17-FAIR-BORE capped-bore run,
   OD17-FALLBACK-CLR, NAC-64-WIRE-TWIST, OD17-JUNC-RETEST, OD17-CFD-BLOCKAGE) and the owner bench test
   NAC-64-WIRE-QUAL. The 2026-11-11 handoff is superseded.
+- **Status 2026-11-23 (S2 audit before Theme N close-out):** OD17-FAIR-BORE closed 2026-11-21 (owner,
+  brief C option C1); OD17-FAIR-WALL closed by reference; root mirror of SPAR-20-WIREOD synced. Still
+  open in S2: OD17-FALLBACK-CLR, NAC-64-WIRE-TWIST, OD17-JUNC-RETEST, OD17-CFD-BLOCKAGE (agent, after
+  S4) and NAC-64-WIRE-QUAL (owner bench test). **New S2 defect:** NAC-64-OD17-BREACH (found 2026-11-22):
+  the drawn route breaks through the inboard pod skin at Z 79-86 mm -- the S2 exit proved bend radius and
+  duct clearance but never the skin. Owner decision (OD-17). `--stage wires` and `--stage bay` re-checked
+  PASS on the G1 pod source; re-run after the S4.5 pivot move. Not S2: OD17-TOOLS-01 and WBS-BURNDOWN-01
+  (excluded by the handoff); the 2026-11-11 feed-wire decisions (FEED-THERM, DESIGN-AMPS, PHASE-TEST,
+  FUSE-COORD, WIRE-10AWG-MASS) belong to the bench blocks and the power work.
 
 **S3 — Pivot, gates and re-bake.** Needs OD-4.
 - NAC-64-PIVOT-RC, NAC-64-GEOM-05 (port the trunnion/ESC-bay/mass gates to the 64 mm wrapper),
