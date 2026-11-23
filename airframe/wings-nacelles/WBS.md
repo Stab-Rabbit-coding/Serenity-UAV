@@ -2365,8 +2365,34 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
                   18 mm = 237.6 mm2 gross (power only; `nacelle_esc_thermal.py` synced); screen
                   bonded flat (mesh rebate 0: a 0.6 rebate left 0.9 mm ribs, under the study
                   floor) -- mesh thickness vs the 0.4 mm clearance REQUIRES VERIFICATION.
-            - [ ] ESC A board corners enter the cover's 0.4 mm clearance: 137 mm3 (power), 61 mm3
-                  (logic) -- corner trim on the board outline (S4.4, issue #23 envelope).
+            - [x] ESC A board corners into the cover clearance -- resolved as an OUTLINE, not a
+                  corner nick (S4.4, 2026-11-23; item NAC-64-ESC-OUTLINE below).
+            - [x] Motor-2 lead slot re-sited into ESC A's power bay (S4.1, lead_az 210).
+            - [x] ESC B logic x stage-2 cartridge (19.4 mm3, S4.4): the cartridge's anti-rotation
+                  key (KEY_ANGLES 150, 3 x 3 mm) reaches r 37.53 under ESC B logic's power panel,
+                  7.8-10.8 mm from the hinge, Z 135.4-157.4, against the 37.2 mm mount radius.  It
+                  sits in the 0.3 mm mount gap and the 1.1 mm bottom-side parts zone, not the PCB
+                  (r 38.6).  Requirement on the board, not the airframe: **no bottom-side parts
+                  7.3-11.3 mm from the hinge** on that panel (rib + 0.5 mm each side).
+        - [ ] **NAC-64-ESC-OUTLINE — the ESC board outline the G1 bays actually hold (S4.4,
+            2026-11-23).**  `tools/nacelle64_esc_outline.py` (+ tests) measures each bay against
+            the printed covers: rigid panels at nominal tilt, rays along the panel normal, allowed
+            stack = distance to the cover's inner face - 0.4 mm clearance, usable width = the run
+            from the hinge that holds the bay envelope.  Figure `docs/figures/nacelle64_esc_outline.png`.
+            Per face: ESC A power (az 210) **1,440 of 1,564 mm2 (92 %)** -- signal panel tapers
+            14 -> 7.35 mm over Z 132-157; ESC A logic (az 268) **1,035 of 1,292 mm2 (80 %)** --
+            power panel 15.5-18 mm over Z 70-86, no board at Z 67.4-69 and on the power panel at
+            Z 100-105; ESC B power and logic (H1 housings) **100 %**.
+            Finding: `esc80_cooptimize.ring_width_fit` narrows a panel ring by ring by RE-TILTING
+            it (tangent at its new centre); a rigid PCB keeps its tilt and loses the far edge.
+            The optimiser therefore read ESC A optimistic: 1,499 / 1,223 mm2 per face vs 1,440 /
+            1,035.  In its margin units that moves ESC A from power -0.65 / logic -1.78 mm to about
+            **-2.4 / -7.3 mm** (ESTIMATE: area change x 2 faces / 2 (w_power + w_signal)).  ESC B
+            unchanged.  The optimiser now also reports each bay's per-ring "profile".
+            - [ ] Fix `ring_width_fit` to the rigid-panel model (or retire it for this tool's
+                  outline) and re-run the margins.
+            - [ ] Re-issue Open-Secure-ESC issue #23's envelope: ESC A outline (this table), ESC B
+                  full rectangles under the H1 housings, the key-rib keep-out, and the shortfall.
             - [x] H1 housings as ESC B's covers (2026-11-22, `nacelle_esc_cover_64mm.scad`
                   RENDER_BAY 2 / 3): the generator's housing solid
                   (`airframe/stls/nacelles/esc/h1_esc_housing_64mm_solid.stl`, reference input,

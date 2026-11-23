@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-22",
+  "generated": "2026-11-23",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -10800,6 +10800,14 @@
       ],
       "archived": false
     },
+    "docs/figures/nacelle64_esc_outline.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "power"
+      ],
+      "archived": false
+    },
     "docs/figures/nacelle64_hollow_skin_check.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -16118,7 +16126,7 @@
       "archived": false
     },
     "tools/esc80_cooptimize.py": {
-      "description": "esc80_cooptimize.py \u2014 score one 80 A ESC + 64 mm nacelle bay design point.",
+      "description": "Python script",
       "tags": [
         "build-tooling"
       ],
@@ -16546,6 +16554,14 @@
     },
     "tools/nacelle64_esc_housing.py": {
       "description": "nacelle64_esc_housing.py -- canonical-styled ventral ESC B housings for the 64 mm nacelle (H1).",
+      "tags": [
+        "build-tooling",
+        "power"
+      ],
+      "archived": false
+    },
+    "tools/nacelle64_esc_outline.py": {
+      "description": "nacelle64_esc_outline.py -- the ESC board outline each G1 bay can actually hold, measured",
       "tags": [
         "build-tooling",
         "power"
@@ -17151,6 +17167,14 @@
       ],
       "archived": false
     },
+    "tools/tests/test_nacelle64_esc_outline.py": {
+      "description": "Tests for tools/nacelle64_esc_outline.py (WBS NAC-64-ESC-OUTLINE).",
+      "tags": [
+        "build-tooling",
+        "power"
+      ],
+      "archived": false
+    },
     "tools/tests/test_nacelle_esc_service.py": {
       "description": "Vendored, unmodified copy of the Open-Secure-ESC board (provenance and licence in",
       "tags": [
@@ -17560,6 +17584,7 @@
       "docs/figures/h1_esc_housing_canonical.png",
       "docs/figures/nacelle64_bay_stud_after.png",
       "docs/figures/nacelle64_bay_stud_interaction.png",
+      "docs/figures/nacelle64_esc_outline.png",
       "docs/figures/nacelle64_hollow_skin_check.png",
       "docs/figures/nacelle64_od17_aft_fairing_horizontal.png",
       "docs/figures/nacelle64_od17_aft_fairing_section.png",
@@ -19683,6 +19708,7 @@
       "docs/figures/brief_g_esc_pivot.png",
       "docs/figures/brief_h_esc_skin.png",
       "docs/figures/h1_esc_housing_canonical.png",
+      "docs/figures/nacelle64_esc_outline.png",
       "docs/figures/od3_esc_current.png",
       "docs/figures/od3_esc_fit_mass.png",
       "docs/figures/od3_esc_path.png",
@@ -19705,6 +19731,7 @@
       "tools/esc_f1_pivot_iter.py",
       "tools/nacelle64_esc_bay_check.py",
       "tools/nacelle64_esc_housing.py",
+      "tools/nacelle64_esc_outline.py",
       "tools/nacelle_esc_bay_fit.py",
       "tools/nacelle_esc_service.py",
       "tools/nacelle_esc_thermal.py",
@@ -19713,6 +19740,7 @@
       "tools/tests/fixtures/open_secure_esc/README.md",
       "tools/tests/fixtures/open_secure_esc/open_secure_esc_6s_50a_can485_faraday.kicad_pcb",
       "tools/tests/test_nacelle64_esc_housing.py",
+      "tools/tests/test_nacelle64_esc_outline.py",
       "tools/tests/test_nacelle_esc_service.py"
     ],
     "comms-protocol": [
@@ -21489,6 +21517,7 @@
       "tools/nacelle64_assembly_check.py",
       "tools/nacelle64_esc_bay_check.py",
       "tools/nacelle64_esc_housing.py",
+      "tools/nacelle64_esc_outline.py",
       "tools/nacelle64_hollow_skin_check.py",
       "tools/nacelle64_od1_figure.py",
       "tools/nacelle64_optD_aft_fairing.py",
@@ -21569,6 +21598,7 @@
       "tools/tests/test_joint_register.py",
       "tools/tests/test_nacelle64_assembly_check.py",
       "tools/tests/test_nacelle64_esc_housing.py",
+      "tools/tests/test_nacelle64_esc_outline.py",
       "tools/tests/test_nacelle_esc_service.py",
       "tools/tests/test_nacelle_hollow_profile.py",
       "tools/tests/test_nonfo_simon_fit.py",
