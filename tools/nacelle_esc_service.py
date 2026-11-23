@@ -12,6 +12,7 @@ import argparse
 import json
 import re
 from pathlib import Path
+from typing import Any
 
 
 NUMBER = r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)"
@@ -28,7 +29,7 @@ FOOTPRINT_RE = re.compile(
 REFERENCE_RE = re.compile(r"\(property\s+\"Reference\"\s+\"([^\"]+)\"")
 
 
-def extract_board_data(board_path: Path) -> dict[str, object]:
+def extract_board_data(board_path: Path) -> dict[str, Any]:
     """Return board dimensions, connector positions, and explicit data gaps."""
     board_text = board_path.read_text(encoding="utf-8")
     edge_segments = [
@@ -71,7 +72,7 @@ def extract_board_data(board_path: Path) -> dict[str, object]:
     }
 
 
-def validate_expected_envelope(data: dict[str, object]) -> None:
+def validate_expected_envelope(data: dict[str, Any]) -> None:
     """Fail if the committed board no longer matches the known envelope."""
     outline = data["outline_mm"]
     assert isinstance(outline, dict)

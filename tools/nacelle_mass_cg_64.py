@@ -123,7 +123,7 @@ def printed_by_ref() -> dict[str, float]:
 
     Priced from the published STLs at the SLS datasheet density.  The BOM
     (current-specification/bom_revU.*) must equal these; tools/check_bom_mesh_sync.py gates it.
-    The ESC bay covers are not here: they have no 64 mm mesh yet.
+    The ESC bay cover is the mean of the four published 64 mm covers (NAC-64-GEOM-03, 2026-11-21).
     """
     n = base.REPO / "airframe/stls/nacelles"
 
@@ -141,6 +141,8 @@ def printed_by_ref() -> dict[str, float]:
         "PRINT-NOZ64-RING": noz["ring"],
         "PRINT-NOZ64-FLAP": noz["flap"],
         "PRINT-NOZ64-FLAP-SEAL": noz["flap_seal"],
+        "PRINT-NAC64-ESC-COVER": 0.25 * sum(g(f"esc/nacelle_esc_cover_64mm_{s}_{b}.stl")
+                                            for s in ("port", "stbd") for b in ("a", "b")),
     }
 
 
@@ -176,9 +178,11 @@ def rows_64(pod_stl: Path) -> list[tuple[str, float, float, str]]:
         ("ESC B (70 A, aft motor, 2 bays)", 52.7, 136.4,
          ("ESTIMATE: tools/esc80_cooptimize.py on tools/esc70_design.json; "
           "centre from the bay fit")),
-        ("4 x ESC access cover", sls.sls_from_fdm_mass(2 * 4 * 6.99 / 2 * K),
+        ("4 x ESC access cover", 4 * printed_by_ref()["PRINT-NAC64-ESC-COVER"],
          0.5 * (125.4 + 136.4),
-         "SCALED est.: 50 mm covers measured x K, two per ESC (four bays); x PA CF/FDM"),
+         ("MEASURED per cover (mean of the four published 64 mm covers, 2026-11-21); x 4 per "
+          "nacelle for the 70 A two-bays-per-ESC layout (esc70_design.json). The pod cuts 2 "
+          "bays today (NAC-64-ESC-80A.l), so the count is conservative")),
         ("Nozzle throat + housing", noz["throat"], NOZ_Z + 8.55,
          "MEASURED nacelle_nozzle_throat_64mm_stbd.stl (Rev U); station from the iris frame"),
         ("Unison ring", noz["ring"], NOZ_Z + 3.65,
@@ -219,10 +223,7 @@ def roll_up(pod_stl: Path) -> dict:
     tip = base.WING_SPAR_HULL_Z - arm
     return {"rows": rows, "total_g": total, "cg_z": cg,
             "pivot_z": round(cg, 1), "arm": arm, "tip_hull_z": tip,
-            "clear_3in": tip - base.GROUND_PLANES[
-                "3.0 in gear (kept, not wired in)"],
-            "clear_1p5in": tip - base.GROUND_PLANES[
-                "1.5 in gear (ACTIVE default)"]}
+            "clear_3in": tip - base.GROUND_PLANES[base.GEAR_3IN]}
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -255,9 +256,7 @@ def main(argv: list[str] | None = None) -> int:
           f"{res['cg_z']:.2f}, residual {delta:+.2f} mm -> {state}")
     print(f"Hover: arm {res['arm']:.1f} mm, nozzle tip at hull Z "
           f"{res['tip_hull_z']:+.1f} mm; clearance 3.0 in gear "
-          f"{res['clear_3in'] / 25.4:+.2f} in ({res['clear_3in']:+.1f} mm), "
-          f"1.5 in gear {res['clear_1p5in'] / 25.4:+.2f} in "
-          f"({res['clear_1p5in']:+.1f} mm)")
+          f"{res['clear_3in'] / 25.4:+.2f} in ({res['clear_3in']:+.1f} mm)")
     return 0 if res["clear_3in"] > 0 else 2
 
 

@@ -1,48 +1,48 @@
 {
  "configs": {
   "cargo_2800_payload": {
-   "I_pitch_gmm2": 74729359.518791,
-   "T_W": 1.405804,
+   "I_pitch_gmm2": 74785712.579301,
+   "T_W": 1.342615,
    "cg": [
-    -0.110939,
-    347.935671,
-    157.483851
+    -0.105952,
+    347.552002,
+    157.005916
    ],
-   "k_pitch_mm": 105.26982,
-   "mass_g": 6743.471123
+   "k_pitch_mm": 102.91552,
+   "mass_g": 7060.848518
   },
   "heaviest_4000_payload": {
-   "I_pitch_gmm2": 75087929.717121,
-   "T_W": 1.385464,
+   "I_pitch_gmm2": 75145187.734968,
+   "T_W": 1.32405,
    "cg": [
-    -0.109334,
-    347.512676,
-    157.939841
+    -0.104487,
+    347.153062,
+    157.448301
    ],
-   "k_pitch_mm": 104.755921,
-   "mass_g": 6842.471123
+   "k_pitch_mm": 102.446864,
+   "mass_g": 7159.848518
   },
   "hover_4000": {
-   "I_pitch_gmm2": 74873877.864677,
-   "T_W": 1.432961,
+   "I_pitch_gmm2": 74936500.360696,
+   "T_W": 1.367364,
    "cg": [
-    -0.113082,
-    347.20457,
-    158.928535
+    -0.107905,
+    346.847297,
+    158.375656
    ],
-   "k_pitch_mm": 106.384464,
-   "mass_g": 6615.671123
+   "k_pitch_mm": 103.964384,
+   "mass_g": 6933.048518
   },
   "hover_twin_2200": {
-   "I_pitch_gmm2": 83463427.869724,
-   "T_W": 1.429073,
+   "I_pitch_gmm2": 83510358.206314,
+   "T_W": 1.363823,
    "cg": [
-    -0.112775,
-    337.865476,
-    159.20369
+    -0.107626,
+    337.93554,
+    158.639679
    ],
-   "k_pitch_mm": 112.168559,
-   "mass_g": 6633.671123
+   "k_pitch_mm": 109.608697,
+   "mass_g": 6951.048518
   }
  },
  "cooling_airflow": {
@@ -84,18 +84,19 @@
  },
  "nacelle_printed_unit_g": {
   "PRINT-NAC64-CARTRIDGE": 65.12,
-  "PRINT-NAC64-POD": 275.65,
+  "PRINT-NAC64-ESC-COVER": 7.44,
+  "PRINT-NAC64-POD": 462.66,
   "PRINT-NAC64-TRUNNION": 9.84,
-  "PRINT-NOZ64-FLAP": 3.22,
+  "PRINT-NOZ64-FLAP": 3.21,
   "PRINT-NOZ64-FLAP-SEAL": 3.45,
   "PRINT-NOZ64-RING": 8.28,
   "PRINT-NOZ64-THROAT": 26.29
  },
  "pitch_inertia": {
-  "I_kg_m2": 0.083463,
-  "I_lbm_in2": 285.209113,
+  "I_kg_m2": 0.08351,
+  "I_lbm_in2": 285.369482,
   "config": "hover_twin_2200",
-  "k_pitch_in": 4.416085
+  "k_pitch_in": 4.315303
  },
  "rows_hover": [
   {
@@ -688,51 +689,51 @@
   },
   {
    "cg": [
-    230.4,
+    255.9,
     339.4,
     146.9
    ],
    "kind": "NACELLE",
-   "mass_g": 965.24,
+   "mass_g": 1144.73,
    "name": "Nacelle port rotating assembly (64 mm)",
    "ref": "NACELLE",
    "source": "tools/nacelle_mass_cg_64.py roll-up at the hull pivot"
   },
   {
    "cg": [
-    -230.4,
+    -255.9,
     339.4,
     146.9
    ],
    "kind": "NACELLE",
-   "mass_g": 965.24,
+   "mass_g": 1144.73,
    "name": "Nacelle stbd rotating assembly (64 mm)",
    "ref": "NACELLE",
    "source": "tools/nacelle_mass_cg_64.py roll-up at the hull pivot"
   },
   {
    "cg": [
-    230.4,
+    255.9,
     339.4,
     146.9
    ],
    "kind": "NACELLE",
-   "mass_g": 24.7,
-   "name": "OD-17 joint extension port (pod boss + spar)",
+   "mass_g": 3.9,
+   "name": "OD-17 spar extension port (23 mm CF)",
    "ref": "NACELLE",
-   "source": "render delta + spar ESTIMATE; retire at NAC-64-REBAKE"
+   "source": "ESTIMATE pending the S6 SPAR-CF-20X16 length update"
   },
   {
    "cg": [
-    -230.4,
+    -255.9,
     339.4,
     146.9
    ],
    "kind": "NACELLE",
-   "mass_g": 24.7,
-   "name": "OD-17 joint extension stbd (pod boss + spar)",
+   "mass_g": 3.9,
+   "name": "OD-17 spar extension stbd (23 mm CF)",
    "ref": "NACELLE",
-   "source": "render delta + spar ESTIMATE; retire at NAC-64-REBAKE"
+   "source": "ESTIMATE pending the S6 SPAR-CF-20X16 length update"
   },
   {
    "cg": [
@@ -760,7 +761,7 @@
   },
   {
    "cg": [
-    230.4,
+    255.9,
     339.4,
     146.9
    ],
@@ -772,7 +773,7 @@
   },
   {
    "cg": [
-    -230.4,
+    -255.9,
     339.4,
     146.9
    ],
@@ -784,7 +785,7 @@
   },
   {
    "cg": [
-    230.4,
+    255.9,
     339.4,
     146.9
    ],
@@ -796,7 +797,7 @@
   },
   {
    "cg": [
-    -230.4,
+    -255.9,
     339.4,
     146.9
    ],
@@ -1408,7 +1409,7 @@
   },
   {
    "cg": [
-    230.4,
+    255.9,
     339.4,
     146.9
    ],
@@ -1420,7 +1421,7 @@
   },
   {
    "cg": [
-    -230.4,
+    -255.9,
     339.4,
     146.9
    ],
@@ -1516,7 +1517,7 @@
   },
   {
    "cg": [
-    230.4,
+    255.9,
     339.4,
     146.9
    ],
@@ -1528,7 +1529,7 @@
   },
   {
    "cg": [
-    -230.4,
+    -255.9,
     339.4,
     146.9
    ],
@@ -1744,7 +1745,7 @@
   },
   {
    "cg": [
-    230.4,
+    255.9,
     339.4,
     146.9
    ],
@@ -1756,7 +1757,7 @@
   },
   {
    "cg": [
-    -230.4,
+    -255.9,
     339.4,
     146.9
    ],
@@ -1768,7 +1769,7 @@
   },
   {
    "cg": [
-    230.4,
+    255.9,
     339.4,
     146.9
    ],
@@ -1780,7 +1781,7 @@
   },
   {
    "cg": [
-    -230.4,
+    -255.9,
     339.4,
     146.9
    ],
@@ -1984,7 +1985,7 @@
   },
   {
    "cg": [
-    230.4,
+    255.9,
     339.4,
     146.9
    ],
@@ -1996,7 +1997,7 @@
   },
   {
    "cg": [
-    -230.4,
+    -255.9,
     339.4,
     146.9
    ],
@@ -2008,7 +2009,7 @@
   },
   {
    "cg": [
-    230.4,
+    255.9,
     339.4,
     146.9
    ],
@@ -2020,7 +2021,7 @@
   },
   {
    "cg": [
-    -230.4,
+    -255.9,
     339.4,
     146.9
    ],
@@ -2286,8 +2287,8 @@
  "subtotals_hover_g": {
   "BOM": 2386.904,
   "GAP": 295.9714,
-  "NACELLE": 1979.876227,
-  "PRINT": 1952.919496
+  "NACELLE": 2297.253605,
+  "PRINT": 1952.919513
  },
  "thrust_gf": 9480.0,
  "unclassified": []

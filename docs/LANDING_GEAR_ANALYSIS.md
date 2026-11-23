@@ -932,15 +932,15 @@ under `lg_r6_common_*`:
 | `lg_r6_common_foot.stl` | Tri-pad TPU foot, sole-down — shared, both variants |
 | `lg_r6_common_spring_wire_nominal.stl` / `_deformed.stl` | Spring wire, nominal / at elastic-limit bow — shared |
 | `lg_r6_common_ductile_wire_nominal.stl` / `_deformed.stl` | Ductile wire, nominal / fired (19.2 mm bow, field-inspection reference) — shared |
-| `lg_r6_1_5in_leg_frame.stl` | One-piece leg frame, **1.5in default**, print orientation |
+| `lg_r6_1_5in_leg_frame.stl` | One-piece leg frame, 1.5in variant — **RETIRED** (§4.8, LG-31; not a flight or print article) |
 | `lg_r6_1_5in_leg_assembled.stl` | One corner: bay + 1.5in leg + 4 wires, nominal stance |
 | `lg_r6_1_5in_leg_deformed.stl` | Same corner at full 30.9° flexion, fired wires |
-| `lg_r6_1_5in_hull_legs.stl` | All 4 corners, 1.5in variant, at §2.2 hull-frame stations (consumed by `serenity_assembly.py` — **active default**) |
+| `lg_r6_1_5in_hull_legs.stl` | All 4 corners, 1.5in variant — **RETIRED** (§4.8, LG-31); not consumed by any tool |
 | `lg_r6_1_5in_hull_stance.stl` | Same + ground plane + cargo-belly ghost (review view) |
-| `lg_r6_3_0in_leg_frame.stl` | One-piece leg frame, **3.0in extended**, print orientation |
+| `lg_r6_3_0in_leg_frame.stl` | One-piece leg frame, **3.0in — the flight article**, print orientation |
 | `lg_r6_3_0in_leg_assembled.stl` | One corner: bay + 3.0in leg + 4 wires, nominal stance |
 | `lg_r6_3_0in_leg_deformed.stl` | Same corner at full 30.9° flexion, fired wires |
-| `lg_r6_3_0in_hull_legs.stl` | All 4 corners, 3.0in variant, at §2.2 hull-frame stations (not wired into the default assembly) |
+| `lg_r6_3_0in_hull_legs.stl` | All 4 corners, **3.0in flight gear**, at §2.2 hull-frame stations (the active assembly variant, `serenity_assembly.py`) |
 | `lg_r6_3_0in_hull_stance.stl` | Same + ground plane + cargo-belly ghost (review view) |
 
 The original undifferentiated `canonical_leg_r6.scad` (2026-07-21,

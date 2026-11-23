@@ -132,10 +132,14 @@ PARTS = [
      "fuselage/wing_root_flange_port.stl", 1.0, 15, False, ""),
     ("J", "wing_root_flange_stbd",
      "fuselage/wing_root_flange_stbd.stl", 1.0, 15, False, ""),
-    ("J", "lg_r6_1_5in_leg_assembled",
-     "fuselage/landing-gear/lg_r6_1_5in_leg_assembled.stl", 1.0, 25, False, ""),
-    ("J", "lg_r6_1_5in_leg_frame",
-     "fuselage/landing-gear/lg_r6_1_5in_leg_frame.stl", 1.0, 25, False, ""),
+    # 3.0 in flight gear only (the 1.5 in variant is retired, LG-31).  The assembled corner is
+    # 185 mm long, so it prints at 0.80 on the 150 mm bed; the leg frames fit at 1.0.
+    ("J", "lg_r6_3_0in_leg_assembled",
+     "fuselage/landing-gear/lg_r6_3_0in_leg_assembled.stl", 0.80, 25, False, ""),
+    ("J", "lg_r6_3_0in_leg_frame",
+     "fuselage/landing-gear/lg_r6_3_0in_leg_frame.stl", 1.0, 25, False, ""),
+    ("J", "lg_r6_3_0in_leg_frame_fore",
+     "fuselage/landing-gear/lg_r6_3_0in_leg_frame_fore.stl", 1.0, 25, False, ""),
     ("J", "lg_r6_common_bay",
      "fuselage/landing-gear/lg_r6_common_bay.stl", 1.0, 25, False, ""),
     ("J", "lg_r6_common_foot",

@@ -4,7 +4,7 @@ Every tool that places geometry on the 64 mm pod imports its scale and the
 stations derived from it from here, so the 2026-10-05 uniform enlargement (and
 any later resize) is one edit in the SCAD file.
 
-Also reads PIVOT_Z from the pod wrapper, which is re-iterated to the rotating
+Also gives PIVOT_Z_64 (pivot_z()), which is re-iterated to the rotating
 assembly's CG whenever the scale changes (tools/nacelle_mass_cg_64.py).
 
 Author: Claude (Claude Opus 5.5, Anthropic) under the direction of
@@ -56,8 +56,12 @@ def get(name: str) -> float:
 
 
 def pivot_z() -> float:
-    """PIVOT_Z as set in the pod wrapper (a literal, re-iterated to the CG)."""
-    m = re.search(r"^PIVOT_Z\s*=\s*([0-9.]+)\s*;", POD_SCAD.read_text(), re.M)
-    if not m:
-        raise ValueError("PIVOT_Z literal not found in the pod wrapper")
-    return float(m.group(1))
+    """PIVOT_Z_64, the tilt pivot station (re-iterated to the rotating CG).
+
+    Single source since 2026-11-21 (S3 NAC-64-GEOM-05): nacelle_64_scale.scad
+    PIVOT_Z_64; the pod wrapper sets PIVOT_Z = PIVOT_Z_64.  Raises if the pod
+    stops reading it, so a re-typed literal there cannot drift silently.
+    """
+    if not re.search(r"^PIVOT_Z\s*=\s*PIVOT_Z_64\s*;", POD_SCAD.read_text(), re.M):
+        raise ValueError("pod wrapper PIVOT_Z no longer reads PIVOT_Z_64")
+    return get("PIVOT_Z_64")

@@ -78,14 +78,11 @@
 ## §1.1.5 — Nacelle Trunnion Pivot and Tilt Drive
 → full detail: `WBS.md` §1.1.5
 
-- [ ] SPAR-25-5 (U5) — BLOCKED 2026-09-10 on an owner decision (§1.1.3.1…
 - [ ] SPAR-25-6 (U6) — Integration, load check, mass/CG, BOM, and the…
 
 ## Findings 2026-11-11 (code review of the OD-17 tools, Claude Opus 5.5)
 → full detail: `WBS.md` §5.5
 
-- [ ] OD17-FAIR-WALL — Fairing thickened 0.08 in (2 mm) per side for the…
-- [ ] OD17-FAIR-BORE — Owner: the open bore beyond the collar (finding…
 - [ ] OD17-FALLBACK-CLR — Fallback channel needs +2 mm shift (2026-11-16)
 - [ ] NAC-64-WIRE-TWIST — Verify the in-spar twist (2026-11-16)
 - [ ] OD17-JUNC-RETEST — End plate vs glove on as-built (2026-11-16)

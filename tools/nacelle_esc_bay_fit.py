@@ -135,8 +135,12 @@ def skin_grid(side: str):
     loc, ray, _ = mesh.ray.intersects_location(np.asarray(origins),
                                                np.asarray(dirs),
                                                multiple_hits=True)
+    # Near-side hits only: each ray continues through the axis, and the far-side hit would
+    # make skin(az) = max(skin(az), skin(az + 180)) (found 2026-11-22).
+    out_dir = -np.asarray(dirs)[ray, :2]
+    near = (loc[:, :2] * out_dir).sum(axis=1) > 0.0
     out = np.zeros(len(origins))
-    np.maximum.at(out, ray, np.hypot(loc[:, 0], loc[:, 1]))
+    np.maximum.at(out, ray[near], np.hypot(loc[near, 0], loc[near, 1]))
     if (out == 0).any():
         raise ValueError(f"{side}: {(out == 0).sum()} rays missed the shell")
     return zs, az, out.reshape(len(zs), N_AZ_SAMPLE)

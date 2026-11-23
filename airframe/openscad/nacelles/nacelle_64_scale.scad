@@ -31,3 +31,9 @@ P64_AXIS_SHIFT_S = 34.0 * P64_K - 34.0; // [mm] pylon-face axis shift  = 9.61
 // tip pad) sits this far OUTBOARD of the pod's pylon face, which opens the bend chamber the four
 // 10 AWG wires need.  Read by the pod, the trunnion, the assembly check and the hull-frame bake.
 P64_JOINT_SHIFT = 23.0;                 // [mm] 0.91 in; the 18 mm first proposed fails (wire pair bends at R 16.5/22)
+// Tilt pivot station (nacelle-local Z from the intake face).  NOT a chosen number: the pivot sits at
+// the CG of everything that tilts (plan 003 KTD7), so this is the OUTPUT of
+// tools/nacelle_mass_cg_64.py, re-iterated to a fixed point whenever the pod changes.  Single source
+// (2026-11-21, S3 NAC-64-GEOM-05): the pod, the trunnion context, the bake and every gate read it
+// here; it was re-typed as 109.7 in six places before.  109.7 (Rev T6, x1.00 pod) -> see the value.
+PIVOT_Z_64      = 118.2;                // [mm] 4.65 in; re-converged 2026-11-22 after the hollow-cavity fix (NAC-64-HOLLOW-SKIN); was 118.9 (S3 2026-11-21)

@@ -4,11 +4,11 @@ from pathlib import Path
 from tools.nacelle_esc_service import extract_board_data, validate_expected_envelope
 
 
-BOARD = Path(
-    "/home/steve/Documents/Vocation/Employers/Griffing.tech/designs/"
-    "Open-Secure-ESC/builds/6s/50A/CAN_485_faraday/kicad/"
-    "open_secure_esc_6s_50a_can485_faraday.kicad_pcb"
-)
+# Vendored, unmodified copy of the Open-Secure-ESC board (provenance and licence in
+# fixtures/open_secure_esc/README.md).  It was read from an absolute path on the owner's
+# workstation, so the test failed in CI and cloud sessions (2026-11-21, Rev U S4).
+BOARD = (Path(__file__).resolve().parent / "fixtures" / "open_secure_esc"
+         / "open_secure_esc_6s_50a_can485_faraday.kicad_pcb")
 
 
 class NacelleEscServiceTest(unittest.TestCase):

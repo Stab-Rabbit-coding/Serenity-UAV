@@ -152,7 +152,7 @@ shape, each with a picture and vectors where loads or motion are involved (owner
 | OD-6 | Bay A forward thermal tier — **overtaken 2026-11-16: the tail EDF supplies the airflow (Theme C); the sustained transmit limit is re-stated from S51** | BAYA-FWD-T1 | S21 |
 | OD-7 | Nozzle strike during a full ductile-fuse arrest | LG-28 | S12 |
 | OD-8 | Nozzle-servo gateway variant (with D-SV-1/D-SV-2 of the nozzle-servo plan, indexed as S5.0–S5.6) | D-NZ-1 | S5 |
-| OD-9 | Wing SPAR-25-5 decision (§1.1.3.1) | SPAR-25-5 | S6 |
+| OD-9 | Wing SPAR-25-5 decision (§1.1.3.1) — **closed 2026-11-21 (owner): superseded by the servo nozzle drive; nozzle servo = KST CM07** | SPAR-25-5 | S6 |
 | OD-10 | Commo RF: 1553 coupling, 49 MHz channel list, re-baselined RF current, antenna-shell bond | avionics "Owner:" items | S16 |
 | OD-11 | TPM path: SLB9672 vs OPTIGA Trust M on gateway + FE | avionics §1.9.2 | S18 |
 | OD-12 | 2026-10-18 branch reconciliation | avionics "Reconcile 2026-10-18" | S21 |
@@ -207,6 +207,15 @@ inserts, open mouth.)
   after the bend. Open in S2: the 2026-11-16 brief review close-out (OD17-FAIR-BORE capped-bore run,
   OD17-FALLBACK-CLR, NAC-64-WIRE-TWIST, OD17-JUNC-RETEST, OD17-CFD-BLOCKAGE) and the owner bench test
   NAC-64-WIRE-QUAL. The 2026-11-11 handoff is superseded.
+- **Status 2026-11-23 (S2 audit before Theme N close-out):** OD17-FAIR-BORE closed 2026-11-21 (owner,
+  brief C option C1); OD17-FAIR-WALL closed by reference; root mirror of SPAR-20-WIREOD synced. Still
+  open in S2: OD17-FALLBACK-CLR, NAC-64-WIRE-TWIST, OD17-JUNC-RETEST, OD17-CFD-BLOCKAGE (agent, after
+  S4) and NAC-64-WIRE-QUAL (owner bench test). **New S2 defect:** NAC-64-OD17-BREACH (found 2026-11-22):
+  the drawn route breaks through the inboard pod skin at Z 79-86 mm -- the S2 exit proved bend radius and
+  duct clearance but never the skin. Owner decision (OD-17). `--stage wires` and `--stage bay` re-checked
+  PASS on the G1 pod source; re-run after the S4.5 pivot move. Not S2: OD17-TOOLS-01 and WBS-BURNDOWN-01
+  (excluded by the handoff); the 2026-11-11 feed-wire decisions (FEED-THERM, DESIGN-AMPS, PHASE-TEST,
+  FUSE-COORD, WIRE-10AWG-MASS) belong to the bench blocks and the power work.
 
 **S3 — Pivot, gates and re-bake.** Needs OD-4.
 - NAC-64-PIVOT-RC, NAC-64-GEOM-05 (port the trunnion/ESC-bay/mass gates to the 64 mm wrapper),
@@ -235,7 +244,7 @@ inserts, open mouth.)
   `serenity_assembly.py` reports no COVERAGE GAP for the 64 mm nacelle. −7.
 - Est. 1 / 2 / 3.
 
-**S6 — Wings and spar.** Needs OD-9.
+**S6 — Wings and spar.** Needs OD-9 (closed 2026-11-21: SPAR-25-5 superseded).
 - Re-render/re-bake both wings (S1b OML), SPAR-02, SPAR-20-8, SPAR-20-9, SPAR-20-AERO,
   SPAR-20-TSCALE, SPAR-25-5/6, WA-R3/WA-R17 split-collar part, WA-R18 mass/CG/T-W.
 - Exit: wings watertight; split collar has a mesh + BOM row; ledger T/W recomputed and recorded. −10.

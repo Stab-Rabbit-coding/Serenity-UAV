@@ -75,3 +75,6 @@ airframe/stls/fuselage/middle_rear_shell24_2mm_merged.stl
 
 # Compound Engineering machine-local config (never commit)
 .compound-engineering/*.local.yaml
+
+# ce-sweep state-engine advisory lock (ephemeral; never committed)
+docs/feedback-sweep/*.lock

@@ -1449,7 +1449,10 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     (0.24 in (6 mm) convex rounding and concave fillet) at the wing junction; trailing edge keeps the
     **22.8° taper** (the longer-tail trial, 11.9°, gave 19 % less strip drag and was rejected as too small a
     flight-performance gain). CFD: `tools/od17_junction_cfd/`; brief sections "Junction CFD" and "Longer-tail
-    CFD". Sprint 2 implements this; the route entry stays open until `--stage cable` passes on the moved joint.
+    CFD". Sprint 2 implements this; the route entry stays open until `--stage cable` passes on the moved joint
+    *(superseded 2026-11-11 by the reinterpreted exit below: the `wires` stage, owner OD-24 item 1; `cable`
+    still reports no single-bundle route by design -- re-checked 2026-11-23 on the G1 pod source, `wires`
+    and `bay` PASS).*
     **2026-11-11 (Sprint 2, built):** `P64_JOINT_SHIFT` 0.91 in (23 mm) in `nacelle_64_scale.scad`, read by
     the pod, trunnion, assembly check, bake and tilt dynamics. Pod: collar boss to the moved rim, Ø1.68 in
     (42.6 mm) bend chamber, four wire channels (`od17_wire_channels`). New published part
@@ -1478,11 +1481,20 @@ takes the rotating spar out of the airflow path. Geometry and analysis by Claude
     Ø55.4 sleeve bore, against a 13.28 mm bundle. Unblocks when the pod is hollowed.
 
 - [ ] **[OPEN — FLIGHT SAFETY, LG-HOVER-01] Hover ground clearance is still
-    negative on the active gear, but by 2.55 mm rather than 10.5.** Rev S4b's
+    negative on the active gear, but by 2.55 mm rather than 10.5.**
+    **2026-11-21 recompute (S3, x1.06 pod re-baked, PIVOT_Z 118.9):** static hover nozzle
+    tip at hull Z +0.46 in (+11.6 mm) on the 3.0 in gear, -1.19 in (-30.3 mm) on the 1.5 in
+    gear (`nacelle_mass_cg_64.py`, arm 5.32 in (135.2 mm)).  The reserve budget (attitude,
+    settle, drift, build tolerance) is NOT recomputed: `tools/landing_gear_ground_clearance.py`
+    still reads the 50 mm roll-up and the removed `Nacelle_Port` bake entry and crashes
+    (LG-CLR-TOOL-64).  Owner re-confirmation of the margin still stands.
+    - [ ] **LG-CLR-TOOL-64 — port `tools/landing_gear_ground_clearance.py` to the 64 mm
+        roll-up** (`nacelle_mass_cg_64.py` pivot and nozzle reach; `Nacelle64_*` bake keys).
+        Broken since the 50 mm bake entries were removed (Rev U). Rev S4b's
     forward-biased hollowing moved `PIVOT_Z` to 113.8 and recovered 7.9 mm of the
     deficit; the in-nacelle harness (22.9 g, all aft of the pivot, never counted
     in any previous roll-up) accounts for part of that. **Remaining: −2.55 mm on
-    the 1.5 in gear, +39.35 mm on the 3.0 in.** Plan 005's already-settled
+    the 1.5 in gear, +39.35 mm on the 3.0 in.** [1.5 in gear RETIRED 2026-09-06 (LG-31; LANDING_GEAR_ANALYSIS.md sec. 4.8) -- the 3.0 in flight gear is the only configuration] Plan 005's already-settled
     40 → 30 mm flap trim is worth 10 mm and takes it to **+6.41 mm** — short of
     the +9.8 mm previously accepted, so the owner should re-confirm the margin
     rather than inherit it. Levers remaining: the flap trim, KD5's deferred
@@ -1936,7 +1948,7 @@ Rev S1b spar-station decision in §1.1.2.1 above.
 **1.456** (root t/c 17.7 %), `THICKNESS_SCALE_TIP` **2.190** (tip t/c 26.6 %),
 `SPAR_Z` **66.85**, `PIVOT_Z` **116.1** (= CG after ESC1 relocates aft),
 canonical offset **−31.1 mm**, hover clearance **+9.8 mm on the 1.5 in gear —
-owner-accepted**. Trunnion ring envelope **measured**: 53.4 mm OD at X 28.
+owner-accepted** [1.5 in gear RETIRED 2026-09-06 (LG-31; LANDING_GEAR_ANALYSIS.md sec. 4.8) -- the 3.0 in flight gear is the only configuration]. Trunnion ring envelope **measured**: 53.4 mm OD at X 28.
 
 The station is a **three-way** trade (airfoil / canonical offset / hover
 clearance), not the two-way one first recorded — the bore rides the camber
@@ -2096,7 +2108,8 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     fills the shell to 178.8 of 185.2, leaving **6.4 mm** for a nozzle that
     measures **58.1 mm** — a variable-area iris cannot fit inside a
     canonical-length nacelle. It is reduced and the residual documented.
-    **OQ1 RESOLVED 2026-08-29 (owner-accepted):** **+9.8 mm on the 1.5 in gear**,
+    **OQ1 RESOLVED 2026-08-29 (owner-accepted):** **+9.8 mm on the 1.5 in gear**
+    [1.5 in gear RETIRED 2026-09-06 (LG-31; LANDING_GEAR_ANALYSIS.md sec. 4.8) -- the 3.0 in flight gear is the only configuration],
     reached by combining the 30 mm flaps with station 28.0 and the ESC1
     relocation. ~1 cm is the accepted margin — downstream geometry changes must
     not silently trade it away. The compact gear stays viable.
@@ -2179,8 +2192,13 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         Sleeve-zone start moved 42.2 -> 103.7; 50 mm lead-exit slot and
         retention bosses deleted at 64 mm. Rotating assembly 926 -> 900 g; CG
         111.25 vs PIVOT_Z 109.7 — RE-CONVERGE after nozzle + servo (NAC-64-PIVOT-RC).
-        - [ ] **NAC-64-PIVOT-RC** — re-converge PIVOT_Z once nozzle, servo and
-            gateway are placed; re-render + re-bake both pods.
+        - [x] **NAC-64-PIVOT-RC — CLOSED 2026-11-21 (S3, Claude Opus 5.5).** PIVOT_Z is now
+            single-sourced as `PIVOT_Z_64` in `nacelle_64_scale.scad` (it was re-typed 109.7 in six
+            files) and iterated to the measured CG of the x1.06 pod with the KST X06 nozzle drive:
+            **4.68 in (118.9 mm)**, residual +0.06 mm stbd / -0.02 mm port (gate 0.25 mm; S3 exit
+            1.0 mm).  Rotating assembly 2.453 lbm (1,112.5 g) per nacelle.  The first pass (120.2)
+            was on a render that had lost the stage-1 stator (inside-out vanes, see
+            NAC-64-VANE-WIND); re-converged after the fix.  Re-converge again after D-SV-1 (S5).
         - [ ] **NAC-64-VANE-CFD** — confirm the 12 deg stator inlet angle (measured
             loaded rpm / swirl survey), both stages.
         - [ ] **NAC-64-LEAD-FOAM** — pour-foam plan must keep the stage-1 lead conduit open.
@@ -2201,7 +2219,390 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         touch at once. Size it with the 64 mm iris (plan 2026-09-28-001 U11) and
         gate it the way `tools/lg_thigh_variants.py` gates the gear hierarchy.
         Replace `PIN-3X18` in the BOM when the fuse is chosen.
-    - [ ] **NAC-64-SERVO-01 — nozzle servo drive — DESIGNED + FIT-CLOSED 2026-10-04
+    - [ ] **NAC-64-SERVO-01 — nozzle servo drive.**  **D-SV-1 DECIDED 2026-11-21 (owner): KST CM07**
+        (0.807 x 0.295 x 0.748 in (20.5 x 7.5 x 19 mm), plastic case, 25.0 ozf.in stall at 6.0 V),
+        replacing the KST X06.  BOM, REFERENCES and the servo table move to it in the nozzle-servo
+        plan's U1/U2 (S5.0/S5.1); pocket integration: `docs/THEME_N_DECISION_BRIEFS.md` brief E;
+        rail voltage D-SV-2: brief D.
+        - [ ] **NAC-64-SERVO-HOLD — the servo cannot hold the nozzle closed (2026-11-21, load study
+            `docs/NOZZLE_64MM_LOAD_STUDY.md` rev 3).** Full-throttle gas load at the ring ear, closed
+            at the flow-surface 75 % exit: 0.88-1.72 lbf (3.9-7.6 N) by fan model (design 7.6 N;
+            hold 2.0 + 7.6 = 9.6 N, x 1.5 = 14.5 N).  By virtual work the adopted drive gives
+            87-125 N per N.m (not the generator's worst-cosine 50.4): the CM07 closes on 6 V stall
+            with x 1.45 over the 1.5 factor but holds closed continuously at only x 0.38.  At today's
+            hinge station (brief F moves it to the canonical root).  Recommended: the L1 near-toggle linkage
+            (NAC-64-SERVO-L1), continuous x 1.96 closed and x 1.94 open, 6.0 V rail.
+            - [x] **NAC-64-SERVO-L1 — SUPERSEDED 2026-11-22 by NAC-64-SERVO-F1B (F1 adopted; L1 was
+                computed at the old hinge station).**
+                `tools/nozzle64_linkage_ma.py`: horn 4.0 mm kept, re-indexed to -82 deg at closed;
+                link 39.1 mm (was 35.5); bellcrank input arm 5.0 mm (was 4.49) at +35 deg on the
+                bellcrank; servo sweep 109 deg of 120.  Continuous margin x 1.96 closed / x 1.94
+                open, 6 V stall x 2.02 everywhere, 11 deg from dead centre; fail-open kept by the
+                KTD3 open cup (L1 is not a latch: never over-centre, push-only).  No closed-position
+                latch is permitted (owner 2026-11-21: it would contradict the fail-open
+                requirement); fallback if L1 fails its checks: the next search candidate, then a
+                larger servo.  Before adoption: parameterise the generator (horn index, input-arm
+                phase), re-run its clearance and transmission checks, the shroud crest
+                (`dorsal_shroud_resize_64.py --eval-only`), the OpenSCAD pod clearance, and pin
+                bearing at the 19.5 N link force; firmware dwell limit at mid-stroke (short-time).
+            - [ ] **NAC-64-SERVO-VW — replace the generator's worst-cosine force chain.**
+                `tools/nozzle_servo_linkage_64.py` multiplies each joint's worst cosine taken at
+                different stroke points (50.4 N/N.m at the ear; real 87-125) and assumes 50 % of
+                stall for holding.  Use the virtual-work measure of `nozzle64_linkage_ma.py` and
+                the CM07's continuous rating, so the tools agree.
+            KST CM07 sheet (2026-05) performance chart: continuous zone ends ~0.45 kgf.cm
+            (6.25 ozf.in); holding the 0.45 lbf (2.0 N) fail-open spring needs ~5.66 ozf.in, so the
+            ring ear keeps +0.05 lbf (+0.21 N) with NO flap load, at any rail voltage (continuous
+            torque is thermal).  Plan 2026-09-28-001 KTD3 levers: lower the spring within the
+            1.5 x friction floor, or change the lever ratio (both reopen fit-closed geometry):
+            owner decision.  Bench the holding current and case temperature (plan U6).
+        - [x] **NAC-64-NOZ-EXIT — exit targets set on the flow surface (2026-11-21, owner direction
+            "set the nozzle exit target on the flow surface").** `nacelle_nozzle_iris_64mm.scad`
+            solves phi for the inner-face trailing edge, r = R_HINGE - L sin(phi) - t cos(phi),
+            and asserts it: closed 12.94 deg, open -2.54 deg (was 16.96 / 1.43 on the hinge line,
+            flow exit 67.7 % / 97.1 %).  Measured from the rendered flaps: 0.945 in (24.01 mm) =
+            75.0 % closed, 1.316 in (33.43 mm) = 104.5 % open.  `TAB_TIP_LIFT` 0.5 mm keeps the
+            diverging open flap's lever tab off the ring face.  Flap STLs re-exported; hinge
+            unchanged.  Root-region step: the clevis lobes stand to r 31.18 mm (0.8 mm inside the
+            bore) over 48 deg at z 15.5, none by z 20 (loss not computed; CFD).
+            - [ ] **NAC-64-NOZ-TABBOSS — the flap lever tab overlaps the housing hinge boss.**
+                Found 2026-11-21 measuring the exit: the rendered flap and the housing's central
+                hinge boss intersect by ~1,600-1,800 mm3 (0.10-0.11 in3) at every angle; predates
+                the exit change.  Resolve the modelling interference (relieve the boss or route the
+                tab) before print; check with a flap x housing boolean at open, mid and closed.
+        - [x] **NAC-64-NOZ-BALANCE — REJECTED 2026-11-21 (owner): "keep the nozzle hinges aligned to the
+            root of the canonical nozzle petals".  Moving the hinge aft goes away from the canonical
+            root; the owner wants it moved FORWARD to the root with longer petals (NAC-64-NOZ-ROOT,
+            brief F).  (First recorded as "the hinge does not move": a misreading, corrected.)** Original proposal: balance the flaps (2026-11-21). Centre of pressure 0.48-0.49 in
+            (12.3-12.6 mm) along the 35 mm wetted face at every angle and fan model; a hinge 10 mm
+            aft cuts the closed design load at the ear 10.8 -> 2.2 N and keeps the gas opening
+            (fail-open) at every angle with 2.3 mm to the c.p.  Confirm the c.p. by axisymmetric
+            CFD (openfoam-cfd) before moving the hinge; >= 13 mm the gas closes the nozzle.
+        - [ ] **NAC-64-NOZ-ROOT — nozzle hinge at the canonical petal root, petals to the canonical
+            tip (owner direction 2026-11-21; brief first: `docs/THEME_N_DECISION_BRIEFS.md` brief F,
+            `tools/nozzle64_hinge_root_brief.py`; DECIDED F1, owner 2026-11-22: bellcrank drive first, then
+            the B80 and lead-slot clashes).** Canonical root
+            Z 6.90 in (175.3 mm) on the sides and ventral surface, dorsal cowl to Z 7.76 in
+            (197 mm), tail Z 8.71 in (221.1 mm); today's hinge is 1.53 in (38.9 mm) aft of the
+            root.  F1: flaps 46.6 mm, P64_Z_NOZ 199.13 -> 160.25, gas at the ear x 1.28, -159 g
+            AUW, pivot -7.2 mm, hover clearance +21.1 mm (corrected 2026-11-22: off-axis CG basis).  Blocking conflict: A1 bay B80 overlaps
+            the new housing zone (4,060 mm3); also A324 0.40 mm, CM07 0.48 mm, motor-2 lead slot,
+            brief E's cover-screw site, R11 assert.  Supersedes the drive geometry of
+            NAC-64-SERVO-L1 if adopted.
+        - [ ] **NAC-64-SERVO-F1B — F1 nozzle drive: bellcrank design done 2026-11-22 (owner direction:
+            add a bellcrank for mechanical advantage); build it into the tools and SCAD.**
+            `tools/nozzle64_f1_drive.py` (PASS): CM07 shaft az 275.9 deg, Z 137.35 (17.9 mm
+            forward); 7.5 mm horn, 13.9 mm link, radial-pin bellcrank at az 268.2, Z 146.0,
+            r 42.5 (arms 10.8 / 9.8 mm), 16.4 mm push rod into the open cup.  Continuous x 1.83
+            closed and x 2.46 open over the 1.5 factor, 6 V stall x 1.70, >= 20 deg from dead
+            centre.  Mesh check: no clash with retained parts (brief F, F1-B).  To do: generator
+            (`nozzle_servo_linkage_64.py`) and SCAD with the F1 station, pocket / cover / screw 1
+            moved forward, ring rod-clearance cut re-made, horn standoff confirmed on hardware.
+            Supersedes NAC-64-SERVO-L1.
+            - [ ] Re-check the F1 / F1-B walls against the SLS material study (owner 2026-11-22:
+                  "use the thicknesses derived from the material studies"), not the 2.0 mm
+                  fallback used in brief G panel 3: docs/SLS_MIN_WALL_THICKNESS.md gives
+                  LOAD-BEARING free-standing PA CF 0.110 in (2.8 mm) any orientation, 0.077 in
+                  (2.0 mm) with XY fixed on the drawing (stiffness parity), before each part's own
+                  load check.  The 2.5 mm gas-loaded flaps pass only if the drawing fixes XY;
+                  bellcrank bosses and the CM07 pocket-to-liner wall are joint/boss walls (the
+                  study excludes them: insert wall >= 2.0 mm rule).
+        - [ ] **NAC-64-NOZ-ROOT-ESC — F1 x A1: the 70 A ESC does not fit the OD-3 bays under F1
+            (2026-11-22; owner decision: shorter 70 A board; space requirements in
+            Stab-Rabbit-coding/Open-Secure-ESC issue #23).**
+            `tools/esc80_cooptimize.py tools/esc70_design_f1.json` (bays end by Z 158.25, servo
+            keep-out moved with F1-B): ESC A -14.3 mm (logic; power -4.7), ESC B -25.7 mm (logic
+            bay 12 mm long); today +3.2 / +18.1.  Bays forward to Z 60 recover A to -4.7 but not B.
+            Per-face envelope: A power 1,360 / A logic 796 / B power 1,574 / B logic 408 mm2 against
+            1,520 (power) and 1,282 (logic incl. creepage and interconnect) needed.
+            Forward room with the pivot at the CG (`tools/esc_f1_pivot_iter.py`, 2026-11-22): bays
+            forward to the Z 47.9 web (skin-limited to Z 67.4) and the pivot re-converged to
+            Z 109.73 (-9.1 mm from today; corrected 2026-11-22 to the off-axis CG basis) ->
+            ESC A -0.94 mm, ESC B -15.7 mm (logic, between the trunnion keep-out and the
+            housing); per ESC +81 / -29 mm2 per face, so the remaining gap is mostly
+            power/logic partitioning.  Pivot move: hover clearance +34.8 mm on the 3.0 in
+            flight gear.  **Owner decision 2026-11-22: G1** (brief G,
+            docs/THEME_N_DECISION_BRIEFS.md): bays forward to the Z 47.9 web, pivot to
+            Z 109.73.  Issue #23 updated to the G1 per-bay envelope (2026-11-22).
+            - [ ] Lead slot re-sited to the ESC-B bay azimuth, ending at the F1 pocket face
+                  (Z 160.25); B80 re-checked.
+            - [ ] PIVOT_Z_64 -> 109.73 via PIVOT-RC; hull re-bake; tilt-sweep (-5..+135 deg),
+                  OD-17 fairing and canonical nacelle-to-wing placement re-checks; AUW ledger.
+            - [ ] F1-B review fixes: dia 6 mm bellcrank bosses; CM07 pocket-to-liner wall
+                  (1.33 mm < 2.0 mm); cam re-derived so the F1 flaps clear the unison ring.
+            - [ ] Lateral (cross-axis) CG check added to the nacelle roll-up.
+            - [ ] Await the shorter-board layout from Open-Secure-ESC issue #23.
+        - [ ] **NAC-64-ESC-BAYS — G1 four-bay layout built into the pod SCAD (S4.1/S4.2, 2026-11-22).**
+            `nacelle_pod_64mm_tandem.scad` `ESC_BAYS` table (same rows as
+            `tools/nacelle64_esc_housing.G1_BAYS`): ESC A power az 210 Z 111.1-157.4, ESC A logic
+            az 268 Z 67.4-105.4 (flat covers); ESC B power az 78 Z 73.4-133.7, ESC B logic az 136
+            Z 135.4-157.4 (H1 housings).  Panels 20 / 14 mm; envelope 6.0 / 6.65 mm.  Every bay
+            gets the same pod geometry (window, 1.5 mm rebate, doubler, insert bosses; two boss
+            rows on bays < 30 mm).  Render: watertight, 387,647 mm3; all four boards clear of pod
+            material; visual check four sides.
+            - [x] Cover 1.5 mm from the SLS material study (was 2.5 FDM-era); counterbore 0 --
+                  M3 button heads 0.065 in (1.65 mm) proud (deliberate, quantified deviation).
+            - [x] Discharge: per power bay, two stadium slots at the inter-stage station Z 96.54
+                  (6.5 x 8.70 mm, same 95 mm2 throat; panel now 20 mm).  ESC A's power bay starts
+                  aft of the cartridge front, so a 5.5 x 18.9 mm (104 mm2) channel outside the
+                  sleeve-zone duct wall joins it to its ports.  Logic bays: no ports, no louvres
+                  (ESTIMATE: logic dissipation low; REQUIRES the thermal model per bay).
+            - [x] Dorsal shroud (`nsv_pod_adds`, Zone C) refilled 2,592 mm3 of ESC A's power bay:
+                  the bay is now cut through the shroud too, and the flat cover restores the shroud
+                  surface (flush where the shroud is up to 1.6 mm proud).
+            - [x] Fold sector added to the bay footprint (loose 2.65 mm3 strip along the az 78
+                  hinge on the thin ventral skin).  Residual loose bodies: 1.17 mm3 facet sliver
+                  at r 37.2, az 211, Z 158-171 (two near-coincident cylinders aft of ESC A's seat
+                  keep-out) and the pre-existing 0.76 mm3 body (az 319, Z 148-153) -- to clear
+                  before the re-bake gate.
+            - [x] Motor leads re-clocked (`edf_motor_mount_64mm.scad` lead_az 78 / 210, pod
+                  `motor_lead_routes`): motor 1 -> ESC B power via the stage-1 conduit (open
+                  Z 46-77.4), motor 2 -> ESC A power via the stage-2 slot (opens into the bay at
+                  Z 119+).  Stage-2 cartridge STL must be re-exported (S4.5).
+            - [x] Cavity webs: forward bay-tied web 54.4 (asserted); aft web keeps 139.85.
+            - [x] ESC A flat covers (`nacelle_esc_cover_64mm.scad`, RENDER_BAY 0 / 1 into
+                  ESC_BAYS): watertight, ~5.7 / 5.6 g, no clash with the pod; louvres 11 x 1.2 x
+                  18 mm = 237.6 mm2 gross (power only; `nacelle_esc_thermal.py` synced); screen
+                  bonded flat (mesh rebate 0: a 0.6 rebate left 0.9 mm ribs, under the study
+                  floor) -- mesh thickness vs the 0.4 mm clearance REQUIRES VERIFICATION.
+            - [x] ESC A board corners into the cover clearance -- resolved as an OUTLINE, not a
+                  corner nick (S4.4, 2026-11-23; item NAC-64-ESC-OUTLINE below).
+            - [x] Motor-2 lead slot re-sited into ESC A's power bay (S4.1, lead_az 210).
+            - [x] ESC B logic x stage-2 cartridge (19.4 mm3, S4.4): the cartridge's anti-rotation
+                  key (KEY_ANGLES 150, 3 x 3 mm) reaches r 37.53 under ESC B logic's power panel,
+                  7.8-10.8 mm from the hinge, Z 135.4-157.4, against the 37.2 mm mount radius.  It
+                  sits in the 0.3 mm mount gap and the 1.1 mm bottom-side parts zone, not the PCB
+                  (r 38.6).  Requirement on the board, not the airframe: **no bottom-side parts
+                  7.3-11.3 mm from the hinge** on that panel (rib + 0.5 mm each side).
+        - [ ] **NAC-64-ESC-OUTLINE — the ESC board outline the G1 bays actually hold (S4.4,
+            2026-11-23).**  `tools/nacelle64_esc_outline.py` (+ tests) measures each bay against
+            the printed covers: rigid panels at nominal tilt, rays along the panel normal, allowed
+            stack = distance to the cover's inner face - 0.4 mm clearance, usable width = the run
+            from the hinge that holds the bay envelope.  Figure `docs/figures/nacelle64_esc_outline.png`.
+            Per face: ESC A power (az 210) **1,440 of 1,564 mm2 (92 %)** -- signal panel tapers
+            14 -> 7.35 mm over Z 132-157; ESC A logic (az 268) **1,035 of 1,292 mm2 (80 %)** --
+            power panel 15.5-18 mm over Z 70-86, no board at Z 67.4-69 and on the power panel at
+            Z 100-105; ESC B power and logic (H1 housings) **100 %**.
+            Finding: `esc80_cooptimize.ring_width_fit` narrows a panel ring by ring by RE-TILTING
+            it (tangent at its new centre); a rigid PCB keeps its tilt and loses the far edge.
+            The optimiser therefore read ESC A optimistic: 1,499 / 1,223 mm2 per face vs 1,440 /
+            1,035.  In its margin units that moves ESC A from power -0.65 / logic -1.78 mm to about
+            **-2.4 / -7.3 mm** (ESTIMATE: area change x 2 faces / 2 (w_power + w_signal)).  ESC B
+            unchanged.  The optimiser now also reports each bay's per-ring "profile".
+            - [ ] Fix `ring_width_fit` to the rigid-panel model (or retire it for this tool's
+                  outline) and re-run the margins.
+            - [ ] Re-issue Open-Secure-ESC issue #23's envelope: ESC A outline (this table), ESC B
+                  full rectangles under the H1 housings, the key-rib keep-out, and the shortfall.
+            - [x] H1 housings as ESC B's covers (2026-11-22, `nacelle_esc_cover_64mm.scad`
+                  RENDER_BAY 2 / 3): the generator's housing solid
+                  (`airframe/stls/nacelles/esc/h1_esc_housing_64mm_solid.stl`, reference input,
+                  NOT_PRINT) + a 1.5 mm flange in each bay's rebate, standing 0.25 mm off the skin
+                  outside the rebate; hollow = board + 0.4 mm swept 15 mm along the lift; M3
+                  holes spotfaced to the skin.  TWO covers, not one: a single cover over both B
+                  boards (58 deg apart) could not be lifted off in any direction (~200 mm3 board
+                  interference); split radially midway between the boards.  Neighbouring covers
+                  are partitioned (radial split unless panels overlap in azimuth, else Z-plane):
+                  no cover overlaps another.  Louvres moved to the FOD-screen spec in the
+                  generator: 1.2 x 18 mm slots, 3 mm pitch, forward field 4 + aft field 7 =
+                  237.6 mm2 gross, bracketing the Z 96.5 ports (was 4 x 2.5 x 9.5 = 95 mm2,
+                  mislabelled as outlets).  Checks: all four covers watertight, one body each,
+                  0 mm3 into the pod; B covers 0 mm3 into board + 0.39 and lift off clean over
+                  15 mm (<= 0.2 mm3); masses ~5.3 / 5.2 / 9.5 / 5.7 g (A pwr, A logic, B pwr,
+                  B logic).  ESC A covers' only interference is the board corners (below).
+                  The published cover STLs (a/b per side) are the Rev-T pair: re-export as four
+                  per side at S4.5 and add their orientations (the orientation gate already
+                  fails on the old covers -- pre-existing).
+            - [ ] Cavity slivers + trunnion collar wall (NAC-64-HOLLOW-SKIN-2, S4.3); re-bake and
+                  gates (S4.5).
+        - [ ] **NAC-64-ESC-KEEPOUT-FRAME — inboard / nav keep-outs were mirrored; G1's ESC A power
+            bay sat in the trunnion gear cavity (found 2026-11-22, S4.1).**  The bay optimiser
+            (`tools/esc80_cooptimize.py`) works on the LEFT shell in the pod's render frame, where
+            the inboard face (trunnion, disconnect bay; PYLON_SIDE +1) is az 0 and the nav light
+            az 180.  The "Inboard/nav measured" keep-outs in `tools/esc70_design_f1.json` and
+            `tools/esc_f1_pivot_iter.py` were 146-214 / 350-370 deg -- the starboard pod's
+            azimuths, mirrored.  The CM07 servo keep-out (244-298) is symmetric and was right.
+            Consequence: G1's ESC A power bay (az 336, Z 109.4-157.4) overlaps the trunnion gear
+            cavity (Ø42.6 mm, X >= 36.8, at the pivot) by 0.136 in3 (2,229 mm3); the tilt pinion
+            runs there.  ESC B is unaffected (H1-housed at 78 / 136, clear of both keep-outs).
+            - [x] Fixed 2026-11-22: keep-outs moved to 326-394 / 170-190 in both files.  Re-run
+                  (esc80_cooptimize, z_min 49.41): **ESC A re-sited to power az 210 (Z 111.1-
+                  157.4), logic az 268 (Z 67.4-105.4)**, margin -1.78 mm (power -0.65, logic
+                  -1.78; G1 had -0.94), centroid Z 110.3.  No clash with the gear cavity, CM07,
+                  F1-B drive or cartridge; board + 1.5 mm flat cover leaves 102 mm3 of panel
+                  corner outside the canonical skin (corner trim, S4.4).  H1 pivot Z 109.27 mm.
+                  Inside the canonical skin the ventral sector (az 60-160) holds no bay at all,
+                  so ESC B stays H1-housed.  `nacelle64_esc_housing.G1_BAYS` and
+                  `esc_f1_pivot_iter.G1_ESC_Z` updated.
+            - [ ] ESC A's logic shortfall grows from 0.94 to 1.78 mm: carry into the issue #23
+                  envelope re-issue (S4).
+            - [ ] `tools/esc70_design.json` (OD-3, brief A) carries the same mirrored keep-outs;
+                  brief A's bay figures were computed with them.  Superseded for bay positions by
+                  G1; re-run brief A only if OD-3 numbers are cited again.
+        - [ ] **NAC-64-ESC-SKIN-RAY — BLOCKER (found 2026-11-22): the ESC bay tools read the
+            skin on the wrong side of the pod.**  `esc80_cooptimize.skin64()` and
+            `nacelle_esc_bay_fit.skin_grid()` cast each ray from r 250 inward, through the axis,
+            and kept the LARGEST hit radius, so skin(az) = max(skin(az), skin(az + 180)): the
+            thin ventral skin (port az 45-150, r 40-44 mm) was read as the thick dorsal one
+            (r 47-55 mm).  Verified ray by ray (cached value = far-side hit at every sample).
+            Fixed (near-side hits only).  With the fix the optimiser finds NO usable bay for
+            today's design or F1/G1: a 20 mm power panel at the 37.2 mm mount radius needs skin
+            r >= 46.9 mm at its corner, which only the dorsal half (port az ~195-345) and a strip
+            near az 0 offer.  Invalidated: the OD-3/A1 bay envelopes, brief G's G1/G2/G3 numbers
+            and Open-Secure-ESC issue #23's envelope (ESC B's bays are ventral).  The as-built
+            ventral bay (local az 68) is skin-tight: boards reach r 42.8 mm against a ventral
+            OML of 42.9 mm (0.041 in3 / 40.9 mm3 of board outside the OML).  Owner decisions
+            needed before the lead slot (task above) can be placed.
+            - [x] Re-planned 2026-11-22: no layout fits inside the canonical skin (best 32 / 57 %
+                  of the area per face, 270 F / 132 C).  Options in brief H (H1 G1 bays + ventral
+                  blister 2.6-6.2 mm, recommended; H2 shrink; H3 bigger nacelle; H4 off-pod).
+                  **Owner decision 2026-11-22: H1**, blister styled canonical from REF-CAD-003 /
+                  REF-CAD-002.
+            - [ ] NAC-64-ESC-BLISTER: canonical-styled ventral blisters over ESC B's G1 bays;
+                  ESC A panel corners trimmed; ESC B logic x stage-2 cartridge clash (19.1 mm3)
+                  re-sited.
+                  Generator 2026-11-22: `tools/nacelle64_esc_housing.py` (+ tests) -- plate
+                  0.059 in (1.5 mm) + 0.4 mm clearance from the SLS material study (owner
+                  2026-11-22: "use the thicknesses derived from the material studies";
+                  docs/SLS_MIN_WALL_THICKNESS.md via tools/sls_min_wall.py, non-load-bearing
+                  free-standing, span 20.8 mm -> process floor 1.5 mm), 1.083 in3, max 0.27 in
+                  (6.8 mm) proud, Z 57.3-159.3 mm, no clash (nearest 0.94 mm to the F1 nozzle
+                  housing / ring), ESC B covered.  Housings ~11.0 g (1.5 mm shell, ESTIMATE)
+                  replace ESC B's two covers.
+                  H1 pivot on the fixed pod (`tools/esc_f1_pivot_iter.py --basis --h1`):
+                  Z 109.25 mm (109.30 with a 2.0 mm shell; pre-fix basis 109.70 = G1's 109.73).  Pod SCAD integration
+                  waits for the G1 bays to be built (S4).
+                  Concept done 2026-11-22 (brief H, `docs/figures/h1_esc_housing_canonical.png`):
+                  faceted housings parallel to the board panels, 45/30/60 deg edges, panel lines,
+                  4 louvres = 95 mm2 cooling outlets; 0.27 in max proud; no clash.  Next: repo
+                  generator + pod SCAD integration, thermal check of the louvres, ground
+                  clearance, cover seats/screws, ESC A corner trim.  The as-built ventral ESC cover already stands up to
+                  11.5 mm proud of the canonical OML.
+            - [x] Wall check of the as-built pod done 2026-11-22 -> NAC-64-HOLLOW-SKIN below.
+        - [x] **NAC-64-HOLLOW-SKIN — CLOSED 2026-11-22 (S3 re-bake): source fixed, pivot
+            re-converged to 118.2 mm, published pods re-baked.  (The "0 open / 0 thin" gate result is
+            withdrawn: see NAC-64-HOLLOW-SKIN-2.)**
+            Original finding: **the as-built 64 mm pod STLs had
+            OPENINGS and thin patches in the outer skin.**  `tools/nacelle_hollow_profile.py`
+            casts each ray through the axis and keeps the largest hit (same bug as
+            NAC-64-ESC-SKIN-RAY), so its skin grid reads up to 0.39 in (9.8 mm) too large in
+            936 of 2,304 cells and the committed cavity (`HOLLOW_R_*`, `HOLLOW_SKIN_*`) was cut
+            to the opposite, fatter side's skin.  Checked on `nacelle_stbd_64mm.stl`
+            (387,682 mm3, the published part): in 458 of 1,718 live cavity cells the cavity
+            surface lies OUTSIDE the true skin, and 652 leave less than the 2.0 mm minimum
+            (AGENTS.md sec. 7; design intent 2.5-8.0 mm).  On the real STL those 652 cells are:
+            278 skin >= 2.0 mm (other keep-outs held material), 121 skin present but < 2.0 mm,
+            54 open but closed by an ESC cover (the designed bay), and **199 open with nothing
+            modelled closing them** (166 of them where the grid puts the cavity outside the
+            skin).  Regions: ventral and flanks, Z 60-160 mm, local az 0-175 deg; forward
+            dorsal, Z 25-55 mm, az 215-315 deg.  Tool `tools/nacelle64_hollow_skin_check.py`;
+            map `docs/figures/nacelle64_hollow_skin_check.png`.
+            Sections at Z 35 / 78 / 120 mm confirm the cavity floor (r 34.5 mm) exposed to the
+            outside.  Port pod not checked separately (mirror; REQUIRES VERIFICATION).
+            CAUTION: do not fly the pre-fix 64 mm pod STLs: the open belly exposes the cavity and
+            wiring to the airflow and breaks the skin load path (aircraft loss; per AGENTS.md sec. 6
+            a WARNING only if people are under the hover).  Note: do not print them either.
+            (Issued as a WARNING 2026-11-22; re-graded the same day.)
+            - [x] Source fixed 2026-11-22 (owner: "make it so"): near-side filter in
+                  `nacelle_hollow_profile.py` (+ tests/test_nacelle_hollow_profile.py, red
+                  before / green after); cavity regenerated (`--emit`) and swapped into the
+                  flattened pod SCAD.  Render of the fixed source: skin check 0 cells < 2.0 mm,
+                  0 open; exterior skin < 2.0 mm 8.25 % -> 2.48 % of samples, of which 44
+                  samples (~0.3 % of the exterior, 1.34-2.0 mm, mostly Z 180-190) sit over
+                  the cavity at canonical recesses finer than the 3 mm x 7.5 deg grid
+                  (residual: denser grid or local margin at the re-bake).
+                  Mass (nacelle_mass_cg_64): tilting group 1,112.5 -> 1,144.6 g per nacelle
+                  (+0.071 lbm / +32.1 g; AUW +64 g), CG/pivot 118.86 -> 118.23 mm; hover
+                  clearance, 3.0 in flight gear, +11.5 -> +10.9 mm (as-built nozzle).
+            - [x] Re-baked 2026-11-22: PIVOT_Z_64 re-converged 118.9 -> 118.2 mm (residual +0.01,
+                  gate 0.25); pods, trunnions and pinions re-staged (`prep_nacelle_64_bake.py`,
+                  port = X-mirror of the stbd render) and re-baked (`bake_hull_frame.py`).
+                  Published pods 416,815 mm3 = source render (S3 gate +/-0.1 %);
+                  `validate_stls.py` 114/114 watertight; `check_datum_drift.py` PASS;
+                  `check_nacelle_deps.py` PASS; `nacelle64_hollow_skin_check.py` 0 open / 0 thin;
+                  assembly check unchanged except pod-side wire lengths (-0.7 mm);
+                  `auw_ledger.py --write` then `--check` PASS: hover AUW 6,886.6 -> 6,951.1 g
+                  (15.18 -> 15.32 lbm), T/W 1.38 -> 1.36.  The CAUTION above was lifted; the
+                  print hold is carried as a Note by NAC-64-HOLLOW-SKIN-2.
+        - [ ] **NAC-64-HOLLOW-SKIN-2 — S3 skin gate was a false pass (found 2026-11-22, S4
+            code-review fix).**  The S3 check ray-cast only the cells the cavity GRID flagged
+            (the grid is the model under test) and tested "open" against the canonical OML, so a
+            pod surface recessed by another cut read as open and a real breach elsewhere went
+            unprobed.  `tools/nacelle64_hollow_skin_check.py` now probes all 1,312 live cells,
+            calls a cell open only when the ray leaves through the cavity, gates on cavity-
+            outside-skin cells, and (with `--pod-nocavity`, the same pod rendered with
+            `hollow_cavity()` commented out) separates cavity-made defects from other cuts.
+            On the published (S3 re-baked) starboard pod:
+            - Cavity-made, gated: 2 open cells, Z 3.25 in (82.6 mm) inboard, az 7.5 / 345 deg;
+              2 slivers 0.012 in (0.31-0.32 mm), Z 82.6 mm az 180 deg (outboard, nav-light
+              pocket edge, NAV_LIGHT_Z 79.1 mm, pocket Ø7 x 2.5 mm deep) and Z 86.2 mm az 7.5 deg.
+            - Not made by the cavity (open or thin in the no-cavity render too): 21 designed
+              openings (trunnion register bore, inboard, Z 107-130 mm; Z 61 mm inboard) and
+              **34 walls below the 2.0 mm rule** -- inboard face az 345-22 deg, Z 68-130 mm,
+              0.58-1.68 mm (trunnion collar / boss-shave region); ventral-inboard az 52-67 deg,
+              Z 82-104 mm, 0.17-1.39 mm (ESC bay rim).
+            Map: `docs/figures/nacelle64_hollow_skin_check.png`.
+            Note: the S3 statement "skin check 0 open / 0 thin" above is withdrawn; do not print
+            the 64 mm pods until this item closes.  (Issued as a WARNING; re-graded 2026-11-22 per
+            AGENTS.md sec. 6: a print hold is not a hazard to people.)
+            - [x] S4.3 2026-11-22, on the G1 pod source: **cavity gate PASS** (0 open, 0 thin
+                  cells made by the cavity; 40 cells closed by the four G1 covers).
+                  Attribution fixed in `nacelle64_hollow_skin_check.py`: a no-cavity ray that
+                  leaves > 1.0 mm inside the canonical skin is "open" (the old test only asked
+                  for solid past the duct wall, and blamed the cavity for the OD-17 breach, item
+                  below); thin cells that are open without the cavity are attributed to that
+                  cut; a ray meeting the outer surface > 60 deg off its normal is "grazing", not a
+                  wall.  Of the original 4 "cavity" cells: the 2 inboard open cells and the Z 86.2
+                  thin cell are the OD-17 breach; the outboard Z 82.6 cell was the cavity under a
+                  narrow canonical recess (Z 82-87, about +/-4 deg, skin r 40.25) next to the
+                  nav-light pocket -- fixed by `nav_pocket_keepout()` (recess Ø + 2 mm, 2.0 mm
+                  floor, run aft to Z 90).
+            - [x] Trunnion collar lip (owner "carry on" on the recommendation): the Ø42.6 gear
+                  cavity ran 1.5 mm short of the flange seat face (1.0 mm along the oblique).  It
+                  now ends `TRUNNION_LIP` 2.0 mm short and the register bore starts there:
+                  lip 1.99 mm measured.  Trunnion clash re-check at S4.5.
+            - [ ] The ray method cannot settle the remaining "< 2.0 mm walls made by another
+                  cut" (44 cells): radial rays graze window edges and pocket rims, and the
+                  inscribed-sphere and surface-normal measures fail at sharp edges (both read
+                  ~0 on every ESC window edge).  Run a real wall-thickness analysis (voxel / SDF,
+                  or the service bureau's DFM) on the re-baked pod before release.  Candidates:
+                  ESC A logic window edges (az 247-307, Z 64-86), ESC B power signal-side edge
+                  (az 45, Z 82-115), outboard skin over the nav channel (az 180, Z 104-122,
+                  ~0.4-1.0 mm), inboard skin over the OD-17 channels (az 345-22, Z 68-100).
+        - [ ] **NAC-64-OD17-BREACH — the OD-17 wire channels break through the inboard skin
+            (found 2026-11-22, S4.3; pre-existing since the 2026-11-11 channels).**  At Z 3.11-
+            3.39 in (79-86 mm), az ~345 and ~7.5 deg, the four 10 AWG channels (Ø6.5 mm,
+            `od17_wire_channels()`) run at r 40-43 mm where the canonical skin is ~43 mm: the
+            channel void is open to air, with or without the cavity (point tests on no-cavity
+            renders before and after G1 agree).  The annulus there is 8.5 mm (duct wall r 34.5 to
+            skin r 43) against 9.5 mm needed (channel 6.5 + 1.5 mm walls).  Options: a local
+            fairing on the inboard face over the run (OML departure, under the wing-root
+            junction?), re-routing the fan-out where the skin is deeper (az 0 +/- 4 deg reaches
+            r 45), or a smaller conductor bundle.  Owner decision (OD-17 is an owner decision).
+            Owner Decision Brief I (`docs/THEME_N_DECISION_BRIEFS.md`, re-issued 2026-11-23 after
+            the adversarial review): at H1 only ESC A + is open (7.4 mm, through a vestigial socket
+            in the canonical shell, Y -6..+1, Z 70-78); ESC B - has 0.54 mm at Z 70.  Recommends
+            X3, filling the socket and a continuous ESC B - pad, Z 68.1-81 (~0.9 g, <= 0.96 mm proud;
+            two review cycles).  OWNER DECISION
+            PENDING.
+            CAUTION: as published, the inboard skin is open over the 10 AWG power feed.  Airflow
+            into the open channel and chafe on its edges can damage the insulation; a short on the
+            feed loses a fan (aircraft loss; per AGENTS.md sec. 6 a WARNING only if people are
+            under the hover, as NAC-64-FUSE-COORD).  Do not fly until closed.  (Issued as a WARNING
+            2026-11-22; re-graded the same day.)
+            - [x] FRAME fix 2026-11-22: the check read the STBD cavity grid against the SCAD's
+                  default render, which imports the LEFT shell and cuts HOLLOW_*_PORT (the two
+                  grids differ by up to 12.7 mm unmirrored).  `--side` added (default PORT);
+                  counts above are from the corrected run.  The H1 housing generator moved to
+                  the same render frame (left shell, port-frame bay azimuths); geometry
+                  unchanged, mirrored.
+        - [ ] **NAC-64-SERVO-RAIL — 6 V rail all-stall 5.53 A with two CM07s (2026-11-21).**
+            `docs/POWER_DISTRIBUTION.md` section 3.3 total 4.2 A + 2 x 0.67 A exceeds the BEC's 5 A
+            continuous (inside the 7 A / 100 ms burst).  Size the F_NOZ fuses and confirm the burst
+            window; add the nozzle servos to the section 3.3 table.
+        - [ ] **NAC-64-SERVO-PAIR — the nozzle-servo power pair is not in the spar-bore census.**
+            The F_NOZ pair (0.67 A stall) must cross the tilt joint with the 4 x 10 AWG, signal and
+            nav conductors; add it to the census and the OD-17 wire checks.
+        *Original entry:* DESIGNED + FIT-CLOSED 2026-10-04
         (Claude Opus 5.5; owner decisions: servo in the canonical dorsal spine,
         bellcrank, fixed shroud on the pod, slide-off nozzle module, KST X06,
         "any height increase must be a resizing of the canonical dorsal shroud").**
@@ -2246,10 +2647,63 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         guide ~90 mm (T5_STBD_DX copy misplaced — explains Tilt_Wheel_Stbd vs
         Wing_Stbd 2788 mm3 with no port twin). Census must export a symmetric
         tilt pose (assembly default is stbd 90 / port 0).
-    - [ ] **NAC-64-GEOM-02 — ESC cooling ports.** ESC_BLEED_Z now opens onto the
-        stator-sleeve wall, not the duct; add matching sleeve ports or move them.
-    - [ ] **NAC-64-GEOM-03 — ESC cover from the scaled skin.** `nacelle_esc_cover.scad`
-        still reads the unscaled grid; give it the RADIAL_K hook.
+    - [x] **NAC-64-GEOM-02 — ESC cooling ports — CLOSED 2026-11-21 (S4, Claude Opus 5.5).**
+        Moved, not matched: a sleeve port would open the duct at the rotor-2 tips.  The four
+        stretched axial ports (Z 94.8-106.8 + 5.5 mm apex) put the aft two on the stage-2
+        cartridge wall (Z >= 103.7).  Now two round-ended slots side by side across the power
+        panel at Z 96.54 mm, 0.22 x 0.39 in (5.5 x 9.82 mm), 1.5 mm web: total throat 95.0 mm2
+        (= the old 4 x 5.5 mm), so the aspirated circuit in `tools/nacelle_esc_thermal.py` is
+        unchanged (K = 3 still ASSUMED; bench or CFD per section 1.1.3.8).  No teardrop apex
+        (SLS).  Parse-time asserts keep the slot inside the bay floor, 1.0 mm ahead of the
+        cartridge and inside the panel; ray check: all four open from the duct to the bay.
+    - [x] **NAC-64-GEOM-03 — ESC cover from the scaled skin — CLOSED 2026-11-21 (S4).**
+        New `nacelle_esc_cover_64mm.scad` includes the pod wrapper and builds each cover from the
+        pod's own `ESC_SKIN` / `hollow_zs()` / footprint, so cover and rebate share one source.
+        Four handed covers published at `airframe/stls/nacelles/esc/` (baked with their pod's
+        placement): watertight single bodies, 0.0164 lbm (7.43 g) each.  Roll-up row now
+        MEASURED (4 per nacelle, conservative, see NAC-64-BAYB-SHROUD).  Fit gate:
+        `tools/nacelle64_esc_bay_check.py` -- cover A seats with 0 mm3 overlap on both pods;
+        **cover B does NOT** (NAC-64-BAYB-SHROUD below).
+    - [ ] **★ NAC-64-BAYB-SHROUD — DECIDED 2026-11-21 (owner, brief A option A1): build the pod to
+        the 70 A ESC requirements, i.e. the OD-3 four-bay layout (two hinged bays per ESC) from
+        `tools/esc80_cooptimize.py` on `tools/esc70_design.json`; implementation open (bays,
+        doublers, eight covers, discharge slots, webs, lead routes).** Original finding: ESC bay B
+        is filled by the resized dorsal shroud (found
+        2026-11-21, S4; the measured form of NAC-64-ESC-80A.l).** Bay B (hinge az 248) lies under
+        the nozzle-servo spine extension (`nsv_pod_adds()`, Zone C, added AFTER the bay cut), so
+        the pod has no open window there: the bay-B cover overlaps the pod by 0.232 in3
+        (3,795 mm3) port and 0.227 in3 (3,713 mm3) stbd over its whole footprint (az 221-290,
+        Z 85-142.5).  ESC B has nowhere to go until bay B is re-sited or the shroud is cut for it.
+        **Owner decision** (it moves an ESC bay against the canon-shroud rule of 2026-10-04).
+        **Brief 2026-11-21:** `docs/THEME_N_DECISION_BRIEFS.md` brief A (recommends A1: build the
+        OD-3 four-bay layout; one bay per ESC is 73 % of the outline a 70 A ESC needs).
+        Related: the roll-up counts 4 covers per nacelle (70 A, two bays per ESC,
+        `esc70_design.json`) while the pod cuts 2 bays (68 / 248) -- decide the bay count with it.
+    - [ ] **NAC-64-LEAD-AZ — DECIDED 2026-11-21 (owner, brief B option B1): enforce the X-mirror
+        rule (port azimuth = 180 - starboard) for every ESC feature: bays, discharge slots, lead
+        conduits and slots, lead vanes and covers; re-render the port stage-2 cartridge.
+        Implementation open.** Original finding: port stage-1 lead conduit misses the port bay
+        (found 2026-11-21).
+        `motor_lead_routes()` places the conduit at `PYLON_SIDE x 68` (port: 292 deg) and the
+        lead vane in `edf_motor_mount_64mm.scad` follows it, but `ESC_BAY_AZ` = [68, 248] is NOT
+        mirrored, so the port bays are cut at 68 / 248 (baked covers confirm: port cover A low
+        outboard, stbd cover A low inboard).  On the port pod the conduit ends in the cavity
+        ~44 deg from the nearest bay.  NAC-64-ESC-80A.l reads "248 (port 292)", i.e. mirrored
+        bays were intended.  Decide the mirror rule with NAC-64-BAYB-SHROUD, then make the bays,
+        lead routes, lead vanes and covers follow one convention.  **Brief 2026-11-21:** brief B
+        (recommends B1, X mirror a -> 180 - a; B2 leaves A324 0 of 42 mm on the stbd pod).
+    - [x] **NAC-64-VANE-WIND — stator vanes were inside-out — FIXED 2026-11-21 (S3).**
+        `vane_solid()` in `edf_motor_mount_64mm.scad` listed faces opposite to OpenSCAD's
+        polyhedron convention (-8,578 mm3 for the 11 vanes with the manifold backend, which
+        dropped the stage-1 stator from the pod and pinched the vane roots).  CGAL silently
+        re-oriented them, so the published stage-2 cartridges were already right (58,668 mm3,
+        re-rendered identical).  Faces reversed; plate + vanes 10,390 mm3 in both kernels.
+    - [ ] **NAC-64-SPECK — one zero-volume sliver in the stbd pod (2026-11-21).** A 4-face lens
+        (0.38 mm2 surface, ~0 mm3) floats 0.1 mm inside the cavity's outer surface at nacelle-
+        local (-34.3, 23.3, 86.3); it comes from the cavity grid grazing (removing
+        `hollow_cavity()` removes it), wall there 0.11-0.15 in (2.8-3.8 mm).  Passes
+        `validate_stls.py` (watertight).  Remove it at the next cavity edit; the ESC doubler lap
+        of the same day removed 32 others like it.
     - [x] **NAC-64-GEOM-04 — hull-frame bake — DONE 2026-10-03 (Claude Opus 5.5).**
         `tools/bake_hull_frame.py` 'Nacelle64_*' / 'Trunnion64_*' / 'TiltPinion64_*'
         are DERIVED, one rule both sides: tilt axis = level spar line Y 21.000 /
@@ -2273,9 +2727,15 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
         (+0.098, ~0.07 mm backlash); pod relief/trunnion slot re-derived
         (azimuth 5.0 deg). OPEN: nav and AK7455 conduits still camber-following
         (flexible runs; walls to be confirmed by the census).
-    - [ ] **NAC-64-GEOM-05 — gates on the 64 mm pod.** Port `nacelle_trunnion_fit.py`,
-        `nacelle_esc_bay_fit.py` and `nacelle_mass_cg.py` (PIVOT_Z, plan U5) to
-        read the 64 mm wrapper; PIVOT_Z 107.5 is carried unchanged until then.
+    - [x] **NAC-64-GEOM-05 — gates on the 64 mm pod — CLOSED 2026-11-21 (S3/S4).**
+        Mass/CG: `nacelle_mass_cg_64.py` reads `PIVOT_Z_64` (single source; the prep, assembly
+        check, tilt-joint context and FreeCAD assembly read it too).  Trunnion fit:
+        `nacelle_trunnion_fit.py` no longer exists; its job is `nacelle64_assembly_check.py`
+        (static: only the accepted 12 mm3 pod x cartridge rib contact; sweep -5..135 deg: pod
+        in the pinion sweep 0 mm3, trunnion x pinion <= 26 mm3 = tooth phase; wires: all four
+        OK, tightest bend 0.650 in (16.50 mm) = 3 x OD; bay: floor 91 % solid, mouth clear).
+        ESC bay: the 50 mm siting search is settled for 64 mm by OD-3; its T9 cover gate and the
+        window section modulus now live in `tools/nacelle64_esc_bay_check.py`.
     - [x] **NAC-64-ASM-01 — CLOSED 2026-11-07 (owner OD-1: option A, cartridge 0.12 in (3 mm)
         shorter; implemented by Claude Opus 5.5).** `edf_motor_mount_64mm.scad` Z_AFT =
         P64_Z_NOZ − NZ_SPIGOT_L (0.12 in (3 mm)), aft face Z 7.72 in (196.1 mm), which is what
@@ -2590,7 +3050,8 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
             reversed flow; the old r 45.05 ring was 2 points better at r/R 0.95
             (2.1 % vs 4.2 %) — traded for canon. Pod shell mass -0.7 g
             (389.4 -> 388.7 g, PA CF), CG +0.09 mm.
-        - [ ] **NAC-64-CANON-01.b — re-bake the published pod STLs**
+        - [x] **NAC-64-CANON-01.b — re-bake the published pod STLs — DONE 2026-11-22** with the
+            NAC-64-HOLLOW-SKIN re-bake (pivot 118.2 converged).  Original item:
             (`nacelle_{stbd,port}_64mm.stl`, `tools/prep_nacelle_64_bake.py` ->
             `tools/bake_hull_frame.py`) from the new source. Held with
             NAC-64-PIVOT-RC: the mass tool reports PIVOT_Z residual +9.1 mm at
@@ -2682,7 +3143,7 @@ hover clearance was measured. Holding 45.15 mm would cost a 40 % t/c tip.
     assembly (pre-existing, found 2026-08-29). The rotating assembly reaches
     nacelle-local Z **221.3** (the iris seats at 166.25 and runs 55.1 beyond —
     36.1 mm proud of the 185.2 mm shell). In hover the tip swings to hull Z
-    **−41.39** against a **−38.1 mm** ground plane on the 1.5 in gear that
+    **−41.39** against a **−38.1 mm** ground plane on the 1.5 in gear [1.5 in gear RETIRED 2026-09-06 (LG-31; LANDING_GEAR_ANALYSIS.md sec. 4.8) -- the 3.0 in flight gear is the only configuration] that
     `serenity_assembly.py` L505-518 calls "the ACTIVE (compact, default)
     variant" — a **3.3 mm strike on every vertical takeoff and landing**. The
     3.0 in gear clears by +38.6 mm. Either make the 3.0 in gear mandatory rather
@@ -2811,7 +3272,11 @@ DS3225's 2.402 N·m — the servo is ~17× oversized (see SPAR-25-6).
 - [x] **SPAR-25-4 (U4) — BUILT 2026-08-31: integral 50T ring on the trunnion +
     14T pinion (module 0.8).** Original text — Tilt ring gear (sector is sufficient
     — the sweep is only 145°) + pinion; mesh stays outside r = 25 mm.
-- [ ] **SPAR-25-5 (U5) — BLOCKED 2026-09-10 on an owner decision** (§1.1.3.1
+- [x] **SPAR-25-5 (U5) — SUPERSEDED 2026-11-21 (owner, OD-9 closed):** the fixed sun gear it
+    needed belongs to the mechanical nozzle sync drive, which the servo nozzle drive (owner
+    2026-09-28, airframe `AGENTS.md` "Nacelle Nozzle Drive") replaced; the nozzle servo is the
+    KST CM07 (D-SV-1, owner 2026-11-21).  Nothing in the 64 mm joint needs the sun's axial home.
+    *Original entry:* **BLOCKED 2026-09-10 on an owner decision** (§1.1.3.1
     "[BLOCKED] KTD3"; `docs/NOZZLE_DRIVE_TRADE.md` "What is blocked"): the fixed
     sun has no axial home in the as-built joint (bearing-stack margin 0.0 mm).
     Choose (i) spend flux margin, (ii) spend wing geometry, or (iii) reopen the
@@ -2833,7 +3298,11 @@ and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
 
 ## Findings 2026-11-11 (code review of the OD-17 tools, Claude Opus 5.5)
 
-- [ ] **OD17-FAIR-WALL — Fairing thickened 0.08 in (2 mm) per side** for
+- [x] **OD17-FAIR-WALL — CLOSED 2026-11-23 by reference:** its conditions are met -- the as-built
+    drag re-run is done (OD17-FAIR-CFD, 2026-11-12), the outer-shape hold was released with the as-built
+    fairing accepted (OD17-FAIR-BORE, owner 2026-11-21), and the skin is 1.5 mm under OD-25 option A
+    (OD17-FAIR-SKIN, owner 2026-11-11).  The one-module refactor it suggested stays open as OD17-TOOLS-01.
+    Original: **Fairing thickened 0.08 in (2 mm) per side** for
     the minimum wall (CFD body had zero wall at the collar bore); drag not re-run (OD-24 item 2).
     **Owner 2026-11-11: CFD re-run first** — see OD17-FAIR-CFD.
 - [x] **OD17-FAIR-CFD — DONE 2026-11-12** (results in `docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md`, "As-built fairing CFD": the as-built assembly is 0.181 lbf (0.806 N) against 0.147 lbf (0.652 N) for the idealised end plate, +23 %, mainly from the open 2.20 in (56 mm) bore beyond the collar; see OD17-FAIR-BORE). Original item: Owner OD-24 item 2 (2026-11-11): re-run the junction drag CFD on the as-built
@@ -2861,7 +3330,9 @@ and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
     1.0 mm: shell 0.039 lbm (17.5 g) + foam 0.5 g per side, saves 0.026 lbm (11.6 g) per aircraft, needs
     a §7 waiver; the outer half-thickness at the axis could then drop 1 mm toward the CFD shape
     (OD17-FAIR-WALL).
-- [ ] **OD17-FAIR-BORE — Owner: the open bore beyond the collar (finding 2026-11-12, OD17-FAIR-CFD).**
+- [x] **OD17-FAIR-BORE — CLOSED 2026-11-21 (owner, brief C option C1): accept the as-built
+    fairing; the outer-shape HOLD is released.** Original: the open bore beyond the collar
+    (finding 2026-11-12, OD17-FAIR-CFD).
     The fairing's 2.20 in (56 mm) bore runs its whole length, but the pod collar ends at X 2.94 in
     (74.8 mm) and the trunnion at 3.11 in (79.0 mm), so out to the fairing's end at X 3.71 in (94.3 mm)
     the bore is an open forward-facing pocket. The CFD puts the as-built assembly +23 % over the idealised
@@ -2878,7 +3349,8 @@ and the shaft/gear centre distance moves with it. Settle OQ5 before U2.
     drag about 15 %. The bore is not the cause and a nose cap is ruled out (it supersedes the "nose cap"
     option above). The +23 % lies in the printing allowances or the real collar/trunnion/spar steps, not
     yet separated. Owner options now: leave as is, or fund isolating runs on those features. Outer shape
-    stays HELD.
+    stays HELD.  **Brief 2026-11-21:** `docs/THEME_N_DECISION_BRIEFS.md` brief C (recommends C1:
+    leave as built and release the HOLD; 0.069 lbf (0.31 N), 6.3 W at 40 kt for both fairings).
 - [ ] **OD17-FALLBACK-CLR — Fallback channel needs +2 mm shift (2026-11-16).**
     Finding 6 of the 2026-11-16 brief review; owner chose "study first". If NAC-64-WIRE-QUAL fails and
     the channel is redrawn to the 0.73 in (18.5 mm) centreline fallback, the aft pair's wire-to-duct gap

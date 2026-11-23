@@ -44,7 +44,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import hull_datums as hd  # noqa: E402
 import nacelle_64_scale as ns  # noqa: E402
 
-PIVOT_Z = 109.7                                  # pod PIVOT_Z == PIVOT_Z_64 (tilt joint context)
+PIVOT_Z = ns.pivot_z()                           # single source nacelle_64_scale.scad PIVOT_Z_64
 AXIS_SHIFT = ns.get("P64_AXIS_SHIFT_S")          # 9.61
 JOINT_SHIFT = ns.get("P64_JOINT_SHIFT")          # 23.0, OD-17 option D (owner 2026-11-11)
 TRUNNION_X0 = 28.2 + AXIS_SHIFT + JOINT_SHIFT    # spar tip == trunnion outboard face (60.81)

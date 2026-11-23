@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-19",
+  "generated": "2026-11-23",
   "files": {
     ".clang-format": {
       "description": "clang-format configuration for the Serenity UAV firmware sources.",
@@ -1422,6 +1422,16 @@
     },
     "airframe/openscad/nacelles/nacelle_esc_cover.scad": {
       "description": "HULL-FRAME COORDINATE STANDARD - Rev R1 (2026-06-11). See CLAUDE.md.",
+      "tags": [
+        "cad-mesh",
+        "power",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/openscad/nacelles/nacelle_esc_cover_64mm.scad": {
+      "description": "nacelle_esc_cover_64mm.scad \u2014 Rev U \u2014 64 mm pod ESC bay access cover (four handed parts)",
       "tags": [
         "cad-mesh",
         "power",
@@ -3126,8 +3136,58 @@
       ],
       "archived": false
     },
+    "airframe/stls/nacelles/esc/h1_esc_housing_64mm_solid.stl": {
+      "description": "STL mesh (binary)",
+      "tags": [
+        "cad-mesh",
+        "power",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_a.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 EscCover64_Port_A 2026-06-11",
+      "tags": [
+        "cad-mesh",
+        "power",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_b.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 EscCover64_Port_B 2026-06-11",
+      "tags": [
+        "cad-mesh",
+        "power",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_a.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 EscCover64_Stbd_A 2026-06-11",
+      "tags": [
+        "cad-mesh",
+        "power",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
+    "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_b.stl": {
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 EscCover64_Stbd_B 2026-06-11",
+      "tags": [
+        "cad-mesh",
+        "power",
+        "propulsion",
+        "structural"
+      ],
+      "archived": false
+    },
     "airframe/stls/nacelles/nacelle_port_64mm.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 nacelle_port_64mm",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 Nacelle64_Port 2026-06-11",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -3136,7 +3196,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/nacelle_stbd_64mm.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 nacelle_stbd_64mm",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 Nacelle64_Stbd 2026-06-11",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -3145,7 +3205,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/nacelle_trunnion_64mm_port.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 nacelle_trunnion_64mm_port",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 Trunnion64_Port 2026-06-11",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -3154,7 +3214,7 @@
       "archived": false
     },
     "airframe/stls/nacelles/nacelle_trunnion_64mm_stbd.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 nacelle_trunnion_64mm_stbd",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 Trunnion64_Stbd 2026-06-11",
       "tags": [
         "cad-mesh",
         "propulsion",
@@ -3233,7 +3293,7 @@
       "archived": false
     },
     "airframe/stls/wings/wing_tilt_pinion_port.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 wing_tilt_pinion_port",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 TiltPinion64_Port 2026-06-11",
       "tags": [
         "cad-mesh",
         "structural"
@@ -3241,7 +3301,7 @@
       "archived": false
     },
     "airframe/stls/wings/wing_tilt_pinion_stbd.stl": {
-      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 wing_tilt_pinion_stbd",
+      "description": "STL mesh \u2014 header: SerenityUAV AIRCRAFT-FRAME R2 TiltPinion64_Stbd 2026-06-11",
       "tags": [
         "cad-mesh",
         "structural"
@@ -10354,6 +10414,14 @@
       ],
       "archived": false
     },
+    "docs/NOZZLE_64MM_LOAD_STUDY.md": {
+      "description": "64 mm Iris Nozzle \u2014 Gas Load, Spring and Servo Study (2026-11-21)",
+      "tags": [
+        "documentation",
+        "propulsion"
+      ],
+      "archived": false
+    },
     "docs/NOZZLE_DRIVE_TRADE.md": {
       "description": "Nozzle-Drive Mechanism Trade Study (Rev S2, 2026-07-19; decided 2026-09-28)",
       "tags": [
@@ -10506,6 +10574,13 @@
     },
     "docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md": {
       "description": "Tail Strike on the Aft Skids (4 ft Drop) and Landing-Gear Materials in SLS",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/THEME_N_DECISION_BRIEFS.md": {
+      "description": "Theme N Owner Decision Briefs (2026-11-21)",
       "tags": [
         "documentation"
       ],
@@ -10672,7 +10747,66 @@
       ],
       "archived": false
     },
+    "docs/feedback-sweep/state.yml": {
+      "description": "YAML config",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/figures/battery_bay_twin_tray.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "power"
+      ],
+      "archived": false
+    },
+    "docs/figures/brief_g_esc_pivot.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "power"
+      ],
+      "archived": false
+    },
+    "docs/figures/brief_h_esc_skin.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "power"
+      ],
+      "archived": false
+    },
+    "docs/figures/brief_h_xray.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/brief_od17_breach_six_checks.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/brief_od17_breach_skin.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/brief_od17_breach_xray.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/h1_esc_housing_canonical.png": {
       "description": "Rendered image / reference photo",
       "tags": [
         "documentation",
@@ -10688,6 +10822,21 @@
       "archived": false
     },
     "docs/figures/nacelle64_bay_stud_interaction.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_esc_outline.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation",
+        "power"
+      ],
+      "archived": false
+    },
+    "docs/figures/nacelle64_hollow_skin_check.png": {
       "description": "Rendered image / reference photo",
       "tags": [
         "documentation"
@@ -10820,6 +10969,34 @@
       ],
       "archived": false
     },
+    "docs/figures/nozzle64_f1_drive.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nozzle64_flap_loads.json": {
+      "description": "JSON data (9 top-level keys)",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nozzle64_flap_loads.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/nozzle64_linkage_ma.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/figures/od3_esc_current.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -10849,6 +11026,48 @@
       "tags": [
         "documentation",
         "power"
+      ],
+      "archived": false
+    },
+    "docs/figures/odb_theme_n_a.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/odb_theme_n_b.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/odb_theme_n_c.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/odb_theme_n_d.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/odb_theme_n_e.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/odb_theme_n_f.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
       ],
       "archived": false
     },
@@ -12062,11 +12281,10 @@
       ],
       "archived": false
     },
-    "docs/plans/2026-11-19-001-feat-flight-engineer-split-relayout-plan.md": {
-      "description": "Flight Engineer Split Re-layout and High-Current Fix - Plan",
+    "docs/plans/feedback-sweep-plan.md": {
+      "description": "Goal Capsule",
       "tags": [
-        "documentation",
-        "security"
+        "documentation"
       ],
       "archived": false
     },
@@ -15724,7 +15942,7 @@
       "archived": false
     },
     "tools/auw_ledger.py": {
-      "description": "Serenity UAV -- bottom-up all-up-weight, CG, pitch inertia and hover T/W.",
+      "description": "Python script",
       "tags": [
         "build-tooling"
       ],
@@ -15753,6 +15971,29 @@
     },
     "tools/bhd10_aft_strip_options.py": {
       "description": "BHD-10 option study: the Pilot FC2/FC3 aft-strip nodes vs the splice collar.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/brief_g_esc_pivot_fig.py": {
+      "description": "brief_g_esc_pivot_fig.py -- six-check figure for Owner Decision Brief G (ESC fit, pivot, F1).",
+      "tags": [
+        "build-tooling",
+        "power"
+      ],
+      "archived": false
+    },
+    "tools/brief_h_esc_skin_fig.py": {
+      "description": "brief_h_esc_skin_fig.py -- six-check figure for Owner Decision Brief H (ESC bays, true skin).",
+      "tags": [
+        "build-tooling",
+        "power"
+      ],
+      "archived": false
+    },
+    "tools/brief_od17_breach_fig.py": {
+      "description": "brief_od17_breach_fig.py -- figures for the Owner Decision Brief on NAC-64-OD17-BREACH.",
       "tags": [
         "build-tooling"
       ],
@@ -15919,6 +16160,13 @@
       ],
       "archived": false
     },
+    "tools/esc70_design_f1.json": {
+      "description": "JSON data (43 top-level keys)",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/esc80_cooptimize.py": {
       "description": "Python script",
       "tags": [
@@ -15937,6 +16185,14 @@
       "description": "JSON data (38 top-level keys)",
       "tags": [
         "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/esc_f1_pivot_iter.py": {
+      "description": "esc_f1_pivot_iter.py -- forward ESC-bay room under F1, with the tilt pivot held at the CG.",
+      "tags": [
+        "build-tooling",
+        "power"
       ],
       "archived": false
     },
@@ -16330,6 +16586,37 @@
       ],
       "archived": false
     },
+    "tools/nacelle64_esc_bay_check.py": {
+      "description": "nacelle64_esc_bay_check.py -- the 64 mm ESC bay covers fit their pods, and what the windows cost.",
+      "tags": [
+        "build-tooling",
+        "power"
+      ],
+      "archived": false
+    },
+    "tools/nacelle64_esc_housing.py": {
+      "description": "nacelle64_esc_housing.py -- canonical-styled ventral ESC B housings for the 64 mm nacelle (H1).",
+      "tags": [
+        "build-tooling",
+        "power"
+      ],
+      "archived": false
+    },
+    "tools/nacelle64_esc_outline.py": {
+      "description": "nacelle64_esc_outline.py -- the ESC board outline each G1 bay can actually hold, measured",
+      "tags": [
+        "build-tooling",
+        "power"
+      ],
+      "archived": false
+    },
+    "tools/nacelle64_hollow_skin_check.py": {
+      "description": "nacelle64_hollow_skin_check.py -- does the 64 mm pod's hollow cavity leave a real outer skin?",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/nacelle64_od1_figure.py": {
       "description": "nacelle64_od1_figure.py -- picture of the OD-1 decision: nozzle spigot vs stage-2 cartridge.",
       "tags": [
@@ -16484,6 +16771,35 @@
       "description": "nonfo_simon_fit.py -- S34 gates for the NoNFO-Pilot-PB2 stern stack at Simon's med bay.",
       "tags": [
         "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/nozzle64_f1_drive.py": {
+      "description": "nozzle64_f1_drive.py -- F1 nozzle drive: CM07, horn, link, bellcrank, push rod, ring ear.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/nozzle64_flap_loads.py": {
+      "description": "nozzle64_flap_loads.py -- exhaust gas load on the 64 mm iris nozzle flaps, carried to the servo.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/nozzle64_hinge_root_brief.py": {
+      "description": "Python script",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
+    "tools/nozzle64_linkage_ma.py": {
+      "description": "nozzle64_linkage_ma.py -- 64 mm nozzle servo linkage mechanical advantage, by virtual work.",
+      "tags": [
+        "build-tooling",
+        "security"
       ],
       "archived": false
     },
@@ -16783,6 +17099,24 @@
       ],
       "archived": false
     },
+    "tools/tests/fixtures/open_secure_esc/README.md": {
+      "description": "Open-Secure-ESC board fixture",
+      "tags": [
+        "build-tooling",
+        "documentation",
+        "power"
+      ],
+      "archived": false
+    },
+    "tools/tests/fixtures/open_secure_esc/open_secure_esc_6s_50a_can485_faraday.kicad_pcb": {
+      "description": "KiCad PCB layout",
+      "tags": [
+        "build-tooling",
+        "pcb-design",
+        "power"
+      ],
+      "archived": false
+    },
     "tools/tests/test_allowables.py": {
       "description": "Tests for tools/allowables.py (plan 2026-11-02-001 U3).",
       "tags": [
@@ -16874,11 +17208,35 @@
       ],
       "archived": false
     },
+    "tools/tests/test_nacelle64_esc_housing.py": {
+      "description": "Characterization tests for tools/nacelle64_esc_housing.py (H1, WBS NAC-64-ESC-BLISTER).",
+      "tags": [
+        "build-tooling",
+        "power"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_nacelle64_esc_outline.py": {
+      "description": "Tests for tools/nacelle64_esc_outline.py (WBS NAC-64-ESC-OUTLINE).",
+      "tags": [
+        "build-tooling",
+        "power"
+      ],
+      "archived": false
+    },
     "tools/tests/test_nacelle_esc_service.py": {
-      "description": "Python script",
+      "description": "Vendored, unmodified copy of the Open-Secure-ESC board (provenance and licence in",
       "tags": [
         "build-tooling",
         "power",
+        "propulsion"
+      ],
+      "archived": false
+    },
+    "tools/tests/test_nacelle_hollow_profile.py": {
+      "description": "Regression tests for tools/nacelle_hollow_profile.py (WBS NAC-64-HOLLOW-SKIN).",
+      "tags": [
+        "build-tooling",
         "propulsion"
       ],
       "archived": false
@@ -16941,6 +17299,13 @@
       "tags": [
         "build-tooling",
         "project-tracking"
+      ],
+      "archived": false
+    },
+    "tools/theme_n_od_briefs.py": {
+      "description": "theme_n_od_briefs.py -- numbers and figures for the Theme N Owner Decision Briefs (2026-11-21).",
+      "tags": [
+        "build-tooling"
       ],
       "archived": false
     },
@@ -17218,6 +17583,7 @@
       "docs/MATSPEC_SLS_PA_CF.md",
       "docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md",
       "docs/NACELLE_64MM_VERIFICATION.md",
+      "docs/NOZZLE_64MM_LOAD_STUDY.md",
       "docs/NOZZLE_DRIVE_TRADE.md",
       "docs/OBSERVER_LASER_ANALYSIS.md",
       "docs/OBSERVER_MANUFACTURING_READINESS.md",
@@ -17238,6 +17604,7 @@
       "docs/SLS_PRINT_ORIENTATION.md",
       "docs/SOURCING_POLICY.md",
       "docs/TAIL_STRIKE_AND_LG_SLS_MATERIALS.md",
+      "docs/THEME_N_DECISION_BRIEFS.md",
       "docs/TILT_ACTUATOR_OPTIONS.md",
       "docs/TILT_ACTUATOR_SELECTION.md",
       "docs/TILT_DRIVE_CONTROL_SPEC.md",
@@ -17258,9 +17625,19 @@
       "docs/conversation histories/2026-10-17-103355-this-session-is-being-continued-from-a-previous-c.txt",
       "docs/electrical_fault_margins.md",
       "docs/failsafe_thresholds.md",
+      "docs/feedback-sweep/state.yml",
       "docs/figures/battery_bay_twin_tray.png",
+      "docs/figures/brief_g_esc_pivot.png",
+      "docs/figures/brief_h_esc_skin.png",
+      "docs/figures/brief_h_xray.png",
+      "docs/figures/brief_od17_breach_six_checks.png",
+      "docs/figures/brief_od17_breach_skin.png",
+      "docs/figures/brief_od17_breach_xray.png",
+      "docs/figures/h1_esc_housing_canonical.png",
       "docs/figures/nacelle64_bay_stud_after.png",
       "docs/figures/nacelle64_bay_stud_interaction.png",
+      "docs/figures/nacelle64_esc_outline.png",
+      "docs/figures/nacelle64_hollow_skin_check.png",
       "docs/figures/nacelle64_od17_aft_fairing_horizontal.png",
       "docs/figures/nacelle64_od17_aft_fairing_section.png",
       "docs/figures/nacelle64_od17_aft_fairing_vertical.png",
@@ -17279,10 +17656,20 @@
       "docs/figures/nacelle64_od1_spigot_cartridge.png",
       "docs/figures/nacelle64_sections.png",
       "docs/figures/nacelle64_war10_options.png",
+      "docs/figures/nozzle64_f1_drive.png",
+      "docs/figures/nozzle64_flap_loads.json",
+      "docs/figures/nozzle64_flap_loads.png",
+      "docs/figures/nozzle64_linkage_ma.png",
       "docs/figures/od3_esc_current.png",
       "docs/figures/od3_esc_fit_mass.png",
       "docs/figures/od3_esc_path.png",
       "docs/figures/od3_esc_thermal.png",
+      "docs/figures/odb_theme_n_a.png",
+      "docs/figures/odb_theme_n_b.png",
+      "docs/figures/odb_theme_n_c.png",
+      "docs/figures/odb_theme_n_d.png",
+      "docs/figures/odb_theme_n_e.png",
+      "docs/figures/odb_theme_n_f.png",
       "docs/flight_envelope.md",
       "docs/handoffs/2026-10-20-aircraft-datum-r2-migration.md",
       "docs/handoffs/2026-10-26-split-battery-and-fe-pdb.md",
@@ -17445,7 +17832,7 @@
       "docs/plans/2026-11-15-001-feat-fuselage-cooling-plan.md",
       "docs/plans/2026-11-15-002-feat-ramp-intake-edf-cooling-plan.md",
       "docs/plans/2026-11-16-001-feat-nozzle-servo-selection-osc-integration-plan.md",
-      "docs/plans/2026-11-19-001-feat-flight-engineer-split-relayout-plan.md",
+      "docs/plans/feedback-sweep-plan.md",
       "docs/references/108090023_STS3215-C001_Datasheet.pdf",
       "docs/references/AC_43.13-1B_w-chg1.pdf",
       "docs/references/Bus_servo_control_circuit.pdf",
@@ -17710,7 +18097,8 @@
       "tools/AGENTS.md",
       "tools/README.md",
       "tools/TODO.md",
-      "tools/TOOL_REFERENCE.md"
+      "tools/TOOL_REFERENCE.md",
+      "tools/tests/fixtures/open_secure_esc/README.md"
     ],
     "emi-hardening": [
       "AGENTS.md",
@@ -18031,6 +18419,7 @@
       "tools/lg_bellcrank_fbd.py",
       "tools/lg_side_hit_study.py",
       "tools/nacelle64_assembly_check.py",
+      "tools/nozzle64_linkage_ma.py",
       "tools/nozzle_servo_linkage.py",
       "tools/nozzle_servo_linkage_64.py",
       "tools/open_mating_faces.py",
@@ -18428,6 +18817,7 @@
       "airframe/openscad/nacelles/nacelle_dorsal_shroud_64_gen.scad",
       "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
+      "airframe/openscad/nacelles/nacelle_esc_cover_64mm.scad",
       "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris_64mm.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_servo_64mm.scad",
@@ -18630,6 +19020,11 @@
       "airframe/stls/nacelles/edf_motor_mount_64mm_stage2_stbd.stl",
       "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl",
       "airframe/stls/nacelles/eng_right_shell24_50mm_repaired.stl",
+      "airframe/stls/nacelles/esc/h1_esc_housing_64mm_solid.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_b.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_b.stl",
       "airframe/stls/nacelles/nacelle_port_64mm.stl",
       "airframe/stls/nacelles/nacelle_stbd_64mm.stl",
       "airframe/stls/nacelles/nacelle_trunnion_64mm_port.stl",
@@ -18756,6 +19151,7 @@
       "airframe/openscad/nacelles/nacelle_dorsal_shroud_64_gen.scad",
       "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
+      "airframe/openscad/nacelles/nacelle_esc_cover_64mm.scad",
       "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris_64mm.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_servo_64mm.scad",
@@ -18948,6 +19344,11 @@
       "airframe/stls/nacelles/edf_motor_mount_64mm_stage2_stbd.stl",
       "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl",
       "airframe/stls/nacelles/eng_right_shell24_50mm_repaired.stl",
+      "airframe/stls/nacelles/esc/h1_esc_housing_64mm_solid.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_b.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_b.stl",
       "airframe/stls/nacelles/nacelle_port_64mm.stl",
       "airframe/stls/nacelles/nacelle_stbd_64mm.stl",
       "airframe/stls/nacelles/nacelle_trunnion_64mm_port.stl",
@@ -19025,6 +19426,7 @@
       "airframe/openscad/nacelles/nacelle_dorsal_shroud_64_gen.scad",
       "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
+      "airframe/openscad/nacelles/nacelle_esc_cover_64mm.scad",
       "airframe/openscad/nacelles/nacelle_hollow_profile.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_iris_64mm.scad",
       "airframe/openscad/nacelles/nacelle_nozzle_servo_64mm.scad",
@@ -19045,6 +19447,11 @@
       "airframe/stls/nacelles/edf_motor_mount_64mm_stage2_stbd.stl",
       "airframe/stls/nacelles/eng_left_shell24_50mm_repaired.stl",
       "airframe/stls/nacelles/eng_right_shell24_50mm_repaired.stl",
+      "airframe/stls/nacelles/esc/h1_esc_housing_64mm_solid.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_b.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_b.stl",
       "airframe/stls/nacelles/nacelle_port_64mm.stl",
       "airframe/stls/nacelles/nacelle_stbd_64mm.stl",
       "airframe/stls/nacelles/nacelle_trunnion_64mm_port.stl",
@@ -19089,6 +19496,7 @@
       "docs/FIXED_NOZZLE_FALLBACK.md",
       "docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md",
       "docs/NACELLE_64MM_VERIFICATION.md",
+      "docs/NOZZLE_64MM_LOAD_STUDY.md",
       "docs/NOZZLE_DRIVE_TRADE.md",
       "docs/handoffs/2026-11-02-nacelle-exterior-canon.md",
       "docs/images/nacelle_64mm_nozzle_servo_option1.png",
@@ -19190,6 +19598,7 @@
       "tools/prep_nacelle_64_bake.py",
       "tools/tail_edf_flow.py",
       "tools/tests/test_nacelle_esc_service.py",
+      "tools/tests/test_nacelle_hollow_profile.py",
       "tools/tests/test_nozzle_servo_linkage.py",
       "tools/tests/test_tail_edf_flow.py"
     ],
@@ -19324,6 +19733,7 @@
       "airframe/openscad/fuselage/cargo/battery_cradle.scad",
       "airframe/openscad/nacelles/nacelle_esc_bay.scad",
       "airframe/openscad/nacelles/nacelle_esc_cover.scad",
+      "airframe/openscad/nacelles/nacelle_esc_cover_64mm.scad",
       "airframe/placeholders/foam/Void_power_bus_25x500x25mm.stl",
       "airframe/placeholders/power/Fuse_MAXI_150A.stl",
       "airframe/placeholders/power/Fuse_mini_40A.stl",
@@ -19335,6 +19745,11 @@
       "airframe/placeholders/propulsion/ESC_80A_6S_BLHeli32_deferred.stl",
       "airframe/stls/fuselage/battery_tray.stl",
       "airframe/stls/fuselage/cargo/battery_cradle.stl",
+      "airframe/stls/nacelles/esc/h1_esc_housing_64mm_solid.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_port_b.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_a.stl",
+      "airframe/stls/nacelles/esc/nacelle_esc_cover_64mm_stbd_b.stl",
       "avionics/kicad/FlightEngineer/kicads/Kaylee.kicad_sch.pre-g351x",
       "docs/BATTERY_MOUNT.md",
       "docs/BATTERY_SPLIT_OPTIONS.md",
@@ -19343,6 +19758,10 @@
       "docs/NACELLE_64MM_POWER_CROSSING_BRIEF.md",
       "docs/POWER_DISTRIBUTION.md",
       "docs/figures/battery_bay_twin_tray.png",
+      "docs/figures/brief_g_esc_pivot.png",
+      "docs/figures/brief_h_esc_skin.png",
+      "docs/figures/h1_esc_housing_canonical.png",
+      "docs/figures/nacelle64_esc_outline.png",
       "docs/figures/od3_esc_current.png",
       "docs/figures/od3_esc_fit_mass.png",
       "docs/figures/od3_esc_path.png",
@@ -19360,11 +19779,21 @@
       "docs/solutions/design-patterns/annular-esc-bay-length-is-set-by-radial-stack-not-panel-width.md",
       "gcs/skipper/hardware/docs/skipper_power_budget.md",
       "graphical-build-guide/build_guide_14_power_routing.svg",
+      "tools/brief_g_esc_pivot_fig.py",
+      "tools/brief_h_esc_skin_fig.py",
+      "tools/esc_f1_pivot_iter.py",
+      "tools/nacelle64_esc_bay_check.py",
+      "tools/nacelle64_esc_housing.py",
+      "tools/nacelle64_esc_outline.py",
       "tools/nacelle_esc_bay_fit.py",
       "tools/nacelle_esc_service.py",
       "tools/nacelle_esc_thermal.py",
       "tools/od3_esc_figures.py",
       "tools/plot_battery_bay.py",
+      "tools/tests/fixtures/open_secure_esc/README.md",
+      "tools/tests/fixtures/open_secure_esc/open_secure_esc_6s_50a_can485_faraday.kicad_pcb",
+      "tools/tests/test_nacelle64_esc_housing.py",
+      "tools/tests/test_nacelle64_esc_outline.py",
       "tools/tests/test_nacelle_esc_service.py"
     ],
     "comms-protocol": [
@@ -20740,6 +21169,7 @@
       "tools/kicad_relink.py",
       "tools/kicad_set_value.py",
       "tools/precommit_kicad_load.py",
+      "tools/tests/fixtures/open_secure_esc/open_secure_esc_6s_50a_can485_faraday.kicad_pcb",
       "tools/validate_kicad.py"
     ],
     "firmware": [
@@ -21059,6 +21489,9 @@
       "tools/bay_a_thermal_budget.py",
       "tools/bhd02_option_study.py",
       "tools/bhd10_aft_strip_options.py",
+      "tools/brief_g_esc_pivot_fig.py",
+      "tools/brief_h_esc_skin_fig.py",
+      "tools/brief_od17_breach_fig.py",
       "tools/build_head_shell.py",
       "tools/build_landing_gear_views.py",
       "tools/cargo_bay_envelope.py",
@@ -21081,9 +21514,11 @@
       "tools/datum_regression.py",
       "tools/dorsal_shroud_resize_64.py",
       "tools/esc70_design.json",
+      "tools/esc70_design_f1.json",
       "tools/esc80_cooptimize.py",
       "tools/esc80_design.json",
       "tools/esc80_design_m2.json",
+      "tools/esc_f1_pivot_iter.py",
       "tools/eval_nozzle_drive_64.py",
       "tools/export-specctra-dsn.py",
       "tools/export_assembly_meshes.py",
@@ -21136,6 +21571,10 @@
       "tools/min_stretch_relocation.py",
       "tools/mirror_claude_memory.py",
       "tools/nacelle64_assembly_check.py",
+      "tools/nacelle64_esc_bay_check.py",
+      "tools/nacelle64_esc_housing.py",
+      "tools/nacelle64_esc_outline.py",
+      "tools/nacelle64_hollow_skin_check.py",
       "tools/nacelle64_od1_figure.py",
       "tools/nacelle64_optD_aft_fairing.py",
       "tools/nacelle64_optD_concept.py",
@@ -21156,6 +21595,10 @@
       "tools/nacelle_tilt_dynamics.py",
       "tools/node_thermal_forced_air.py",
       "tools/nonfo_simon_fit.py",
+      "tools/nozzle64_f1_drive.py",
+      "tools/nozzle64_flap_loads.py",
+      "tools/nozzle64_hinge_root_brief.py",
+      "tools/nozzle64_linkage_ma.py",
       "tools/nozzle_servo_linkage.py",
       "tools/nozzle_servo_linkage_64.py",
       "tools/observer_board_envelope.py",
@@ -21196,6 +21639,8 @@
       "tools/sync_operators_manual.py",
       "tools/tail_edf_flow.py",
       "tools/tail_strike_requirement.py",
+      "tools/tests/fixtures/open_secure_esc/README.md",
+      "tools/tests/fixtures/open_secure_esc/open_secure_esc_6s_50a_can485_faraday.kicad_pcb",
       "tools/tests/test_allowables.py",
       "tools/tests/test_auw_ledger_cooling.py",
       "tools/tests/test_bay_a_fwd_mounts.py",
@@ -21209,7 +21654,10 @@
       "tools/tests/test_hover_trim_rcs.py",
       "tools/tests/test_joint_register.py",
       "tools/tests/test_nacelle64_assembly_check.py",
+      "tools/tests/test_nacelle64_esc_housing.py",
+      "tools/tests/test_nacelle64_esc_outline.py",
       "tools/tests/test_nacelle_esc_service.py",
+      "tools/tests/test_nacelle_hollow_profile.py",
       "tools/tests/test_nonfo_simon_fit.py",
       "tools/tests/test_nozzle_servo_linkage.py",
       "tools/tests/test_pace_balance.py",
@@ -21218,6 +21666,7 @@
       "tools/tests/test_tail_edf_flow.py",
       "tools/tests/test_tail_strike_requirement.py",
       "tools/tests/test_wbs_burndown.py",
+      "tools/theme_n_od_briefs.py",
       "tools/tilt_actuator_options.py",
       "tools/try-via-again.py",
       "tools/twin_head_pack_fit.py",
