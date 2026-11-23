@@ -12,6 +12,7 @@ Terms (node, cape, stack, bay): `CONCEPTS.md`.
 
 Board-level rules not stated in root:
 
+- **Boards in the fuselage air path lie in line with the flow, never as an air dam,** and the stream keeps 12.4 in² (8,000 mm²) at every bay station: `airframe/AGENTS.md` "Interior Air Path" owns both rules. Outline and mounting choices (on edge, trapezoids, split boards) follow from them.
 - **Bus isolation:** every bus terminal on every PCB (Pilot, TACCO, Commo, Observer, Flight
   Engineer, Bus-Gateway) is galvanically isolated, for CAN FD, RS-485, Ethernet, and
   MIL-STD-1553C alike. CAN FD and RS-485 reach every PCB, actuator, and sensor; Observer

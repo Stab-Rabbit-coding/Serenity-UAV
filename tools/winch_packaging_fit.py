@@ -45,6 +45,7 @@ from pathlib import Path
 import numpy as np
 import trimesh
 from shapely.geometry import Polygon, box as sbox
+from shapely.geometry.base import BaseGeometry
 from shapely.ops import unary_union
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -91,9 +92,9 @@ def load_hull() -> trimesh.Trimesh:
         return trimesh.load_mesh(member, file_type="stl", force="mesh")
 
 
-def wall_polygons(hull: trimesh.Trimesh, ys: np.ndarray) -> dict[float, object]:
+def wall_polygons(hull: trimesh.Trimesh, ys: np.ndarray) -> dict[float, BaseGeometry]:
     """Wall cross-section (union of polygons) in (X, Z) at each Y."""
-    out = {}
+    out: dict[float, BaseGeometry] = {}
     for y in ys:
         sec = hull.section(plane_origin=[0, float(y), 0], plane_normal=[0, 1, 0])
         if sec is None:
