@@ -14,11 +14,14 @@ import os
 import sys
 import shutil
 S, name = sys.argv[1], sys.argv[2]
+# Optional 3rd argument: far-field half-height Y (m), default 0.12.  OD17-CFD-BLOCKAGE (2026-11-23)
+# re-runs with 0.24 (blockage 15.4 -> ~7.7 %); the case directory then gets a "_y<mm>" suffix.
+FAR_Y = float(sys.argv[3]) if len(sys.argv) > 3 else 0.12
 U = 20.58          # 40 kt
 NU = 1.46e-5       # ISA SL (docs/WING_ATTACH_INTERFACE.md)
 K = 1.5 * (U * 0.005) ** 2
 OMEGA = K / (NU * 10.0)
-case = f'{S}/cfd/{name}'
+case = f'{S}/cfd/{name}' + ('' if FAR_Y == 0.12 else f'_y{round(FAR_Y * 1000)}')
 shutil.rmtree(case, ignore_errors=True)
 for d in ('0', 'constant/triSurface', 'system'):
     os.makedirs(f'{case}/{d}', exist_ok=True)
@@ -31,7 +34,7 @@ def w(path, obj, body, cls='dictionary'):
 
 
 # domain (m): X 0.048 (nacelle flank) .. 0.165 (inboard cut); Y +-0.12; Z -0.25 .. 0.55 (flow +Z)
-x0, x1, y0, y1, z0, z1 = 0.048, 0.165, -0.12, 0.12, -0.25, 0.55
+x0, x1, y0, y1, z0, z1 = 0.048, 0.165, -FAR_Y, FAR_Y, -0.25, 0.55
 dx = 0.006
 nx, ny, nz = round((x1 - x0) / dx), round((y1 - y0) / dx), round((z1 - z0) / dx)
 w('system/blockMeshDict', 'blockMeshDict', f'''convertToMeters 1;
