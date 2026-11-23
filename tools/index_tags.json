@@ -10778,6 +10778,27 @@
       ],
       "archived": false
     },
+    "docs/figures/brief_od17_breach_six_checks.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/brief_od17_breach_skin.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
+    "docs/figures/brief_od17_breach_xray.png": {
+      "description": "Rendered image / reference photo",
+      "tags": [
+        "documentation"
+      ],
+      "archived": false
+    },
     "docs/figures/h1_esc_housing_canonical.png": {
       "description": "Rendered image / reference photo",
       "tags": [
@@ -15964,6 +15985,13 @@
       ],
       "archived": false
     },
+    "tools/brief_od17_breach_fig.py": {
+      "description": "brief_od17_breach_fig.py -- figures for the Owner Decision Brief on NAC-64-OD17-BREACH.",
+      "tags": [
+        "build-tooling"
+      ],
+      "archived": false
+    },
     "tools/build_head_shell.py": {
       "description": "build_head_shell.py \u2014 apply head-shell features (bosses + aperture cuts) to",
       "tags": [
@@ -17581,6 +17609,9 @@
       "docs/figures/brief_g_esc_pivot.png",
       "docs/figures/brief_h_esc_skin.png",
       "docs/figures/brief_h_xray.png",
+      "docs/figures/brief_od17_breach_six_checks.png",
+      "docs/figures/brief_od17_breach_skin.png",
+      "docs/figures/brief_od17_breach_xray.png",
       "docs/figures/h1_esc_housing_canonical.png",
       "docs/figures/nacelle64_bay_stud_after.png",
       "docs/figures/nacelle64_bay_stud_interaction.png",
@@ -21437,6 +21468,7 @@
       "tools/bhd10_aft_strip_options.py",
       "tools/brief_g_esc_pivot_fig.py",
       "tools/brief_h_esc_skin_fig.py",
+      "tools/brief_od17_breach_fig.py",
       "tools/build_head_shell.py",
       "tools/build_landing_gear_views.py",
       "tools/cargo_bay_envelope.py",

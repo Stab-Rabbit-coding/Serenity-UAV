@@ -1,5 +1,5 @@
 <!-- SYNC-STAMP
-parent commit: d311fb6
+parent commit: ebc316c
 source digest: 0e00b1cc67d2
 current-specification/auw_ledger.json: 74ed5c381e
 current-specification/flight_limits.json: 25167e891e
