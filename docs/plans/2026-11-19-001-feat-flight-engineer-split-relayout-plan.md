@@ -21,7 +21,7 @@ License: CC BY-SA 4.0 (SPDX-License-Identifier: CC-BY-SA-4.0)
 
 ## Goal Capsule
 
-- **Objective:** re-architect the Flight Engineer (FE) power distribution unit as two modules that fit the TEDF-06 cargo duct, with a power path rated for today's loads; also grow the belly service panel and reserve the nacelle cable corridor in the duct tool.
+- **Objective:** re-architect the Flight Engineer (FE) power distribution unit as two modules that fit the TEDF-06 cargo duct, with a power path rated for today's loads; fold Flight Engineer Rev S1 into the new logic module; also grow the belly service panel and reserve the nacelle cable corridor in the duct tool.
 - **Product authority:** owner (Steve Griffing). Scope chosen 2026-11-19 in the S44 session and in the PR #309 review threads.
 - **Open blockers:** an in-line packing at the 8,000 mm2 floor is found by a session search and still needs confirming in the tool and in CAD (OQ6).
 
@@ -39,7 +39,7 @@ Extend `tools/cargo_duct_layout_fit.py` so the duct's inner walls wrap the modul
 
 The U6 duct tool finds no station for the 75 x 94 x 36 mm (2.95 x 3.70 x 1.42 in) FE unit in any orientation.
 A session free-space search through the whole interior (floor, roof and wall pockets, using the height the retired cargo freed: Z 88-234 on the centreline) also rejects a slimmer can and a single long narrow board. The hull is narrow rather than low: 70-154 mm (2.8-6.1 in) wide at Z 150, narrowest at Y 288 and at the pivot. Against the bare hull the single can fits only on edge on the centreline from Y 334 aft, into N2/N4 and the Observer tray, and at the 11,800 mm2 floor the bay is also cut along Y by stream headroom (Y 312 has 49 mm2, Y 328 has 307 mm2).
-Separately, Rev R was sized for 18 A per fan. Today's design currents are 44 A sustained and 63 A peak (10 s or less) per nacelle fan (`docs/ESC_RATING_OD3_BRIEF.md`, ESTIMATE), plus 32 A for the tail fan at hover. That puts the main bus at about 190 A mean, 214 A worst sustained and 320 A for 10 s or less, or 107 A per pack with the twin packs. Several Rev R parts are below those currents:
+Separately, Rev R was sized for 18 A per fan. Today's design currents are 44 A sustained and 63 A peak (10 s or less) per nacelle fan (`docs/ESC_RATING_OD3_BRIEF.md`, ESTIMATE), plus 32 A for the tail fan at hover. That puts the main bus at about 190 A mean, 214 A worst sustained (4 x 44 A + 32.4 A tail + 5.1 A BEC input) and 320 A for 10 s or less (4 x 63 A + 63.3 A tail at full throttle + 5.1 A), or 107 A per pack with the twin packs sharing evenly. Several Rev R parts are below those currents:
 
 | Rev R part | Rating in the repo | Today's duty |
 |---|---|---|
@@ -55,10 +55,10 @@ Separately, Rev R was sized for 18 A per fan. Today's design currents are 44 A s
 
 - **The duct changes only at its inner walls.** The hull outer mold line stays; the sealed duct partition is reshaped to pocket the modules. Governs R10. (session-settled: user-directed -- chosen over changing the outer mold line or keeping the duct fixed: least disruption to aero and the published hull)
 - **One plan covers the split and the high-current fix.** Governs R1-R9. (session-settled: user-approved -- chosen over fixing the power path first in its own plan, and over a split that keeps the on-board 44 A common-mode chokes: the power path sets the module's form, and the on-board chokes are unlikely to fit)
-- **The belly panel grows to reach every fuselage avionics unit that has no hatch of its own, and may span the whole flat bottom of the cargo section, edge to edge, from the intake ramp to where the hull necks down toward the tail EDF, cut out only for the landing gear bays.** Governs R12. (session-settled: user-directed -- owner PR #309 review and session, 2026-11-19; no restriction to the door field's width)
+- **The belly panel grows to reach every fuselage avionics unit that has no hatch of its own, and may span the whole flat bottom of the cargo section, edge to edge, from the intake ramp to where the hull necks down toward the tail EDF, cut out only for the landing gear bays, inside a sealing frame land for the gasket and captive fasteners.** Governs R12. (session-settled: user-directed -- owner PR #309 review and session, 2026-11-19; no restriction to the door field's width; the sealing frame land kept by the owner in the plan review)
 - **The spar bore carries the four nacelle EDF cables.** Any seal is a pass-through around them, and the bay keeps a corridor from the bore to the FE. Governs R11, R13. (session-settled: user-directed -- owner PR #309 review, 2026-11-19)
 - **Every PCB lies in line with the airflow; no board stands across the stream as an air dam.** Governs R16. (session-settled: user-directed -- owner, 2026-11-19; a standing rule in `airframe/AGENTS.md`)
-- **The stream floor is 12.4 in2 (8,000 mm2) at every bay station, and future changes hold it.** About -0.7 % hover tail thrust in `tools/tail_edf_flow.py`; the lowest floor tried at which every board packs in line. Governs R15. (session-settled: user-directed -- chosen over 11,800 mm2, where the in-line Observer has no station, and 6,000 mm2, at -1.6 %: owner, 2026-11-19)
+- **The stream floor is 12.4 in2 (8,000 mm2) at every bay station, and future changes hold it.** About -0.7 % hover tail thrust in `tools/tail_edf_flow.py` (a lower bound: constant k_cargo, no obstruction loss), against -1.6 % at 6,000 mm2; both pack every board in line, and 11,800 mm2 leaves the Observer no in-line station. Governs R15. (session-settled: user-directed -- chosen over 11,800 mm2, where the in-line Observer has no station, and 6,000 mm2, at -1.6 %: owner, 2026-11-19)
 - **Per-branch noise suppression moves to the cables and the ESCs (option A), plus a source-side common-mode choke on each ESC input where it fits (option C).** Governs R9. (session-settled: user-directed -- chosen over 44 A chokes kept on the Flight Engineer (option B), which are unlikely to fit the power module: owner, 2026-11-19)
 - **Heavy current runs in copper bars, lugs and bolt-down or blade fuses, not PCB copper.** A 3 x 10 mm (0.118 x 0.394 in) bar dissipates 1.8 W and drops 8.6 mV per 70 mm (2.76 in) at 214 A; two 30 mm (1.2 in) 4 oz pours dissipate 6.5 W. Governs R3, R4.
 
@@ -67,29 +67,29 @@ Separately, Rev R was sized for 18 A per fan. Today's design currents are 44 A s
 **Form and placement**
 
 - R1. The FE is two modules, a power module and a logic module, each fitting the duct with the hull gap, every placed envelope's gap and the stream floor of R15.
-- R2. The power module sits within reach of the spar-bore corridor (R11) so the nacelle cables run straight from the bore to their branch fuses; the session fit placed it at X -33..12, Y 330-400, Z 162-207 mm.
+- R2. The power module sits within reach of the spar-bore corridor (R11) so the nacelle cables run straight from the bore to their branch fuses; the in-line packing of OQ6 places it at X -33..12, Y 304-374, Z 162-207 mm (an earlier fit at Y 330-400 predates R16).
 
 **Power path (power module)**
 
 - R3. The main bus and every branch carry their design current continuously, and their peaks for 10 s, without exceeding the conductor's or terminal's rating at a 122 F (50 C) bay ambient.
 - R4. Each nacelle branch has a fuse that carries 44 A continuous and 57-63 A for 10 s and clears a wiring fault before the pack fuse; the coordination is the NAC-64-FUSE-COORD study, which this plan adopts.
-- R5. Each pack input has its own fuse sized for its share of the sustained bus (about 107 A per pack).
+- R5. Each pack input has its own fuse, and no single fault, a blown fuse included, dumps its load or fault energy onto the other pack or ends in an uncontrolled descent: losing one pack leaves a deterministic degraded mode in which the flight control limits load to what the surviving pack and its fuse can carry and flies a controlled landing. (The twin packs share about 107 A each at the 214 A bus; how they are isolated and how the load is limited is OQ10.)
 - R6. Branch outputs use connectors or bolted lugs rated at or above the branch current.
 - R7. Branch current is measured with a shunt that stays inside its continuous rating at 44 A and inside its pulse rating at 63 A for 10 s; the session sizing gives 0.5 mOhm (1.0 W and 2.0 W).
 - R8. The pack's state and disconnect function survives, but no series element carries the bus current unless its dissipation fits the module's cooling.
 
 **EMC**
 
-- R9. The per-branch noise isolation of Rev R moves off the Flight Engineer: shielded twisted-pair ESC cables with clamp-on ferrites at both ends, one bus-level filter at the power module input, RC filters on the INA226 sense lines, and the bulk ripple capacitance on each ESC; a common-mode choke rated for the branch current is added at each ESC's input wherever it fits on the ESC board. The 500 W/m2 immunity stays with the enclosure, glands, Y-capacitors and TVS.
+- R9. The per-branch noise isolation of Rev R moves off the Flight Engineer: shielded twisted-pair ESC cables with clamp-on ferrites at both ends outside the spar bore (inside it the four unbound 10 AWG conductors of NAC-64-WIRE-QUAL stay as built), one bus-level filter at the power module input, RC filters on the INA226 sense lines, and the bulk ripple capacitance on each ESC; a common-mode choke rated for the branch current is added at each ESC's input wherever it fits on the ESC board. The 500 W/m2 immunity stays with the enclosure, glands, Y-capacitors and TVS.
 
 **Duct tool**
 
 - R10. `tools/cargo_duct_layout_fit.py` places equipment in wall and roof pockets anywhere in the cross-section, not only on the floor or hung from the roof, and gates the two FE modules.
 - R11. The tool keeps a nacelle cable corridor clear from the spar bore at each hull wall to the power module (the session used X +-55, Y 327-352, Z 135-159 mm).
-- R12. The tool takes the belly panel opening as the flat bottom of the cargo section from the ramp to the neck-down, less the gear bays and the frame land, and every fuselage avionics unit without a dedicated hatch passes the reach gate as a hard pass/fail.
-- R16. Every PCB envelope in the duct (FE modules, speed controller, gateway, N2/N4, Observer, chin nodes, tilt controller) has its thinnest side across the flow (along X or Z), never along Y, and the tool fails any board that faces the stream.
-- R15. The tool gates the stream against 8,000 mm2 (12.4 in2) of free area at every bay station and reports the tail-fan thrust cost of that floor from `tools/tail_edf_flow.py`.
-- R13. The U13 spar-bore seal is specified as a pass-through around the four nacelle cables, keeping the bore's free area for them.
+- R12. The tool takes the belly panel opening as the flat bottom of the cargo section from the ramp to the neck-down, less the gear bays and the frame land, and every fuselage avionics unit without a dedicated hatch passes the reach gate as a hard pass/fail (at least 0.5 of its footprint inside the opening inset 0.4 in (10 mm), the tool's REACH_MIN rule; vertical access to roof pockets is a separate CAD check).
+- R13. The U13 spar-bore seal is specified as a pass-through around the four 10 AWG conductors in each spar (two per nacelle ESC, 5.5 mm envelope, a 13.28 mm bundle in the 16.3 mm bore, `airframe/wings-nacelles/WBS.md` SPAR-20-WIREOD), keeping the bore's free area for them.
+- R15. The tool gates the stream against 8,000 mm2 (12.4 in2) of free area at every bay station, kept equipment included (a station below the floor today does not stay below it), and reports the tail-fan thrust cost of that floor from `tools/tail_edf_flow.py` as a lower bound.
+- R16. Every PCB envelope in the duct (FE modules, speed controller, gateway, N2/N4, Observer, chin nodes, tilt controller) has its thinnest side across the flow (along X or Z), never along Y, and the tool fails any board that faces the stream. Re-laying the kept N2/N4 nodes and the Observer tray on edge is part of this plan (OQ6).
 
 **Logic module**
 
@@ -99,18 +99,18 @@ Separately, Rev R was sized for 18 A per fan. Today's design currents are 44 A s
 
 - AE1. **Covers R1.** Given the U6 layout with the FE modules placed first, when the speed controller, gateway and three RCS servos are placed after them, then all place and every bay station keeps at least the R15 floor.
 - AE2. **Covers R11.** Given the corridor keep-out, when any equipment envelope overlaps it, then the tool reports the overlap as a failure.
-- AE3. **Covers R12.** Given a fuselage avionics unit with no dedicated hatch whose footprint is less than the reach share inside the panel opening, then the tool exits nonzero and names the unit.
+- AE3. **Covers R12.** Given a fuselage avionics unit with no dedicated hatch whose footprint is less than half inside the inset panel opening, then the tool exits nonzero and names the unit.
 
 ### Scope Boundaries
 
 - Outside this plan: the outer mold line. The hull throat at Y 288-296 has 11,259 mm2 (17.5 in2) of cavity with nothing in it; TEDF-03 takes the least station area, not the 12,750 mm2 midpoint, as a_cargo.
-- Deferred: re-laying N2/N4 and the Observer tray at the aft pinch (Y 412-428, about 6,000-6,900 mm2 free). In the session test, standing N2 parallel to the flow lifted that station to 11,300-11,660 mm2; N4 found no station and the tray remains the residual blocker. Whether this is needed depends on the R15 floor.
 - Deferred: the ideal-diode ORing of the twin packs (`docs/POWER_DISTRIBUTION.md`) beyond what R5 and R8 need.
 
 ### Dependencies / Assumptions
 
 - The currents are ESTIMATES from `docs/ESC_RATING_OD3_BRIEF.md` and `tools/tail_edf_flow.py` (1,368 W full, cube law at 0.8 throttle, 21.6 V).
 - The module envelopes have almost no margin. A 90 mm long or 50 mm wide power module, a larger logic module, or a taller power module that displaces RCS servos does not fit. A CAD pass of the real part stack is needed before the envelopes are fixed.
+- `tools/tail_edf_flow.py` takes k_cargo = 1.0 (ASSUMED) and counts only the free area, so the thrust cost of R15 is a lower bound that leaves out drag from the placed modules; the TEDF-03 bench run calibrates it.
 - The bar's temperature rise assumes a convective h of 50 W/m2K in duct air (ASSUMED), giving about 11 K/W per 70 mm bar.
 
 ### Outstanding Questions
@@ -125,8 +125,11 @@ Separately, Rev R was sized for 18 A per fan. Today's design currents are 44 A s
 - OQ2. Pack fuse form (MAXI with a holder, or a bolt-down MEGA/ANL class) and branch fuse form (60 A MAXI, derated to 48 A at 122 F), from the NAC-64-FUSE-COORD curves.
 - OQ3. R8's disconnect: a parallel FET bank (about 8 x 0.6 mOhm, 3.4 W at 214 A) or an arming plug that leaves BQ76930 as monitor only.
 - OQ4. Where the INA226s sit: beside the shunts in the power module (short Kelvin lines, I2C across) or on the logic module.
-- OQ7. R9 verification before G1: one ESC at full PWM, measure the noise it couples into the other branches' INA226 readings and the conducted emissions on the bus (MIL-STD-461G [REF-MIL-002] as the guide, limits to be checked against the standard); and whether the source choke fits each ESC board (OSESC-NAC 44 x 33 mm, OSESC-TAIL-1) without moving the nacelle mass budget.
 - OQ5. The CG effect of the two module masses against the 158 g single-unit row (TEDF-04 pricing).
+- OQ7. R9 verification before G1: one ESC at full PWM, measure the noise it couples into the other branches' INA226 readings and the conducted emissions on the bus (MIL-STD-461G [REF-MIL-002] as the guide, limits to be checked against the standard); and whether the source choke fits each ESC board (OSESC-NAC 44 x 33 mm, OSESC-TAIL-1) without moving the nacelle mass budget.
+- OQ8. R8's disconnect: must the surviving pack disconnect act automatically on a BQ76930 overcurrent or short-circuit fault, or may it be a manual arming plug with the fuses as the only automatic protection? (Plan review finding, deferred.)
+- OQ9. R9's acceptance limit: the branch-to-branch noise coupled into the INA226 readings and the bus conducted emissions at which the cable-ferrite-only fix passes G1 if the source choke does not fit an ESC board.
+- OQ10. R5's mechanism: how the twin packs are isolated so a fault or full bus never lands on the survivor, how the load is limited in the degraded mode, and whether a second pack is always fitted (`docs/POWER_DISTRIBUTION.md` section 11 RBM) or optional.
 
 ### Sources / Research
 
